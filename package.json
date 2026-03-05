@@ -1,0 +1,29 @@
+{
+  "scripts": {
+    "start": "electron .",
+    "build": "react-scripts build",
+    "dev": "concurrently \"npm run start\" \"npm run build\""
+  },
+  "name": "inventario-venta-desktop",
+  "version": "1.0.0",
+  "main": "dist/main/main.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "electron": "^35.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "reflect-metadata": "^0.2.2",
+    "sqlite3": "^5.1.7",
+    "typeorm": "^0.3.21",
+    "typescript": "^5.8.2"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.10",
+    "@types/react-dom": "^19.0.4",
+    "eslint": "^9.21.0",
+    "prettier": "^3.5.3"
+  }
+}
