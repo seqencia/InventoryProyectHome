@@ -1,13 +1,4 @@
-import React, { useState } from 'react';
-
-const CATEGORIES = [
-  'Computadoras',
-  'Monitores',
-  'Periféricos',
-  'Accesorios',
-  'Sillas de Oficina',
-  'Otro',
-];
+import React, { useState, useEffect } from 'react';
 
 const styles = {
   overlay: {
@@ -102,6 +93,11 @@ const styles = {
     fontSize: '14px',
     fontWeight: '500',
   },
+  selectHint: {
+    fontSize: '12px',
+    color: '#94a3b8',
+    marginTop: '4px',
+  },
 };
 
 export default function ProductForm({ product, onSave, onCancel }) {
@@ -114,6 +110,11 @@ export default function ProductForm({ product, onSave, onCancel }) {
     stock: product?.stock ?? '',
     description: product?.description ?? '',
   });
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    window.electron.categories.getAll().then(setCategories).catch(() => {});
+  }, []);
 
   const set = (field) => (e) =>
     setForm((prev) => ({ ...prev, [field]: e.target.value }));
@@ -154,11 +155,18 @@ export default function ProductForm({ product, onSave, onCancel }) {
           <div style={styles.field}>
             <label style={styles.label}>Categoría</label>
             <select style={styles.select} value={form.category} onChange={set('category')}>
-              <option value="">Seleccionar categoría...</option>
-              {CATEGORIES.map((c) => (
-                <option key={c} value={c}>{c}</option>
+              <option value="">Sin categoría</option>
+              {categories.map((cat) => (
+                <option key={cat.id} value={cat.name}>
+                  {cat.name}
+                </option>
               ))}
             </select>
+            {categories.length === 0 && (
+              <p style={styles.selectHint}>
+                Agrega categorías desde la pestaña "Categorías".
+              </p>
+            )}
           </div>
 
           <div style={styles.row}>

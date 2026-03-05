@@ -26,6 +26,7 @@ Electron desktop app with three layers:
 **Adding a new entity**: define an `EntitySchema` in `main.js`, add it to the `DataSource` `entities` array, add IPC handlers, expose them in `preload.js`.
 
 **Renderer structure**:
+
 ```
 src/renderer/
   app.js               — navigation shell (3 tabs)
@@ -64,3 +65,11 @@ Single user, offline-first (SQLite), no authentication needed for now.
 - `package.json` `"main"`: `src/main/main.js` (plain JS entry, no compilation needed)
 - esbuild input: `src/renderer/index.js` → output: `src/renderer/bundle.js`
 - Prettier: single quotes, 2-space indent, semicolons, `trailingComma: "es5"`
+
+## Git Workflow
+
+After completing each feature or module, always run:
+git add .
+git commit -m "feat: [short description of what was built]"
+Use conventional commits format: feat:, fix:, refactor:, docs:
+Do NOT push automatically, only commit.

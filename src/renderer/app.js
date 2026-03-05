@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import InventoryView from './components/InventoryView';
 import NewSale from './components/NewSale';
 import SaleHistory from './components/SaleHistory';
+import CategoriesView from './components/CategoriesView';
 
 const TABS = [
   { id: 'inventory', label: 'Inventario' },
   { id: 'new-sale', label: 'Nueva Venta' },
   { id: 'history', label: 'Historial' },
+  { id: 'categories', label: 'Categorías' },
 ];
 
 const styles = {
@@ -71,6 +73,7 @@ export default function App() {
           <NewSale onSaleComplete={() => setActiveTab('history')} />
         )}
         {activeTab === 'history' && <SaleHistory />}
+        {activeTab === 'categories' && <CategoriesView />}
       </main>
     </div>
   );

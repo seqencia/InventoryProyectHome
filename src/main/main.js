@@ -19,6 +19,16 @@ const ProductSchema = new EntitySchema({
   },
 });
 
+const CategorySchema = new EntitySchema({
+  name: 'Category',
+  tableName: 'categories',
+  columns: {
+    id: { type: Number, primary: true, generated: true },
+    name: { type: String, unique: true },
+    description: { type: String, nullable: true, default: '' },
+  },
+});
+
 const SaleSchema = new EntitySchema({
   name: 'Sale',
   tableName: 'sales',
@@ -51,7 +61,7 @@ async function initDatabase() {
   AppDataSource = new DataSource({
     type: 'sqlite',
     database: path.join(app.getPath('userData'), 'database.sqlite'),
-    entities: [ProductSchema, SaleSchema, SaleDetailSchema],
+    entities: [ProductSchema, CategorySchema, SaleSchema, SaleDetailSchema],
     synchronize: true,
     logging: false,
   });
@@ -79,6 +89,25 @@ function setupIpcHandlers() {
 
   ipcMain.handle('products:delete', async (_, id) => {
     await repo('Product').delete(id);
+    return { success: true };
+  });
+
+  // Categories
+  ipcMain.handle('categories:getAll', async () => {
+    return await repo('Category').find({ order: { name: 'ASC' } });
+  });
+
+  ipcMain.handle('categories:create', async (_, data) => {
+    return await repo('Category').save(repo('Category').create(data));
+  });
+
+  ipcMain.handle('categories:update', async (_, { id, ...data }) => {
+    await repo('Category').update(id, data);
+    return await repo('Category').findOneBy({ id });
+  });
+
+  ipcMain.handle('categories:delete', async (_, id) => {
+    await repo('Category').delete(id);
     return { success: true };
   });
 

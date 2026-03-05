@@ -1474,7 +1474,7 @@
           return dispatcher;
         }
         "undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(Error());
-        var React8 = require_react(), Internals = {
+        var React9 = require_react(), Internals = {
           d: {
             f: noop,
             r: function() {
@@ -1492,7 +1492,7 @@
           },
           p: 0,
           findDOMNode: null
-        }, REACT_PORTAL_TYPE = Symbol.for("react.portal"), ReactSharedInternals = React8.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE;
+        }, REACT_PORTAL_TYPE = Symbol.for("react.portal"), ReactSharedInternals = React9.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE;
         "function" === typeof Map && null != Map.prototype && "function" === typeof Map.prototype.forEach && "function" === typeof Set && null != Set.prototype && "function" === typeof Set.prototype.clear && "function" === typeof Set.prototype.forEach || console.error(
           "React depends on Map and Set built-in types. Make sure that you load a polyfill in older browsers. https://reactjs.org/link/react-polyfills"
         );
@@ -2948,7 +2948,7 @@
           "number" === type && getActiveElement(node.ownerDocument) === node || node.defaultValue === "" + value || (node.defaultValue = "" + value);
         }
         function validateOptionProps(element, props) {
-          null == props.value && ("object" === typeof props.children && null !== props.children ? React8.Children.forEach(props.children, function(child) {
+          null == props.value && ("object" === typeof props.children && null !== props.children ? React9.Children.forEach(props.children, function(child) {
             null == child || "string" === typeof child || "number" === typeof child || "bigint" === typeof child || didWarnInvalidChild || (didWarnInvalidChild = true, console.error(
               "Cannot infer the option value of complex children. Pass a `value` prop or use a plain string as children to <option>."
             ));
@@ -3538,28 +3538,28 @@
           ))));
           null == value || "boolean" === typeof value || "" === value ? isCustomProperty ? style2.setProperty(styleName, "") : "float" === styleName ? style2.cssFloat = "" : style2[styleName] = "" : isCustomProperty ? style2.setProperty(styleName, value) : "number" !== typeof value || 0 === value || unitlessNumbers.has(styleName) ? "float" === styleName ? style2.cssFloat = value : (checkCSSPropertyStringCoercion(value, styleName), style2[styleName] = ("" + value).trim()) : style2[styleName] = value + "px";
         }
-        function setValueForStyles(node, styles7, prevStyles) {
-          if (null != styles7 && "object" !== typeof styles7)
+        function setValueForStyles(node, styles8, prevStyles) {
+          if (null != styles8 && "object" !== typeof styles8)
             throw Error(
               "The `style` prop expects a mapping from style properties to values, not a string. For example, style={{marginRight: spacing + 'em'}} when using JSX."
             );
-          styles7 && Object.freeze(styles7);
+          styles8 && Object.freeze(styles8);
           node = node.style;
           if (null != prevStyles) {
-            if (styles7) {
+            if (styles8) {
               var expandedUpdates = {};
               if (prevStyles) {
                 for (var key in prevStyles)
-                  if (prevStyles.hasOwnProperty(key) && !styles7.hasOwnProperty(key))
+                  if (prevStyles.hasOwnProperty(key) && !styles8.hasOwnProperty(key))
                     for (var longhands = shorthandToLonghand[key] || [key], i = 0; i < longhands.length; i++)
                       expandedUpdates[longhands[i]] = key;
               }
-              for (var _key in styles7)
-                if (styles7.hasOwnProperty(_key) && (!prevStyles || prevStyles[_key] !== styles7[_key]))
+              for (var _key in styles8)
+                if (styles8.hasOwnProperty(_key) && (!prevStyles || prevStyles[_key] !== styles8[_key]))
                   for (key = shorthandToLonghand[_key] || [_key], longhands = 0; longhands < key.length; longhands++)
                     expandedUpdates[key[longhands]] = _key;
               _key = {};
-              for (var key$jscomp$0 in styles7)
+              for (var key$jscomp$0 in styles8)
                 for (key = shorthandToLonghand[key$jscomp$0] || [key$jscomp$0], longhands = 0; longhands < key.length; longhands++)
                   _key[key[longhands]] = key$jscomp$0;
               key$jscomp$0 = {};
@@ -3567,7 +3567,7 @@
                 if (key = expandedUpdates[_key2], (longhands = _key[_key2]) && key !== longhands && (i = key + "," + longhands, !key$jscomp$0[i])) {
                   key$jscomp$0[i] = true;
                   i = console;
-                  var value = styles7[key];
+                  var value = styles8[key];
                   i.error.call(
                     i,
                     "%s a style property during rerender (%s) when a conflicting property is set (%s) can lead to styling bugs. To avoid this, don't mix shorthand and non-shorthand properties for the same value; instead, replace the shorthand with separate values.",
@@ -3578,12 +3578,12 @@
                 }
             }
             for (var styleName in prevStyles)
-              !prevStyles.hasOwnProperty(styleName) || null != styles7 && styles7.hasOwnProperty(styleName) || (0 === styleName.indexOf("--") ? node.setProperty(styleName, "") : "float" === styleName ? node.cssFloat = "" : node[styleName] = "");
-            for (var _styleName in styles7)
-              _key2 = styles7[_styleName], styles7.hasOwnProperty(_styleName) && prevStyles[_styleName] !== _key2 && setValueForStyle(node, _styleName, _key2);
+              !prevStyles.hasOwnProperty(styleName) || null != styles8 && styles8.hasOwnProperty(styleName) || (0 === styleName.indexOf("--") ? node.setProperty(styleName, "") : "float" === styleName ? node.cssFloat = "" : node[styleName] = "");
+            for (var _styleName in styles8)
+              _key2 = styles8[_styleName], styles8.hasOwnProperty(_styleName) && prevStyles[_styleName] !== _key2 && setValueForStyle(node, _styleName, _key2);
           } else
-            for (expandedUpdates in styles7)
-              styles7.hasOwnProperty(expandedUpdates) && setValueForStyle(node, expandedUpdates, styles7[expandedUpdates]);
+            for (expandedUpdates in styles8)
+              styles8.hasOwnProperty(expandedUpdates) && setValueForStyle(node, expandedUpdates, styles8[expandedUpdates]);
         }
         function isCustomElement(tagName) {
           if (-1 === tagName.indexOf("-")) return false;
@@ -16418,13 +16418,13 @@
           ));
         }
         "undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(Error());
-        var Scheduler = require_scheduler(), React8 = require_react(), ReactDOM = require_react_dom(), REACT_LEGACY_ELEMENT_TYPE = Symbol.for("react.element"), REACT_ELEMENT_TYPE = Symbol.for("react.transitional.element"), REACT_PORTAL_TYPE = Symbol.for("react.portal"), REACT_FRAGMENT_TYPE = Symbol.for("react.fragment"), REACT_STRICT_MODE_TYPE = Symbol.for("react.strict_mode"), REACT_PROFILER_TYPE = Symbol.for("react.profiler"), REACT_PROVIDER_TYPE = Symbol.for("react.provider"), REACT_CONSUMER_TYPE = Symbol.for("react.consumer"), REACT_CONTEXT_TYPE = Symbol.for("react.context"), REACT_FORWARD_REF_TYPE = Symbol.for("react.forward_ref"), REACT_SUSPENSE_TYPE = Symbol.for("react.suspense"), REACT_SUSPENSE_LIST_TYPE = Symbol.for("react.suspense_list"), REACT_MEMO_TYPE = Symbol.for("react.memo"), REACT_LAZY_TYPE = Symbol.for("react.lazy");
+        var Scheduler = require_scheduler(), React9 = require_react(), ReactDOM = require_react_dom(), REACT_LEGACY_ELEMENT_TYPE = Symbol.for("react.element"), REACT_ELEMENT_TYPE = Symbol.for("react.transitional.element"), REACT_PORTAL_TYPE = Symbol.for("react.portal"), REACT_FRAGMENT_TYPE = Symbol.for("react.fragment"), REACT_STRICT_MODE_TYPE = Symbol.for("react.strict_mode"), REACT_PROFILER_TYPE = Symbol.for("react.profiler"), REACT_PROVIDER_TYPE = Symbol.for("react.provider"), REACT_CONSUMER_TYPE = Symbol.for("react.consumer"), REACT_CONTEXT_TYPE = Symbol.for("react.context"), REACT_FORWARD_REF_TYPE = Symbol.for("react.forward_ref"), REACT_SUSPENSE_TYPE = Symbol.for("react.suspense"), REACT_SUSPENSE_LIST_TYPE = Symbol.for("react.suspense_list"), REACT_MEMO_TYPE = Symbol.for("react.memo"), REACT_LAZY_TYPE = Symbol.for("react.lazy");
         Symbol.for("react.scope");
         Symbol.for("react.debug_trace_mode");
         var REACT_OFFSCREEN_TYPE = Symbol.for("react.offscreen");
         Symbol.for("react.legacy_hidden");
         Symbol.for("react.tracing_marker");
-        var REACT_MEMO_CACHE_SENTINEL = Symbol.for("react.memo_cache_sentinel"), MAYBE_ITERATOR_SYMBOL = Symbol.iterator, REACT_CLIENT_REFERENCE = Symbol.for("react.client.reference"), ReactSharedInternals = React8.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, assign = Object.assign, disabledDepth = 0, prevLog, prevInfo, prevWarn, prevError, prevGroup, prevGroupCollapsed, prevGroupEnd;
+        var REACT_MEMO_CACHE_SENTINEL = Symbol.for("react.memo_cache_sentinel"), MAYBE_ITERATOR_SYMBOL = Symbol.iterator, REACT_CLIENT_REFERENCE = Symbol.for("react.client.reference"), ReactSharedInternals = React9.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, assign = Object.assign, disabledDepth = 0, prevLog, prevInfo, prevWarn, prevError, prevGroup, prevGroupCollapsed, prevGroupEnd;
         disabledLog.__reactDisabledLog = true;
         var prefix, suffix, reentry = false;
         var componentFrameCache = new ("function" === typeof WeakMap ? WeakMap : Map)();
@@ -18974,9 +18974,9 @@
             previousDispatcher.S(href, precedence, options);
             var ownerDocument = globalDocument;
             if (ownerDocument && href) {
-              var styles7 = getResourcesFromRoot(ownerDocument).hoistableStyles, key = getStyleKey(href);
+              var styles8 = getResourcesFromRoot(ownerDocument).hoistableStyles, key = getStyleKey(href);
               precedence = precedence || "default";
-              var resource = styles7.get(key);
+              var resource = styles8.get(key);
               if (!resource) {
                 var state = { loading: NotLoaded, preload: null };
                 if (resource = ownerDocument.querySelector(
@@ -19015,7 +19015,7 @@
                   count: 1,
                   state
                 };
-                styles7.set(key, resource);
+                styles8.set(key, resource);
               }
             }
           },
@@ -19144,7 +19144,7 @@
           }
         };
         (function() {
-          var isomorphicReactPackageVersion = React8.version;
+          var isomorphicReactPackageVersion = React9.version;
           if ("19.0.0" !== isomorphicReactPackageVersion)
             throw Error(
               'Incompatible React versions: The "react" and "react-dom" packages must have the exact same version. Instead got:\n  - react:      ' + (isomorphicReactPackageVersion + "\n  - react-dom:  19.0.0\nLearn more: https://react.dev/warnings/version-mismatch")
@@ -19286,11 +19286,11 @@
   });
 
   // src/renderer/index.js
-  var import_react7 = __toESM(require_react());
+  var import_react8 = __toESM(require_react());
   var import_client = __toESM(require_client());
 
   // src/renderer/app.js
-  var import_react6 = __toESM(require_react());
+  var import_react7 = __toESM(require_react());
 
   // src/renderer/components/InventoryView.js
   var import_react3 = __toESM(require_react());
@@ -19386,14 +19386,6 @@
 
   // src/renderer/components/ProductForm.js
   var import_react2 = __toESM(require_react());
-  var CATEGORIES = [
-    "Computadoras",
-    "Monitores",
-    "Perif\xE9ricos",
-    "Accesorios",
-    "Sillas de Oficina",
-    "Otro"
-  ];
   var styles2 = {
     overlay: {
       position: "fixed",
@@ -19486,6 +19478,11 @@
       cursor: "pointer",
       fontSize: "14px",
       fontWeight: "500"
+    },
+    selectHint: {
+      fontSize: "12px",
+      color: "#94a3b8",
+      marginTop: "4px"
     }
   };
   function ProductForm({ product, onSave, onCancel }) {
@@ -19497,6 +19494,11 @@
       stock: product?.stock ?? "",
       description: product?.description ?? ""
     });
+    const [categories, setCategories] = (0, import_react2.useState)([]);
+    (0, import_react2.useEffect)(() => {
+      window.electron.categories.getAll().then(setCategories).catch(() => {
+      });
+    }, []);
     const set = (field) => (e) => setForm((prev) => ({ ...prev, [field]: e.target.value }));
     const handleSubmit = (e) => {
       e.preventDefault();
@@ -19521,7 +19523,7 @@
         required: true,
         autoFocus: true
       }
-    )), /* @__PURE__ */ import_react2.default.createElement("div", { style: styles2.field }, /* @__PURE__ */ import_react2.default.createElement("label", { style: styles2.label }, "Categor\xEDa"), /* @__PURE__ */ import_react2.default.createElement("select", { style: styles2.select, value: form.category, onChange: set("category") }, /* @__PURE__ */ import_react2.default.createElement("option", { value: "" }, "Seleccionar categor\xEDa..."), CATEGORIES.map((c) => /* @__PURE__ */ import_react2.default.createElement("option", { key: c, value: c }, c)))), /* @__PURE__ */ import_react2.default.createElement("div", { style: styles2.row }, /* @__PURE__ */ import_react2.default.createElement("div", { style: styles2.field }, /* @__PURE__ */ import_react2.default.createElement("label", { style: styles2.label }, "Precio ($) *"), /* @__PURE__ */ import_react2.default.createElement(
+    )), /* @__PURE__ */ import_react2.default.createElement("div", { style: styles2.field }, /* @__PURE__ */ import_react2.default.createElement("label", { style: styles2.label }, "Categor\xEDa"), /* @__PURE__ */ import_react2.default.createElement("select", { style: styles2.select, value: form.category, onChange: set("category") }, /* @__PURE__ */ import_react2.default.createElement("option", { value: "" }, "Sin categor\xEDa"), categories.map((cat) => /* @__PURE__ */ import_react2.default.createElement("option", { key: cat.id, value: cat.name }, cat.name))), categories.length === 0 && /* @__PURE__ */ import_react2.default.createElement("p", { style: styles2.selectHint }, 'Agrega categor\xEDas desde la pesta\xF1a "Categor\xEDas".')), /* @__PURE__ */ import_react2.default.createElement("div", { style: styles2.row }, /* @__PURE__ */ import_react2.default.createElement("div", { style: styles2.field }, /* @__PURE__ */ import_react2.default.createElement("label", { style: styles2.label }, "Precio ($) *"), /* @__PURE__ */ import_react2.default.createElement(
       "input",
       {
         style: styles2.input,
@@ -20085,13 +20087,268 @@
     return /* @__PURE__ */ import_react5.default.createElement(import_react5.default.Fragment, null, /* @__PURE__ */ import_react5.default.createElement("div", { style: styles5.toolbar }, /* @__PURE__ */ import_react5.default.createElement("h2", { style: styles5.sectionTitle }, "Historial de Ventas")), error && /* @__PURE__ */ import_react5.default.createElement("div", { style: styles5.errorBox }, error), loading ? /* @__PURE__ */ import_react5.default.createElement("p", { style: { color: "#64748b", fontSize: "14px" } }, "Cargando...") : /* @__PURE__ */ import_react5.default.createElement("div", { style: styles5.wrapper }, sales.length === 0 ? /* @__PURE__ */ import_react5.default.createElement("p", { style: styles5.empty }, "No hay ventas registradas a\xFAn.") : /* @__PURE__ */ import_react5.default.createElement("table", { style: styles5.table }, /* @__PURE__ */ import_react5.default.createElement("thead", null, /* @__PURE__ */ import_react5.default.createElement("tr", null, /* @__PURE__ */ import_react5.default.createElement("th", { style: styles5.th }, "#"), /* @__PURE__ */ import_react5.default.createElement("th", { style: styles5.th }, "Fecha"), /* @__PURE__ */ import_react5.default.createElement("th", { style: styles5.th }, "Productos"), /* @__PURE__ */ import_react5.default.createElement("th", { style: styles5.th }, "Total"), /* @__PURE__ */ import_react5.default.createElement("th", { style: styles5.th }))), /* @__PURE__ */ import_react5.default.createElement("tbody", null, sales.map((sale) => /* @__PURE__ */ import_react5.default.createElement(import_react5.default.Fragment, { key: sale.id }, /* @__PURE__ */ import_react5.default.createElement("tr", null, /* @__PURE__ */ import_react5.default.createElement("td", { style: styles5.td }, sale.id), /* @__PURE__ */ import_react5.default.createElement("td", { style: styles5.td }, formatDate(sale.created_at)), /* @__PURE__ */ import_react5.default.createElement("td", { style: styles5.td }, sale.details.length, " producto", sale.details.length !== 1 ? "s" : ""), /* @__PURE__ */ import_react5.default.createElement("td", { style: styles5.td }, /* @__PURE__ */ import_react5.default.createElement("span", { style: styles5.totalBadge }, "$", Number(sale.total).toFixed(2))), /* @__PURE__ */ import_react5.default.createElement("td", { style: styles5.td }, /* @__PURE__ */ import_react5.default.createElement("button", { style: styles5.toggleBtn, onClick: () => toggle(sale.id) }, expanded === sale.id ? "Ocultar" : "Ver detalle"))), expanded === sale.id && /* @__PURE__ */ import_react5.default.createElement("tr", { style: styles5.detailRow }, /* @__PURE__ */ import_react5.default.createElement("td", { colSpan: 5, style: styles5.detailCell }, /* @__PURE__ */ import_react5.default.createElement("table", { style: styles5.detailTable }, /* @__PURE__ */ import_react5.default.createElement("thead", null, /* @__PURE__ */ import_react5.default.createElement("tr", null, /* @__PURE__ */ import_react5.default.createElement("th", { style: styles5.detailTh }, "Producto"), /* @__PURE__ */ import_react5.default.createElement("th", { style: styles5.detailTh }, "Precio unit."), /* @__PURE__ */ import_react5.default.createElement("th", { style: styles5.detailTh }, "Cantidad"), /* @__PURE__ */ import_react5.default.createElement("th", { style: styles5.detailTh }, "Subtotal"))), /* @__PURE__ */ import_react5.default.createElement("tbody", null, sale.details.map((d) => /* @__PURE__ */ import_react5.default.createElement("tr", { key: d.id }, /* @__PURE__ */ import_react5.default.createElement("td", { style: styles5.detailTd }, d.product_name), /* @__PURE__ */ import_react5.default.createElement("td", { style: styles5.detailTd }, "$", Number(d.unit_price).toFixed(2)), /* @__PURE__ */ import_react5.default.createElement("td", { style: styles5.detailTd }, d.quantity), /* @__PURE__ */ import_react5.default.createElement("td", { style: styles5.detailTd }, "$", Number(d.subtotal).toFixed(2)))))), /* @__PURE__ */ import_react5.default.createElement("div", { style: styles5.detailTotal }, "Total: $", Number(sale.total).toFixed(2))))))))));
   }
 
+  // src/renderer/components/CategoriesView.js
+  var import_react6 = __toESM(require_react());
+  var styles6 = {
+    toolbar: {
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      marginBottom: "16px"
+    },
+    sectionTitle: { fontSize: "17px", fontWeight: "600", color: "#1e293b" },
+    btnPrimary: {
+      background: "#3b82f6",
+      color: "white",
+      border: "none",
+      padding: "8px 16px",
+      borderRadius: "6px",
+      cursor: "pointer",
+      fontSize: "14px",
+      fontWeight: "500"
+    },
+    errorBox: {
+      background: "#fee2e2",
+      color: "#dc2626",
+      padding: "12px 16px",
+      borderRadius: "6px",
+      marginBottom: "16px",
+      fontSize: "14px"
+    },
+    // Table
+    wrapper: {
+      background: "white",
+      borderRadius: "8px",
+      boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
+      overflow: "hidden"
+    },
+    table: { width: "100%", borderCollapse: "collapse", fontSize: "14px" },
+    th: {
+      background: "#f8fafc",
+      padding: "11px 16px",
+      textAlign: "left",
+      fontWeight: "600",
+      color: "#475569",
+      borderBottom: "2px solid #e2e8f0"
+    },
+    td: {
+      padding: "11px 16px",
+      borderBottom: "1px solid #f1f5f9",
+      verticalAlign: "middle"
+    },
+    tdMuted: {
+      padding: "11px 16px",
+      borderBottom: "1px solid #f1f5f9",
+      verticalAlign: "middle",
+      color: "#64748b"
+    },
+    btnEdit: {
+      background: "#f1f5f9",
+      border: "none",
+      padding: "5px 12px",
+      borderRadius: "4px",
+      cursor: "pointer",
+      fontSize: "13px",
+      marginRight: "6px",
+      color: "#334155"
+    },
+    btnDelete: {
+      background: "#fee2e2",
+      border: "none",
+      padding: "5px 12px",
+      borderRadius: "4px",
+      cursor: "pointer",
+      fontSize: "13px",
+      color: "#dc2626"
+    },
+    empty: {
+      textAlign: "center",
+      padding: "48px",
+      color: "#94a3b8",
+      fontSize: "15px"
+    },
+    // Modal
+    overlay: {
+      position: "fixed",
+      inset: 0,
+      background: "rgba(0,0,0,0.5)",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      zIndex: 1e3
+    },
+    modal: {
+      background: "white",
+      borderRadius: "12px",
+      padding: "28px",
+      width: "420px",
+      maxWidth: "90vw",
+      boxShadow: "0 20px 60px rgba(0,0,0,0.3)"
+    },
+    modalTitle: {
+      fontSize: "17px",
+      fontWeight: "600",
+      marginBottom: "20px",
+      color: "#1e293b"
+    },
+    field: { marginBottom: "14px" },
+    label: {
+      display: "block",
+      fontSize: "13px",
+      fontWeight: "500",
+      color: "#475569",
+      marginBottom: "5px"
+    },
+    input: {
+      width: "100%",
+      padding: "8px 11px",
+      border: "1px solid #e2e8f0",
+      borderRadius: "6px",
+      fontSize: "14px",
+      outline: "none",
+      boxSizing: "border-box"
+    },
+    textarea: {
+      width: "100%",
+      padding: "8px 11px",
+      border: "1px solid #e2e8f0",
+      borderRadius: "6px",
+      fontSize: "14px",
+      resize: "vertical",
+      minHeight: "70px",
+      boxSizing: "border-box",
+      fontFamily: "inherit"
+    },
+    actions: {
+      display: "flex",
+      justifyContent: "flex-end",
+      gap: "8px",
+      marginTop: "22px"
+    },
+    btnCancel: {
+      background: "#f1f5f9",
+      border: "none",
+      padding: "8px 16px",
+      borderRadius: "6px",
+      cursor: "pointer",
+      fontSize: "14px",
+      color: "#475569"
+    },
+    btnSave: {
+      background: "#3b82f6",
+      color: "white",
+      border: "none",
+      padding: "8px 20px",
+      borderRadius: "6px",
+      cursor: "pointer",
+      fontSize: "14px",
+      fontWeight: "500"
+    }
+  };
+  function CategoryModal({ category, onSave, onCancel }) {
+    const isEdit = Boolean(category);
+    const [form, setForm] = (0, import_react6.useState)({
+      name: category?.name ?? "",
+      description: category?.description ?? ""
+    });
+    const set = (field) => (e) => setForm((prev) => ({ ...prev, [field]: e.target.value }));
+    const handleSubmit = (e) => {
+      e.preventDefault();
+      onSave({ name: form.name.trim(), description: form.description.trim() || null });
+    };
+    return /* @__PURE__ */ import_react6.default.createElement("div", { style: styles6.overlay, onClick: (e) => e.target === e.currentTarget && onCancel() }, /* @__PURE__ */ import_react6.default.createElement("div", { style: styles6.modal }, /* @__PURE__ */ import_react6.default.createElement("h2", { style: styles6.modalTitle }, isEdit ? "Editar Categor\xEDa" : "Nueva Categor\xEDa"), /* @__PURE__ */ import_react6.default.createElement("form", { onSubmit: handleSubmit }, /* @__PURE__ */ import_react6.default.createElement("div", { style: styles6.field }, /* @__PURE__ */ import_react6.default.createElement("label", { style: styles6.label }, "Nombre *"), /* @__PURE__ */ import_react6.default.createElement(
+      "input",
+      {
+        style: styles6.input,
+        value: form.name,
+        onChange: set("name"),
+        placeholder: "Ej: Computadoras",
+        required: true,
+        autoFocus: true
+      }
+    )), /* @__PURE__ */ import_react6.default.createElement("div", { style: styles6.field }, /* @__PURE__ */ import_react6.default.createElement("label", { style: styles6.label }, "Descripci\xF3n"), /* @__PURE__ */ import_react6.default.createElement(
+      "textarea",
+      {
+        style: styles6.textarea,
+        value: form.description,
+        onChange: set("description"),
+        placeholder: "Descripci\xF3n opcional de la categor\xEDa"
+      }
+    )), /* @__PURE__ */ import_react6.default.createElement("div", { style: styles6.actions }, /* @__PURE__ */ import_react6.default.createElement("button", { type: "button", style: styles6.btnCancel, onClick: onCancel }, "Cancelar"), /* @__PURE__ */ import_react6.default.createElement("button", { type: "submit", style: styles6.btnSave }, isEdit ? "Guardar cambios" : "Crear categor\xEDa")))));
+  }
+  function CategoriesView() {
+    const [categories, setCategories] = (0, import_react6.useState)([]);
+    const [loading, setLoading] = (0, import_react6.useState)(true);
+    const [error, setError] = (0, import_react6.useState)(null);
+    const [modal, setModal] = (0, import_react6.useState)(null);
+    const load = (0, import_react6.useCallback)(async () => {
+      try {
+        setLoading(true);
+        setCategories(await window.electron.categories.getAll());
+        setError(null);
+      } catch {
+        setError("Error al cargar las categor\xEDas.");
+      } finally {
+        setLoading(false);
+      }
+    }, []);
+    (0, import_react6.useEffect)(() => {
+      load();
+    }, [load]);
+    const handleSave = async (formData) => {
+      try {
+        if (modal === "create") {
+          await window.electron.categories.create(formData);
+        } else {
+          await window.electron.categories.update(modal.category.id, formData);
+        }
+        setModal(null);
+        load();
+      } catch {
+        setError("Error al guardar la categor\xEDa. El nombre podr\xEDa estar duplicado.");
+      }
+    };
+    const handleDelete = async (id) => {
+      if (!window.confirm("\xBFEliminar esta categor\xEDa?")) return;
+      try {
+        await window.electron.categories.delete(id);
+        load();
+      } catch {
+        setError("Error al eliminar la categor\xEDa.");
+      }
+    };
+    return /* @__PURE__ */ import_react6.default.createElement(import_react6.default.Fragment, null, /* @__PURE__ */ import_react6.default.createElement("div", { style: styles6.toolbar }, /* @__PURE__ */ import_react6.default.createElement("h2", { style: styles6.sectionTitle }, "Categor\xEDas"), /* @__PURE__ */ import_react6.default.createElement("button", { style: styles6.btnPrimary, onClick: () => setModal("create") }, "+ Nueva Categor\xEDa")), error && /* @__PURE__ */ import_react6.default.createElement("div", { style: styles6.errorBox }, error), loading ? /* @__PURE__ */ import_react6.default.createElement("p", { style: { color: "#64748b", fontSize: "14px" } }, "Cargando...") : /* @__PURE__ */ import_react6.default.createElement("div", { style: styles6.wrapper }, categories.length === 0 ? /* @__PURE__ */ import_react6.default.createElement("p", { style: styles6.empty }, "No hay categor\xEDas. Agrega la primera.") : /* @__PURE__ */ import_react6.default.createElement("table", { style: styles6.table }, /* @__PURE__ */ import_react6.default.createElement("thead", null, /* @__PURE__ */ import_react6.default.createElement("tr", null, /* @__PURE__ */ import_react6.default.createElement("th", { style: styles6.th }, "Nombre"), /* @__PURE__ */ import_react6.default.createElement("th", { style: styles6.th }, "Descripci\xF3n"), /* @__PURE__ */ import_react6.default.createElement("th", { style: styles6.th }, "Acciones"))), /* @__PURE__ */ import_react6.default.createElement("tbody", null, categories.map((cat) => /* @__PURE__ */ import_react6.default.createElement("tr", { key: cat.id }, /* @__PURE__ */ import_react6.default.createElement("td", { style: styles6.td }, /* @__PURE__ */ import_react6.default.createElement("strong", null, cat.name)), /* @__PURE__ */ import_react6.default.createElement("td", { style: styles6.tdMuted }, cat.description || "\u2014"), /* @__PURE__ */ import_react6.default.createElement("td", { style: styles6.td }, /* @__PURE__ */ import_react6.default.createElement(
+      "button",
+      {
+        style: styles6.btnEdit,
+        onClick: () => setModal({ mode: "edit", category: cat })
+      },
+      "Editar"
+    ), /* @__PURE__ */ import_react6.default.createElement(
+      "button",
+      {
+        style: styles6.btnDelete,
+        onClick: () => handleDelete(cat.id)
+      },
+      "Eliminar"
+    ))))))), modal && /* @__PURE__ */ import_react6.default.createElement(
+      CategoryModal,
+      {
+        category: modal !== "create" ? modal.category : null,
+        onSave: handleSave,
+        onCancel: () => setModal(null)
+      }
+    ));
+  }
+
   // src/renderer/app.js
   var TABS = [
     { id: "inventory", label: "Inventario" },
     { id: "new-sale", label: "Nueva Venta" },
-    { id: "history", label: "Historial" }
+    { id: "history", label: "Historial" },
+    { id: "categories", label: "Categor\xEDas" }
   ];
-  var styles6 = {
+  var styles7 = {
     app: { minHeight: "100vh", background: "#f0f2f5" },
     header: {
       background: "#1a1a2e",
@@ -20128,21 +20385,21 @@
     main: { padding: "24px" }
   };
   function App() {
-    const [activeTab, setActiveTab] = (0, import_react6.useState)("inventory");
-    return /* @__PURE__ */ import_react6.default.createElement("div", { style: styles6.app }, /* @__PURE__ */ import_react6.default.createElement("header", { style: styles6.header }, /* @__PURE__ */ import_react6.default.createElement("span", { style: styles6.title }, "Inventario y Ventas"), /* @__PURE__ */ import_react6.default.createElement("nav", { style: styles6.nav }, TABS.map((tab) => /* @__PURE__ */ import_react6.default.createElement(
+    const [activeTab, setActiveTab] = (0, import_react7.useState)("inventory");
+    return /* @__PURE__ */ import_react7.default.createElement("div", { style: styles7.app }, /* @__PURE__ */ import_react7.default.createElement("header", { style: styles7.header }, /* @__PURE__ */ import_react7.default.createElement("span", { style: styles7.title }, "Inventario y Ventas"), /* @__PURE__ */ import_react7.default.createElement("nav", { style: styles7.nav }, TABS.map((tab) => /* @__PURE__ */ import_react7.default.createElement(
       "button",
       {
         key: tab.id,
-        style: activeTab === tab.id ? styles6.tabActive : styles6.tab,
+        style: activeTab === tab.id ? styles7.tabActive : styles7.tab,
         onClick: () => setActiveTab(tab.id)
       },
       tab.label
-    )))), /* @__PURE__ */ import_react6.default.createElement("main", { style: styles6.main }, activeTab === "inventory" && /* @__PURE__ */ import_react6.default.createElement(InventoryView, null), activeTab === "new-sale" && /* @__PURE__ */ import_react6.default.createElement(NewSale, { onSaleComplete: () => setActiveTab("history") }), activeTab === "history" && /* @__PURE__ */ import_react6.default.createElement(SaleHistory, null)));
+    )))), /* @__PURE__ */ import_react7.default.createElement("main", { style: styles7.main }, activeTab === "inventory" && /* @__PURE__ */ import_react7.default.createElement(InventoryView, null), activeTab === "new-sale" && /* @__PURE__ */ import_react7.default.createElement(NewSale, { onSaleComplete: () => setActiveTab("history") }), activeTab === "history" && /* @__PURE__ */ import_react7.default.createElement(SaleHistory, null), activeTab === "categories" && /* @__PURE__ */ import_react7.default.createElement(CategoriesView, null)));
   }
 
   // src/renderer/index.js
   var root = (0, import_client.createRoot)(document.getElementById("root"));
-  root.render(/* @__PURE__ */ import_react7.default.createElement(App, null));
+  root.render(/* @__PURE__ */ import_react8.default.createElement(App, null));
 })();
 /*! Bundled license information:
 
