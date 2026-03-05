@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import SaleReceipt from './SaleReceipt';
 
 const styles = {
   layout: {
@@ -199,6 +200,7 @@ export default function NewSale({ onSaleComplete }) {
   const [cart, setCart] = useState([]);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
+  const [receipt, setReceipt] = useState(null); // { sale, items, total }
 
   useEffect(() => {
     window.electron.products.getAll().then(setAllProducts);
@@ -266,10 +268,10 @@ export default function NewSale({ onSaleComplete }) {
     setSaving(true);
     setError(null);
     try {
-      await window.electron.sales.create(cart);
+      const savedSale = await window.electron.sales.create(cart);
+      setReceipt({ sale: savedSale, items: [...cart], total });
       setCart([]);
       setQuery('');
-      onSaleComplete();
     } catch {
       setError('Error al confirmar la venta. Intenta de nuevo.');
     } finally {
@@ -398,6 +400,15 @@ export default function NewSale({ onSaleComplete }) {
           {error && <div style={styles.errorBox}>{error}</div>}
         </div>
       </div>
+
+      {receipt && (
+        <SaleReceipt
+          sale={receipt.sale}
+          items={receipt.items}
+          total={receipt.total}
+          onClose={() => { setReceipt(null); onSaleComplete(); }}
+        />
+      )}
     </>
   );
 }
