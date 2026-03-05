@@ -1,5 +1,14 @@
-const { contextBridge } = require('electron');
+const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld('electron', {
-  // Aquí puedes exponer funciones de Node.js al frontend
+  products: {
+    getAll: () => ipcRenderer.invoke('products:getAll'),
+    create: (data) => ipcRenderer.invoke('products:create', data),
+    update: (id, data) => ipcRenderer.invoke('products:update', { id, ...data }),
+    delete: (id) => ipcRenderer.invoke('products:delete', id),
+  },
+  sales: {
+    create: (items) => ipcRenderer.invoke('sales:create', { items }),
+    getAll: () => ipcRenderer.invoke('sales:getAll'),
+  },
 });

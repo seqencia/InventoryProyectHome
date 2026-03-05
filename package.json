@@ -1,16 +1,16 @@
 {
-  "scripts": {
-    "start": "electron .",
-    "build": "react-scripts build",
-    "dev": "concurrently \"npm run start\" \"npm run build\""
-  },
   "name": "inventario-venta-desktop",
   "version": "1.0.0",
-  "main": "dist/main/main.js",
+  "main": "src/main/main.js",
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
+  "scripts": {
+    "build:renderer": "esbuild src/renderer/index.js --bundle --loader:.js=jsx --outfile=src/renderer/bundle.js",
+    "start": "npm run build:renderer && electron .",
+    "dev": "concurrently \"esbuild src/renderer/index.js --bundle --loader:.js=jsx --outfile=src/renderer/bundle.js --watch\" \"electron .\""
+  },
   "dependencies": {
     "electron": "^35.0.0",
     "react": "^19.0.0",
@@ -23,6 +23,8 @@
   "devDependencies": {
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",
+    "concurrently": "^9.0.0",
+    "esbuild": "^0.25.0",
     "eslint": "^9.21.0",
     "prettier": "^3.5.3"
   }
