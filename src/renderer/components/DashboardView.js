@@ -186,6 +186,7 @@ function RecentSalesCard({ sales, onNavigate }) {
 // ── Main component ─────────────────────────────────────────────────────────
 
 const layout = {
+  grid3: { display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px', marginBottom: '16px' },
   grid2: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' },
   grid2Bottom: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' },
   title: { fontSize: '17px', fontWeight: '600', color: '#1e293b', marginBottom: '20px' },
@@ -210,7 +211,8 @@ export default function DashboardView({ onNavigate }) {
     return (
       <>
         <div style={layout.title}>Dashboard</div>
-        <div style={layout.grid2}>
+        <div style={layout.grid3}>
+          <div style={layout.skeleton} />
           <div style={layout.skeleton} />
           <div style={layout.skeleton} />
         </div>
@@ -232,7 +234,7 @@ export default function DashboardView({ onNavigate }) {
       <div style={layout.title}>Dashboard</div>
 
       {/* Stat cards */}
-      <div style={layout.grid2}>
+      <div style={layout.grid3}>
         <StatCard
           label="Ventas Hoy"
           value={data.todayCount}
@@ -244,6 +246,12 @@ export default function DashboardView({ onNavigate }) {
           value={`$${data.todayTotal.toFixed(2)}`}
           sub={data.todayCount === 0 ? 'Sin movimiento hoy' : `Promedio $${data.todayCount > 0 ? (data.todayTotal / data.todayCount).toFixed(2) : '0.00'} por venta`}
           accentColor="#16a34a"
+        />
+        <StatCard
+          label="Utilidad Hoy"
+          value={`$${data.todayProfit.toFixed(2)}`}
+          sub={data.todayProfit >= 0 ? 'Ganancia neta estimada' : 'Sin datos de costo'}
+          accentColor="#8b5cf6"
         />
       </div>
 

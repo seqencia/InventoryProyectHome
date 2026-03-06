@@ -161,7 +161,7 @@ const s = {
   },
 };
 
-export default function SaleReceipt({ sale, items, total, onClose }) {
+export default function SaleReceipt({ sale, items, subtotal, tax, total, onClose }) {
   return (
     <>
       <style>{PRINT_STYLES}</style>
@@ -203,6 +203,10 @@ export default function SaleReceipt({ sale, items, total, onClose }) {
                 <span style={s.infoValue}>{sale.customer_name}</span>
               </div>
             )}
+            <div style={s.infoRow}>
+              <span style={s.infoLabel}>Pago</span>
+              <span style={s.infoValue}>{sale.payment_method || 'Efectivo'}</span>
+            </div>
           </div>
 
           <div style={s.divider} />
@@ -229,7 +233,17 @@ export default function SaleReceipt({ sale, items, total, onClose }) {
 
           <div style={s.dividerSolid} />
 
-          {/* Total */}
+          {/* Totals breakdown */}
+          <div style={{ marginBottom: '8px' }}>
+            <div style={{ ...s.infoRow, marginBottom: '4px' }}>
+              <span style={s.infoLabel}>Subtotal</span>
+              <span style={s.infoValue}>${Number(subtotal ?? sale.subtotal ?? total).toFixed(2)}</span>
+            </div>
+            <div style={{ ...s.infoRow, marginBottom: '4px' }}>
+              <span style={s.infoLabel}>IVA (13%)</span>
+              <span style={s.infoValue}>${Number(tax ?? sale.tax ?? 0).toFixed(2)}</span>
+            </div>
+          </div>
           <div style={s.totalRow}>
             <span style={s.totalLabel}>Total</span>
             <span style={s.totalAmount}>${Number(total).toFixed(2)}</span>

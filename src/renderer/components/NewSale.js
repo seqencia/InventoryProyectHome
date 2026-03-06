@@ -273,6 +273,7 @@ export default function NewSale({ onSaleComplete }) {
   const [allCustomers, setAllCustomers] = useState([]);
   const [selectedCustomer, setSelectedCustomer] = useState(null);
   const [customerQuery, setCustomerQuery] = useState('');
+  const [paymentMethod, setPaymentMethod] = useState('Efectivo');
 
   useEffect(() => {
     window.electron.products.getAll().then(setAllProducts);
@@ -349,7 +350,9 @@ export default function NewSale({ onSaleComplete }) {
     );
   };
 
-  const total = cart.reduce((sum, item) => sum + item.subtotal, 0);
+  const subtotal = cart.reduce((sum, item) => sum + item.subtotal, 0);
+  const tax = subtotal * 0.13;
+  const total = subtotal + tax;
 
   const confirmSale = async () => {
     if (cart.length === 0 || saving) return;
@@ -359,13 +362,16 @@ export default function NewSale({ onSaleComplete }) {
       const savedSale = await window.electron.sales.create(
         cart,
         selectedCustomer?.id ?? null,
-        selectedCustomer?.name ?? null
+        selectedCustomer?.name ?? null,
+        paymentMethod,
+        'Completada'
       );
-      setReceipt({ sale: savedSale, items: [...cart], total });
+      setReceipt({ sale: savedSale, items: [...cart], subtotal, tax, total });
       setCart([]);
       setQuery('');
       setSelectedCustomer(null);
       setCustomerQuery('');
+      setPaymentMethod('Efectivo');
     } catch {
       setError('Error al confirmar la venta. Intenta de nuevo.');
     } finally {
@@ -535,6 +541,32 @@ export default function NewSale({ onSaleComplete }) {
           </div>
 
           <div style={styles.cartFooter}>
+            {/* Payment method */}
+            <div style={{ marginBottom: '10px' }}>
+              <div style={{ fontSize: '11px', fontWeight: '600', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '5px' }}>
+                Método de pago
+              </div>
+              <select
+                value={paymentMethod}
+                onChange={(e) => setPaymentMethod(e.target.value)}
+                style={{ width: '100%', padding: '6px 10px', border: '1px solid #e2e8f0', borderRadius: '6px', fontSize: '13px', background: 'white', boxSizing: 'border-box' }}
+              >
+                <option value="Efectivo">Efectivo</option>
+                <option value="Tarjeta">Tarjeta</option>
+                <option value="Transferencia">Transferencia</option>
+              </select>
+            </div>
+            {/* Breakdown */}
+            <div style={{ fontSize: '13px', color: '#64748b', marginBottom: '8px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '3px' }}>
+                <span>Subtotal</span>
+                <span>${subtotal.toFixed(2)}</span>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '3px' }}>
+                <span>IVA (13%)</span>
+                <span>${tax.toFixed(2)}</span>
+              </div>
+            </div>
             <div style={styles.totalRow}>
               <span style={styles.totalLabel}>Total</span>
               <span style={styles.totalAmount}>${total.toFixed(2)}</span>
@@ -555,6 +587,8 @@ export default function NewSale({ onSaleComplete }) {
         <SaleReceipt
           sale={receipt.sale}
           items={receipt.items}
+          subtotal={receipt.subtotal}
+          tax={receipt.tax}
           total={receipt.total}
           onClose={() => { setReceipt(null); onSaleComplete(); }}
         />

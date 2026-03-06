@@ -95,6 +95,27 @@ const styles = {
   },
 };
 
+const STATUS_STYLE = {
+  'Completada': { background: '#dcfce7', color: '#16a34a' },
+  'Cancelada':  { background: '#fee2e2', color: '#dc2626' },
+  'Pendiente':  { background: '#fef3c7', color: '#b45309' },
+};
+
+const PAYMENT_STYLE = {
+  'Efectivo':      { background: '#f0fdf4', color: '#15803d' },
+  'Tarjeta':       { background: '#eff6ff', color: '#1d4ed8' },
+  'Transferencia': { background: '#f5f3ff', color: '#7c3aed' },
+};
+
+function Badge({ map, value }) {
+  const col = map[value] || { background: '#f1f5f9', color: '#64748b' };
+  return (
+    <span style={{ display: 'inline-block', padding: '2px 8px', borderRadius: '10px', fontSize: '12px', fontWeight: '600', ...col }}>
+      {value || '—'}
+    </span>
+  );
+}
+
 function formatDate(dateStr) {
   return new Date(dateStr).toLocaleString('es', {
     day: '2-digit',
@@ -141,6 +162,8 @@ export default function SaleHistory() {
                   <th style={styles.th}>#</th>
                   <th style={styles.th}>Fecha</th>
                   <th style={styles.th}>Cliente</th>
+                  <th style={styles.th}>Método</th>
+                  <th style={styles.th}>Estado</th>
                   <th style={styles.th}>Productos</th>
                   <th style={styles.th}>Total</th>
                   <th style={styles.th}></th>
@@ -153,6 +176,8 @@ export default function SaleHistory() {
                       <td style={styles.td}>{sale.id}</td>
                       <td style={styles.td}>{formatDate(sale.created_at)}</td>
                       <td style={styles.td}>{sale.customer_name || <span style={{ color: '#94a3b8' }}>—</span>}</td>
+                      <td style={styles.td}><Badge map={PAYMENT_STYLE} value={sale.payment_method || 'Efectivo'} /></td>
+                      <td style={styles.td}><Badge map={STATUS_STYLE} value={sale.status || 'Completada'} /></td>
                       <td style={styles.td}>{sale.details.length} producto{sale.details.length !== 1 ? 's' : ''}</td>
                       <td style={styles.td}>
                         <span style={styles.totalBadge}>${Number(sale.total).toFixed(2)}</span>
@@ -165,7 +190,7 @@ export default function SaleHistory() {
                     </tr>
                     {expanded === sale.id && (
                       <tr style={styles.detailRow}>
-                        <td colSpan={6} style={styles.detailCell}>
+                        <td colSpan={8} style={styles.detailCell}>
                           <table style={styles.detailTable}>
                             <thead>
                               <tr>
@@ -187,6 +212,16 @@ export default function SaleHistory() {
                             </tbody>
                           </table>
                           <div style={styles.detailTotal}>
+                            {sale.subtotal != null && (
+                              <>
+                                <span style={{ fontWeight: '400', color: '#64748b', marginRight: '16px' }}>
+                                  Subtotal: ${Number(sale.subtotal).toFixed(2)}
+                                </span>
+                                <span style={{ fontWeight: '400', color: '#64748b', marginRight: '16px' }}>
+                                  IVA 13%: ${Number(sale.tax).toFixed(2)}
+                                </span>
+                              </>
+                            )}
                             Total: ${Number(sale.total).toFixed(2)}
                           </div>
                         </td>

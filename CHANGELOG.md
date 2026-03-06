@@ -10,6 +10,28 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [0.8.0] - 2026-03-05
+
+### Added
+
+#### Sales module improvements
+- **Método de pago**: dropdown in Nueva Venta (Efectivo, Tarjeta, Transferencia); stored on the sale record; shown in receipt and history with color badges
+- **Estado de venta**: stored on sale record (Completada / Cancelada / Pendiente); displayed in Historial with color badges; defaults to `Completada` on confirm
+- **IVA 13%**: subtotal computed as sum of item prices, tax = subtotal × 0.13, total = subtotal + tax; all three stored in the `sales` table
+- **Profit per sale**: calculated at save time as Σ (unit_price − cost_price) × quantity per item; stored in `sales.profit`; products without cost_price are excluded from profit
+- **Cart breakdown**: Nueva Venta cart footer now shows Subtotal / IVA (13%) / Total rows before the confirm button
+- **Receipt breakdown**: SaleReceipt modal shows Subtotal, IVA (13%), and Total separately; also shows payment method
+- **Historial columns**: Método and Estado columns added with color badges; expanded row footer shows Subtotal + IVA + Total
+- **Dashboard Utilidad card**: third stat card shows today's estimated net profit (`todayProfit`) with purple accent
+
+### Changed
+- `SaleSchema` extended with nullable columns: `payment_method`, `status`, `subtotal`, `tax`, `profit` — existing records unaffected via `synchronize: true`
+- `sales:create` IPC handler now receives `paymentMethod` and `status`; performs product lookup to compute per-item profit
+- `preload.js` `sales.create` bridge updated to forward `paymentMethod` and `status`
+- Dashboard top stat row changed from 2-column to 3-column grid
+
+---
+
 ## [0.7.0] - 2026-03-05
 
 ### Added

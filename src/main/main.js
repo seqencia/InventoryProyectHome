@@ -1,6 +1,6 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
-const { DataSource, EntitySchema } = require('typeorm');
+const { DataSource, EntitySchema, In } = require('typeorm');
 
 // ── Schemas ────────────────────────────────────────────────────────────────
 
@@ -57,7 +57,12 @@ const SaleSchema = new EntitySchema({
   tableName: 'sales',
   columns: {
     id: { type: Number, primary: true, generated: true },
+    payment_method: { type: String, nullable: true, default: 'Efectivo' },
+    status: { type: String, nullable: true, default: 'Completada' },
+    subtotal: { type: 'decimal', precision: 10, scale: 2, nullable: true },
+    tax: { type: 'decimal', precision: 10, scale: 2, nullable: true },
     total: { type: 'decimal', precision: 10, scale: 2 },
+    profit: { type: 'decimal', precision: 10, scale: 2, nullable: true },
     customer_id: { type: Number, nullable: true },
     customer_name: { type: String, nullable: true },
     created_at: { type: 'datetime', createDate: true },
@@ -153,6 +158,7 @@ function setupIpcHandlers() {
     const todaySales = allSales.filter((s) => new Date(s.created_at) >= todayStart);
     const todayTotal = todaySales.reduce((sum, s) => sum + Number(s.total), 0);
     const todayCount = todaySales.length;
+    const todayProfit = todaySales.reduce((sum, s) => sum + Number(s.profit || 0), 0);
 
     // Low stock — respect each product's individual minimum
     const lowStock = allProducts
@@ -174,7 +180,7 @@ function setupIpcHandlers() {
     // Recent 5 sales
     const recentSales = allSales.slice(0, 5);
 
-    return { todayTotal, todayCount, lowStock, topProducts, recentSales };
+    return { todayTotal, todayCount, todayProfit, lowStock, topProducts, recentSales };
   });
 
   // Customers
@@ -197,14 +203,35 @@ function setupIpcHandlers() {
   });
 
   // Sales
-  ipcMain.handle('sales:create', async (_, { items, customerId, customerName }) => {
+  ipcMain.handle('sales:create', async (_, { items, customerId, customerName, paymentMethod, status }) => {
     return await AppDataSource.transaction(async (manager) => {
-      const total = items.reduce((sum, item) => sum + item.subtotal, 0);
+      const subtotal = items.reduce((sum, item) => sum + item.subtotal, 0);
+      const tax = subtotal * 0.13;
+      const total = subtotal + tax;
+
+      // Profit = sum of (unit_price - cost_price) * quantity per item
+      const productIds = items.map((i) => i.product_id);
+      const products = await manager.getRepository('Product').find({ where: { id: In(productIds) } });
+      const productMap = {};
+      for (const p of products) productMap[p.id] = p;
+
+      let profit = 0;
+      for (const item of items) {
+        const product = productMap[item.product_id];
+        if (product && product.cost_price != null) {
+          profit += (item.unit_price - Number(product.cost_price)) * item.quantity;
+        }
+      }
 
       const savedSale = await manager.save(
         'Sale',
         manager.create('Sale', {
+          payment_method: paymentMethod || 'Efectivo',
+          status: status || 'Completada',
+          subtotal,
+          tax,
           total,
+          profit,
           customer_id: customerId || null,
           customer_name: customerName || null,
         })
