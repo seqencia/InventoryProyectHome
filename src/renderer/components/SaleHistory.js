@@ -140,6 +140,7 @@ export default function SaleHistory() {
                 <tr>
                   <th style={styles.th}>#</th>
                   <th style={styles.th}>Fecha</th>
+                  <th style={styles.th}>Cliente</th>
                   <th style={styles.th}>Productos</th>
                   <th style={styles.th}>Total</th>
                   <th style={styles.th}></th>
@@ -151,6 +152,7 @@ export default function SaleHistory() {
                     <tr>
                       <td style={styles.td}>{sale.id}</td>
                       <td style={styles.td}>{formatDate(sale.created_at)}</td>
+                      <td style={styles.td}>{sale.customer_name || <span style={{ color: '#94a3b8' }}>—</span>}</td>
                       <td style={styles.td}>{sale.details.length} producto{sale.details.length !== 1 ? 's' : ''}</td>
                       <td style={styles.td}>
                         <span style={styles.totalBadge}>${Number(sale.total).toFixed(2)}</span>
@@ -163,7 +165,7 @@ export default function SaleHistory() {
                     </tr>
                     {expanded === sale.id && (
                       <tr style={styles.detailRow}>
-                        <td colSpan={5} style={styles.detailCell}>
+                        <td colSpan={6} style={styles.detailCell}>
                           <table style={styles.detailTable}>
                             <thead>
                               <tr>

@@ -186,6 +186,75 @@ const styles = {
     fontSize: '13px',
     borderTop: '1px solid #fecaca',
   },
+  // Customer selector
+  customerSection: {
+    padding: '10px 16px',
+    borderBottom: '1px solid #f1f5f9',
+    background: '#fafafa',
+  },
+  customerLabel: {
+    fontSize: '11px',
+    fontWeight: '600',
+    color: '#64748b',
+    textTransform: 'uppercase',
+    letterSpacing: '0.5px',
+    marginBottom: '6px',
+  },
+  customerPill: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '8px',
+    background: '#eff6ff',
+    border: '1px solid #bfdbfe',
+    borderRadius: '6px',
+    padding: '6px 10px',
+  },
+  customerPillName: {
+    fontWeight: '600',
+    fontSize: '13px',
+    color: '#1d4ed8',
+    flex: 1,
+  },
+  customerPillMeta: { fontSize: '12px', color: '#64748b' },
+  customerClearBtn: {
+    background: 'none',
+    border: 'none',
+    color: '#94a3b8',
+    cursor: 'pointer',
+    fontSize: '18px',
+    lineHeight: 1,
+    padding: '0 2px',
+  },
+  customerSearchWrap: { position: 'relative' },
+  customerInput: {
+    width: '100%',
+    padding: '6px 10px',
+    border: '1px solid #e2e8f0',
+    borderRadius: '6px',
+    fontSize: '13px',
+    outline: 'none',
+    boxSizing: 'border-box',
+  },
+  customerDropdown: {
+    position: 'absolute',
+    top: 'calc(100% + 4px)',
+    left: 0,
+    right: 0,
+    background: 'white',
+    border: '1px solid #e2e8f0',
+    borderRadius: '6px',
+    boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+    zIndex: 10,
+    maxHeight: '160px',
+    overflowY: 'auto',
+  },
+  customerOption: {
+    padding: '8px 12px',
+    cursor: 'pointer',
+    borderBottom: '1px solid #f8fafc',
+  },
+  customerOptionName: { fontWeight: '500', fontSize: '13px', color: '#1e293b' },
+  customerOptionMeta: { fontSize: '11px', color: '#94a3b8', marginTop: '2px' },
   sectionTitle: {
     fontSize: '17px',
     fontWeight: '600',
@@ -201,10 +270,26 @@ export default function NewSale({ onSaleComplete }) {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
   const [receipt, setReceipt] = useState(null); // { sale, items, total }
+  const [allCustomers, setAllCustomers] = useState([]);
+  const [selectedCustomer, setSelectedCustomer] = useState(null);
+  const [customerQuery, setCustomerQuery] = useState('');
 
   useEffect(() => {
     window.electron.products.getAll().then(setAllProducts);
+    window.electron.customers.getAll().then(setAllCustomers);
   }, []);
+
+  const filteredCustomers = useMemo(() => {
+    const q = customerQuery.toLowerCase().trim();
+    if (!q) return [];
+    return allCustomers
+      .filter(
+        (c) =>
+          c.name.toLowerCase().includes(q) ||
+          (c.phone || '').includes(q)
+      )
+      .slice(0, 5);
+  }, [allCustomers, customerQuery]);
 
   // Products filtered by query, with available stock (product stock minus qty already in cart)
   const filteredProducts = useMemo(() => {
@@ -268,10 +353,16 @@ export default function NewSale({ onSaleComplete }) {
     setSaving(true);
     setError(null);
     try {
-      const savedSale = await window.electron.sales.create(cart);
+      const savedSale = await window.electron.sales.create(
+        cart,
+        selectedCustomer?.id ?? null,
+        selectedCustomer?.name ?? null
+      );
       setReceipt({ sale: savedSale, items: [...cart], total });
       setCart([]);
       setQuery('');
+      setSelectedCustomer(null);
+      setCustomerQuery('');
     } catch {
       setError('Error al confirmar la venta. Intenta de nuevo.');
     } finally {
@@ -341,6 +432,57 @@ export default function NewSale({ onSaleComplete }) {
         {/* Cart panel */}
         <div style={styles.panel}>
           <div style={styles.panelHeader}>Carrito</div>
+
+          {/* Customer selector */}
+          <div style={styles.customerSection}>
+            <div style={styles.customerLabel}>
+              Cliente <span style={{ fontWeight: '400', textTransform: 'none', letterSpacing: 0 }}>(opcional)</span>
+            </div>
+            {selectedCustomer ? (
+              <div style={styles.customerPill}>
+                <span style={styles.customerPillName}>{selectedCustomer.name}</span>
+                {selectedCustomer.phone && (
+                  <span style={styles.customerPillMeta}>{selectedCustomer.phone}</span>
+                )}
+                <button
+                  style={styles.customerClearBtn}
+                  onClick={() => setSelectedCustomer(null)}
+                  title="Quitar cliente"
+                >
+                  ×
+                </button>
+              </div>
+            ) : (
+              <div style={styles.customerSearchWrap}>
+                <input
+                  style={styles.customerInput}
+                  placeholder="Buscar cliente por nombre o teléfono..."
+                  value={customerQuery}
+                  onChange={(e) => setCustomerQuery(e.target.value)}
+                />
+                {filteredCustomers.length > 0 && (
+                  <div style={styles.customerDropdown}>
+                    {filteredCustomers.map((c) => (
+                      <div
+                        key={c.id}
+                        style={styles.customerOption}
+                        onClick={() => {
+                          setSelectedCustomer(c);
+                          setCustomerQuery('');
+                        }}
+                      >
+                        <div style={styles.customerOptionName}>{c.name}</div>
+                        {c.phone && (
+                          <div style={styles.customerOptionMeta}>{c.phone}</div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+
           <div style={styles.cartBody}>
             {cart.length === 0 ? (
               <p style={styles.emptyCart}>

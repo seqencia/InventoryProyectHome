@@ -197,6 +197,12 @@ export default function SaleReceipt({ sale, items, total, onClose }) {
               <span style={s.infoLabel}>Fecha</span>
               <span style={s.infoValue}>{formatDate(sale.created_at)}</span>
             </div>
+            {sale.customer_name && (
+              <div style={s.infoRow}>
+                <span style={s.infoLabel}>Cliente</span>
+                <span style={s.infoValue}>{sale.customer_name}</span>
+              </div>
+            )}
           </div>
 
           <div style={s.divider} />

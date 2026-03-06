@@ -13,8 +13,15 @@ contextBridge.exposeInMainWorld('electron', {
     update: (id, data) => ipcRenderer.invoke('categories:update', { id, ...data }),
     delete: (id) => ipcRenderer.invoke('categories:delete', id),
   },
+  customers: {
+    getAll: () => ipcRenderer.invoke('customers:getAll'),
+    create: (data) => ipcRenderer.invoke('customers:create', data),
+    update: (id, data) => ipcRenderer.invoke('customers:update', { id, ...data }),
+    delete: (id) => ipcRenderer.invoke('customers:delete', id),
+  },
   sales: {
-    create: (items) => ipcRenderer.invoke('sales:create', { items }),
+    create: (items, customerId, customerName) =>
+      ipcRenderer.invoke('sales:create', { items, customerId, customerName }),
     getAll: () => ipcRenderer.invoke('sales:getAll'),
   },
 });

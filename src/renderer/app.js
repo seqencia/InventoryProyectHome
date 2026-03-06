@@ -3,12 +3,14 @@ import InventoryView from './components/InventoryView';
 import NewSale from './components/NewSale';
 import SaleHistory from './components/SaleHistory';
 import CategoriesView from './components/CategoriesView';
+import CustomersView from './components/CustomersView';
 
 const TABS = [
   { id: 'inventory', label: 'Inventario' },
   { id: 'new-sale', label: 'Nueva Venta' },
   { id: 'history', label: 'Historial' },
   { id: 'categories', label: 'Categorías' },
+  { id: 'customers', label: 'Clientes' },
 ];
 
 const styles = {
@@ -74,6 +76,7 @@ export default function App() {
         )}
         {activeTab === 'history' && <SaleHistory />}
         {activeTab === 'categories' && <CategoriesView />}
+        {activeTab === 'customers' && <CustomersView />}
       </main>
     </div>
   );

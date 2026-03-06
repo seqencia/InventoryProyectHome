@@ -29,12 +29,26 @@ const CategorySchema = new EntitySchema({
   },
 });
 
+const CustomerSchema = new EntitySchema({
+  name: 'Customer',
+  tableName: 'customers',
+  columns: {
+    id: { type: Number, primary: true, generated: true },
+    name: { type: String },
+    phone: { type: String, nullable: true },
+    email: { type: String, nullable: true },
+    created_at: { type: 'datetime', createDate: true },
+  },
+});
+
 const SaleSchema = new EntitySchema({
   name: 'Sale',
   tableName: 'sales',
   columns: {
     id: { type: Number, primary: true, generated: true },
     total: { type: 'decimal', precision: 10, scale: 2 },
+    customer_id: { type: Number, nullable: true },
+    customer_name: { type: String, nullable: true },
     created_at: { type: 'datetime', createDate: true },
   },
 });
@@ -61,7 +75,7 @@ async function initDatabase() {
   AppDataSource = new DataSource({
     type: 'sqlite',
     database: path.join(app.getPath('userData'), 'database.sqlite'),
-    entities: [ProductSchema, CategorySchema, SaleSchema, SaleDetailSchema],
+    entities: [ProductSchema, CategorySchema, CustomerSchema, SaleSchema, SaleDetailSchema],
     synchronize: true,
     logging: false,
   });
@@ -111,14 +125,37 @@ function setupIpcHandlers() {
     return { success: true };
   });
 
+  // Customers
+  ipcMain.handle('customers:getAll', async () => {
+    return await repo('Customer').find({ order: { name: 'ASC' } });
+  });
+
+  ipcMain.handle('customers:create', async (_, data) => {
+    return await repo('Customer').save(repo('Customer').create(data));
+  });
+
+  ipcMain.handle('customers:update', async (_, { id, ...data }) => {
+    await repo('Customer').update(id, data);
+    return await repo('Customer').findOneBy({ id });
+  });
+
+  ipcMain.handle('customers:delete', async (_, id) => {
+    await repo('Customer').delete(id);
+    return { success: true };
+  });
+
   // Sales
-  ipcMain.handle('sales:create', async (_, { items }) => {
+  ipcMain.handle('sales:create', async (_, { items, customerId, customerName }) => {
     return await AppDataSource.transaction(async (manager) => {
       const total = items.reduce((sum, item) => sum + item.subtotal, 0);
 
       const savedSale = await manager.save(
         'Sale',
-        manager.create('Sale', { total })
+        manager.create('Sale', {
+          total,
+          customer_id: customerId || null,
+          customer_name: customerName || null,
+        })
       );
 
       for (const item of items) {

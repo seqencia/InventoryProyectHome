@@ -10,6 +10,25 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [0.5.0] - 2026-03-05
+
+### Added
+
+#### Customers module
+- `customers` table in SQLite (`name` required; `phone`, `email` optional)
+- IPC handlers: `customers:getAll`, `customers:create`, `customers:update`, `customers:delete`
+- `CustomersView` screen with full CRUD: table with name, phone, and email columns; inline create/edit modal; delete with confirmation
+- "Clientes" tab added to main navigation
+
+#### Customer integration in sales
+- `sales` table extended with nullable `customer_id` and `customer_name` columns (auto-migrated via `synchronize: true`)
+- Optional customer selector in the Nueva Venta cart panel: type to search by name or phone, results dropdown limited to 5 matches, selected customer shown as a dismissible pill
+- Customer name snapshotted at sale time (`customer_name` stored in the sale record)
+- Customer name displayed in the sale receipt when present
+- "Cliente" column added to the Historial de Ventas table
+
+---
+
 ## [0.4.0] - 2026-03-04
 
 ### Added
