@@ -10,6 +10,35 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [0.9.0] - 2026-03-05
+
+### Added
+
+#### Catálogo module (replaces Inventario tab)
+- Product master data CRUD: Nombre, SKU, Código de barras, Número de serie, Condición, Estado, Precios, Categoría, Ubicación, Descripción, Notas técnicas
+- Stock is no longer editable in the form — managed exclusively via Entradas de Inventario
+- New products start with `stock = 0` automatically
+
+#### Entradas de Inventario module
+- `stock_entries` table: `product_id`, `product_name`, `quantity`, `unit_cost`, `supplier_id`, `supplier_name`, `notes`, `created_at`
+- IPC handler `stockEntries:create` runs in a transaction: saves the entry and increments `products.stock` atomically
+- IPC handler `stockEntries:getAll` returns all entries sorted by date descending
+- History list: columns #, Fecha, Producto, Cantidad (green badge), Costo unit., Proveedor, Notas
+- Modal form: product dropdown (shows SKU + current stock), quantity (required), unit cost, supplier dropdown, notes
+
+#### Proveedores module
+- `suppliers` table: `name`, `phone`, `email`, `address`, `notes`, `created_at`
+- IPC handlers: `suppliers:getAll`, `suppliers:create`, `suppliers:update`, `suppliers:delete`
+- Full CRUD with inline modal; supplier name snapshotted at stock entry time
+
+### Changed
+- Navigation tabs updated: "Inventario" → "Catálogo"; "Entradas" and "Proveedores" added after Catálogo
+- `ProductForm` section "Inventario y Ubicación" (4 cols) simplified to "Clasificación y Ubicación" (2 cols: Categoría, Ubicación); stock and min_stock removed from form
+- `preload.js` exposes `suppliers` and `stockEntries` bridges
+- Existing product stock values and all existing records remain fully compatible
+
+---
+
 ## [0.8.0] - 2026-03-05
 
 ### Added

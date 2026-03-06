@@ -69,6 +69,36 @@ const SaleSchema = new EntitySchema({
   },
 });
 
+const SupplierSchema = new EntitySchema({
+  name: 'Supplier',
+  tableName: 'suppliers',
+  columns: {
+    id: { type: Number, primary: true, generated: true },
+    name: { type: String },
+    phone: { type: String, nullable: true },
+    email: { type: String, nullable: true },
+    address: { type: String, nullable: true },
+    notes: { type: String, nullable: true },
+    created_at: { type: 'datetime', createDate: true },
+  },
+});
+
+const StockEntrySchema = new EntitySchema({
+  name: 'StockEntry',
+  tableName: 'stock_entries',
+  columns: {
+    id: { type: Number, primary: true, generated: true },
+    product_id: { type: Number },
+    product_name: { type: String },
+    quantity: { type: Number },
+    unit_cost: { type: 'decimal', precision: 10, scale: 2, nullable: true },
+    supplier_id: { type: Number, nullable: true },
+    supplier_name: { type: String, nullable: true },
+    notes: { type: String, nullable: true },
+    created_at: { type: 'datetime', createDate: true },
+  },
+});
+
 const SaleDetailSchema = new EntitySchema({
   name: 'SaleDetail',
   tableName: 'sale_details',
@@ -91,7 +121,7 @@ async function initDatabase() {
   AppDataSource = new DataSource({
     type: 'sqlite',
     database: path.join(app.getPath('userData'), 'database.sqlite'),
-    entities: [ProductSchema, CategorySchema, CustomerSchema, SaleSchema, SaleDetailSchema],
+    entities: [ProductSchema, CategorySchema, CustomerSchema, SaleSchema, SaleDetailSchema, SupplierSchema, StockEntrySchema],
     synchronize: true,
     logging: false,
   });
@@ -112,6 +142,7 @@ function setupIpcHandlers() {
     if (!data.sku || !data.sku.trim()) {
       data.sku = 'PRD-' + Date.now().toString(36).toUpperCase().slice(-6);
     }
+    if (data.stock == null) data.stock = 0;
     return await repo('Product').save(repo('Product').create(data));
   });
 
@@ -200,6 +231,59 @@ function setupIpcHandlers() {
   ipcMain.handle('customers:delete', async (_, id) => {
     await repo('Customer').delete(id);
     return { success: true };
+  });
+
+  // Suppliers
+  ipcMain.handle('suppliers:getAll', async () => {
+    return await repo('Supplier').find({ order: { name: 'ASC' } });
+  });
+
+  ipcMain.handle('suppliers:create', async (_, data) => {
+    return await repo('Supplier').save(repo('Supplier').create(data));
+  });
+
+  ipcMain.handle('suppliers:update', async (_, { id, ...data }) => {
+    await repo('Supplier').update(id, data);
+    return await repo('Supplier').findOneBy({ id });
+  });
+
+  ipcMain.handle('suppliers:delete', async (_, id) => {
+    await repo('Supplier').delete(id);
+    return { success: true };
+  });
+
+  // Stock Entries
+  ipcMain.handle('stockEntries:getAll', async () => {
+    return await repo('StockEntry').find({ order: { created_at: 'DESC' } });
+  });
+
+  ipcMain.handle('stockEntries:create', async (_, data) => {
+    return await AppDataSource.transaction(async (manager) => {
+      const product = await manager.getRepository('Product').findOneBy({ id: data.product_id });
+      if (!product) throw new Error('Producto no encontrado');
+
+      let supplier_name = null;
+      if (data.supplier_id) {
+        const supplier = await manager.getRepository('Supplier').findOneBy({ id: data.supplier_id });
+        supplier_name = supplier?.name ?? null;
+      }
+
+      const entry = await manager.save(
+        'StockEntry',
+        manager.create('StockEntry', {
+          product_id: data.product_id,
+          product_name: product.name,
+          quantity: data.quantity,
+          unit_cost: data.unit_cost || null,
+          supplier_id: data.supplier_id || null,
+          supplier_name,
+          notes: data.notes || null,
+        })
+      );
+
+      await manager.getRepository('Product').increment({ id: data.product_id }, 'stock', data.quantity);
+      return entry;
+    });
   });
 
   // Sales

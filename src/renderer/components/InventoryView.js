@@ -77,7 +77,7 @@ export default function InventoryView() {
   return (
     <>
       <div style={styles.toolbar}>
-        <h2 style={styles.sectionTitle}>Inventario de Productos</h2>
+        <h2 style={styles.sectionTitle}>Catálogo de Productos</h2>
         <button style={styles.btnPrimary} onClick={() => setModal('create')}>
           + Nuevo Producto
         </button>

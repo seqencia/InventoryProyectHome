@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import DashboardView from './components/DashboardView';
 import InventoryView from './components/InventoryView';
+import StockEntriesView from './components/StockEntriesView';
+import SuppliersView from './components/SuppliersView';
 import NewSale from './components/NewSale';
 import SaleHistory from './components/SaleHistory';
 import CategoriesView from './components/CategoriesView';
@@ -8,7 +10,9 @@ import CustomersView from './components/CustomersView';
 
 const TABS = [
   { id: 'dashboard', label: 'Dashboard' },
-  { id: 'inventory', label: 'Inventario' },
+  { id: 'catalog', label: 'Catálogo' },
+  { id: 'stock-entries', label: 'Entradas' },
+  { id: 'suppliers', label: 'Proveedores' },
   { id: 'new-sale', label: 'Nueva Venta' },
   { id: 'history', label: 'Historial' },
   { id: 'categories', label: 'Categorías' },
@@ -73,7 +77,9 @@ export default function App() {
       </header>
       <main style={styles.main}>
         {activeTab === 'dashboard' && <DashboardView onNavigate={setActiveTab} />}
-        {activeTab === 'inventory' && <InventoryView />}
+        {activeTab === 'catalog' && <InventoryView />}
+        {activeTab === 'stock-entries' && <StockEntriesView />}
+        {activeTab === 'suppliers' && <SuppliersView />}
         {activeTab === 'new-sale' && (
           <NewSale onSaleComplete={() => setActiveTab('history')} />
         )}

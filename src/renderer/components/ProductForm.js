@@ -131,8 +131,6 @@ export default function ProductForm({ product, onSave, onCancel }) {
     cost_price: product?.cost_price ?? '',
     sale_price: product?.sale_price ?? '',
     offer_price: product?.offer_price ?? '',
-    stock: product?.stock ?? '',
-    min_stock: product?.min_stock ?? 5,
     category: product?.category ?? '',
     location: product?.location ?? '',
     description: product?.description ?? '',
@@ -159,8 +157,6 @@ export default function ProductForm({ product, onSave, onCancel }) {
       cost_price: form.cost_price !== '' ? parseFloat(form.cost_price) : null,
       sale_price: parseFloat(form.sale_price),
       offer_price: form.offer_price !== '' ? parseFloat(form.offer_price) : null,
-      stock: parseInt(form.stock, 10),
-      min_stock: form.min_stock !== '' ? parseInt(form.min_stock, 10) : 5,
       category: form.category || null,
       location: form.location.trim() || null,
       description: form.description.trim() || null,
@@ -291,35 +287,10 @@ export default function ProductForm({ product, onSave, onCancel }) {
               </div>
             </div>
 
-            {/* ── Inventario ──────────────────────────────────────── */}
+            {/* ── Clasificación y Ubicación ────────────────────────── */}
             <div style={s.section}>
-              <SectionTitle>Inventario y Ubicación</SectionTitle>
-              <div style={s.grid4}>
-                <div style={s.field}>
-                  <label style={s.label}>Stock *</label>
-                  <input
-                    style={s.input}
-                    type="number"
-                    min="0"
-                    step="1"
-                    value={form.stock}
-                    onChange={set('stock')}
-                    placeholder="0"
-                    required
-                  />
-                </div>
-                <div style={s.field}>
-                  <label style={s.label}>Stock mínimo</label>
-                  <input
-                    style={s.input}
-                    type="number"
-                    min="0"
-                    step="1"
-                    value={form.min_stock}
-                    onChange={set('min_stock')}
-                    placeholder="5"
-                  />
-                </div>
+              <SectionTitle>Clasificación y Ubicación</SectionTitle>
+              <div style={s.grid2}>
                 <div style={s.field}>
                   <label style={s.label}>Categoría</label>
                   <select style={s.select} value={form.category} onChange={set('category')}>

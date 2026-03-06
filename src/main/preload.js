@@ -22,6 +22,16 @@ contextBridge.exposeInMainWorld('electron', {
     update: (id, data) => ipcRenderer.invoke('customers:update', { id, ...data }),
     delete: (id) => ipcRenderer.invoke('customers:delete', id),
   },
+  suppliers: {
+    getAll: () => ipcRenderer.invoke('suppliers:getAll'),
+    create: (data) => ipcRenderer.invoke('suppliers:create', data),
+    update: (id, data) => ipcRenderer.invoke('suppliers:update', { id, ...data }),
+    delete: (id) => ipcRenderer.invoke('suppliers:delete', id),
+  },
+  stockEntries: {
+    getAll: () => ipcRenderer.invoke('stockEntries:getAll'),
+    create: (data) => ipcRenderer.invoke('stockEntries:create', data),
+  },
   sales: {
     create: (items, customerId, customerName, paymentMethod, status) =>
       ipcRenderer.invoke('sales:create', { items, customerId, customerName, paymentMethod, status }),
