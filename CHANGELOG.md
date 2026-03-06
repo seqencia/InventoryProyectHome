@@ -10,6 +10,32 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [0.7.0] - 2026-03-05
+
+### Added
+
+#### Extended Product fields
+- **SKU / Código**: optional, unique; auto-generated as `PRD-XXXXXX` (timestamp-based) if left blank
+- **Código de barras**: optional, unique
+- **Número de serie**: optional; important for refurbished items
+- **Precio de costo**: optional decimal field
+- **Precio de oferta**: optional; when set, shown in green with regular price struck through in ProductList and NewSale
+- **Condición**: dropdown — Nuevo, Bueno, Regular, Para reparar (color-coded badges)
+- **Estado**: dropdown — Disponible, Reservado, Vendido, En reparación (color-coded badges)
+- **Notas técnicas**: textarea for repairs, technical details
+- **Stock mínimo**: per-product configurable threshold (default 5)
+- **Ubicación física**: shelf / warehouse text field
+
+### Changed
+
+- `price` DB column transparently renamed to `sale_price` in the entity using TypeORM `name: 'price'` mapping — existing data preserved with zero SQL migration
+- `ProductForm` reorganized into collapsible sections: Identificación, Condición y Estado, Precios, Inventario y Ubicación, Descripción y Notas; modal is now scrollable (580px wide, 90vh max height)
+- `ProductList` columns updated: Nombre/SKU, Condición badge, Estado badge, Precio venta (with cost price hint and offer price strikethrough), Stock (with per-product minimum hint)
+- `NewSale` product search uses effective price (offer_price if set, else sale_price); shows offer price with strikethrough of regular price
+- Dashboard low-stock alert now uses each product's `min_stock` instead of a hardcoded value of 5; stock badge shows `current / mín X`
+
+---
+
 ## [0.6.0] - 2026-03-05
 
 ### Added

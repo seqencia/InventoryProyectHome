@@ -308,6 +308,9 @@ export default function NewSale({ onSaleComplete }) {
 
   const addToCart = (product) => {
     if (availableStock(product) <= 0) return;
+    const effectivePrice = product.offer_price
+      ? Number(product.offer_price)
+      : Number(product.sale_price);
     setCart((prev) => {
       const existing = prev.find((c) => c.product_id === product.id);
       if (existing) {
@@ -322,9 +325,9 @@ export default function NewSale({ onSaleComplete }) {
         {
           product_id: product.id,
           product_name: product.name,
-          unit_price: Number(product.price),
+          unit_price: effectivePrice,
           quantity: 1,
-          subtotal: Number(product.price),
+          subtotal: effectivePrice,
         },
       ];
     });
@@ -410,7 +413,12 @@ export default function NewSale({ onSaleComplete }) {
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center' }}>
                       <div style={styles.productRight}>
-                        <div style={styles.productPrice}>${Number(product.price).toFixed(2)}</div>
+                        <div style={styles.productPrice}>
+                          {product.offer_price
+                            ? <>${Number(product.offer_price).toFixed(2)} <span style={{ textDecoration: 'line-through', color: '#94a3b8', fontSize: '11px' }}>${Number(product.sale_price).toFixed(2)}</span></>
+                            : `$${Number(product.sale_price).toFixed(2)}`
+                          }
+                        </div>
                       </div>
                       {outOfStock ? (
                         <span style={{ ...styles.inCartBadge, background: '#f8fafc', border: '1px solid #e2e8f0', color: '#94a3b8' }}>

@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 
-const styles = {
+const CONDITIONS = ['Nuevo', 'Bueno', 'Regular', 'Para reparar'];
+const STATUSES = ['Disponible', 'Reservado', 'Vendido', 'En reparación'];
+
+const s = {
   overlay: {
     position: 'fixed',
     inset: 0,
@@ -13,67 +16,83 @@ const styles = {
   modal: {
     background: 'white',
     borderRadius: '12px',
-    padding: '28px',
-    width: '480px',
-    maxWidth: '90vw',
+    width: '580px',
+    maxWidth: '95vw',
+    maxHeight: '90vh',
+    display: 'flex',
+    flexDirection: 'column',
     boxShadow: '0 20px 60px rgba(0,0,0,0.3)',
   },
-  title: {
-    fontSize: '17px',
-    fontWeight: '600',
-    marginBottom: '20px',
-    color: '#1e293b',
+  header: {
+    padding: '20px 24px 16px',
+    borderBottom: '1px solid #f1f5f9',
+    flexShrink: 0,
   },
-  field: {
-    marginBottom: '14px',
+  title: { fontSize: '17px', fontWeight: '600', color: '#1e293b', margin: 0 },
+  body: { padding: '0 24px', overflowY: 'auto', flex: 1 },
+  footer: {
+    padding: '16px 24px',
+    borderTop: '1px solid #f1f5f9',
+    display: 'flex',
+    justifyContent: 'flex-end',
+    gap: '8px',
+    flexShrink: 0,
   },
+  // Section
+  section: { paddingTop: '16px', paddingBottom: '4px' },
+  sectionTitle: {
+    fontSize: '11px',
+    fontWeight: '700',
+    color: '#94a3b8',
+    textTransform: 'uppercase',
+    letterSpacing: '0.8px',
+    marginBottom: '12px',
+    paddingBottom: '6px',
+    borderBottom: '1px solid #f1f5f9',
+  },
+  // Fields
+  field: { marginBottom: '12px' },
   label: {
     display: 'block',
-    fontSize: '13px',
+    fontSize: '12px',
     fontWeight: '500',
     color: '#475569',
-    marginBottom: '5px',
+    marginBottom: '4px',
   },
+  hint: { fontSize: '11px', color: '#94a3b8', marginTop: '3px' },
   input: {
     width: '100%',
-    padding: '8px 11px',
+    padding: '7px 10px',
     border: '1px solid #e2e8f0',
     borderRadius: '6px',
-    fontSize: '14px',
+    fontSize: '13px',
     outline: 'none',
     boxSizing: 'border-box',
   },
   select: {
     width: '100%',
-    padding: '8px 11px',
+    padding: '7px 10px',
     border: '1px solid #e2e8f0',
     borderRadius: '6px',
-    fontSize: '14px',
+    fontSize: '13px',
     background: 'white',
     boxSizing: 'border-box',
   },
   textarea: {
     width: '100%',
-    padding: '8px 11px',
+    padding: '7px 10px',
     border: '1px solid #e2e8f0',
     borderRadius: '6px',
-    fontSize: '14px',
+    fontSize: '13px',
     resize: 'vertical',
-    minHeight: '70px',
+    minHeight: '64px',
     boxSizing: 'border-box',
     fontFamily: 'inherit',
   },
-  row: {
-    display: 'grid',
-    gridTemplateColumns: '1fr 1fr',
-    gap: '12px',
-  },
-  actions: {
-    display: 'flex',
-    justifyContent: 'flex-end',
-    gap: '8px',
-    marginTop: '22px',
-  },
+  grid2: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' },
+  grid3: { display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '12px' },
+  grid4: { display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: '12px' },
+  // Buttons
   btnCancel: {
     background: '#f1f5f9',
     border: 'none',
@@ -93,22 +112,31 @@ const styles = {
     fontSize: '14px',
     fontWeight: '500',
   },
-  selectHint: {
-    fontSize: '12px',
-    color: '#94a3b8',
-    marginTop: '4px',
-  },
 };
+
+function SectionTitle({ children }) {
+  return <div style={s.sectionTitle}>{children}</div>;
+}
 
 export default function ProductForm({ product, onSave, onCancel }) {
   const isEdit = Boolean(product);
 
   const [form, setForm] = useState({
     name: product?.name ?? '',
-    category: product?.category ?? '',
-    price: product?.price ?? '',
+    sku: product?.sku ?? '',
+    barcode: product?.barcode ?? '',
+    serial_number: product?.serial_number ?? '',
+    condition: product?.condition ?? '',
+    status: product?.status ?? 'Disponible',
+    cost_price: product?.cost_price ?? '',
+    sale_price: product?.sale_price ?? '',
+    offer_price: product?.offer_price ?? '',
     stock: product?.stock ?? '',
+    min_stock: product?.min_stock ?? 5,
+    category: product?.category ?? '',
+    location: product?.location ?? '',
     description: product?.description ?? '',
+    technical_notes: product?.technical_notes ?? '',
   });
   const [categories, setCategories] = useState([]);
 
@@ -123,96 +151,229 @@ export default function ProductForm({ product, onSave, onCancel }) {
     e.preventDefault();
     onSave({
       name: form.name.trim(),
-      category: form.category || null,
-      price: parseFloat(form.price),
+      sku: form.sku.trim() || null,
+      barcode: form.barcode.trim() || null,
+      serial_number: form.serial_number.trim() || null,
+      condition: form.condition || null,
+      status: form.status || 'Disponible',
+      cost_price: form.cost_price !== '' ? parseFloat(form.cost_price) : null,
+      sale_price: parseFloat(form.sale_price),
+      offer_price: form.offer_price !== '' ? parseFloat(form.offer_price) : null,
       stock: parseInt(form.stock, 10),
+      min_stock: form.min_stock !== '' ? parseInt(form.min_stock, 10) : 5,
+      category: form.category || null,
+      location: form.location.trim() || null,
       description: form.description.trim() || null,
+      technical_notes: form.technical_notes.trim() || null,
     });
   };
 
-  const closeOnBackdrop = (e) => {
-    if (e.target === e.currentTarget) onCancel();
-  };
-
   return (
-    <div style={styles.overlay} onClick={closeOnBackdrop}>
-      <div style={styles.modal}>
-        <h2 style={styles.title}>{isEdit ? 'Editar Producto' : 'Nuevo Producto'}</h2>
+    <div style={s.overlay} onClick={(e) => e.target === e.currentTarget && onCancel()}>
+      <div style={s.modal}>
+        <div style={s.header}>
+          <h2 style={s.title}>{isEdit ? 'Editar Producto' : 'Nuevo Producto'}</h2>
+        </div>
 
-        <form onSubmit={handleSubmit}>
-          <div style={styles.field}>
-            <label style={styles.label}>Nombre *</label>
-            <input
-              style={styles.input}
-              value={form.name}
-              onChange={set('name')}
-              placeholder="Ej: Laptop Dell Latitude 5490"
-              required
-              autoFocus
-            />
-          </div>
+        <form onSubmit={handleSubmit} style={{ display: 'contents' }}>
+          <div style={s.body}>
 
-          <div style={styles.field}>
-            <label style={styles.label}>Categoría</label>
-            <select style={styles.select} value={form.category} onChange={set('category')}>
-              <option value="">Sin categoría</option>
-              {categories.map((cat) => (
-                <option key={cat.id} value={cat.name}>
-                  {cat.name}
-                </option>
-              ))}
-            </select>
-            {categories.length === 0 && (
-              <p style={styles.selectHint}>
-                Agrega categorías desde la pestaña "Categorías".
-              </p>
-            )}
-          </div>
+            {/* ── Identificación ──────────────────────────────────── */}
+            <div style={s.section}>
+              <SectionTitle>Identificación</SectionTitle>
 
-          <div style={styles.row}>
-            <div style={styles.field}>
-              <label style={styles.label}>Precio ($) *</label>
-              <input
-                style={styles.input}
-                type="number"
-                min="0"
-                step="0.01"
-                value={form.price}
-                onChange={set('price')}
-                placeholder="0.00"
-                required
-              />
+              <div style={s.field}>
+                <label style={s.label}>Nombre *</label>
+                <input
+                  style={s.input}
+                  value={form.name}
+                  onChange={set('name')}
+                  placeholder="Ej: Laptop Dell Latitude 5490"
+                  required
+                  autoFocus
+                />
+              </div>
+
+              <div style={s.grid2}>
+                <div style={s.field}>
+                  <label style={s.label}>SKU / Código</label>
+                  <input
+                    style={s.input}
+                    value={form.sku}
+                    onChange={set('sku')}
+                    placeholder="Ej: PRD-001"
+                  />
+                  <div style={s.hint}>Se genera automáticamente si se deja vacío</div>
+                </div>
+                <div style={s.field}>
+                  <label style={s.label}>Código de barras</label>
+                  <input
+                    style={s.input}
+                    value={form.barcode}
+                    onChange={set('barcode')}
+                    placeholder="Escanear o ingresar"
+                  />
+                </div>
+              </div>
+
+              <div style={s.field}>
+                <label style={s.label}>Número de serie</label>
+                <input
+                  style={s.input}
+                  value={form.serial_number}
+                  onChange={set('serial_number')}
+                  placeholder="Importante para equipos reacondicionados"
+                />
+              </div>
             </div>
-            <div style={styles.field}>
-              <label style={styles.label}>Stock *</label>
-              <input
-                style={styles.input}
-                type="number"
-                min="0"
-                step="1"
-                value={form.stock}
-                onChange={set('stock')}
-                placeholder="0"
-                required
-              />
+
+            {/* ── Condición y estado ──────────────────────────────── */}
+            <div style={s.section}>
+              <SectionTitle>Condición y Estado</SectionTitle>
+              <div style={s.grid2}>
+                <div style={s.field}>
+                  <label style={s.label}>Condición</label>
+                  <select style={s.select} value={form.condition} onChange={set('condition')}>
+                    <option value="">Sin especificar</option>
+                    {CONDITIONS.map((c) => <option key={c} value={c}>{c}</option>)}
+                  </select>
+                </div>
+                <div style={s.field}>
+                  <label style={s.label}>Estado</label>
+                  <select style={s.select} value={form.status} onChange={set('status')}>
+                    {STATUSES.map((st) => <option key={st} value={st}>{st}</option>)}
+                  </select>
+                </div>
+              </div>
             </div>
+
+            {/* ── Precios ─────────────────────────────────────────── */}
+            <div style={s.section}>
+              <SectionTitle>Precios</SectionTitle>
+              <div style={s.grid3}>
+                <div style={s.field}>
+                  <label style={s.label}>Precio de costo ($)</label>
+                  <input
+                    style={s.input}
+                    type="number"
+                    min="0"
+                    step="0.01"
+                    value={form.cost_price}
+                    onChange={set('cost_price')}
+                    placeholder="0.00"
+                  />
+                </div>
+                <div style={s.field}>
+                  <label style={s.label}>Precio de venta ($) *</label>
+                  <input
+                    style={s.input}
+                    type="number"
+                    min="0"
+                    step="0.01"
+                    value={form.sale_price}
+                    onChange={set('sale_price')}
+                    placeholder="0.00"
+                    required
+                  />
+                </div>
+                <div style={s.field}>
+                  <label style={s.label}>Precio oferta ($)</label>
+                  <input
+                    style={s.input}
+                    type="number"
+                    min="0"
+                    step="0.01"
+                    value={form.offer_price}
+                    onChange={set('offer_price')}
+                    placeholder="Vacío = sin oferta"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* ── Inventario ──────────────────────────────────────── */}
+            <div style={s.section}>
+              <SectionTitle>Inventario y Ubicación</SectionTitle>
+              <div style={s.grid4}>
+                <div style={s.field}>
+                  <label style={s.label}>Stock *</label>
+                  <input
+                    style={s.input}
+                    type="number"
+                    min="0"
+                    step="1"
+                    value={form.stock}
+                    onChange={set('stock')}
+                    placeholder="0"
+                    required
+                  />
+                </div>
+                <div style={s.field}>
+                  <label style={s.label}>Stock mínimo</label>
+                  <input
+                    style={s.input}
+                    type="number"
+                    min="0"
+                    step="1"
+                    value={form.min_stock}
+                    onChange={set('min_stock')}
+                    placeholder="5"
+                  />
+                </div>
+                <div style={s.field}>
+                  <label style={s.label}>Categoría</label>
+                  <select style={s.select} value={form.category} onChange={set('category')}>
+                    <option value="">Sin categoría</option>
+                    {categories.map((cat) => (
+                      <option key={cat.id} value={cat.name}>{cat.name}</option>
+                    ))}
+                  </select>
+                  {categories.length === 0 && (
+                    <div style={s.hint}>Gestiona categorías en la pestaña "Categorías"</div>
+                  )}
+                </div>
+                <div style={s.field}>
+                  <label style={s.label}>Ubicación física</label>
+                  <input
+                    style={s.input}
+                    value={form.location}
+                    onChange={set('location')}
+                    placeholder="Ej: Estante A3"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* ── Notas ───────────────────────────────────────────── */}
+            <div style={{ ...s.section, paddingBottom: '16px' }}>
+              <SectionTitle>Descripción y Notas</SectionTitle>
+              <div style={s.field}>
+                <label style={s.label}>Descripción</label>
+                <textarea
+                  style={s.textarea}
+                  value={form.description}
+                  onChange={set('description')}
+                  placeholder="Descripción general del producto"
+                />
+              </div>
+              <div style={s.field}>
+                <label style={s.label}>Notas técnicas</label>
+                <textarea
+                  style={{ ...s.textarea, minHeight: '56px' }}
+                  value={form.technical_notes}
+                  onChange={set('technical_notes')}
+                  placeholder="Reparaciones, detalles técnicos, observaciones..."
+                />
+              </div>
+            </div>
+
           </div>
 
-          <div style={styles.field}>
-            <label style={styles.label}>Descripción</label>
-            <textarea
-              style={styles.textarea}
-              value={form.description}
-              onChange={set('description')}
-              placeholder="Detalles del producto (modelo, condición, etc.)"
-            />
-          </div>
-
-          <div style={styles.actions}>
-            <button type="button" style={styles.btnCancel} onClick={onCancel}>
+          <div style={s.footer}>
+            <button type="button" style={s.btnCancel} onClick={onCancel}>
               Cancelar
             </button>
-            <button type="submit" style={styles.btnSave}>
+            <button type="submit" style={s.btnSave}>
               {isEdit ? 'Guardar cambios' : 'Crear producto'}
             </button>
           </div>

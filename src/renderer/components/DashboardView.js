@@ -76,7 +76,7 @@ function LowStockCard({ items, onNavigate }) {
                 padding: '2px 10px',
                 borderRadius: '12px',
               }}>
-                {p.stock === 0 ? 'Sin stock' : `${p.stock} uds`}
+                {p.stock === 0 ? 'Sin stock' : `${p.stock} / mín ${p.min_stock ?? 5}`}
               </span>
             </li>
           ))}

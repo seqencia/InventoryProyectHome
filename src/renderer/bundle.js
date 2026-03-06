@@ -3538,28 +3538,28 @@
           ))));
           null == value || "boolean" === typeof value || "" === value ? isCustomProperty ? style2.setProperty(styleName, "") : "float" === styleName ? style2.cssFloat = "" : style2[styleName] = "" : isCustomProperty ? style2.setProperty(styleName, value) : "number" !== typeof value || 0 === value || unitlessNumbers.has(styleName) ? "float" === styleName ? style2.cssFloat = value : (checkCSSPropertyStringCoercion(value, styleName), style2[styleName] = ("" + value).trim()) : style2[styleName] = value + "px";
         }
-        function setValueForStyles(node, styles9, prevStyles) {
-          if (null != styles9 && "object" !== typeof styles9)
+        function setValueForStyles(node, styles7, prevStyles) {
+          if (null != styles7 && "object" !== typeof styles7)
             throw Error(
               "The `style` prop expects a mapping from style properties to values, not a string. For example, style={{marginRight: spacing + 'em'}} when using JSX."
             );
-          styles9 && Object.freeze(styles9);
+          styles7 && Object.freeze(styles7);
           node = node.style;
           if (null != prevStyles) {
-            if (styles9) {
+            if (styles7) {
               var expandedUpdates = {};
               if (prevStyles) {
                 for (var key in prevStyles)
-                  if (prevStyles.hasOwnProperty(key) && !styles9.hasOwnProperty(key))
+                  if (prevStyles.hasOwnProperty(key) && !styles7.hasOwnProperty(key))
                     for (var longhands = shorthandToLonghand[key] || [key], i = 0; i < longhands.length; i++)
                       expandedUpdates[longhands[i]] = key;
               }
-              for (var _key in styles9)
-                if (styles9.hasOwnProperty(_key) && (!prevStyles || prevStyles[_key] !== styles9[_key]))
+              for (var _key in styles7)
+                if (styles7.hasOwnProperty(_key) && (!prevStyles || prevStyles[_key] !== styles7[_key]))
                   for (key = shorthandToLonghand[_key] || [_key], longhands = 0; longhands < key.length; longhands++)
                     expandedUpdates[key[longhands]] = _key;
               _key = {};
-              for (var key$jscomp$0 in styles9)
+              for (var key$jscomp$0 in styles7)
                 for (key = shorthandToLonghand[key$jscomp$0] || [key$jscomp$0], longhands = 0; longhands < key.length; longhands++)
                   _key[key[longhands]] = key$jscomp$0;
               key$jscomp$0 = {};
@@ -3567,7 +3567,7 @@
                 if (key = expandedUpdates[_key2], (longhands = _key[_key2]) && key !== longhands && (i = key + "," + longhands, !key$jscomp$0[i])) {
                   key$jscomp$0[i] = true;
                   i = console;
-                  var value = styles9[key];
+                  var value = styles7[key];
                   i.error.call(
                     i,
                     "%s a style property during rerender (%s) when a conflicting property is set (%s) can lead to styling bugs. To avoid this, don't mix shorthand and non-shorthand properties for the same value; instead, replace the shorthand with separate values.",
@@ -3578,12 +3578,12 @@
                 }
             }
             for (var styleName in prevStyles)
-              !prevStyles.hasOwnProperty(styleName) || null != styles9 && styles9.hasOwnProperty(styleName) || (0 === styleName.indexOf("--") ? node.setProperty(styleName, "") : "float" === styleName ? node.cssFloat = "" : node[styleName] = "");
-            for (var _styleName in styles9)
-              _key2 = styles9[_styleName], styles9.hasOwnProperty(_styleName) && prevStyles[_styleName] !== _key2 && setValueForStyle(node, _styleName, _key2);
+              !prevStyles.hasOwnProperty(styleName) || null != styles7 && styles7.hasOwnProperty(styleName) || (0 === styleName.indexOf("--") ? node.setProperty(styleName, "") : "float" === styleName ? node.cssFloat = "" : node[styleName] = "");
+            for (var _styleName in styles7)
+              _key2 = styles7[_styleName], styles7.hasOwnProperty(_styleName) && prevStyles[_styleName] !== _key2 && setValueForStyle(node, _styleName, _key2);
           } else
-            for (expandedUpdates in styles9)
-              styles9.hasOwnProperty(expandedUpdates) && setValueForStyle(node, expandedUpdates, styles9[expandedUpdates]);
+            for (expandedUpdates in styles7)
+              styles7.hasOwnProperty(expandedUpdates) && setValueForStyle(node, expandedUpdates, styles7[expandedUpdates]);
         }
         function isCustomElement(tagName) {
           if (-1 === tagName.indexOf("-")) return false;
@@ -18974,9 +18974,9 @@
             previousDispatcher.S(href, precedence, options);
             var ownerDocument = globalDocument;
             if (ownerDocument && href) {
-              var styles9 = getResourcesFromRoot(ownerDocument).hoistableStyles, key = getStyleKey(href);
+              var styles7 = getResourcesFromRoot(ownerDocument).hoistableStyles, key = getStyleKey(href);
               precedence = precedence || "default";
-              var resource = styles9.get(key);
+              var resource = styles7.get(key);
               if (!resource) {
                 var state = { loading: NotLoaded, preload: null };
                 if (resource = ownerDocument.querySelector(
@@ -19015,7 +19015,7 @@
                   count: 1,
                   state
                 };
-                styles9.set(key, resource);
+                styles7.set(key, resource);
               }
             }
           },
@@ -19329,7 +19329,7 @@
         fontSize: "13px",
         padding: "2px 10px",
         borderRadius: "12px"
-      } }, p.stock === 0 ? "Sin stock" : `${p.stock} uds`)
+      } }, p.stock === 0 ? "Sin stock" : `${p.stock} / m\xEDn ${p.min_stock ?? 5}`)
     ))));
   }
   function TopProductsCard({ items }) {
@@ -19398,22 +19398,42 @@
 
   // src/renderer/components/ProductList.js
   var import_react2 = __toESM(require_react());
-  var LOW_STOCK = 5;
-  var styles = {
+  var CONDITION_STYLE = {
+    "Nuevo": { background: "#dcfce7", color: "#16a34a" },
+    "Bueno": { background: "#dbeafe", color: "#1d4ed8" },
+    "Regular": { background: "#fef3c7", color: "#b45309" },
+    "Para reparar": { background: "#fee2e2", color: "#dc2626" }
+  };
+  var STATUS_STYLE = {
+    "Disponible": { background: "#dcfce7", color: "#16a34a" },
+    "Reservado": { background: "#ede9fe", color: "#7c3aed" },
+    "Vendido": { background: "#f1f5f9", color: "#64748b" },
+    "En reparaci\xF3n": { background: "#ffedd5", color: "#c2410c" }
+  };
+  var badge = (map, value) => {
+    const col = map[value] || { background: "#f1f5f9", color: "#64748b" };
+    return {
+      display: "inline-block",
+      padding: "2px 8px",
+      borderRadius: "10px",
+      fontSize: "12px",
+      fontWeight: "600",
+      whiteSpace: "nowrap",
+      ...col
+    };
+  };
+  var isLowStock = (p) => p.stock <= (p.min_stock ?? 5);
+  var s = {
     wrapper: {
       background: "white",
       borderRadius: "8px",
       boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
       overflow: "hidden"
     },
-    table: {
-      width: "100%",
-      borderCollapse: "collapse",
-      fontSize: "14px"
-    },
+    table: { width: "100%", borderCollapse: "collapse", fontSize: "13px" },
     th: {
       background: "#f8fafc",
-      padding: "11px 16px",
+      padding: "10px 14px",
       textAlign: "left",
       fontWeight: "600",
       color: "#475569",
@@ -19421,54 +19441,42 @@
       whiteSpace: "nowrap"
     },
     td: {
-      padding: "11px 16px",
+      padding: "10px 14px",
       borderBottom: "1px solid #f1f5f9",
       verticalAlign: "middle"
     },
-    tdMuted: {
-      padding: "11px 16px",
-      borderBottom: "1px solid #f1f5f9",
-      verticalAlign: "middle",
-      color: "#64748b",
-      maxWidth: "220px",
-      overflow: "hidden",
-      textOverflow: "ellipsis",
-      whiteSpace: "nowrap"
-    },
-    stockBadge: (stock) => ({
+    rowLowStock: { background: "#fffbeb" },
+    skuText: { fontSize: "11px", color: "#94a3b8", marginTop: "2px", fontFamily: "monospace" },
+    priceMain: { fontWeight: "700", color: "#1e293b" },
+    priceOffer: { fontWeight: "700", color: "#16a34a" },
+    priceStrike: { textDecoration: "line-through", color: "#94a3b8", fontSize: "11px", marginLeft: "4px" },
+    stockBadge: (p) => ({
       display: "inline-block",
       padding: "2px 9px",
       borderRadius: "12px",
-      fontWeight: "600",
-      fontSize: "13px",
-      background: stock <= LOW_STOCK ? "#fee2e2" : "#dcfce7",
-      color: stock <= LOW_STOCK ? "#dc2626" : "#16a34a"
-    }),
-    lowStockLabel: {
-      marginLeft: "8px",
+      fontWeight: "700",
       fontSize: "12px",
-      color: "#dc2626"
-    },
-    rowLowStock: {
-      background: "#fffbeb"
-    },
+      background: p.stock === 0 ? "#fee2e2" : isLowStock(p) ? "#fef3c7" : "#dcfce7",
+      color: p.stock === 0 ? "#dc2626" : isLowStock(p) ? "#b45309" : "#16a34a"
+    }),
+    minStockHint: { fontSize: "11px", color: "#94a3b8", marginTop: "2px" },
     btnEdit: {
       background: "#f1f5f9",
       border: "none",
-      padding: "5px 12px",
+      padding: "5px 11px",
       borderRadius: "4px",
       cursor: "pointer",
-      fontSize: "13px",
-      marginRight: "6px",
+      fontSize: "12px",
+      marginRight: "5px",
       color: "#334155"
     },
     btnDelete: {
       background: "#fee2e2",
       border: "none",
-      padding: "5px 12px",
+      padding: "5px 11px",
       borderRadius: "4px",
       cursor: "pointer",
-      fontSize: "13px",
+      fontSize: "12px",
       color: "#dc2626"
     },
     empty: {
@@ -19480,14 +19488,16 @@
   };
   function ProductList({ products, onEdit, onDelete }) {
     if (products.length === 0) {
-      return /* @__PURE__ */ import_react2.default.createElement("div", { style: styles.wrapper }, /* @__PURE__ */ import_react2.default.createElement("p", { style: styles.empty }, "No hay productos registrados. Agrega el primero."));
+      return /* @__PURE__ */ import_react2.default.createElement("div", { style: s.wrapper }, /* @__PURE__ */ import_react2.default.createElement("p", { style: s.empty }, "No hay productos registrados. Agrega el primero."));
     }
-    return /* @__PURE__ */ import_react2.default.createElement("div", { style: styles.wrapper }, /* @__PURE__ */ import_react2.default.createElement("table", { style: styles.table }, /* @__PURE__ */ import_react2.default.createElement("thead", null, /* @__PURE__ */ import_react2.default.createElement("tr", null, /* @__PURE__ */ import_react2.default.createElement("th", { style: styles.th }, "Nombre"), /* @__PURE__ */ import_react2.default.createElement("th", { style: styles.th }, "Categor\xEDa"), /* @__PURE__ */ import_react2.default.createElement("th", { style: styles.th }, "Descripci\xF3n"), /* @__PURE__ */ import_react2.default.createElement("th", { style: styles.th }, "Precio"), /* @__PURE__ */ import_react2.default.createElement("th", { style: styles.th }, "Stock"), /* @__PURE__ */ import_react2.default.createElement("th", { style: styles.th }, "Acciones"))), /* @__PURE__ */ import_react2.default.createElement("tbody", null, products.map((product) => /* @__PURE__ */ import_react2.default.createElement("tr", { key: product.id, style: product.stock <= LOW_STOCK ? styles.rowLowStock : void 0 }, /* @__PURE__ */ import_react2.default.createElement("td", { style: styles.td }, /* @__PURE__ */ import_react2.default.createElement("strong", null, product.name)), /* @__PURE__ */ import_react2.default.createElement("td", { style: styles.td }, product.category || "\u2014"), /* @__PURE__ */ import_react2.default.createElement("td", { style: styles.tdMuted }, product.description || "\u2014"), /* @__PURE__ */ import_react2.default.createElement("td", { style: styles.td }, "$", Number(product.price).toFixed(2)), /* @__PURE__ */ import_react2.default.createElement("td", { style: styles.td }, /* @__PURE__ */ import_react2.default.createElement("span", { style: styles.stockBadge(product.stock) }, product.stock), product.stock <= LOW_STOCK && /* @__PURE__ */ import_react2.default.createElement("span", { style: styles.lowStockLabel }, "Stock bajo")), /* @__PURE__ */ import_react2.default.createElement("td", { style: styles.td }, /* @__PURE__ */ import_react2.default.createElement("button", { style: styles.btnEdit, onClick: () => onEdit(product) }, "Editar"), /* @__PURE__ */ import_react2.default.createElement("button", { style: styles.btnDelete, onClick: () => onDelete(product.id) }, "Eliminar")))))));
+    return /* @__PURE__ */ import_react2.default.createElement("div", { style: s.wrapper }, /* @__PURE__ */ import_react2.default.createElement("table", { style: s.table }, /* @__PURE__ */ import_react2.default.createElement("thead", null, /* @__PURE__ */ import_react2.default.createElement("tr", null, /* @__PURE__ */ import_react2.default.createElement("th", { style: s.th }, "Nombre / SKU"), /* @__PURE__ */ import_react2.default.createElement("th", { style: s.th }, "Condici\xF3n"), /* @__PURE__ */ import_react2.default.createElement("th", { style: s.th }, "Estado"), /* @__PURE__ */ import_react2.default.createElement("th", { style: s.th }, "Precio venta"), /* @__PURE__ */ import_react2.default.createElement("th", { style: s.th }, "Stock"), /* @__PURE__ */ import_react2.default.createElement("th", { style: s.th }, "Acciones"))), /* @__PURE__ */ import_react2.default.createElement("tbody", null, products.map((p) => /* @__PURE__ */ import_react2.default.createElement("tr", { key: p.id, style: isLowStock(p) ? s.rowLowStock : void 0 }, /* @__PURE__ */ import_react2.default.createElement("td", { style: s.td }, /* @__PURE__ */ import_react2.default.createElement("div", { style: { fontWeight: "600", color: "#1e293b" } }, p.name), p.sku && /* @__PURE__ */ import_react2.default.createElement("div", { style: s.skuText }, p.sku)), /* @__PURE__ */ import_react2.default.createElement("td", { style: s.td }, p.condition ? /* @__PURE__ */ import_react2.default.createElement("span", { style: badge(CONDITION_STYLE, p.condition) }, p.condition) : /* @__PURE__ */ import_react2.default.createElement("span", { style: { color: "#94a3b8" } }, "\u2014")), /* @__PURE__ */ import_react2.default.createElement("td", { style: s.td }, p.status ? /* @__PURE__ */ import_react2.default.createElement("span", { style: badge(STATUS_STYLE, p.status) }, p.status) : /* @__PURE__ */ import_react2.default.createElement("span", { style: { color: "#94a3b8" } }, "\u2014")), /* @__PURE__ */ import_react2.default.createElement("td", { style: s.td }, p.offer_price ? /* @__PURE__ */ import_react2.default.createElement(import_react2.default.Fragment, null, /* @__PURE__ */ import_react2.default.createElement("span", { style: s.priceOffer }, "$", Number(p.offer_price).toFixed(2)), /* @__PURE__ */ import_react2.default.createElement("span", { style: s.priceStrike }, "$", Number(p.sale_price).toFixed(2))) : /* @__PURE__ */ import_react2.default.createElement("span", { style: s.priceMain }, "$", Number(p.sale_price).toFixed(2)), p.cost_price && /* @__PURE__ */ import_react2.default.createElement("div", { style: { fontSize: "11px", color: "#94a3b8", marginTop: "1px" } }, "Costo: $", Number(p.cost_price).toFixed(2))), /* @__PURE__ */ import_react2.default.createElement("td", { style: s.td }, /* @__PURE__ */ import_react2.default.createElement("span", { style: s.stockBadge(p) }, p.stock), /* @__PURE__ */ import_react2.default.createElement("div", { style: s.minStockHint }, "m\xEDn ", p.min_stock ?? 5)), /* @__PURE__ */ import_react2.default.createElement("td", { style: s.td }, /* @__PURE__ */ import_react2.default.createElement("button", { style: s.btnEdit, onClick: () => onEdit(p) }, "Editar"), /* @__PURE__ */ import_react2.default.createElement("button", { style: s.btnDelete, onClick: () => onDelete(p.id) }, "Eliminar")))))));
   }
 
   // src/renderer/components/ProductForm.js
   var import_react3 = __toESM(require_react());
-  var styles2 = {
+  var CONDITIONS = ["Nuevo", "Bueno", "Regular", "Para reparar"];
+  var STATUSES = ["Disponible", "Reservado", "Vendido", "En reparaci\xF3n"];
+  var s2 = {
     overlay: {
       position: "fixed",
       inset: 0,
@@ -19500,67 +19510,83 @@
     modal: {
       background: "white",
       borderRadius: "12px",
-      padding: "28px",
-      width: "480px",
-      maxWidth: "90vw",
+      width: "580px",
+      maxWidth: "95vw",
+      maxHeight: "90vh",
+      display: "flex",
+      flexDirection: "column",
       boxShadow: "0 20px 60px rgba(0,0,0,0.3)"
     },
-    title: {
-      fontSize: "17px",
-      fontWeight: "600",
-      marginBottom: "20px",
-      color: "#1e293b"
+    header: {
+      padding: "20px 24px 16px",
+      borderBottom: "1px solid #f1f5f9",
+      flexShrink: 0
     },
-    field: {
-      marginBottom: "14px"
+    title: { fontSize: "17px", fontWeight: "600", color: "#1e293b", margin: 0 },
+    body: { padding: "0 24px", overflowY: "auto", flex: 1 },
+    footer: {
+      padding: "16px 24px",
+      borderTop: "1px solid #f1f5f9",
+      display: "flex",
+      justifyContent: "flex-end",
+      gap: "8px",
+      flexShrink: 0
     },
+    // Section
+    section: { paddingTop: "16px", paddingBottom: "4px" },
+    sectionTitle: {
+      fontSize: "11px",
+      fontWeight: "700",
+      color: "#94a3b8",
+      textTransform: "uppercase",
+      letterSpacing: "0.8px",
+      marginBottom: "12px",
+      paddingBottom: "6px",
+      borderBottom: "1px solid #f1f5f9"
+    },
+    // Fields
+    field: { marginBottom: "12px" },
     label: {
       display: "block",
-      fontSize: "13px",
+      fontSize: "12px",
       fontWeight: "500",
       color: "#475569",
-      marginBottom: "5px"
+      marginBottom: "4px"
     },
+    hint: { fontSize: "11px", color: "#94a3b8", marginTop: "3px" },
     input: {
       width: "100%",
-      padding: "8px 11px",
+      padding: "7px 10px",
       border: "1px solid #e2e8f0",
       borderRadius: "6px",
-      fontSize: "14px",
+      fontSize: "13px",
       outline: "none",
       boxSizing: "border-box"
     },
     select: {
       width: "100%",
-      padding: "8px 11px",
+      padding: "7px 10px",
       border: "1px solid #e2e8f0",
       borderRadius: "6px",
-      fontSize: "14px",
+      fontSize: "13px",
       background: "white",
       boxSizing: "border-box"
     },
     textarea: {
       width: "100%",
-      padding: "8px 11px",
+      padding: "7px 10px",
       border: "1px solid #e2e8f0",
       borderRadius: "6px",
-      fontSize: "14px",
+      fontSize: "13px",
       resize: "vertical",
-      minHeight: "70px",
+      minHeight: "64px",
       boxSizing: "border-box",
       fontFamily: "inherit"
     },
-    row: {
-      display: "grid",
-      gridTemplateColumns: "1fr 1fr",
-      gap: "12px"
-    },
-    actions: {
-      display: "flex",
-      justifyContent: "flex-end",
-      gap: "8px",
-      marginTop: "22px"
-    },
+    grid2: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" },
+    grid3: { display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "12px" },
+    grid4: { display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: "12px" },
+    // Buttons
     btnCancel: {
       background: "#f1f5f9",
       border: "none",
@@ -19579,21 +19605,29 @@
       cursor: "pointer",
       fontSize: "14px",
       fontWeight: "500"
-    },
-    selectHint: {
-      fontSize: "12px",
-      color: "#94a3b8",
-      marginTop: "4px"
     }
   };
+  function SectionTitle({ children }) {
+    return /* @__PURE__ */ import_react3.default.createElement("div", { style: s2.sectionTitle }, children);
+  }
   function ProductForm({ product, onSave, onCancel }) {
     const isEdit = Boolean(product);
     const [form, setForm] = (0, import_react3.useState)({
       name: product?.name ?? "",
-      category: product?.category ?? "",
-      price: product?.price ?? "",
+      sku: product?.sku ?? "",
+      barcode: product?.barcode ?? "",
+      serial_number: product?.serial_number ?? "",
+      condition: product?.condition ?? "",
+      status: product?.status ?? "Disponible",
+      cost_price: product?.cost_price ?? "",
+      sale_price: product?.sale_price ?? "",
+      offer_price: product?.offer_price ?? "",
       stock: product?.stock ?? "",
-      description: product?.description ?? ""
+      min_stock: product?.min_stock ?? 5,
+      category: product?.category ?? "",
+      location: product?.location ?? "",
+      description: product?.description ?? "",
+      technical_notes: product?.technical_notes ?? ""
     });
     const [categories, setCategories] = (0, import_react3.useState)([]);
     (0, import_react3.useEffect)(() => {
@@ -19605,41 +19639,94 @@
       e.preventDefault();
       onSave({
         name: form.name.trim(),
-        category: form.category || null,
-        price: parseFloat(form.price),
+        sku: form.sku.trim() || null,
+        barcode: form.barcode.trim() || null,
+        serial_number: form.serial_number.trim() || null,
+        condition: form.condition || null,
+        status: form.status || "Disponible",
+        cost_price: form.cost_price !== "" ? parseFloat(form.cost_price) : null,
+        sale_price: parseFloat(form.sale_price),
+        offer_price: form.offer_price !== "" ? parseFloat(form.offer_price) : null,
         stock: parseInt(form.stock, 10),
-        description: form.description.trim() || null
+        min_stock: form.min_stock !== "" ? parseInt(form.min_stock, 10) : 5,
+        category: form.category || null,
+        location: form.location.trim() || null,
+        description: form.description.trim() || null,
+        technical_notes: form.technical_notes.trim() || null
       });
     };
-    const closeOnBackdrop = (e) => {
-      if (e.target === e.currentTarget) onCancel();
-    };
-    return /* @__PURE__ */ import_react3.default.createElement("div", { style: styles2.overlay, onClick: closeOnBackdrop }, /* @__PURE__ */ import_react3.default.createElement("div", { style: styles2.modal }, /* @__PURE__ */ import_react3.default.createElement("h2", { style: styles2.title }, isEdit ? "Editar Producto" : "Nuevo Producto"), /* @__PURE__ */ import_react3.default.createElement("form", { onSubmit: handleSubmit }, /* @__PURE__ */ import_react3.default.createElement("div", { style: styles2.field }, /* @__PURE__ */ import_react3.default.createElement("label", { style: styles2.label }, "Nombre *"), /* @__PURE__ */ import_react3.default.createElement(
+    return /* @__PURE__ */ import_react3.default.createElement("div", { style: s2.overlay, onClick: (e) => e.target === e.currentTarget && onCancel() }, /* @__PURE__ */ import_react3.default.createElement("div", { style: s2.modal }, /* @__PURE__ */ import_react3.default.createElement("div", { style: s2.header }, /* @__PURE__ */ import_react3.default.createElement("h2", { style: s2.title }, isEdit ? "Editar Producto" : "Nuevo Producto")), /* @__PURE__ */ import_react3.default.createElement("form", { onSubmit: handleSubmit, style: { display: "contents" } }, /* @__PURE__ */ import_react3.default.createElement("div", { style: s2.body }, /* @__PURE__ */ import_react3.default.createElement("div", { style: s2.section }, /* @__PURE__ */ import_react3.default.createElement(SectionTitle, null, "Identificaci\xF3n"), /* @__PURE__ */ import_react3.default.createElement("div", { style: s2.field }, /* @__PURE__ */ import_react3.default.createElement("label", { style: s2.label }, "Nombre *"), /* @__PURE__ */ import_react3.default.createElement(
       "input",
       {
-        style: styles2.input,
+        style: s2.input,
         value: form.name,
         onChange: set("name"),
         placeholder: "Ej: Laptop Dell Latitude 5490",
         required: true,
         autoFocus: true
       }
-    )), /* @__PURE__ */ import_react3.default.createElement("div", { style: styles2.field }, /* @__PURE__ */ import_react3.default.createElement("label", { style: styles2.label }, "Categor\xEDa"), /* @__PURE__ */ import_react3.default.createElement("select", { style: styles2.select, value: form.category, onChange: set("category") }, /* @__PURE__ */ import_react3.default.createElement("option", { value: "" }, "Sin categor\xEDa"), categories.map((cat) => /* @__PURE__ */ import_react3.default.createElement("option", { key: cat.id, value: cat.name }, cat.name))), categories.length === 0 && /* @__PURE__ */ import_react3.default.createElement("p", { style: styles2.selectHint }, 'Agrega categor\xEDas desde la pesta\xF1a "Categor\xEDas".')), /* @__PURE__ */ import_react3.default.createElement("div", { style: styles2.row }, /* @__PURE__ */ import_react3.default.createElement("div", { style: styles2.field }, /* @__PURE__ */ import_react3.default.createElement("label", { style: styles2.label }, "Precio ($) *"), /* @__PURE__ */ import_react3.default.createElement(
+    )), /* @__PURE__ */ import_react3.default.createElement("div", { style: s2.grid2 }, /* @__PURE__ */ import_react3.default.createElement("div", { style: s2.field }, /* @__PURE__ */ import_react3.default.createElement("label", { style: s2.label }, "SKU / C\xF3digo"), /* @__PURE__ */ import_react3.default.createElement(
       "input",
       {
-        style: styles2.input,
+        style: s2.input,
+        value: form.sku,
+        onChange: set("sku"),
+        placeholder: "Ej: PRD-001"
+      }
+    ), /* @__PURE__ */ import_react3.default.createElement("div", { style: s2.hint }, "Se genera autom\xE1ticamente si se deja vac\xEDo")), /* @__PURE__ */ import_react3.default.createElement("div", { style: s2.field }, /* @__PURE__ */ import_react3.default.createElement("label", { style: s2.label }, "C\xF3digo de barras"), /* @__PURE__ */ import_react3.default.createElement(
+      "input",
+      {
+        style: s2.input,
+        value: form.barcode,
+        onChange: set("barcode"),
+        placeholder: "Escanear o ingresar"
+      }
+    ))), /* @__PURE__ */ import_react3.default.createElement("div", { style: s2.field }, /* @__PURE__ */ import_react3.default.createElement("label", { style: s2.label }, "N\xFAmero de serie"), /* @__PURE__ */ import_react3.default.createElement(
+      "input",
+      {
+        style: s2.input,
+        value: form.serial_number,
+        onChange: set("serial_number"),
+        placeholder: "Importante para equipos reacondicionados"
+      }
+    ))), /* @__PURE__ */ import_react3.default.createElement("div", { style: s2.section }, /* @__PURE__ */ import_react3.default.createElement(SectionTitle, null, "Condici\xF3n y Estado"), /* @__PURE__ */ import_react3.default.createElement("div", { style: s2.grid2 }, /* @__PURE__ */ import_react3.default.createElement("div", { style: s2.field }, /* @__PURE__ */ import_react3.default.createElement("label", { style: s2.label }, "Condici\xF3n"), /* @__PURE__ */ import_react3.default.createElement("select", { style: s2.select, value: form.condition, onChange: set("condition") }, /* @__PURE__ */ import_react3.default.createElement("option", { value: "" }, "Sin especificar"), CONDITIONS.map((c) => /* @__PURE__ */ import_react3.default.createElement("option", { key: c, value: c }, c)))), /* @__PURE__ */ import_react3.default.createElement("div", { style: s2.field }, /* @__PURE__ */ import_react3.default.createElement("label", { style: s2.label }, "Estado"), /* @__PURE__ */ import_react3.default.createElement("select", { style: s2.select, value: form.status, onChange: set("status") }, STATUSES.map((st) => /* @__PURE__ */ import_react3.default.createElement("option", { key: st, value: st }, st)))))), /* @__PURE__ */ import_react3.default.createElement("div", { style: s2.section }, /* @__PURE__ */ import_react3.default.createElement(SectionTitle, null, "Precios"), /* @__PURE__ */ import_react3.default.createElement("div", { style: s2.grid3 }, /* @__PURE__ */ import_react3.default.createElement("div", { style: s2.field }, /* @__PURE__ */ import_react3.default.createElement("label", { style: s2.label }, "Precio de costo ($)"), /* @__PURE__ */ import_react3.default.createElement(
+      "input",
+      {
+        style: s2.input,
         type: "number",
         min: "0",
         step: "0.01",
-        value: form.price,
-        onChange: set("price"),
+        value: form.cost_price,
+        onChange: set("cost_price"),
+        placeholder: "0.00"
+      }
+    )), /* @__PURE__ */ import_react3.default.createElement("div", { style: s2.field }, /* @__PURE__ */ import_react3.default.createElement("label", { style: s2.label }, "Precio de venta ($) *"), /* @__PURE__ */ import_react3.default.createElement(
+      "input",
+      {
+        style: s2.input,
+        type: "number",
+        min: "0",
+        step: "0.01",
+        value: form.sale_price,
+        onChange: set("sale_price"),
         placeholder: "0.00",
         required: true
       }
-    )), /* @__PURE__ */ import_react3.default.createElement("div", { style: styles2.field }, /* @__PURE__ */ import_react3.default.createElement("label", { style: styles2.label }, "Stock *"), /* @__PURE__ */ import_react3.default.createElement(
+    )), /* @__PURE__ */ import_react3.default.createElement("div", { style: s2.field }, /* @__PURE__ */ import_react3.default.createElement("label", { style: s2.label }, "Precio oferta ($)"), /* @__PURE__ */ import_react3.default.createElement(
       "input",
       {
-        style: styles2.input,
+        style: s2.input,
+        type: "number",
+        min: "0",
+        step: "0.01",
+        value: form.offer_price,
+        onChange: set("offer_price"),
+        placeholder: "Vac\xEDo = sin oferta"
+      }
+    )))), /* @__PURE__ */ import_react3.default.createElement("div", { style: s2.section }, /* @__PURE__ */ import_react3.default.createElement(SectionTitle, null, "Inventario y Ubicaci\xF3n"), /* @__PURE__ */ import_react3.default.createElement("div", { style: s2.grid4 }, /* @__PURE__ */ import_react3.default.createElement("div", { style: s2.field }, /* @__PURE__ */ import_react3.default.createElement("label", { style: s2.label }, "Stock *"), /* @__PURE__ */ import_react3.default.createElement(
+      "input",
+      {
+        style: s2.input,
         type: "number",
         min: "0",
         step: "1",
@@ -19648,19 +19735,46 @@
         placeholder: "0",
         required: true
       }
-    ))), /* @__PURE__ */ import_react3.default.createElement("div", { style: styles2.field }, /* @__PURE__ */ import_react3.default.createElement("label", { style: styles2.label }, "Descripci\xF3n"), /* @__PURE__ */ import_react3.default.createElement(
+    )), /* @__PURE__ */ import_react3.default.createElement("div", { style: s2.field }, /* @__PURE__ */ import_react3.default.createElement("label", { style: s2.label }, "Stock m\xEDnimo"), /* @__PURE__ */ import_react3.default.createElement(
+      "input",
+      {
+        style: s2.input,
+        type: "number",
+        min: "0",
+        step: "1",
+        value: form.min_stock,
+        onChange: set("min_stock"),
+        placeholder: "5"
+      }
+    )), /* @__PURE__ */ import_react3.default.createElement("div", { style: s2.field }, /* @__PURE__ */ import_react3.default.createElement("label", { style: s2.label }, "Categor\xEDa"), /* @__PURE__ */ import_react3.default.createElement("select", { style: s2.select, value: form.category, onChange: set("category") }, /* @__PURE__ */ import_react3.default.createElement("option", { value: "" }, "Sin categor\xEDa"), categories.map((cat) => /* @__PURE__ */ import_react3.default.createElement("option", { key: cat.id, value: cat.name }, cat.name))), categories.length === 0 && /* @__PURE__ */ import_react3.default.createElement("div", { style: s2.hint }, 'Gestiona categor\xEDas en la pesta\xF1a "Categor\xEDas"')), /* @__PURE__ */ import_react3.default.createElement("div", { style: s2.field }, /* @__PURE__ */ import_react3.default.createElement("label", { style: s2.label }, "Ubicaci\xF3n f\xEDsica"), /* @__PURE__ */ import_react3.default.createElement(
+      "input",
+      {
+        style: s2.input,
+        value: form.location,
+        onChange: set("location"),
+        placeholder: "Ej: Estante A3"
+      }
+    )))), /* @__PURE__ */ import_react3.default.createElement("div", { style: { ...s2.section, paddingBottom: "16px" } }, /* @__PURE__ */ import_react3.default.createElement(SectionTitle, null, "Descripci\xF3n y Notas"), /* @__PURE__ */ import_react3.default.createElement("div", { style: s2.field }, /* @__PURE__ */ import_react3.default.createElement("label", { style: s2.label }, "Descripci\xF3n"), /* @__PURE__ */ import_react3.default.createElement(
       "textarea",
       {
-        style: styles2.textarea,
+        style: s2.textarea,
         value: form.description,
         onChange: set("description"),
-        placeholder: "Detalles del producto (modelo, condici\xF3n, etc.)"
+        placeholder: "Descripci\xF3n general del producto"
       }
-    )), /* @__PURE__ */ import_react3.default.createElement("div", { style: styles2.actions }, /* @__PURE__ */ import_react3.default.createElement("button", { type: "button", style: styles2.btnCancel, onClick: onCancel }, "Cancelar"), /* @__PURE__ */ import_react3.default.createElement("button", { type: "submit", style: styles2.btnSave }, isEdit ? "Guardar cambios" : "Crear producto")))));
+    )), /* @__PURE__ */ import_react3.default.createElement("div", { style: s2.field }, /* @__PURE__ */ import_react3.default.createElement("label", { style: s2.label }, "Notas t\xE9cnicas"), /* @__PURE__ */ import_react3.default.createElement(
+      "textarea",
+      {
+        style: { ...s2.textarea, minHeight: "56px" },
+        value: form.technical_notes,
+        onChange: set("technical_notes"),
+        placeholder: "Reparaciones, detalles t\xE9cnicos, observaciones..."
+      }
+    )))), /* @__PURE__ */ import_react3.default.createElement("div", { style: s2.footer }, /* @__PURE__ */ import_react3.default.createElement("button", { type: "button", style: s2.btnCancel, onClick: onCancel }, "Cancelar"), /* @__PURE__ */ import_react3.default.createElement("button", { type: "submit", style: s2.btnSave }, isEdit ? "Guardar cambios" : "Crear producto")))));
   }
 
   // src/renderer/components/InventoryView.js
-  var styles3 = {
+  var styles = {
     toolbar: {
       display: "flex",
       justifyContent: "space-between",
@@ -19728,7 +19842,7 @@
         setError("Error al eliminar el producto.");
       }
     };
-    return /* @__PURE__ */ import_react4.default.createElement(import_react4.default.Fragment, null, /* @__PURE__ */ import_react4.default.createElement("div", { style: styles3.toolbar }, /* @__PURE__ */ import_react4.default.createElement("h2", { style: styles3.sectionTitle }, "Inventario de Productos"), /* @__PURE__ */ import_react4.default.createElement("button", { style: styles3.btnPrimary, onClick: () => setModal("create") }, "+ Nuevo Producto")), error && /* @__PURE__ */ import_react4.default.createElement("div", { style: styles3.errorBox }, error), loading ? /* @__PURE__ */ import_react4.default.createElement("p", { style: { color: "#64748b", fontSize: "14px" } }, "Cargando...") : /* @__PURE__ */ import_react4.default.createElement(
+    return /* @__PURE__ */ import_react4.default.createElement(import_react4.default.Fragment, null, /* @__PURE__ */ import_react4.default.createElement("div", { style: styles.toolbar }, /* @__PURE__ */ import_react4.default.createElement("h2", { style: styles.sectionTitle }, "Inventario de Productos"), /* @__PURE__ */ import_react4.default.createElement("button", { style: styles.btnPrimary, onClick: () => setModal("create") }, "+ Nuevo Producto")), error && /* @__PURE__ */ import_react4.default.createElement("div", { style: styles.errorBox }, error), loading ? /* @__PURE__ */ import_react4.default.createElement("p", { style: { color: "#64748b", fontSize: "14px" } }, "Cargando...") : /* @__PURE__ */ import_react4.default.createElement(
       ProductList,
       {
         products,
@@ -19776,7 +19890,7 @@
       minute: "2-digit"
     });
   }
-  var s = {
+  var s3 = {
     overlay: {
       position: "fixed",
       inset: 0,
@@ -19909,11 +20023,11 @@
     }
   };
   function SaleReceipt({ sale, items, total, onClose }) {
-    return /* @__PURE__ */ import_react5.default.createElement(import_react5.default.Fragment, null, /* @__PURE__ */ import_react5.default.createElement("style", null, PRINT_STYLES), /* @__PURE__ */ import_react5.default.createElement("div", { style: s.overlay }, /* @__PURE__ */ import_react5.default.createElement("div", { style: s.actions, className: "receipt-no-print" }, /* @__PURE__ */ import_react5.default.createElement("button", { style: s.btnPrint, onClick: () => window.print() }, "\u{1F5A8} Imprimir"), /* @__PURE__ */ import_react5.default.createElement("button", { style: s.btnClose, onClick: onClose }, "Cerrar")), /* @__PURE__ */ import_react5.default.createElement("div", { id: "sale-receipt", style: s.receipt }, /* @__PURE__ */ import_react5.default.createElement("div", { style: s.headerBlock }, /* @__PURE__ */ import_react5.default.createElement("h1", { style: s.storeName }, "TechStore"), /* @__PURE__ */ import_react5.default.createElement("p", { style: s.storeTagline }, "Comprobante de Venta")), /* @__PURE__ */ import_react5.default.createElement("div", { style: s.dividerSolid }), /* @__PURE__ */ import_react5.default.createElement("div", null, /* @__PURE__ */ import_react5.default.createElement("div", { style: s.infoRow }, /* @__PURE__ */ import_react5.default.createElement("span", { style: s.infoLabel }, "Venta #"), /* @__PURE__ */ import_react5.default.createElement("span", { style: s.infoValue }, sale.id)), /* @__PURE__ */ import_react5.default.createElement("div", { style: s.infoRow }, /* @__PURE__ */ import_react5.default.createElement("span", { style: s.infoLabel }, "Fecha"), /* @__PURE__ */ import_react5.default.createElement("span", { style: s.infoValue }, formatDate2(sale.created_at))), sale.customer_name && /* @__PURE__ */ import_react5.default.createElement("div", { style: s.infoRow }, /* @__PURE__ */ import_react5.default.createElement("span", { style: s.infoLabel }, "Cliente"), /* @__PURE__ */ import_react5.default.createElement("span", { style: s.infoValue }, sale.customer_name))), /* @__PURE__ */ import_react5.default.createElement("div", { style: s.divider }), /* @__PURE__ */ import_react5.default.createElement("div", { style: s.itemsHeader }, /* @__PURE__ */ import_react5.default.createElement("span", { style: s.colName }, "Producto"), /* @__PURE__ */ import_react5.default.createElement("span", { style: s.colQty }, "Cant"), /* @__PURE__ */ import_react5.default.createElement("span", { style: s.colUnit }, "P.Unit"), /* @__PURE__ */ import_react5.default.createElement("span", { style: s.colSub }, "Subtotal")), /* @__PURE__ */ import_react5.default.createElement("div", { style: s.divider }), items.map((item, i) => /* @__PURE__ */ import_react5.default.createElement("div", { key: i, style: s.itemRow }, /* @__PURE__ */ import_react5.default.createElement("span", { style: s.colName }, item.product_name), /* @__PURE__ */ import_react5.default.createElement("span", { style: s.colQty }, item.quantity), /* @__PURE__ */ import_react5.default.createElement("span", { style: s.colUnit }, "$", Number(item.unit_price).toFixed(2)), /* @__PURE__ */ import_react5.default.createElement("span", { style: s.colSub }, "$", Number(item.subtotal).toFixed(2)))), /* @__PURE__ */ import_react5.default.createElement("div", { style: s.dividerSolid }), /* @__PURE__ */ import_react5.default.createElement("div", { style: s.totalRow }, /* @__PURE__ */ import_react5.default.createElement("span", { style: s.totalLabel }, "Total"), /* @__PURE__ */ import_react5.default.createElement("span", { style: s.totalAmount }, "$", Number(total).toFixed(2))), /* @__PURE__ */ import_react5.default.createElement("div", { style: s.divider }), /* @__PURE__ */ import_react5.default.createElement("p", { style: s.footer }, "\xA1Gracias por su compra!"))));
+    return /* @__PURE__ */ import_react5.default.createElement(import_react5.default.Fragment, null, /* @__PURE__ */ import_react5.default.createElement("style", null, PRINT_STYLES), /* @__PURE__ */ import_react5.default.createElement("div", { style: s3.overlay }, /* @__PURE__ */ import_react5.default.createElement("div", { style: s3.actions, className: "receipt-no-print" }, /* @__PURE__ */ import_react5.default.createElement("button", { style: s3.btnPrint, onClick: () => window.print() }, "\u{1F5A8} Imprimir"), /* @__PURE__ */ import_react5.default.createElement("button", { style: s3.btnClose, onClick: onClose }, "Cerrar")), /* @__PURE__ */ import_react5.default.createElement("div", { id: "sale-receipt", style: s3.receipt }, /* @__PURE__ */ import_react5.default.createElement("div", { style: s3.headerBlock }, /* @__PURE__ */ import_react5.default.createElement("h1", { style: s3.storeName }, "TechStore"), /* @__PURE__ */ import_react5.default.createElement("p", { style: s3.storeTagline }, "Comprobante de Venta")), /* @__PURE__ */ import_react5.default.createElement("div", { style: s3.dividerSolid }), /* @__PURE__ */ import_react5.default.createElement("div", null, /* @__PURE__ */ import_react5.default.createElement("div", { style: s3.infoRow }, /* @__PURE__ */ import_react5.default.createElement("span", { style: s3.infoLabel }, "Venta #"), /* @__PURE__ */ import_react5.default.createElement("span", { style: s3.infoValue }, sale.id)), /* @__PURE__ */ import_react5.default.createElement("div", { style: s3.infoRow }, /* @__PURE__ */ import_react5.default.createElement("span", { style: s3.infoLabel }, "Fecha"), /* @__PURE__ */ import_react5.default.createElement("span", { style: s3.infoValue }, formatDate2(sale.created_at))), sale.customer_name && /* @__PURE__ */ import_react5.default.createElement("div", { style: s3.infoRow }, /* @__PURE__ */ import_react5.default.createElement("span", { style: s3.infoLabel }, "Cliente"), /* @__PURE__ */ import_react5.default.createElement("span", { style: s3.infoValue }, sale.customer_name))), /* @__PURE__ */ import_react5.default.createElement("div", { style: s3.divider }), /* @__PURE__ */ import_react5.default.createElement("div", { style: s3.itemsHeader }, /* @__PURE__ */ import_react5.default.createElement("span", { style: s3.colName }, "Producto"), /* @__PURE__ */ import_react5.default.createElement("span", { style: s3.colQty }, "Cant"), /* @__PURE__ */ import_react5.default.createElement("span", { style: s3.colUnit }, "P.Unit"), /* @__PURE__ */ import_react5.default.createElement("span", { style: s3.colSub }, "Subtotal")), /* @__PURE__ */ import_react5.default.createElement("div", { style: s3.divider }), items.map((item, i) => /* @__PURE__ */ import_react5.default.createElement("div", { key: i, style: s3.itemRow }, /* @__PURE__ */ import_react5.default.createElement("span", { style: s3.colName }, item.product_name), /* @__PURE__ */ import_react5.default.createElement("span", { style: s3.colQty }, item.quantity), /* @__PURE__ */ import_react5.default.createElement("span", { style: s3.colUnit }, "$", Number(item.unit_price).toFixed(2)), /* @__PURE__ */ import_react5.default.createElement("span", { style: s3.colSub }, "$", Number(item.subtotal).toFixed(2)))), /* @__PURE__ */ import_react5.default.createElement("div", { style: s3.dividerSolid }), /* @__PURE__ */ import_react5.default.createElement("div", { style: s3.totalRow }, /* @__PURE__ */ import_react5.default.createElement("span", { style: s3.totalLabel }, "Total"), /* @__PURE__ */ import_react5.default.createElement("span", { style: s3.totalAmount }, "$", Number(total).toFixed(2))), /* @__PURE__ */ import_react5.default.createElement("div", { style: s3.divider }), /* @__PURE__ */ import_react5.default.createElement("p", { style: s3.footer }, "\xA1Gracias por su compra!"))));
   }
 
   // src/renderer/components/NewSale.js
-  var styles4 = {
+  var styles2 = {
     layout: {
       display: "grid",
       gridTemplateColumns: "1fr 340px",
@@ -20208,6 +20322,7 @@
     const availableStock = (product) => product.stock - cartQtyFor(product.id);
     const addToCart = (product) => {
       if (availableStock(product) <= 0) return;
+      const effectivePrice = product.offer_price ? Number(product.offer_price) : Number(product.sale_price);
       setCart((prev) => {
         const existing = prev.find((c) => c.product_id === product.id);
         if (existing) {
@@ -20220,9 +20335,9 @@
           {
             product_id: product.id,
             product_name: product.name,
-            unit_price: Number(product.price),
+            unit_price: effectivePrice,
             quantity: 1,
-            subtotal: Number(product.price)
+            subtotal: effectivePrice
           }
         ];
       });
@@ -20262,16 +20377,16 @@
         setSaving(false);
       }
     };
-    return /* @__PURE__ */ import_react6.default.createElement(import_react6.default.Fragment, null, /* @__PURE__ */ import_react6.default.createElement("h2", { style: styles4.sectionTitle }, "Nueva Venta"), /* @__PURE__ */ import_react6.default.createElement("div", { style: styles4.layout }, /* @__PURE__ */ import_react6.default.createElement("div", { style: styles4.panel }, /* @__PURE__ */ import_react6.default.createElement("div", { style: styles4.panelHeader }, "Productos"), /* @__PURE__ */ import_react6.default.createElement("div", { style: styles4.searchBox }, /* @__PURE__ */ import_react6.default.createElement(
+    return /* @__PURE__ */ import_react6.default.createElement(import_react6.default.Fragment, null, /* @__PURE__ */ import_react6.default.createElement("h2", { style: styles2.sectionTitle }, "Nueva Venta"), /* @__PURE__ */ import_react6.default.createElement("div", { style: styles2.layout }, /* @__PURE__ */ import_react6.default.createElement("div", { style: styles2.panel }, /* @__PURE__ */ import_react6.default.createElement("div", { style: styles2.panelHeader }, "Productos"), /* @__PURE__ */ import_react6.default.createElement("div", { style: styles2.searchBox }, /* @__PURE__ */ import_react6.default.createElement(
       "input",
       {
-        style: styles4.searchInput,
+        style: styles2.searchInput,
         placeholder: "Buscar por nombre o categor\xEDa...",
         value: query,
         onChange: (e) => setQuery(e.target.value),
         autoFocus: true
       }
-    )), /* @__PURE__ */ import_react6.default.createElement("div", { style: styles4.productList }, filteredProducts.length === 0 ? /* @__PURE__ */ import_react6.default.createElement("p", { style: styles4.emptySearch }, 'Sin resultados para "', query, '"') : filteredProducts.map((product) => {
+    )), /* @__PURE__ */ import_react6.default.createElement("div", { style: styles2.productList }, filteredProducts.length === 0 ? /* @__PURE__ */ import_react6.default.createElement("p", { style: styles2.emptySearch }, 'Sin resultados para "', query, '"') : filteredProducts.map((product) => {
       const inCart = cartQtyFor(product.id);
       const avail = availableStock(product);
       const outOfStock = avail <= 0;
@@ -20279,71 +20394,71 @@
         "div",
         {
           key: product.id,
-          style: outOfStock ? styles4.productRowDisabled : styles4.productRow,
+          style: outOfStock ? styles2.productRowDisabled : styles2.productRow,
           onClick: () => !outOfStock && addToCart(product)
         },
-        /* @__PURE__ */ import_react6.default.createElement("div", null, /* @__PURE__ */ import_react6.default.createElement("div", { style: styles4.productName }, product.name), /* @__PURE__ */ import_react6.default.createElement("div", { style: styles4.productMeta }, product.category || "Sin categor\xEDa", " \xB7 Stock: ", avail, inCart > 0 && ` (${inCart} en carrito)`)),
-        /* @__PURE__ */ import_react6.default.createElement("div", { style: { display: "flex", alignItems: "center" } }, /* @__PURE__ */ import_react6.default.createElement("div", { style: styles4.productRight }, /* @__PURE__ */ import_react6.default.createElement("div", { style: styles4.productPrice }, "$", Number(product.price).toFixed(2))), outOfStock ? /* @__PURE__ */ import_react6.default.createElement("span", { style: { ...styles4.inCartBadge, background: "#f8fafc", border: "1px solid #e2e8f0", color: "#94a3b8" } }, "Sin stock") : inCart > 0 ? /* @__PURE__ */ import_react6.default.createElement("span", { style: styles4.inCartBadge }, "+", inCart) : /* @__PURE__ */ import_react6.default.createElement("span", { style: styles4.addBtn }, "Agregar"))
+        /* @__PURE__ */ import_react6.default.createElement("div", null, /* @__PURE__ */ import_react6.default.createElement("div", { style: styles2.productName }, product.name), /* @__PURE__ */ import_react6.default.createElement("div", { style: styles2.productMeta }, product.category || "Sin categor\xEDa", " \xB7 Stock: ", avail, inCart > 0 && ` (${inCart} en carrito)`)),
+        /* @__PURE__ */ import_react6.default.createElement("div", { style: { display: "flex", alignItems: "center" } }, /* @__PURE__ */ import_react6.default.createElement("div", { style: styles2.productRight }, /* @__PURE__ */ import_react6.default.createElement("div", { style: styles2.productPrice }, product.offer_price ? /* @__PURE__ */ import_react6.default.createElement(import_react6.default.Fragment, null, "$", Number(product.offer_price).toFixed(2), " ", /* @__PURE__ */ import_react6.default.createElement("span", { style: { textDecoration: "line-through", color: "#94a3b8", fontSize: "11px" } }, "$", Number(product.sale_price).toFixed(2))) : `$${Number(product.sale_price).toFixed(2)}`)), outOfStock ? /* @__PURE__ */ import_react6.default.createElement("span", { style: { ...styles2.inCartBadge, background: "#f8fafc", border: "1px solid #e2e8f0", color: "#94a3b8" } }, "Sin stock") : inCart > 0 ? /* @__PURE__ */ import_react6.default.createElement("span", { style: styles2.inCartBadge }, "+", inCart) : /* @__PURE__ */ import_react6.default.createElement("span", { style: styles2.addBtn }, "Agregar"))
       );
-    }))), /* @__PURE__ */ import_react6.default.createElement("div", { style: styles4.panel }, /* @__PURE__ */ import_react6.default.createElement("div", { style: styles4.panelHeader }, "Carrito"), /* @__PURE__ */ import_react6.default.createElement("div", { style: styles4.customerSection }, /* @__PURE__ */ import_react6.default.createElement("div", { style: styles4.customerLabel }, "Cliente ", /* @__PURE__ */ import_react6.default.createElement("span", { style: { fontWeight: "400", textTransform: "none", letterSpacing: 0 } }, "(opcional)")), selectedCustomer ? /* @__PURE__ */ import_react6.default.createElement("div", { style: styles4.customerPill }, /* @__PURE__ */ import_react6.default.createElement("span", { style: styles4.customerPillName }, selectedCustomer.name), selectedCustomer.phone && /* @__PURE__ */ import_react6.default.createElement("span", { style: styles4.customerPillMeta }, selectedCustomer.phone), /* @__PURE__ */ import_react6.default.createElement(
+    }))), /* @__PURE__ */ import_react6.default.createElement("div", { style: styles2.panel }, /* @__PURE__ */ import_react6.default.createElement("div", { style: styles2.panelHeader }, "Carrito"), /* @__PURE__ */ import_react6.default.createElement("div", { style: styles2.customerSection }, /* @__PURE__ */ import_react6.default.createElement("div", { style: styles2.customerLabel }, "Cliente ", /* @__PURE__ */ import_react6.default.createElement("span", { style: { fontWeight: "400", textTransform: "none", letterSpacing: 0 } }, "(opcional)")), selectedCustomer ? /* @__PURE__ */ import_react6.default.createElement("div", { style: styles2.customerPill }, /* @__PURE__ */ import_react6.default.createElement("span", { style: styles2.customerPillName }, selectedCustomer.name), selectedCustomer.phone && /* @__PURE__ */ import_react6.default.createElement("span", { style: styles2.customerPillMeta }, selectedCustomer.phone), /* @__PURE__ */ import_react6.default.createElement(
       "button",
       {
-        style: styles4.customerClearBtn,
+        style: styles2.customerClearBtn,
         onClick: () => setSelectedCustomer(null),
         title: "Quitar cliente"
       },
       "\xD7"
-    )) : /* @__PURE__ */ import_react6.default.createElement("div", { style: styles4.customerSearchWrap }, /* @__PURE__ */ import_react6.default.createElement(
+    )) : /* @__PURE__ */ import_react6.default.createElement("div", { style: styles2.customerSearchWrap }, /* @__PURE__ */ import_react6.default.createElement(
       "input",
       {
-        style: styles4.customerInput,
+        style: styles2.customerInput,
         placeholder: "Buscar cliente por nombre o tel\xE9fono...",
         value: customerQuery,
         onChange: (e) => setCustomerQuery(e.target.value)
       }
-    ), filteredCustomers.length > 0 && /* @__PURE__ */ import_react6.default.createElement("div", { style: styles4.customerDropdown }, filteredCustomers.map((c) => /* @__PURE__ */ import_react6.default.createElement(
+    ), filteredCustomers.length > 0 && /* @__PURE__ */ import_react6.default.createElement("div", { style: styles2.customerDropdown }, filteredCustomers.map((c) => /* @__PURE__ */ import_react6.default.createElement(
       "div",
       {
         key: c.id,
-        style: styles4.customerOption,
+        style: styles2.customerOption,
         onClick: () => {
           setSelectedCustomer(c);
           setCustomerQuery("");
         }
       },
-      /* @__PURE__ */ import_react6.default.createElement("div", { style: styles4.customerOptionName }, c.name),
-      c.phone && /* @__PURE__ */ import_react6.default.createElement("div", { style: styles4.customerOptionMeta }, c.phone)
-    ))))), /* @__PURE__ */ import_react6.default.createElement("div", { style: styles4.cartBody }, cart.length === 0 ? /* @__PURE__ */ import_react6.default.createElement("p", { style: styles4.emptyCart }, "Haz clic en un producto para agregarlo.") : cart.map((item) => /* @__PURE__ */ import_react6.default.createElement("div", { key: item.product_id, style: styles4.cartItem }, /* @__PURE__ */ import_react6.default.createElement("div", { style: styles4.cartItemName }, /* @__PURE__ */ import_react6.default.createElement("span", null, item.product_name), /* @__PURE__ */ import_react6.default.createElement(
+      /* @__PURE__ */ import_react6.default.createElement("div", { style: styles2.customerOptionName }, c.name),
+      c.phone && /* @__PURE__ */ import_react6.default.createElement("div", { style: styles2.customerOptionMeta }, c.phone)
+    ))))), /* @__PURE__ */ import_react6.default.createElement("div", { style: styles2.cartBody }, cart.length === 0 ? /* @__PURE__ */ import_react6.default.createElement("p", { style: styles2.emptyCart }, "Haz clic en un producto para agregarlo.") : cart.map((item) => /* @__PURE__ */ import_react6.default.createElement("div", { key: item.product_id, style: styles2.cartItem }, /* @__PURE__ */ import_react6.default.createElement("div", { style: styles2.cartItemName }, /* @__PURE__ */ import_react6.default.createElement("span", null, item.product_name), /* @__PURE__ */ import_react6.default.createElement(
       "button",
       {
-        style: styles4.removeBtn,
+        style: styles2.removeBtn,
         onClick: () => setQty(item.product_id, 0),
         title: "Quitar del carrito"
       },
       "\xD7"
-    )), /* @__PURE__ */ import_react6.default.createElement("div", { style: styles4.qtyRow }, /* @__PURE__ */ import_react6.default.createElement("div", { style: styles4.qtyControls }, /* @__PURE__ */ import_react6.default.createElement(
+    )), /* @__PURE__ */ import_react6.default.createElement("div", { style: styles2.qtyRow }, /* @__PURE__ */ import_react6.default.createElement("div", { style: styles2.qtyControls }, /* @__PURE__ */ import_react6.default.createElement(
       "button",
       {
-        style: styles4.qtyBtn,
+        style: styles2.qtyBtn,
         onClick: () => setQty(item.product_id, item.quantity - 1)
       },
       "\u2212"
-    ), /* @__PURE__ */ import_react6.default.createElement("span", { style: styles4.qtyValue }, item.quantity), /* @__PURE__ */ import_react6.default.createElement(
+    ), /* @__PURE__ */ import_react6.default.createElement("span", { style: styles2.qtyValue }, item.quantity), /* @__PURE__ */ import_react6.default.createElement(
       "button",
       {
-        style: styles4.qtyBtn,
+        style: styles2.qtyBtn,
         onClick: () => setQty(item.product_id, item.quantity + 1)
       },
       "+"
-    )), /* @__PURE__ */ import_react6.default.createElement("span", { style: styles4.itemSubtotal }, "$", item.subtotal.toFixed(2)))))), /* @__PURE__ */ import_react6.default.createElement("div", { style: styles4.cartFooter }, /* @__PURE__ */ import_react6.default.createElement("div", { style: styles4.totalRow }, /* @__PURE__ */ import_react6.default.createElement("span", { style: styles4.totalLabel }, "Total"), /* @__PURE__ */ import_react6.default.createElement("span", { style: styles4.totalAmount }, "$", total.toFixed(2))), /* @__PURE__ */ import_react6.default.createElement(
+    )), /* @__PURE__ */ import_react6.default.createElement("span", { style: styles2.itemSubtotal }, "$", item.subtotal.toFixed(2)))))), /* @__PURE__ */ import_react6.default.createElement("div", { style: styles2.cartFooter }, /* @__PURE__ */ import_react6.default.createElement("div", { style: styles2.totalRow }, /* @__PURE__ */ import_react6.default.createElement("span", { style: styles2.totalLabel }, "Total"), /* @__PURE__ */ import_react6.default.createElement("span", { style: styles2.totalAmount }, "$", total.toFixed(2))), /* @__PURE__ */ import_react6.default.createElement(
       "button",
       {
-        style: cart.length === 0 || saving ? styles4.confirmBtnDisabled : styles4.confirmBtn,
+        style: cart.length === 0 || saving ? styles2.confirmBtnDisabled : styles2.confirmBtn,
         onClick: confirmSale,
         disabled: cart.length === 0 || saving
       },
       saving ? "Procesando..." : "Confirmar Venta"
-    )), error && /* @__PURE__ */ import_react6.default.createElement("div", { style: styles4.errorBox }, error))), receipt && /* @__PURE__ */ import_react6.default.createElement(
+    )), error && /* @__PURE__ */ import_react6.default.createElement("div", { style: styles2.errorBox }, error))), receipt && /* @__PURE__ */ import_react6.default.createElement(
       SaleReceipt,
       {
         sale: receipt.sale,
@@ -20359,7 +20474,7 @@
 
   // src/renderer/components/SaleHistory.js
   var import_react7 = __toESM(require_react());
-  var styles5 = {
+  var styles3 = {
     toolbar: {
       display: "flex",
       justifyContent: "space-between",
@@ -20477,12 +20592,12 @@
       });
     }, []);
     const toggle = (id) => setExpanded((prev) => prev === id ? null : id);
-    return /* @__PURE__ */ import_react7.default.createElement(import_react7.default.Fragment, null, /* @__PURE__ */ import_react7.default.createElement("div", { style: styles5.toolbar }, /* @__PURE__ */ import_react7.default.createElement("h2", { style: styles5.sectionTitle }, "Historial de Ventas")), error && /* @__PURE__ */ import_react7.default.createElement("div", { style: styles5.errorBox }, error), loading ? /* @__PURE__ */ import_react7.default.createElement("p", { style: { color: "#64748b", fontSize: "14px" } }, "Cargando...") : /* @__PURE__ */ import_react7.default.createElement("div", { style: styles5.wrapper }, sales.length === 0 ? /* @__PURE__ */ import_react7.default.createElement("p", { style: styles5.empty }, "No hay ventas registradas a\xFAn.") : /* @__PURE__ */ import_react7.default.createElement("table", { style: styles5.table }, /* @__PURE__ */ import_react7.default.createElement("thead", null, /* @__PURE__ */ import_react7.default.createElement("tr", null, /* @__PURE__ */ import_react7.default.createElement("th", { style: styles5.th }, "#"), /* @__PURE__ */ import_react7.default.createElement("th", { style: styles5.th }, "Fecha"), /* @__PURE__ */ import_react7.default.createElement("th", { style: styles5.th }, "Cliente"), /* @__PURE__ */ import_react7.default.createElement("th", { style: styles5.th }, "Productos"), /* @__PURE__ */ import_react7.default.createElement("th", { style: styles5.th }, "Total"), /* @__PURE__ */ import_react7.default.createElement("th", { style: styles5.th }))), /* @__PURE__ */ import_react7.default.createElement("tbody", null, sales.map((sale) => /* @__PURE__ */ import_react7.default.createElement(import_react7.default.Fragment, { key: sale.id }, /* @__PURE__ */ import_react7.default.createElement("tr", null, /* @__PURE__ */ import_react7.default.createElement("td", { style: styles5.td }, sale.id), /* @__PURE__ */ import_react7.default.createElement("td", { style: styles5.td }, formatDate3(sale.created_at)), /* @__PURE__ */ import_react7.default.createElement("td", { style: styles5.td }, sale.customer_name || /* @__PURE__ */ import_react7.default.createElement("span", { style: { color: "#94a3b8" } }, "\u2014")), /* @__PURE__ */ import_react7.default.createElement("td", { style: styles5.td }, sale.details.length, " producto", sale.details.length !== 1 ? "s" : ""), /* @__PURE__ */ import_react7.default.createElement("td", { style: styles5.td }, /* @__PURE__ */ import_react7.default.createElement("span", { style: styles5.totalBadge }, "$", Number(sale.total).toFixed(2))), /* @__PURE__ */ import_react7.default.createElement("td", { style: styles5.td }, /* @__PURE__ */ import_react7.default.createElement("button", { style: styles5.toggleBtn, onClick: () => toggle(sale.id) }, expanded === sale.id ? "Ocultar" : "Ver detalle"))), expanded === sale.id && /* @__PURE__ */ import_react7.default.createElement("tr", { style: styles5.detailRow }, /* @__PURE__ */ import_react7.default.createElement("td", { colSpan: 6, style: styles5.detailCell }, /* @__PURE__ */ import_react7.default.createElement("table", { style: styles5.detailTable }, /* @__PURE__ */ import_react7.default.createElement("thead", null, /* @__PURE__ */ import_react7.default.createElement("tr", null, /* @__PURE__ */ import_react7.default.createElement("th", { style: styles5.detailTh }, "Producto"), /* @__PURE__ */ import_react7.default.createElement("th", { style: styles5.detailTh }, "Precio unit."), /* @__PURE__ */ import_react7.default.createElement("th", { style: styles5.detailTh }, "Cantidad"), /* @__PURE__ */ import_react7.default.createElement("th", { style: styles5.detailTh }, "Subtotal"))), /* @__PURE__ */ import_react7.default.createElement("tbody", null, sale.details.map((d) => /* @__PURE__ */ import_react7.default.createElement("tr", { key: d.id }, /* @__PURE__ */ import_react7.default.createElement("td", { style: styles5.detailTd }, d.product_name), /* @__PURE__ */ import_react7.default.createElement("td", { style: styles5.detailTd }, "$", Number(d.unit_price).toFixed(2)), /* @__PURE__ */ import_react7.default.createElement("td", { style: styles5.detailTd }, d.quantity), /* @__PURE__ */ import_react7.default.createElement("td", { style: styles5.detailTd }, "$", Number(d.subtotal).toFixed(2)))))), /* @__PURE__ */ import_react7.default.createElement("div", { style: styles5.detailTotal }, "Total: $", Number(sale.total).toFixed(2))))))))));
+    return /* @__PURE__ */ import_react7.default.createElement(import_react7.default.Fragment, null, /* @__PURE__ */ import_react7.default.createElement("div", { style: styles3.toolbar }, /* @__PURE__ */ import_react7.default.createElement("h2", { style: styles3.sectionTitle }, "Historial de Ventas")), error && /* @__PURE__ */ import_react7.default.createElement("div", { style: styles3.errorBox }, error), loading ? /* @__PURE__ */ import_react7.default.createElement("p", { style: { color: "#64748b", fontSize: "14px" } }, "Cargando...") : /* @__PURE__ */ import_react7.default.createElement("div", { style: styles3.wrapper }, sales.length === 0 ? /* @__PURE__ */ import_react7.default.createElement("p", { style: styles3.empty }, "No hay ventas registradas a\xFAn.") : /* @__PURE__ */ import_react7.default.createElement("table", { style: styles3.table }, /* @__PURE__ */ import_react7.default.createElement("thead", null, /* @__PURE__ */ import_react7.default.createElement("tr", null, /* @__PURE__ */ import_react7.default.createElement("th", { style: styles3.th }, "#"), /* @__PURE__ */ import_react7.default.createElement("th", { style: styles3.th }, "Fecha"), /* @__PURE__ */ import_react7.default.createElement("th", { style: styles3.th }, "Cliente"), /* @__PURE__ */ import_react7.default.createElement("th", { style: styles3.th }, "Productos"), /* @__PURE__ */ import_react7.default.createElement("th", { style: styles3.th }, "Total"), /* @__PURE__ */ import_react7.default.createElement("th", { style: styles3.th }))), /* @__PURE__ */ import_react7.default.createElement("tbody", null, sales.map((sale) => /* @__PURE__ */ import_react7.default.createElement(import_react7.default.Fragment, { key: sale.id }, /* @__PURE__ */ import_react7.default.createElement("tr", null, /* @__PURE__ */ import_react7.default.createElement("td", { style: styles3.td }, sale.id), /* @__PURE__ */ import_react7.default.createElement("td", { style: styles3.td }, formatDate3(sale.created_at)), /* @__PURE__ */ import_react7.default.createElement("td", { style: styles3.td }, sale.customer_name || /* @__PURE__ */ import_react7.default.createElement("span", { style: { color: "#94a3b8" } }, "\u2014")), /* @__PURE__ */ import_react7.default.createElement("td", { style: styles3.td }, sale.details.length, " producto", sale.details.length !== 1 ? "s" : ""), /* @__PURE__ */ import_react7.default.createElement("td", { style: styles3.td }, /* @__PURE__ */ import_react7.default.createElement("span", { style: styles3.totalBadge }, "$", Number(sale.total).toFixed(2))), /* @__PURE__ */ import_react7.default.createElement("td", { style: styles3.td }, /* @__PURE__ */ import_react7.default.createElement("button", { style: styles3.toggleBtn, onClick: () => toggle(sale.id) }, expanded === sale.id ? "Ocultar" : "Ver detalle"))), expanded === sale.id && /* @__PURE__ */ import_react7.default.createElement("tr", { style: styles3.detailRow }, /* @__PURE__ */ import_react7.default.createElement("td", { colSpan: 6, style: styles3.detailCell }, /* @__PURE__ */ import_react7.default.createElement("table", { style: styles3.detailTable }, /* @__PURE__ */ import_react7.default.createElement("thead", null, /* @__PURE__ */ import_react7.default.createElement("tr", null, /* @__PURE__ */ import_react7.default.createElement("th", { style: styles3.detailTh }, "Producto"), /* @__PURE__ */ import_react7.default.createElement("th", { style: styles3.detailTh }, "Precio unit."), /* @__PURE__ */ import_react7.default.createElement("th", { style: styles3.detailTh }, "Cantidad"), /* @__PURE__ */ import_react7.default.createElement("th", { style: styles3.detailTh }, "Subtotal"))), /* @__PURE__ */ import_react7.default.createElement("tbody", null, sale.details.map((d) => /* @__PURE__ */ import_react7.default.createElement("tr", { key: d.id }, /* @__PURE__ */ import_react7.default.createElement("td", { style: styles3.detailTd }, d.product_name), /* @__PURE__ */ import_react7.default.createElement("td", { style: styles3.detailTd }, "$", Number(d.unit_price).toFixed(2)), /* @__PURE__ */ import_react7.default.createElement("td", { style: styles3.detailTd }, d.quantity), /* @__PURE__ */ import_react7.default.createElement("td", { style: styles3.detailTd }, "$", Number(d.subtotal).toFixed(2)))))), /* @__PURE__ */ import_react7.default.createElement("div", { style: styles3.detailTotal }, "Total: $", Number(sale.total).toFixed(2))))))))));
   }
 
   // src/renderer/components/CategoriesView.js
   var import_react8 = __toESM(require_react());
-  var styles6 = {
+  var styles4 = {
     toolbar: {
       display: "flex",
       justifyContent: "space-between",
@@ -20649,25 +20764,25 @@
       e.preventDefault();
       onSave({ name: form.name.trim(), description: form.description.trim() || null });
     };
-    return /* @__PURE__ */ import_react8.default.createElement("div", { style: styles6.overlay, onClick: (e) => e.target === e.currentTarget && onCancel() }, /* @__PURE__ */ import_react8.default.createElement("div", { style: styles6.modal }, /* @__PURE__ */ import_react8.default.createElement("h2", { style: styles6.modalTitle }, isEdit ? "Editar Categor\xEDa" : "Nueva Categor\xEDa"), /* @__PURE__ */ import_react8.default.createElement("form", { onSubmit: handleSubmit }, /* @__PURE__ */ import_react8.default.createElement("div", { style: styles6.field }, /* @__PURE__ */ import_react8.default.createElement("label", { style: styles6.label }, "Nombre *"), /* @__PURE__ */ import_react8.default.createElement(
+    return /* @__PURE__ */ import_react8.default.createElement("div", { style: styles4.overlay, onClick: (e) => e.target === e.currentTarget && onCancel() }, /* @__PURE__ */ import_react8.default.createElement("div", { style: styles4.modal }, /* @__PURE__ */ import_react8.default.createElement("h2", { style: styles4.modalTitle }, isEdit ? "Editar Categor\xEDa" : "Nueva Categor\xEDa"), /* @__PURE__ */ import_react8.default.createElement("form", { onSubmit: handleSubmit }, /* @__PURE__ */ import_react8.default.createElement("div", { style: styles4.field }, /* @__PURE__ */ import_react8.default.createElement("label", { style: styles4.label }, "Nombre *"), /* @__PURE__ */ import_react8.default.createElement(
       "input",
       {
-        style: styles6.input,
+        style: styles4.input,
         value: form.name,
         onChange: set("name"),
         placeholder: "Ej: Computadoras",
         required: true,
         autoFocus: true
       }
-    )), /* @__PURE__ */ import_react8.default.createElement("div", { style: styles6.field }, /* @__PURE__ */ import_react8.default.createElement("label", { style: styles6.label }, "Descripci\xF3n"), /* @__PURE__ */ import_react8.default.createElement(
+    )), /* @__PURE__ */ import_react8.default.createElement("div", { style: styles4.field }, /* @__PURE__ */ import_react8.default.createElement("label", { style: styles4.label }, "Descripci\xF3n"), /* @__PURE__ */ import_react8.default.createElement(
       "textarea",
       {
-        style: styles6.textarea,
+        style: styles4.textarea,
         value: form.description,
         onChange: set("description"),
         placeholder: "Descripci\xF3n opcional de la categor\xEDa"
       }
-    )), /* @__PURE__ */ import_react8.default.createElement("div", { style: styles6.actions }, /* @__PURE__ */ import_react8.default.createElement("button", { type: "button", style: styles6.btnCancel, onClick: onCancel }, "Cancelar"), /* @__PURE__ */ import_react8.default.createElement("button", { type: "submit", style: styles6.btnSave }, isEdit ? "Guardar cambios" : "Crear categor\xEDa")))));
+    )), /* @__PURE__ */ import_react8.default.createElement("div", { style: styles4.actions }, /* @__PURE__ */ import_react8.default.createElement("button", { type: "button", style: styles4.btnCancel, onClick: onCancel }, "Cancelar"), /* @__PURE__ */ import_react8.default.createElement("button", { type: "submit", style: styles4.btnSave }, isEdit ? "Guardar cambios" : "Crear categor\xEDa")))));
   }
   function CategoriesView() {
     const [categories, setCategories] = (0, import_react8.useState)([]);
@@ -20710,17 +20825,17 @@
         setError("Error al eliminar la categor\xEDa.");
       }
     };
-    return /* @__PURE__ */ import_react8.default.createElement(import_react8.default.Fragment, null, /* @__PURE__ */ import_react8.default.createElement("div", { style: styles6.toolbar }, /* @__PURE__ */ import_react8.default.createElement("h2", { style: styles6.sectionTitle }, "Categor\xEDas"), /* @__PURE__ */ import_react8.default.createElement("button", { style: styles6.btnPrimary, onClick: () => setModal("create") }, "+ Nueva Categor\xEDa")), error && /* @__PURE__ */ import_react8.default.createElement("div", { style: styles6.errorBox }, error), loading ? /* @__PURE__ */ import_react8.default.createElement("p", { style: { color: "#64748b", fontSize: "14px" } }, "Cargando...") : /* @__PURE__ */ import_react8.default.createElement("div", { style: styles6.wrapper }, categories.length === 0 ? /* @__PURE__ */ import_react8.default.createElement("p", { style: styles6.empty }, "No hay categor\xEDas. Agrega la primera.") : /* @__PURE__ */ import_react8.default.createElement("table", { style: styles6.table }, /* @__PURE__ */ import_react8.default.createElement("thead", null, /* @__PURE__ */ import_react8.default.createElement("tr", null, /* @__PURE__ */ import_react8.default.createElement("th", { style: styles6.th }, "Nombre"), /* @__PURE__ */ import_react8.default.createElement("th", { style: styles6.th }, "Descripci\xF3n"), /* @__PURE__ */ import_react8.default.createElement("th", { style: styles6.th }, "Acciones"))), /* @__PURE__ */ import_react8.default.createElement("tbody", null, categories.map((cat) => /* @__PURE__ */ import_react8.default.createElement("tr", { key: cat.id }, /* @__PURE__ */ import_react8.default.createElement("td", { style: styles6.td }, /* @__PURE__ */ import_react8.default.createElement("strong", null, cat.name)), /* @__PURE__ */ import_react8.default.createElement("td", { style: styles6.tdMuted }, cat.description || "\u2014"), /* @__PURE__ */ import_react8.default.createElement("td", { style: styles6.td }, /* @__PURE__ */ import_react8.default.createElement(
+    return /* @__PURE__ */ import_react8.default.createElement(import_react8.default.Fragment, null, /* @__PURE__ */ import_react8.default.createElement("div", { style: styles4.toolbar }, /* @__PURE__ */ import_react8.default.createElement("h2", { style: styles4.sectionTitle }, "Categor\xEDas"), /* @__PURE__ */ import_react8.default.createElement("button", { style: styles4.btnPrimary, onClick: () => setModal("create") }, "+ Nueva Categor\xEDa")), error && /* @__PURE__ */ import_react8.default.createElement("div", { style: styles4.errorBox }, error), loading ? /* @__PURE__ */ import_react8.default.createElement("p", { style: { color: "#64748b", fontSize: "14px" } }, "Cargando...") : /* @__PURE__ */ import_react8.default.createElement("div", { style: styles4.wrapper }, categories.length === 0 ? /* @__PURE__ */ import_react8.default.createElement("p", { style: styles4.empty }, "No hay categor\xEDas. Agrega la primera.") : /* @__PURE__ */ import_react8.default.createElement("table", { style: styles4.table }, /* @__PURE__ */ import_react8.default.createElement("thead", null, /* @__PURE__ */ import_react8.default.createElement("tr", null, /* @__PURE__ */ import_react8.default.createElement("th", { style: styles4.th }, "Nombre"), /* @__PURE__ */ import_react8.default.createElement("th", { style: styles4.th }, "Descripci\xF3n"), /* @__PURE__ */ import_react8.default.createElement("th", { style: styles4.th }, "Acciones"))), /* @__PURE__ */ import_react8.default.createElement("tbody", null, categories.map((cat) => /* @__PURE__ */ import_react8.default.createElement("tr", { key: cat.id }, /* @__PURE__ */ import_react8.default.createElement("td", { style: styles4.td }, /* @__PURE__ */ import_react8.default.createElement("strong", null, cat.name)), /* @__PURE__ */ import_react8.default.createElement("td", { style: styles4.tdMuted }, cat.description || "\u2014"), /* @__PURE__ */ import_react8.default.createElement("td", { style: styles4.td }, /* @__PURE__ */ import_react8.default.createElement(
       "button",
       {
-        style: styles6.btnEdit,
+        style: styles4.btnEdit,
         onClick: () => setModal({ mode: "edit", category: cat })
       },
       "Editar"
     ), /* @__PURE__ */ import_react8.default.createElement(
       "button",
       {
-        style: styles6.btnDelete,
+        style: styles4.btnDelete,
         onClick: () => handleDelete(cat.id)
       },
       "Eliminar"
@@ -20736,7 +20851,7 @@
 
   // src/renderer/components/CustomersView.js
   var import_react9 = __toESM(require_react());
-  var styles7 = {
+  var styles5 = {
     toolbar: {
       display: "flex",
       justifyContent: "space-between",
@@ -20896,35 +21011,35 @@
         email: form.email.trim() || null
       });
     };
-    return /* @__PURE__ */ import_react9.default.createElement("div", { style: styles7.overlay, onClick: (e) => e.target === e.currentTarget && onCancel() }, /* @__PURE__ */ import_react9.default.createElement("div", { style: styles7.modal }, /* @__PURE__ */ import_react9.default.createElement("h2", { style: styles7.modalTitle }, isEdit ? "Editar Cliente" : "Nuevo Cliente"), /* @__PURE__ */ import_react9.default.createElement("form", { onSubmit: handleSubmit }, /* @__PURE__ */ import_react9.default.createElement("div", { style: styles7.field }, /* @__PURE__ */ import_react9.default.createElement("label", { style: styles7.label }, "Nombre *"), /* @__PURE__ */ import_react9.default.createElement(
+    return /* @__PURE__ */ import_react9.default.createElement("div", { style: styles5.overlay, onClick: (e) => e.target === e.currentTarget && onCancel() }, /* @__PURE__ */ import_react9.default.createElement("div", { style: styles5.modal }, /* @__PURE__ */ import_react9.default.createElement("h2", { style: styles5.modalTitle }, isEdit ? "Editar Cliente" : "Nuevo Cliente"), /* @__PURE__ */ import_react9.default.createElement("form", { onSubmit: handleSubmit }, /* @__PURE__ */ import_react9.default.createElement("div", { style: styles5.field }, /* @__PURE__ */ import_react9.default.createElement("label", { style: styles5.label }, "Nombre *"), /* @__PURE__ */ import_react9.default.createElement(
       "input",
       {
-        style: styles7.input,
+        style: styles5.input,
         value: form.name,
         onChange: set("name"),
         placeholder: "Nombre completo",
         required: true,
         autoFocus: true
       }
-    )), /* @__PURE__ */ import_react9.default.createElement("div", { style: styles7.field }, /* @__PURE__ */ import_react9.default.createElement("label", { style: styles7.label }, "Tel\xE9fono"), /* @__PURE__ */ import_react9.default.createElement(
+    )), /* @__PURE__ */ import_react9.default.createElement("div", { style: styles5.field }, /* @__PURE__ */ import_react9.default.createElement("label", { style: styles5.label }, "Tel\xE9fono"), /* @__PURE__ */ import_react9.default.createElement(
       "input",
       {
-        style: styles7.input,
+        style: styles5.input,
         value: form.phone,
         onChange: set("phone"),
         placeholder: "Ej: 555-1234",
         type: "tel"
       }
-    )), /* @__PURE__ */ import_react9.default.createElement("div", { style: styles7.field }, /* @__PURE__ */ import_react9.default.createElement("label", { style: styles7.label }, "Correo electr\xF3nico"), /* @__PURE__ */ import_react9.default.createElement(
+    )), /* @__PURE__ */ import_react9.default.createElement("div", { style: styles5.field }, /* @__PURE__ */ import_react9.default.createElement("label", { style: styles5.label }, "Correo electr\xF3nico"), /* @__PURE__ */ import_react9.default.createElement(
       "input",
       {
-        style: styles7.input,
+        style: styles5.input,
         value: form.email,
         onChange: set("email"),
         placeholder: "correo@ejemplo.com",
         type: "email"
       }
-    )), /* @__PURE__ */ import_react9.default.createElement("div", { style: styles7.actions }, /* @__PURE__ */ import_react9.default.createElement("button", { type: "button", style: styles7.btnCancel, onClick: onCancel }, "Cancelar"), /* @__PURE__ */ import_react9.default.createElement("button", { type: "submit", style: styles7.btnSave }, isEdit ? "Guardar cambios" : "Crear cliente")))));
+    )), /* @__PURE__ */ import_react9.default.createElement("div", { style: styles5.actions }, /* @__PURE__ */ import_react9.default.createElement("button", { type: "button", style: styles5.btnCancel, onClick: onCancel }, "Cancelar"), /* @__PURE__ */ import_react9.default.createElement("button", { type: "submit", style: styles5.btnSave }, isEdit ? "Guardar cambios" : "Crear cliente")))));
   }
   function CustomersView() {
     const [customers, setCustomers] = (0, import_react9.useState)([]);
@@ -20967,17 +21082,17 @@
         setError("Error al eliminar el cliente.");
       }
     };
-    return /* @__PURE__ */ import_react9.default.createElement(import_react9.default.Fragment, null, /* @__PURE__ */ import_react9.default.createElement("div", { style: styles7.toolbar }, /* @__PURE__ */ import_react9.default.createElement("h2", { style: styles7.sectionTitle }, "Clientes"), /* @__PURE__ */ import_react9.default.createElement("button", { style: styles7.btnPrimary, onClick: () => setModal("create") }, "+ Nuevo Cliente")), error && /* @__PURE__ */ import_react9.default.createElement("div", { style: styles7.errorBox }, error), loading ? /* @__PURE__ */ import_react9.default.createElement("p", { style: { color: "#64748b", fontSize: "14px" } }, "Cargando...") : /* @__PURE__ */ import_react9.default.createElement("div", { style: styles7.wrapper }, customers.length === 0 ? /* @__PURE__ */ import_react9.default.createElement("p", { style: styles7.empty }, "No hay clientes registrados. Agrega el primero.") : /* @__PURE__ */ import_react9.default.createElement("table", { style: styles7.table }, /* @__PURE__ */ import_react9.default.createElement("thead", null, /* @__PURE__ */ import_react9.default.createElement("tr", null, /* @__PURE__ */ import_react9.default.createElement("th", { style: styles7.th }, "Nombre"), /* @__PURE__ */ import_react9.default.createElement("th", { style: styles7.th }, "Tel\xE9fono"), /* @__PURE__ */ import_react9.default.createElement("th", { style: styles7.th }, "Correo electr\xF3nico"), /* @__PURE__ */ import_react9.default.createElement("th", { style: styles7.th }, "Acciones"))), /* @__PURE__ */ import_react9.default.createElement("tbody", null, customers.map((customer) => /* @__PURE__ */ import_react9.default.createElement("tr", { key: customer.id }, /* @__PURE__ */ import_react9.default.createElement("td", { style: styles7.td }, /* @__PURE__ */ import_react9.default.createElement("strong", null, customer.name)), /* @__PURE__ */ import_react9.default.createElement("td", { style: styles7.tdMuted }, customer.phone || "\u2014"), /* @__PURE__ */ import_react9.default.createElement("td", { style: styles7.tdMuted }, customer.email || "\u2014"), /* @__PURE__ */ import_react9.default.createElement("td", { style: styles7.td }, /* @__PURE__ */ import_react9.default.createElement(
+    return /* @__PURE__ */ import_react9.default.createElement(import_react9.default.Fragment, null, /* @__PURE__ */ import_react9.default.createElement("div", { style: styles5.toolbar }, /* @__PURE__ */ import_react9.default.createElement("h2", { style: styles5.sectionTitle }, "Clientes"), /* @__PURE__ */ import_react9.default.createElement("button", { style: styles5.btnPrimary, onClick: () => setModal("create") }, "+ Nuevo Cliente")), error && /* @__PURE__ */ import_react9.default.createElement("div", { style: styles5.errorBox }, error), loading ? /* @__PURE__ */ import_react9.default.createElement("p", { style: { color: "#64748b", fontSize: "14px" } }, "Cargando...") : /* @__PURE__ */ import_react9.default.createElement("div", { style: styles5.wrapper }, customers.length === 0 ? /* @__PURE__ */ import_react9.default.createElement("p", { style: styles5.empty }, "No hay clientes registrados. Agrega el primero.") : /* @__PURE__ */ import_react9.default.createElement("table", { style: styles5.table }, /* @__PURE__ */ import_react9.default.createElement("thead", null, /* @__PURE__ */ import_react9.default.createElement("tr", null, /* @__PURE__ */ import_react9.default.createElement("th", { style: styles5.th }, "Nombre"), /* @__PURE__ */ import_react9.default.createElement("th", { style: styles5.th }, "Tel\xE9fono"), /* @__PURE__ */ import_react9.default.createElement("th", { style: styles5.th }, "Correo electr\xF3nico"), /* @__PURE__ */ import_react9.default.createElement("th", { style: styles5.th }, "Acciones"))), /* @__PURE__ */ import_react9.default.createElement("tbody", null, customers.map((customer) => /* @__PURE__ */ import_react9.default.createElement("tr", { key: customer.id }, /* @__PURE__ */ import_react9.default.createElement("td", { style: styles5.td }, /* @__PURE__ */ import_react9.default.createElement("strong", null, customer.name)), /* @__PURE__ */ import_react9.default.createElement("td", { style: styles5.tdMuted }, customer.phone || "\u2014"), /* @__PURE__ */ import_react9.default.createElement("td", { style: styles5.tdMuted }, customer.email || "\u2014"), /* @__PURE__ */ import_react9.default.createElement("td", { style: styles5.td }, /* @__PURE__ */ import_react9.default.createElement(
       "button",
       {
-        style: styles7.btnEdit,
+        style: styles5.btnEdit,
         onClick: () => setModal({ mode: "edit", customer })
       },
       "Editar"
     ), /* @__PURE__ */ import_react9.default.createElement(
       "button",
       {
-        style: styles7.btnDelete,
+        style: styles5.btnDelete,
         onClick: () => handleDelete(customer.id)
       },
       "Eliminar"
@@ -21000,7 +21115,7 @@
     { id: "categories", label: "Categor\xEDas" },
     { id: "customers", label: "Clientes" }
   ];
-  var styles8 = {
+  var styles6 = {
     app: { minHeight: "100vh", background: "#f0f2f5" },
     header: {
       background: "#1a1a2e",
@@ -21038,15 +21153,15 @@
   };
   function App() {
     const [activeTab, setActiveTab] = (0, import_react10.useState)("dashboard");
-    return /* @__PURE__ */ import_react10.default.createElement("div", { style: styles8.app }, /* @__PURE__ */ import_react10.default.createElement("header", { style: styles8.header }, /* @__PURE__ */ import_react10.default.createElement("span", { style: styles8.title }, "Inventario y Ventas"), /* @__PURE__ */ import_react10.default.createElement("nav", { style: styles8.nav }, TABS.map((tab) => /* @__PURE__ */ import_react10.default.createElement(
+    return /* @__PURE__ */ import_react10.default.createElement("div", { style: styles6.app }, /* @__PURE__ */ import_react10.default.createElement("header", { style: styles6.header }, /* @__PURE__ */ import_react10.default.createElement("span", { style: styles6.title }, "Inventario y Ventas"), /* @__PURE__ */ import_react10.default.createElement("nav", { style: styles6.nav }, TABS.map((tab) => /* @__PURE__ */ import_react10.default.createElement(
       "button",
       {
         key: tab.id,
-        style: activeTab === tab.id ? styles8.tabActive : styles8.tab,
+        style: activeTab === tab.id ? styles6.tabActive : styles6.tab,
         onClick: () => setActiveTab(tab.id)
       },
       tab.label
-    )))), /* @__PURE__ */ import_react10.default.createElement("main", { style: styles8.main }, activeTab === "dashboard" && /* @__PURE__ */ import_react10.default.createElement(DashboardView, { onNavigate: setActiveTab }), activeTab === "inventory" && /* @__PURE__ */ import_react10.default.createElement(InventoryView, null), activeTab === "new-sale" && /* @__PURE__ */ import_react10.default.createElement(NewSale, { onSaleComplete: () => setActiveTab("history") }), activeTab === "history" && /* @__PURE__ */ import_react10.default.createElement(SaleHistory, null), activeTab === "categories" && /* @__PURE__ */ import_react10.default.createElement(CategoriesView, null), activeTab === "customers" && /* @__PURE__ */ import_react10.default.createElement(CustomersView, null)));
+    )))), /* @__PURE__ */ import_react10.default.createElement("main", { style: styles6.main }, activeTab === "dashboard" && /* @__PURE__ */ import_react10.default.createElement(DashboardView, { onNavigate: setActiveTab }), activeTab === "inventory" && /* @__PURE__ */ import_react10.default.createElement(InventoryView, null), activeTab === "new-sale" && /* @__PURE__ */ import_react10.default.createElement(NewSale, { onSaleComplete: () => setActiveTab("history") }), activeTab === "history" && /* @__PURE__ */ import_react10.default.createElement(SaleHistory, null), activeTab === "categories" && /* @__PURE__ */ import_react10.default.createElement(CategoriesView, null), activeTab === "customers" && /* @__PURE__ */ import_react10.default.createElement(CustomersView, null)));
   }
 
   // src/renderer/index.js

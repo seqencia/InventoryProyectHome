@@ -9,11 +9,22 @@ const ProductSchema = new EntitySchema({
   tableName: 'products',
   columns: {
     id: { type: Number, primary: true, generated: true },
+    sku: { type: String, nullable: true, unique: true },
+    barcode: { type: String, nullable: true, unique: true },
+    serial_number: { type: String, nullable: true },
     name: { type: String },
-    description: { type: String, nullable: true, default: '' },
+    description: { type: String, nullable: true },
+    technical_notes: { type: String, nullable: true },
     category: { type: String, nullable: true },
-    price: { type: 'decimal', precision: 10, scale: 2 },
+    condition: { type: String, nullable: true },
+    status: { type: String, nullable: true, default: 'Disponible' },
+    cost_price: { type: 'decimal', precision: 10, scale: 2, nullable: true },
+    // sale_price maps to the existing 'price' DB column — zero-migration rename
+    sale_price: { type: 'decimal', precision: 10, scale: 2, name: 'price' },
+    offer_price: { type: 'decimal', precision: 10, scale: 2, nullable: true },
     stock: { type: Number },
+    min_stock: { type: Number, nullable: true, default: 5 },
+    location: { type: String, nullable: true },
     created_at: { type: 'datetime', createDate: true },
     updated_at: { type: 'datetime', updateDate: true },
   },
@@ -93,6 +104,9 @@ function setupIpcHandlers() {
   });
 
   ipcMain.handle('products:create', async (_, data) => {
+    if (!data.sku || !data.sku.trim()) {
+      data.sku = 'PRD-' + Date.now().toString(36).toUpperCase().slice(-6);
+    }
     return await repo('Product').save(repo('Product').create(data));
   });
 
@@ -140,9 +154,9 @@ function setupIpcHandlers() {
     const todayTotal = todaySales.reduce((sum, s) => sum + Number(s.total), 0);
     const todayCount = todaySales.length;
 
-    // Low stock
+    // Low stock — respect each product's individual minimum
     const lowStock = allProducts
-      .filter((p) => p.stock <= 5)
+      .filter((p) => p.stock <= (p.min_stock ?? 5))
       .sort((a, b) => a.stock - b.stock);
 
     // Top 5 best selling (aggregate by product_id across all history)
