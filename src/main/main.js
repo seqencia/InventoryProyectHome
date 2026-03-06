@@ -125,6 +125,44 @@ function setupIpcHandlers() {
     return { success: true };
   });
 
+  // Dashboard
+  ipcMain.handle('dashboard:getSummary', async () => {
+    const [allSales, allDetails, allProducts] = await Promise.all([
+      repo('Sale').find({ order: { created_at: 'DESC' } }),
+      repo('SaleDetail').find(),
+      repo('Product').find(),
+    ]);
+
+    // Today's sales (local midnight)
+    const todayStart = new Date();
+    todayStart.setHours(0, 0, 0, 0);
+    const todaySales = allSales.filter((s) => new Date(s.created_at) >= todayStart);
+    const todayTotal = todaySales.reduce((sum, s) => sum + Number(s.total), 0);
+    const todayCount = todaySales.length;
+
+    // Low stock
+    const lowStock = allProducts
+      .filter((p) => p.stock <= 5)
+      .sort((a, b) => a.stock - b.stock);
+
+    // Top 5 best selling (aggregate by product_id across all history)
+    const soldMap = {};
+    for (const d of allDetails) {
+      if (!soldMap[d.product_id]) {
+        soldMap[d.product_id] = { product_id: d.product_id, product_name: d.product_name, total_sold: 0 };
+      }
+      soldMap[d.product_id].total_sold += d.quantity;
+    }
+    const topProducts = Object.values(soldMap)
+      .sort((a, b) => b.total_sold - a.total_sold)
+      .slice(0, 5);
+
+    // Recent 5 sales
+    const recentSales = allSales.slice(0, 5);
+
+    return { todayTotal, todayCount, lowStock, topProducts, recentSales };
+  });
+
   // Customers
   ipcMain.handle('customers:getAll', async () => {
     return await repo('Customer').find({ order: { name: 'ASC' } });

@@ -1474,7 +1474,7 @@
           return dispatcher;
         }
         "undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(Error());
-        var React11 = require_react(), Internals = {
+        var React12 = require_react(), Internals = {
           d: {
             f: noop,
             r: function() {
@@ -1492,7 +1492,7 @@
           },
           p: 0,
           findDOMNode: null
-        }, REACT_PORTAL_TYPE = Symbol.for("react.portal"), ReactSharedInternals = React11.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE;
+        }, REACT_PORTAL_TYPE = Symbol.for("react.portal"), ReactSharedInternals = React12.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE;
         "function" === typeof Map && null != Map.prototype && "function" === typeof Map.prototype.forEach && "function" === typeof Set && null != Set.prototype && "function" === typeof Set.prototype.clear && "function" === typeof Set.prototype.forEach || console.error(
           "React depends on Map and Set built-in types. Make sure that you load a polyfill in older browsers. https://reactjs.org/link/react-polyfills"
         );
@@ -2948,7 +2948,7 @@
           "number" === type && getActiveElement(node.ownerDocument) === node || node.defaultValue === "" + value || (node.defaultValue = "" + value);
         }
         function validateOptionProps(element, props) {
-          null == props.value && ("object" === typeof props.children && null !== props.children ? React11.Children.forEach(props.children, function(child) {
+          null == props.value && ("object" === typeof props.children && null !== props.children ? React12.Children.forEach(props.children, function(child) {
             null == child || "string" === typeof child || "number" === typeof child || "bigint" === typeof child || didWarnInvalidChild || (didWarnInvalidChild = true, console.error(
               "Cannot infer the option value of complex children. Pass a `value` prop or use a plain string as children to <option>."
             ));
@@ -16418,13 +16418,13 @@
           ));
         }
         "undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(Error());
-        var Scheduler = require_scheduler(), React11 = require_react(), ReactDOM = require_react_dom(), REACT_LEGACY_ELEMENT_TYPE = Symbol.for("react.element"), REACT_ELEMENT_TYPE = Symbol.for("react.transitional.element"), REACT_PORTAL_TYPE = Symbol.for("react.portal"), REACT_FRAGMENT_TYPE = Symbol.for("react.fragment"), REACT_STRICT_MODE_TYPE = Symbol.for("react.strict_mode"), REACT_PROFILER_TYPE = Symbol.for("react.profiler"), REACT_PROVIDER_TYPE = Symbol.for("react.provider"), REACT_CONSUMER_TYPE = Symbol.for("react.consumer"), REACT_CONTEXT_TYPE = Symbol.for("react.context"), REACT_FORWARD_REF_TYPE = Symbol.for("react.forward_ref"), REACT_SUSPENSE_TYPE = Symbol.for("react.suspense"), REACT_SUSPENSE_LIST_TYPE = Symbol.for("react.suspense_list"), REACT_MEMO_TYPE = Symbol.for("react.memo"), REACT_LAZY_TYPE = Symbol.for("react.lazy");
+        var Scheduler = require_scheduler(), React12 = require_react(), ReactDOM = require_react_dom(), REACT_LEGACY_ELEMENT_TYPE = Symbol.for("react.element"), REACT_ELEMENT_TYPE = Symbol.for("react.transitional.element"), REACT_PORTAL_TYPE = Symbol.for("react.portal"), REACT_FRAGMENT_TYPE = Symbol.for("react.fragment"), REACT_STRICT_MODE_TYPE = Symbol.for("react.strict_mode"), REACT_PROFILER_TYPE = Symbol.for("react.profiler"), REACT_PROVIDER_TYPE = Symbol.for("react.provider"), REACT_CONSUMER_TYPE = Symbol.for("react.consumer"), REACT_CONTEXT_TYPE = Symbol.for("react.context"), REACT_FORWARD_REF_TYPE = Symbol.for("react.forward_ref"), REACT_SUSPENSE_TYPE = Symbol.for("react.suspense"), REACT_SUSPENSE_LIST_TYPE = Symbol.for("react.suspense_list"), REACT_MEMO_TYPE = Symbol.for("react.memo"), REACT_LAZY_TYPE = Symbol.for("react.lazy");
         Symbol.for("react.scope");
         Symbol.for("react.debug_trace_mode");
         var REACT_OFFSCREEN_TYPE = Symbol.for("react.offscreen");
         Symbol.for("react.legacy_hidden");
         Symbol.for("react.tracing_marker");
-        var REACT_MEMO_CACHE_SENTINEL = Symbol.for("react.memo_cache_sentinel"), MAYBE_ITERATOR_SYMBOL = Symbol.iterator, REACT_CLIENT_REFERENCE = Symbol.for("react.client.reference"), ReactSharedInternals = React11.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, assign = Object.assign, disabledDepth = 0, prevLog, prevInfo, prevWarn, prevError, prevGroup, prevGroupCollapsed, prevGroupEnd;
+        var REACT_MEMO_CACHE_SENTINEL = Symbol.for("react.memo_cache_sentinel"), MAYBE_ITERATOR_SYMBOL = Symbol.iterator, REACT_CLIENT_REFERENCE = Symbol.for("react.client.reference"), ReactSharedInternals = React12.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, assign = Object.assign, disabledDepth = 0, prevLog, prevInfo, prevWarn, prevError, prevGroup, prevGroupCollapsed, prevGroupEnd;
         disabledLog.__reactDisabledLog = true;
         var prefix, suffix, reentry = false;
         var componentFrameCache = new ("function" === typeof WeakMap ? WeakMap : Map)();
@@ -19144,7 +19144,7 @@
           }
         };
         (function() {
-          var isomorphicReactPackageVersion = React11.version;
+          var isomorphicReactPackageVersion = React12.version;
           if ("19.0.0" !== isomorphicReactPackageVersion)
             throw Error(
               'Incompatible React versions: The "react" and "react-dom" packages must have the exact same version. Instead got:\n  - react:      ' + (isomorphicReactPackageVersion + "\n  - react-dom:  19.0.0\nLearn more: https://react.dev/warnings/version-mismatch")
@@ -19286,17 +19286,118 @@
   });
 
   // src/renderer/index.js
-  var import_react10 = __toESM(require_react());
+  var import_react11 = __toESM(require_react());
   var import_client = __toESM(require_client());
 
   // src/renderer/app.js
-  var import_react9 = __toESM(require_react());
+  var import_react10 = __toESM(require_react());
+
+  // src/renderer/components/DashboardView.js
+  var import_react = __toESM(require_react());
+  function formatDate(dateStr) {
+    return new Date(dateStr).toLocaleString("es", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit"
+    });
+  }
+  function Card({ children, style }) {
+    return /* @__PURE__ */ import_react.default.createElement("div", { style: { background: "white", borderRadius: "10px", boxShadow: "0 1px 4px rgba(0,0,0,0.08)", overflow: "hidden", ...style } }, children);
+  }
+  function CardHeader({ title }) {
+    return /* @__PURE__ */ import_react.default.createElement("div", { style: { padding: "14px 18px", borderBottom: "1px solid #f1f5f9", fontWeight: "600", fontSize: "14px", color: "#475569" } }, title);
+  }
+  function StatCard({ label, value, sub, accentColor }) {
+    return /* @__PURE__ */ import_react.default.createElement(Card, null, /* @__PURE__ */ import_react.default.createElement("div", { style: { borderTop: `3px solid ${accentColor}`, padding: "20px 22px" } }, /* @__PURE__ */ import_react.default.createElement("div", { style: { fontSize: "12px", fontWeight: "600", color: "#94a3b8", textTransform: "uppercase", letterSpacing: "0.6px", marginBottom: "10px" } }, label), /* @__PURE__ */ import_react.default.createElement("div", { style: { fontSize: "32px", fontWeight: "700", color: "#1e293b", lineHeight: 1 } }, value), sub && /* @__PURE__ */ import_react.default.createElement("div", { style: { fontSize: "13px", color: "#94a3b8", marginTop: "6px" } }, sub)));
+  }
+  function LowStockCard({ items, onNavigate }) {
+    return /* @__PURE__ */ import_react.default.createElement(Card, null, /* @__PURE__ */ import_react.default.createElement(CardHeader, { title: "\u26A0 Alertas de Stock Bajo" }), items.length === 0 ? /* @__PURE__ */ import_react.default.createElement("div", { style: { padding: "28px 18px", textAlign: "center", color: "#16a34a", fontSize: "14px", fontWeight: "500" } }, "\u2713 Todo el inventario en orden") : /* @__PURE__ */ import_react.default.createElement("ul", { style: { listStyle: "none", margin: 0, padding: 0 } }, items.map((p) => /* @__PURE__ */ import_react.default.createElement(
+      "li",
+      {
+        key: p.id,
+        style: { display: "flex", alignItems: "center", justifyContent: "space-between", padding: "10px 18px", borderBottom: "1px solid #f8fafc", cursor: "pointer" },
+        onClick: () => onNavigate("inventory"),
+        title: "Ir al inventario"
+      },
+      /* @__PURE__ */ import_react.default.createElement("span", { style: { fontSize: "14px", color: "#334155" } }, p.name),
+      /* @__PURE__ */ import_react.default.createElement("span", { style: {
+        background: p.stock === 0 ? "#fee2e2" : "#fef3c7",
+        color: p.stock === 0 ? "#dc2626" : "#b45309",
+        fontWeight: "700",
+        fontSize: "13px",
+        padding: "2px 10px",
+        borderRadius: "12px"
+      } }, p.stock === 0 ? "Sin stock" : `${p.stock} uds`)
+    ))));
+  }
+  function TopProductsCard({ items }) {
+    const max = items[0]?.total_sold || 1;
+    return /* @__PURE__ */ import_react.default.createElement(Card, null, /* @__PURE__ */ import_react.default.createElement(CardHeader, { title: "\u2605 Top 5 M\xE1s Vendidos" }), items.length === 0 ? /* @__PURE__ */ import_react.default.createElement("div", { style: { padding: "28px 18px", textAlign: "center", color: "#94a3b8", fontSize: "14px" } }, "Sin ventas registradas a\xFAn") : /* @__PURE__ */ import_react.default.createElement("ul", { style: { listStyle: "none", margin: 0, padding: "8px 0" } }, items.map((p, i) => /* @__PURE__ */ import_react.default.createElement("li", { key: p.product_id, style: { padding: "9px 18px" } }, /* @__PURE__ */ import_react.default.createElement("div", { style: { display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "5px" } }, /* @__PURE__ */ import_react.default.createElement("div", { style: { display: "flex", alignItems: "center", gap: "10px" } }, /* @__PURE__ */ import_react.default.createElement("span", { style: { fontWeight: "700", fontSize: "13px", color: "#94a3b8", width: "16px" } }, i + 1), /* @__PURE__ */ import_react.default.createElement("span", { style: { fontSize: "14px", color: "#1e293b", fontWeight: "500" } }, p.product_name)), /* @__PURE__ */ import_react.default.createElement("span", { style: { fontSize: "13px", fontWeight: "600", color: "#475569" } }, p.total_sold, " uds")), /* @__PURE__ */ import_react.default.createElement("div", { style: { marginLeft: "26px", height: "4px", background: "#f1f5f9", borderRadius: "2px", overflow: "hidden" } }, /* @__PURE__ */ import_react.default.createElement("div", { style: {
+      height: "100%",
+      width: `${p.total_sold / max * 100}%`,
+      background: i === 0 ? "#3b82f6" : "#93c5fd",
+      borderRadius: "2px",
+      transition: "width 0.4s ease"
+    } }))))));
+  }
+  function RecentSalesCard({ sales, onNavigate }) {
+    const th = { padding: "10px 16px", textAlign: "left", fontWeight: "600", fontSize: "12px", color: "#94a3b8", background: "#f8fafc", borderBottom: "1px solid #f1f5f9", textTransform: "uppercase", letterSpacing: "0.5px" };
+    const td = { padding: "11px 16px", borderBottom: "1px solid #f8fafc", fontSize: "14px", color: "#334155", verticalAlign: "middle" };
+    return /* @__PURE__ */ import_react.default.createElement(Card, null, /* @__PURE__ */ import_react.default.createElement("div", { style: { display: "flex", alignItems: "center", justifyContent: "space-between", padding: "14px 18px", borderBottom: "1px solid #f1f5f9" } }, /* @__PURE__ */ import_react.default.createElement("span", { style: { fontWeight: "600", fontSize: "14px", color: "#475569" } }, "Ventas Recientes"), /* @__PURE__ */ import_react.default.createElement(
+      "button",
+      {
+        onClick: () => onNavigate("history"),
+        style: { background: "none", border: "none", color: "#3b82f6", cursor: "pointer", fontSize: "13px", fontWeight: "500" }
+      },
+      "Ver todas \u2192"
+    )), sales.length === 0 ? /* @__PURE__ */ import_react.default.createElement("div", { style: { padding: "28px 18px", textAlign: "center", color: "#94a3b8", fontSize: "14px" } }, "Sin ventas registradas a\xFAn") : /* @__PURE__ */ import_react.default.createElement("table", { style: { width: "100%", borderCollapse: "collapse", fontSize: "14px" } }, /* @__PURE__ */ import_react.default.createElement("thead", null, /* @__PURE__ */ import_react.default.createElement("tr", null, /* @__PURE__ */ import_react.default.createElement("th", { style: th }, "#"), /* @__PURE__ */ import_react.default.createElement("th", { style: th }, "Fecha"), /* @__PURE__ */ import_react.default.createElement("th", { style: th }, "Cliente"), /* @__PURE__ */ import_react.default.createElement("th", { style: { ...th, textAlign: "right" } }, "Total"))), /* @__PURE__ */ import_react.default.createElement("tbody", null, sales.map((sale) => /* @__PURE__ */ import_react.default.createElement("tr", { key: sale.id }, /* @__PURE__ */ import_react.default.createElement("td", { style: { ...td, color: "#94a3b8", width: "40px" } }, sale.id), /* @__PURE__ */ import_react.default.createElement("td", { style: td }, formatDate(sale.created_at)), /* @__PURE__ */ import_react.default.createElement("td", { style: { ...td, color: sale.customer_name ? "#334155" : "#94a3b8" } }, sale.customer_name || "\u2014"), /* @__PURE__ */ import_react.default.createElement("td", { style: { ...td, textAlign: "right", fontWeight: "700", color: "#1e293b" } }, "$", Number(sale.total).toFixed(2)))))));
+  }
+  var layout = {
+    grid2: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px", marginBottom: "16px" },
+    grid2Bottom: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px", marginBottom: "16px" },
+    title: { fontSize: "17px", fontWeight: "600", color: "#1e293b", marginBottom: "20px" },
+    errorBox: { background: "#fee2e2", color: "#dc2626", padding: "12px 16px", borderRadius: "6px", marginBottom: "16px", fontSize: "14px" },
+    skeleton: { background: "#f1f5f9", borderRadius: "10px", height: "100px", animation: "pulse 1.5s ease infinite" }
+  };
+  function DashboardView({ onNavigate }) {
+    const [data, setData] = (0, import_react.useState)(null);
+    const [loading, setLoading] = (0, import_react.useState)(true);
+    const [error, setError] = (0, import_react.useState)(null);
+    (0, import_react.useEffect)(() => {
+      window.electron.dashboard.getSummary().then(setData).catch(() => setError("Error al cargar el dashboard.")).finally(() => setLoading(false));
+    }, []);
+    if (loading) {
+      return /* @__PURE__ */ import_react.default.createElement(import_react.default.Fragment, null, /* @__PURE__ */ import_react.default.createElement("div", { style: layout.title }, "Dashboard"), /* @__PURE__ */ import_react.default.createElement("div", { style: layout.grid2 }, /* @__PURE__ */ import_react.default.createElement("div", { style: layout.skeleton }), /* @__PURE__ */ import_react.default.createElement("div", { style: layout.skeleton })), /* @__PURE__ */ import_react.default.createElement("div", { style: layout.grid2Bottom }, /* @__PURE__ */ import_react.default.createElement("div", { style: { ...layout.skeleton, height: "200px" } }), /* @__PURE__ */ import_react.default.createElement("div", { style: { ...layout.skeleton, height: "200px" } })), /* @__PURE__ */ import_react.default.createElement("div", { style: { ...layout.skeleton, height: "220px" } }));
+    }
+    if (error) {
+      return /* @__PURE__ */ import_react.default.createElement("div", { style: layout.errorBox }, error);
+    }
+    return /* @__PURE__ */ import_react.default.createElement(import_react.default.Fragment, null, /* @__PURE__ */ import_react.default.createElement("div", { style: layout.title }, "Dashboard"), /* @__PURE__ */ import_react.default.createElement("div", { style: layout.grid2 }, /* @__PURE__ */ import_react.default.createElement(
+      StatCard,
+      {
+        label: "Ventas Hoy",
+        value: data.todayCount,
+        sub: data.todayCount === 1 ? "1 venta realizada" : `${data.todayCount} ventas realizadas`,
+        accentColor: "#3b82f6"
+      }
+    ), /* @__PURE__ */ import_react.default.createElement(
+      StatCard,
+      {
+        label: "Ingresos Hoy",
+        value: `$${data.todayTotal.toFixed(2)}`,
+        sub: data.todayCount === 0 ? "Sin movimiento hoy" : `Promedio $${data.todayCount > 0 ? (data.todayTotal / data.todayCount).toFixed(2) : "0.00"} por venta`,
+        accentColor: "#16a34a"
+      }
+    )), /* @__PURE__ */ import_react.default.createElement("div", { style: layout.grid2Bottom }, /* @__PURE__ */ import_react.default.createElement(LowStockCard, { items: data.lowStock, onNavigate }), /* @__PURE__ */ import_react.default.createElement(TopProductsCard, { items: data.topProducts })), /* @__PURE__ */ import_react.default.createElement(RecentSalesCard, { sales: data.recentSales, onNavigate }));
+  }
 
   // src/renderer/components/InventoryView.js
-  var import_react3 = __toESM(require_react());
+  var import_react4 = __toESM(require_react());
 
   // src/renderer/components/ProductList.js
-  var import_react = __toESM(require_react());
+  var import_react2 = __toESM(require_react());
   var LOW_STOCK = 5;
   var styles = {
     wrapper: {
@@ -19379,13 +19480,13 @@
   };
   function ProductList({ products, onEdit, onDelete }) {
     if (products.length === 0) {
-      return /* @__PURE__ */ import_react.default.createElement("div", { style: styles.wrapper }, /* @__PURE__ */ import_react.default.createElement("p", { style: styles.empty }, "No hay productos registrados. Agrega el primero."));
+      return /* @__PURE__ */ import_react2.default.createElement("div", { style: styles.wrapper }, /* @__PURE__ */ import_react2.default.createElement("p", { style: styles.empty }, "No hay productos registrados. Agrega el primero."));
     }
-    return /* @__PURE__ */ import_react.default.createElement("div", { style: styles.wrapper }, /* @__PURE__ */ import_react.default.createElement("table", { style: styles.table }, /* @__PURE__ */ import_react.default.createElement("thead", null, /* @__PURE__ */ import_react.default.createElement("tr", null, /* @__PURE__ */ import_react.default.createElement("th", { style: styles.th }, "Nombre"), /* @__PURE__ */ import_react.default.createElement("th", { style: styles.th }, "Categor\xEDa"), /* @__PURE__ */ import_react.default.createElement("th", { style: styles.th }, "Descripci\xF3n"), /* @__PURE__ */ import_react.default.createElement("th", { style: styles.th }, "Precio"), /* @__PURE__ */ import_react.default.createElement("th", { style: styles.th }, "Stock"), /* @__PURE__ */ import_react.default.createElement("th", { style: styles.th }, "Acciones"))), /* @__PURE__ */ import_react.default.createElement("tbody", null, products.map((product) => /* @__PURE__ */ import_react.default.createElement("tr", { key: product.id, style: product.stock <= LOW_STOCK ? styles.rowLowStock : void 0 }, /* @__PURE__ */ import_react.default.createElement("td", { style: styles.td }, /* @__PURE__ */ import_react.default.createElement("strong", null, product.name)), /* @__PURE__ */ import_react.default.createElement("td", { style: styles.td }, product.category || "\u2014"), /* @__PURE__ */ import_react.default.createElement("td", { style: styles.tdMuted }, product.description || "\u2014"), /* @__PURE__ */ import_react.default.createElement("td", { style: styles.td }, "$", Number(product.price).toFixed(2)), /* @__PURE__ */ import_react.default.createElement("td", { style: styles.td }, /* @__PURE__ */ import_react.default.createElement("span", { style: styles.stockBadge(product.stock) }, product.stock), product.stock <= LOW_STOCK && /* @__PURE__ */ import_react.default.createElement("span", { style: styles.lowStockLabel }, "Stock bajo")), /* @__PURE__ */ import_react.default.createElement("td", { style: styles.td }, /* @__PURE__ */ import_react.default.createElement("button", { style: styles.btnEdit, onClick: () => onEdit(product) }, "Editar"), /* @__PURE__ */ import_react.default.createElement("button", { style: styles.btnDelete, onClick: () => onDelete(product.id) }, "Eliminar")))))));
+    return /* @__PURE__ */ import_react2.default.createElement("div", { style: styles.wrapper }, /* @__PURE__ */ import_react2.default.createElement("table", { style: styles.table }, /* @__PURE__ */ import_react2.default.createElement("thead", null, /* @__PURE__ */ import_react2.default.createElement("tr", null, /* @__PURE__ */ import_react2.default.createElement("th", { style: styles.th }, "Nombre"), /* @__PURE__ */ import_react2.default.createElement("th", { style: styles.th }, "Categor\xEDa"), /* @__PURE__ */ import_react2.default.createElement("th", { style: styles.th }, "Descripci\xF3n"), /* @__PURE__ */ import_react2.default.createElement("th", { style: styles.th }, "Precio"), /* @__PURE__ */ import_react2.default.createElement("th", { style: styles.th }, "Stock"), /* @__PURE__ */ import_react2.default.createElement("th", { style: styles.th }, "Acciones"))), /* @__PURE__ */ import_react2.default.createElement("tbody", null, products.map((product) => /* @__PURE__ */ import_react2.default.createElement("tr", { key: product.id, style: product.stock <= LOW_STOCK ? styles.rowLowStock : void 0 }, /* @__PURE__ */ import_react2.default.createElement("td", { style: styles.td }, /* @__PURE__ */ import_react2.default.createElement("strong", null, product.name)), /* @__PURE__ */ import_react2.default.createElement("td", { style: styles.td }, product.category || "\u2014"), /* @__PURE__ */ import_react2.default.createElement("td", { style: styles.tdMuted }, product.description || "\u2014"), /* @__PURE__ */ import_react2.default.createElement("td", { style: styles.td }, "$", Number(product.price).toFixed(2)), /* @__PURE__ */ import_react2.default.createElement("td", { style: styles.td }, /* @__PURE__ */ import_react2.default.createElement("span", { style: styles.stockBadge(product.stock) }, product.stock), product.stock <= LOW_STOCK && /* @__PURE__ */ import_react2.default.createElement("span", { style: styles.lowStockLabel }, "Stock bajo")), /* @__PURE__ */ import_react2.default.createElement("td", { style: styles.td }, /* @__PURE__ */ import_react2.default.createElement("button", { style: styles.btnEdit, onClick: () => onEdit(product) }, "Editar"), /* @__PURE__ */ import_react2.default.createElement("button", { style: styles.btnDelete, onClick: () => onDelete(product.id) }, "Eliminar")))))));
   }
 
   // src/renderer/components/ProductForm.js
-  var import_react2 = __toESM(require_react());
+  var import_react3 = __toESM(require_react());
   var styles2 = {
     overlay: {
       position: "fixed",
@@ -19487,15 +19588,15 @@
   };
   function ProductForm({ product, onSave, onCancel }) {
     const isEdit = Boolean(product);
-    const [form, setForm] = (0, import_react2.useState)({
+    const [form, setForm] = (0, import_react3.useState)({
       name: product?.name ?? "",
       category: product?.category ?? "",
       price: product?.price ?? "",
       stock: product?.stock ?? "",
       description: product?.description ?? ""
     });
-    const [categories, setCategories] = (0, import_react2.useState)([]);
-    (0, import_react2.useEffect)(() => {
+    const [categories, setCategories] = (0, import_react3.useState)([]);
+    (0, import_react3.useEffect)(() => {
       window.electron.categories.getAll().then(setCategories).catch(() => {
       });
     }, []);
@@ -19513,7 +19614,7 @@
     const closeOnBackdrop = (e) => {
       if (e.target === e.currentTarget) onCancel();
     };
-    return /* @__PURE__ */ import_react2.default.createElement("div", { style: styles2.overlay, onClick: closeOnBackdrop }, /* @__PURE__ */ import_react2.default.createElement("div", { style: styles2.modal }, /* @__PURE__ */ import_react2.default.createElement("h2", { style: styles2.title }, isEdit ? "Editar Producto" : "Nuevo Producto"), /* @__PURE__ */ import_react2.default.createElement("form", { onSubmit: handleSubmit }, /* @__PURE__ */ import_react2.default.createElement("div", { style: styles2.field }, /* @__PURE__ */ import_react2.default.createElement("label", { style: styles2.label }, "Nombre *"), /* @__PURE__ */ import_react2.default.createElement(
+    return /* @__PURE__ */ import_react3.default.createElement("div", { style: styles2.overlay, onClick: closeOnBackdrop }, /* @__PURE__ */ import_react3.default.createElement("div", { style: styles2.modal }, /* @__PURE__ */ import_react3.default.createElement("h2", { style: styles2.title }, isEdit ? "Editar Producto" : "Nuevo Producto"), /* @__PURE__ */ import_react3.default.createElement("form", { onSubmit: handleSubmit }, /* @__PURE__ */ import_react3.default.createElement("div", { style: styles2.field }, /* @__PURE__ */ import_react3.default.createElement("label", { style: styles2.label }, "Nombre *"), /* @__PURE__ */ import_react3.default.createElement(
       "input",
       {
         style: styles2.input,
@@ -19523,7 +19624,7 @@
         required: true,
         autoFocus: true
       }
-    )), /* @__PURE__ */ import_react2.default.createElement("div", { style: styles2.field }, /* @__PURE__ */ import_react2.default.createElement("label", { style: styles2.label }, "Categor\xEDa"), /* @__PURE__ */ import_react2.default.createElement("select", { style: styles2.select, value: form.category, onChange: set("category") }, /* @__PURE__ */ import_react2.default.createElement("option", { value: "" }, "Sin categor\xEDa"), categories.map((cat) => /* @__PURE__ */ import_react2.default.createElement("option", { key: cat.id, value: cat.name }, cat.name))), categories.length === 0 && /* @__PURE__ */ import_react2.default.createElement("p", { style: styles2.selectHint }, 'Agrega categor\xEDas desde la pesta\xF1a "Categor\xEDas".')), /* @__PURE__ */ import_react2.default.createElement("div", { style: styles2.row }, /* @__PURE__ */ import_react2.default.createElement("div", { style: styles2.field }, /* @__PURE__ */ import_react2.default.createElement("label", { style: styles2.label }, "Precio ($) *"), /* @__PURE__ */ import_react2.default.createElement(
+    )), /* @__PURE__ */ import_react3.default.createElement("div", { style: styles2.field }, /* @__PURE__ */ import_react3.default.createElement("label", { style: styles2.label }, "Categor\xEDa"), /* @__PURE__ */ import_react3.default.createElement("select", { style: styles2.select, value: form.category, onChange: set("category") }, /* @__PURE__ */ import_react3.default.createElement("option", { value: "" }, "Sin categor\xEDa"), categories.map((cat) => /* @__PURE__ */ import_react3.default.createElement("option", { key: cat.id, value: cat.name }, cat.name))), categories.length === 0 && /* @__PURE__ */ import_react3.default.createElement("p", { style: styles2.selectHint }, 'Agrega categor\xEDas desde la pesta\xF1a "Categor\xEDas".')), /* @__PURE__ */ import_react3.default.createElement("div", { style: styles2.row }, /* @__PURE__ */ import_react3.default.createElement("div", { style: styles2.field }, /* @__PURE__ */ import_react3.default.createElement("label", { style: styles2.label }, "Precio ($) *"), /* @__PURE__ */ import_react3.default.createElement(
       "input",
       {
         style: styles2.input,
@@ -19535,7 +19636,7 @@
         placeholder: "0.00",
         required: true
       }
-    )), /* @__PURE__ */ import_react2.default.createElement("div", { style: styles2.field }, /* @__PURE__ */ import_react2.default.createElement("label", { style: styles2.label }, "Stock *"), /* @__PURE__ */ import_react2.default.createElement(
+    )), /* @__PURE__ */ import_react3.default.createElement("div", { style: styles2.field }, /* @__PURE__ */ import_react3.default.createElement("label", { style: styles2.label }, "Stock *"), /* @__PURE__ */ import_react3.default.createElement(
       "input",
       {
         style: styles2.input,
@@ -19547,7 +19648,7 @@
         placeholder: "0",
         required: true
       }
-    ))), /* @__PURE__ */ import_react2.default.createElement("div", { style: styles2.field }, /* @__PURE__ */ import_react2.default.createElement("label", { style: styles2.label }, "Descripci\xF3n"), /* @__PURE__ */ import_react2.default.createElement(
+    ))), /* @__PURE__ */ import_react3.default.createElement("div", { style: styles2.field }, /* @__PURE__ */ import_react3.default.createElement("label", { style: styles2.label }, "Descripci\xF3n"), /* @__PURE__ */ import_react3.default.createElement(
       "textarea",
       {
         style: styles2.textarea,
@@ -19555,7 +19656,7 @@
         onChange: set("description"),
         placeholder: "Detalles del producto (modelo, condici\xF3n, etc.)"
       }
-    )), /* @__PURE__ */ import_react2.default.createElement("div", { style: styles2.actions }, /* @__PURE__ */ import_react2.default.createElement("button", { type: "button", style: styles2.btnCancel, onClick: onCancel }, "Cancelar"), /* @__PURE__ */ import_react2.default.createElement("button", { type: "submit", style: styles2.btnSave }, isEdit ? "Guardar cambios" : "Crear producto")))));
+    )), /* @__PURE__ */ import_react3.default.createElement("div", { style: styles2.actions }, /* @__PURE__ */ import_react3.default.createElement("button", { type: "button", style: styles2.btnCancel, onClick: onCancel }, "Cancelar"), /* @__PURE__ */ import_react3.default.createElement("button", { type: "submit", style: styles2.btnSave }, isEdit ? "Guardar cambios" : "Crear producto")))));
   }
 
   // src/renderer/components/InventoryView.js
@@ -19587,11 +19688,11 @@
     }
   };
   function InventoryView() {
-    const [products, setProducts] = (0, import_react3.useState)([]);
-    const [loading, setLoading] = (0, import_react3.useState)(true);
-    const [error, setError] = (0, import_react3.useState)(null);
-    const [modal, setModal] = (0, import_react3.useState)(null);
-    const loadProducts = (0, import_react3.useCallback)(async () => {
+    const [products, setProducts] = (0, import_react4.useState)([]);
+    const [loading, setLoading] = (0, import_react4.useState)(true);
+    const [error, setError] = (0, import_react4.useState)(null);
+    const [modal, setModal] = (0, import_react4.useState)(null);
+    const loadProducts = (0, import_react4.useCallback)(async () => {
       try {
         setLoading(true);
         setProducts(await window.electron.products.getAll());
@@ -19602,7 +19703,7 @@
         setLoading(false);
       }
     }, []);
-    (0, import_react3.useEffect)(() => {
+    (0, import_react4.useEffect)(() => {
       loadProducts();
     }, [loadProducts]);
     const handleSave = async (formData) => {
@@ -19627,14 +19728,14 @@
         setError("Error al eliminar el producto.");
       }
     };
-    return /* @__PURE__ */ import_react3.default.createElement(import_react3.default.Fragment, null, /* @__PURE__ */ import_react3.default.createElement("div", { style: styles3.toolbar }, /* @__PURE__ */ import_react3.default.createElement("h2", { style: styles3.sectionTitle }, "Inventario de Productos"), /* @__PURE__ */ import_react3.default.createElement("button", { style: styles3.btnPrimary, onClick: () => setModal("create") }, "+ Nuevo Producto")), error && /* @__PURE__ */ import_react3.default.createElement("div", { style: styles3.errorBox }, error), loading ? /* @__PURE__ */ import_react3.default.createElement("p", { style: { color: "#64748b", fontSize: "14px" } }, "Cargando...") : /* @__PURE__ */ import_react3.default.createElement(
+    return /* @__PURE__ */ import_react4.default.createElement(import_react4.default.Fragment, null, /* @__PURE__ */ import_react4.default.createElement("div", { style: styles3.toolbar }, /* @__PURE__ */ import_react4.default.createElement("h2", { style: styles3.sectionTitle }, "Inventario de Productos"), /* @__PURE__ */ import_react4.default.createElement("button", { style: styles3.btnPrimary, onClick: () => setModal("create") }, "+ Nuevo Producto")), error && /* @__PURE__ */ import_react4.default.createElement("div", { style: styles3.errorBox }, error), loading ? /* @__PURE__ */ import_react4.default.createElement("p", { style: { color: "#64748b", fontSize: "14px" } }, "Cargando...") : /* @__PURE__ */ import_react4.default.createElement(
       ProductList,
       {
         products,
         onEdit: (product) => setModal({ mode: "edit", product }),
         onDelete: handleDelete
       }
-    ), modal && /* @__PURE__ */ import_react3.default.createElement(
+    ), modal && /* @__PURE__ */ import_react4.default.createElement(
       ProductForm,
       {
         product: modal !== "create" ? modal.product : null,
@@ -19645,10 +19746,10 @@
   }
 
   // src/renderer/components/NewSale.js
-  var import_react5 = __toESM(require_react());
+  var import_react6 = __toESM(require_react());
 
   // src/renderer/components/SaleReceipt.js
-  var import_react4 = __toESM(require_react());
+  var import_react5 = __toESM(require_react());
   var PRINT_STYLES = `
   @media print {
     body * { visibility: hidden !important; }
@@ -19666,7 +19767,7 @@
     .receipt-no-print { display: none !important; }
   }
 `;
-  function formatDate(dateStr) {
+  function formatDate2(dateStr) {
     return new Date(dateStr || Date.now()).toLocaleString("es", {
       day: "2-digit",
       month: "2-digit",
@@ -19808,7 +19909,7 @@
     }
   };
   function SaleReceipt({ sale, items, total, onClose }) {
-    return /* @__PURE__ */ import_react4.default.createElement(import_react4.default.Fragment, null, /* @__PURE__ */ import_react4.default.createElement("style", null, PRINT_STYLES), /* @__PURE__ */ import_react4.default.createElement("div", { style: s.overlay }, /* @__PURE__ */ import_react4.default.createElement("div", { style: s.actions, className: "receipt-no-print" }, /* @__PURE__ */ import_react4.default.createElement("button", { style: s.btnPrint, onClick: () => window.print() }, "\u{1F5A8} Imprimir"), /* @__PURE__ */ import_react4.default.createElement("button", { style: s.btnClose, onClick: onClose }, "Cerrar")), /* @__PURE__ */ import_react4.default.createElement("div", { id: "sale-receipt", style: s.receipt }, /* @__PURE__ */ import_react4.default.createElement("div", { style: s.headerBlock }, /* @__PURE__ */ import_react4.default.createElement("h1", { style: s.storeName }, "TechStore"), /* @__PURE__ */ import_react4.default.createElement("p", { style: s.storeTagline }, "Comprobante de Venta")), /* @__PURE__ */ import_react4.default.createElement("div", { style: s.dividerSolid }), /* @__PURE__ */ import_react4.default.createElement("div", null, /* @__PURE__ */ import_react4.default.createElement("div", { style: s.infoRow }, /* @__PURE__ */ import_react4.default.createElement("span", { style: s.infoLabel }, "Venta #"), /* @__PURE__ */ import_react4.default.createElement("span", { style: s.infoValue }, sale.id)), /* @__PURE__ */ import_react4.default.createElement("div", { style: s.infoRow }, /* @__PURE__ */ import_react4.default.createElement("span", { style: s.infoLabel }, "Fecha"), /* @__PURE__ */ import_react4.default.createElement("span", { style: s.infoValue }, formatDate(sale.created_at))), sale.customer_name && /* @__PURE__ */ import_react4.default.createElement("div", { style: s.infoRow }, /* @__PURE__ */ import_react4.default.createElement("span", { style: s.infoLabel }, "Cliente"), /* @__PURE__ */ import_react4.default.createElement("span", { style: s.infoValue }, sale.customer_name))), /* @__PURE__ */ import_react4.default.createElement("div", { style: s.divider }), /* @__PURE__ */ import_react4.default.createElement("div", { style: s.itemsHeader }, /* @__PURE__ */ import_react4.default.createElement("span", { style: s.colName }, "Producto"), /* @__PURE__ */ import_react4.default.createElement("span", { style: s.colQty }, "Cant"), /* @__PURE__ */ import_react4.default.createElement("span", { style: s.colUnit }, "P.Unit"), /* @__PURE__ */ import_react4.default.createElement("span", { style: s.colSub }, "Subtotal")), /* @__PURE__ */ import_react4.default.createElement("div", { style: s.divider }), items.map((item, i) => /* @__PURE__ */ import_react4.default.createElement("div", { key: i, style: s.itemRow }, /* @__PURE__ */ import_react4.default.createElement("span", { style: s.colName }, item.product_name), /* @__PURE__ */ import_react4.default.createElement("span", { style: s.colQty }, item.quantity), /* @__PURE__ */ import_react4.default.createElement("span", { style: s.colUnit }, "$", Number(item.unit_price).toFixed(2)), /* @__PURE__ */ import_react4.default.createElement("span", { style: s.colSub }, "$", Number(item.subtotal).toFixed(2)))), /* @__PURE__ */ import_react4.default.createElement("div", { style: s.dividerSolid }), /* @__PURE__ */ import_react4.default.createElement("div", { style: s.totalRow }, /* @__PURE__ */ import_react4.default.createElement("span", { style: s.totalLabel }, "Total"), /* @__PURE__ */ import_react4.default.createElement("span", { style: s.totalAmount }, "$", Number(total).toFixed(2))), /* @__PURE__ */ import_react4.default.createElement("div", { style: s.divider }), /* @__PURE__ */ import_react4.default.createElement("p", { style: s.footer }, "\xA1Gracias por su compra!"))));
+    return /* @__PURE__ */ import_react5.default.createElement(import_react5.default.Fragment, null, /* @__PURE__ */ import_react5.default.createElement("style", null, PRINT_STYLES), /* @__PURE__ */ import_react5.default.createElement("div", { style: s.overlay }, /* @__PURE__ */ import_react5.default.createElement("div", { style: s.actions, className: "receipt-no-print" }, /* @__PURE__ */ import_react5.default.createElement("button", { style: s.btnPrint, onClick: () => window.print() }, "\u{1F5A8} Imprimir"), /* @__PURE__ */ import_react5.default.createElement("button", { style: s.btnClose, onClick: onClose }, "Cerrar")), /* @__PURE__ */ import_react5.default.createElement("div", { id: "sale-receipt", style: s.receipt }, /* @__PURE__ */ import_react5.default.createElement("div", { style: s.headerBlock }, /* @__PURE__ */ import_react5.default.createElement("h1", { style: s.storeName }, "TechStore"), /* @__PURE__ */ import_react5.default.createElement("p", { style: s.storeTagline }, "Comprobante de Venta")), /* @__PURE__ */ import_react5.default.createElement("div", { style: s.dividerSolid }), /* @__PURE__ */ import_react5.default.createElement("div", null, /* @__PURE__ */ import_react5.default.createElement("div", { style: s.infoRow }, /* @__PURE__ */ import_react5.default.createElement("span", { style: s.infoLabel }, "Venta #"), /* @__PURE__ */ import_react5.default.createElement("span", { style: s.infoValue }, sale.id)), /* @__PURE__ */ import_react5.default.createElement("div", { style: s.infoRow }, /* @__PURE__ */ import_react5.default.createElement("span", { style: s.infoLabel }, "Fecha"), /* @__PURE__ */ import_react5.default.createElement("span", { style: s.infoValue }, formatDate2(sale.created_at))), sale.customer_name && /* @__PURE__ */ import_react5.default.createElement("div", { style: s.infoRow }, /* @__PURE__ */ import_react5.default.createElement("span", { style: s.infoLabel }, "Cliente"), /* @__PURE__ */ import_react5.default.createElement("span", { style: s.infoValue }, sale.customer_name))), /* @__PURE__ */ import_react5.default.createElement("div", { style: s.divider }), /* @__PURE__ */ import_react5.default.createElement("div", { style: s.itemsHeader }, /* @__PURE__ */ import_react5.default.createElement("span", { style: s.colName }, "Producto"), /* @__PURE__ */ import_react5.default.createElement("span", { style: s.colQty }, "Cant"), /* @__PURE__ */ import_react5.default.createElement("span", { style: s.colUnit }, "P.Unit"), /* @__PURE__ */ import_react5.default.createElement("span", { style: s.colSub }, "Subtotal")), /* @__PURE__ */ import_react5.default.createElement("div", { style: s.divider }), items.map((item, i) => /* @__PURE__ */ import_react5.default.createElement("div", { key: i, style: s.itemRow }, /* @__PURE__ */ import_react5.default.createElement("span", { style: s.colName }, item.product_name), /* @__PURE__ */ import_react5.default.createElement("span", { style: s.colQty }, item.quantity), /* @__PURE__ */ import_react5.default.createElement("span", { style: s.colUnit }, "$", Number(item.unit_price).toFixed(2)), /* @__PURE__ */ import_react5.default.createElement("span", { style: s.colSub }, "$", Number(item.subtotal).toFixed(2)))), /* @__PURE__ */ import_react5.default.createElement("div", { style: s.dividerSolid }), /* @__PURE__ */ import_react5.default.createElement("div", { style: s.totalRow }, /* @__PURE__ */ import_react5.default.createElement("span", { style: s.totalLabel }, "Total"), /* @__PURE__ */ import_react5.default.createElement("span", { style: s.totalAmount }, "$", Number(total).toFixed(2))), /* @__PURE__ */ import_react5.default.createElement("div", { style: s.divider }), /* @__PURE__ */ import_react5.default.createElement("p", { style: s.footer }, "\xA1Gracias por su compra!"))));
   }
 
   // src/renderer/components/NewSale.js
@@ -20074,27 +20175,27 @@
     }
   };
   function NewSale({ onSaleComplete }) {
-    const [allProducts, setAllProducts] = (0, import_react5.useState)([]);
-    const [query, setQuery] = (0, import_react5.useState)("");
-    const [cart, setCart] = (0, import_react5.useState)([]);
-    const [saving, setSaving] = (0, import_react5.useState)(false);
-    const [error, setError] = (0, import_react5.useState)(null);
-    const [receipt, setReceipt] = (0, import_react5.useState)(null);
-    const [allCustomers, setAllCustomers] = (0, import_react5.useState)([]);
-    const [selectedCustomer, setSelectedCustomer] = (0, import_react5.useState)(null);
-    const [customerQuery, setCustomerQuery] = (0, import_react5.useState)("");
-    (0, import_react5.useEffect)(() => {
+    const [allProducts, setAllProducts] = (0, import_react6.useState)([]);
+    const [query, setQuery] = (0, import_react6.useState)("");
+    const [cart, setCart] = (0, import_react6.useState)([]);
+    const [saving, setSaving] = (0, import_react6.useState)(false);
+    const [error, setError] = (0, import_react6.useState)(null);
+    const [receipt, setReceipt] = (0, import_react6.useState)(null);
+    const [allCustomers, setAllCustomers] = (0, import_react6.useState)([]);
+    const [selectedCustomer, setSelectedCustomer] = (0, import_react6.useState)(null);
+    const [customerQuery, setCustomerQuery] = (0, import_react6.useState)("");
+    (0, import_react6.useEffect)(() => {
       window.electron.products.getAll().then(setAllProducts);
       window.electron.customers.getAll().then(setAllCustomers);
     }, []);
-    const filteredCustomers = (0, import_react5.useMemo)(() => {
+    const filteredCustomers = (0, import_react6.useMemo)(() => {
       const q = customerQuery.toLowerCase().trim();
       if (!q) return [];
       return allCustomers.filter(
         (c) => c.name.toLowerCase().includes(q) || (c.phone || "").includes(q)
       ).slice(0, 5);
     }, [allCustomers, customerQuery]);
-    const filteredProducts = (0, import_react5.useMemo)(() => {
+    const filteredProducts = (0, import_react6.useMemo)(() => {
       const q = query.toLowerCase().trim();
       return allProducts.filter(
         (p) => !q || p.name.toLowerCase().includes(q) || (p.category || "").toLowerCase().includes(q)
@@ -20161,7 +20262,7 @@
         setSaving(false);
       }
     };
-    return /* @__PURE__ */ import_react5.default.createElement(import_react5.default.Fragment, null, /* @__PURE__ */ import_react5.default.createElement("h2", { style: styles4.sectionTitle }, "Nueva Venta"), /* @__PURE__ */ import_react5.default.createElement("div", { style: styles4.layout }, /* @__PURE__ */ import_react5.default.createElement("div", { style: styles4.panel }, /* @__PURE__ */ import_react5.default.createElement("div", { style: styles4.panelHeader }, "Productos"), /* @__PURE__ */ import_react5.default.createElement("div", { style: styles4.searchBox }, /* @__PURE__ */ import_react5.default.createElement(
+    return /* @__PURE__ */ import_react6.default.createElement(import_react6.default.Fragment, null, /* @__PURE__ */ import_react6.default.createElement("h2", { style: styles4.sectionTitle }, "Nueva Venta"), /* @__PURE__ */ import_react6.default.createElement("div", { style: styles4.layout }, /* @__PURE__ */ import_react6.default.createElement("div", { style: styles4.panel }, /* @__PURE__ */ import_react6.default.createElement("div", { style: styles4.panelHeader }, "Productos"), /* @__PURE__ */ import_react6.default.createElement("div", { style: styles4.searchBox }, /* @__PURE__ */ import_react6.default.createElement(
       "input",
       {
         style: styles4.searchInput,
@@ -20170,21 +20271,21 @@
         onChange: (e) => setQuery(e.target.value),
         autoFocus: true
       }
-    )), /* @__PURE__ */ import_react5.default.createElement("div", { style: styles4.productList }, filteredProducts.length === 0 ? /* @__PURE__ */ import_react5.default.createElement("p", { style: styles4.emptySearch }, 'Sin resultados para "', query, '"') : filteredProducts.map((product) => {
+    )), /* @__PURE__ */ import_react6.default.createElement("div", { style: styles4.productList }, filteredProducts.length === 0 ? /* @__PURE__ */ import_react6.default.createElement("p", { style: styles4.emptySearch }, 'Sin resultados para "', query, '"') : filteredProducts.map((product) => {
       const inCart = cartQtyFor(product.id);
       const avail = availableStock(product);
       const outOfStock = avail <= 0;
-      return /* @__PURE__ */ import_react5.default.createElement(
+      return /* @__PURE__ */ import_react6.default.createElement(
         "div",
         {
           key: product.id,
           style: outOfStock ? styles4.productRowDisabled : styles4.productRow,
           onClick: () => !outOfStock && addToCart(product)
         },
-        /* @__PURE__ */ import_react5.default.createElement("div", null, /* @__PURE__ */ import_react5.default.createElement("div", { style: styles4.productName }, product.name), /* @__PURE__ */ import_react5.default.createElement("div", { style: styles4.productMeta }, product.category || "Sin categor\xEDa", " \xB7 Stock: ", avail, inCart > 0 && ` (${inCart} en carrito)`)),
-        /* @__PURE__ */ import_react5.default.createElement("div", { style: { display: "flex", alignItems: "center" } }, /* @__PURE__ */ import_react5.default.createElement("div", { style: styles4.productRight }, /* @__PURE__ */ import_react5.default.createElement("div", { style: styles4.productPrice }, "$", Number(product.price).toFixed(2))), outOfStock ? /* @__PURE__ */ import_react5.default.createElement("span", { style: { ...styles4.inCartBadge, background: "#f8fafc", border: "1px solid #e2e8f0", color: "#94a3b8" } }, "Sin stock") : inCart > 0 ? /* @__PURE__ */ import_react5.default.createElement("span", { style: styles4.inCartBadge }, "+", inCart) : /* @__PURE__ */ import_react5.default.createElement("span", { style: styles4.addBtn }, "Agregar"))
+        /* @__PURE__ */ import_react6.default.createElement("div", null, /* @__PURE__ */ import_react6.default.createElement("div", { style: styles4.productName }, product.name), /* @__PURE__ */ import_react6.default.createElement("div", { style: styles4.productMeta }, product.category || "Sin categor\xEDa", " \xB7 Stock: ", avail, inCart > 0 && ` (${inCart} en carrito)`)),
+        /* @__PURE__ */ import_react6.default.createElement("div", { style: { display: "flex", alignItems: "center" } }, /* @__PURE__ */ import_react6.default.createElement("div", { style: styles4.productRight }, /* @__PURE__ */ import_react6.default.createElement("div", { style: styles4.productPrice }, "$", Number(product.price).toFixed(2))), outOfStock ? /* @__PURE__ */ import_react6.default.createElement("span", { style: { ...styles4.inCartBadge, background: "#f8fafc", border: "1px solid #e2e8f0", color: "#94a3b8" } }, "Sin stock") : inCart > 0 ? /* @__PURE__ */ import_react6.default.createElement("span", { style: styles4.inCartBadge }, "+", inCart) : /* @__PURE__ */ import_react6.default.createElement("span", { style: styles4.addBtn }, "Agregar"))
       );
-    }))), /* @__PURE__ */ import_react5.default.createElement("div", { style: styles4.panel }, /* @__PURE__ */ import_react5.default.createElement("div", { style: styles4.panelHeader }, "Carrito"), /* @__PURE__ */ import_react5.default.createElement("div", { style: styles4.customerSection }, /* @__PURE__ */ import_react5.default.createElement("div", { style: styles4.customerLabel }, "Cliente ", /* @__PURE__ */ import_react5.default.createElement("span", { style: { fontWeight: "400", textTransform: "none", letterSpacing: 0 } }, "(opcional)")), selectedCustomer ? /* @__PURE__ */ import_react5.default.createElement("div", { style: styles4.customerPill }, /* @__PURE__ */ import_react5.default.createElement("span", { style: styles4.customerPillName }, selectedCustomer.name), selectedCustomer.phone && /* @__PURE__ */ import_react5.default.createElement("span", { style: styles4.customerPillMeta }, selectedCustomer.phone), /* @__PURE__ */ import_react5.default.createElement(
+    }))), /* @__PURE__ */ import_react6.default.createElement("div", { style: styles4.panel }, /* @__PURE__ */ import_react6.default.createElement("div", { style: styles4.panelHeader }, "Carrito"), /* @__PURE__ */ import_react6.default.createElement("div", { style: styles4.customerSection }, /* @__PURE__ */ import_react6.default.createElement("div", { style: styles4.customerLabel }, "Cliente ", /* @__PURE__ */ import_react6.default.createElement("span", { style: { fontWeight: "400", textTransform: "none", letterSpacing: 0 } }, "(opcional)")), selectedCustomer ? /* @__PURE__ */ import_react6.default.createElement("div", { style: styles4.customerPill }, /* @__PURE__ */ import_react6.default.createElement("span", { style: styles4.customerPillName }, selectedCustomer.name), selectedCustomer.phone && /* @__PURE__ */ import_react6.default.createElement("span", { style: styles4.customerPillMeta }, selectedCustomer.phone), /* @__PURE__ */ import_react6.default.createElement(
       "button",
       {
         style: styles4.customerClearBtn,
@@ -20192,7 +20293,7 @@
         title: "Quitar cliente"
       },
       "\xD7"
-    )) : /* @__PURE__ */ import_react5.default.createElement("div", { style: styles4.customerSearchWrap }, /* @__PURE__ */ import_react5.default.createElement(
+    )) : /* @__PURE__ */ import_react6.default.createElement("div", { style: styles4.customerSearchWrap }, /* @__PURE__ */ import_react6.default.createElement(
       "input",
       {
         style: styles4.customerInput,
@@ -20200,7 +20301,7 @@
         value: customerQuery,
         onChange: (e) => setCustomerQuery(e.target.value)
       }
-    ), filteredCustomers.length > 0 && /* @__PURE__ */ import_react5.default.createElement("div", { style: styles4.customerDropdown }, filteredCustomers.map((c) => /* @__PURE__ */ import_react5.default.createElement(
+    ), filteredCustomers.length > 0 && /* @__PURE__ */ import_react6.default.createElement("div", { style: styles4.customerDropdown }, filteredCustomers.map((c) => /* @__PURE__ */ import_react6.default.createElement(
       "div",
       {
         key: c.id,
@@ -20210,9 +20311,9 @@
           setCustomerQuery("");
         }
       },
-      /* @__PURE__ */ import_react5.default.createElement("div", { style: styles4.customerOptionName }, c.name),
-      c.phone && /* @__PURE__ */ import_react5.default.createElement("div", { style: styles4.customerOptionMeta }, c.phone)
-    ))))), /* @__PURE__ */ import_react5.default.createElement("div", { style: styles4.cartBody }, cart.length === 0 ? /* @__PURE__ */ import_react5.default.createElement("p", { style: styles4.emptyCart }, "Haz clic en un producto para agregarlo.") : cart.map((item) => /* @__PURE__ */ import_react5.default.createElement("div", { key: item.product_id, style: styles4.cartItem }, /* @__PURE__ */ import_react5.default.createElement("div", { style: styles4.cartItemName }, /* @__PURE__ */ import_react5.default.createElement("span", null, item.product_name), /* @__PURE__ */ import_react5.default.createElement(
+      /* @__PURE__ */ import_react6.default.createElement("div", { style: styles4.customerOptionName }, c.name),
+      c.phone && /* @__PURE__ */ import_react6.default.createElement("div", { style: styles4.customerOptionMeta }, c.phone)
+    ))))), /* @__PURE__ */ import_react6.default.createElement("div", { style: styles4.cartBody }, cart.length === 0 ? /* @__PURE__ */ import_react6.default.createElement("p", { style: styles4.emptyCart }, "Haz clic en un producto para agregarlo.") : cart.map((item) => /* @__PURE__ */ import_react6.default.createElement("div", { key: item.product_id, style: styles4.cartItem }, /* @__PURE__ */ import_react6.default.createElement("div", { style: styles4.cartItemName }, /* @__PURE__ */ import_react6.default.createElement("span", null, item.product_name), /* @__PURE__ */ import_react6.default.createElement(
       "button",
       {
         style: styles4.removeBtn,
@@ -20220,21 +20321,21 @@
         title: "Quitar del carrito"
       },
       "\xD7"
-    )), /* @__PURE__ */ import_react5.default.createElement("div", { style: styles4.qtyRow }, /* @__PURE__ */ import_react5.default.createElement("div", { style: styles4.qtyControls }, /* @__PURE__ */ import_react5.default.createElement(
+    )), /* @__PURE__ */ import_react6.default.createElement("div", { style: styles4.qtyRow }, /* @__PURE__ */ import_react6.default.createElement("div", { style: styles4.qtyControls }, /* @__PURE__ */ import_react6.default.createElement(
       "button",
       {
         style: styles4.qtyBtn,
         onClick: () => setQty(item.product_id, item.quantity - 1)
       },
       "\u2212"
-    ), /* @__PURE__ */ import_react5.default.createElement("span", { style: styles4.qtyValue }, item.quantity), /* @__PURE__ */ import_react5.default.createElement(
+    ), /* @__PURE__ */ import_react6.default.createElement("span", { style: styles4.qtyValue }, item.quantity), /* @__PURE__ */ import_react6.default.createElement(
       "button",
       {
         style: styles4.qtyBtn,
         onClick: () => setQty(item.product_id, item.quantity + 1)
       },
       "+"
-    )), /* @__PURE__ */ import_react5.default.createElement("span", { style: styles4.itemSubtotal }, "$", item.subtotal.toFixed(2)))))), /* @__PURE__ */ import_react5.default.createElement("div", { style: styles4.cartFooter }, /* @__PURE__ */ import_react5.default.createElement("div", { style: styles4.totalRow }, /* @__PURE__ */ import_react5.default.createElement("span", { style: styles4.totalLabel }, "Total"), /* @__PURE__ */ import_react5.default.createElement("span", { style: styles4.totalAmount }, "$", total.toFixed(2))), /* @__PURE__ */ import_react5.default.createElement(
+    )), /* @__PURE__ */ import_react6.default.createElement("span", { style: styles4.itemSubtotal }, "$", item.subtotal.toFixed(2)))))), /* @__PURE__ */ import_react6.default.createElement("div", { style: styles4.cartFooter }, /* @__PURE__ */ import_react6.default.createElement("div", { style: styles4.totalRow }, /* @__PURE__ */ import_react6.default.createElement("span", { style: styles4.totalLabel }, "Total"), /* @__PURE__ */ import_react6.default.createElement("span", { style: styles4.totalAmount }, "$", total.toFixed(2))), /* @__PURE__ */ import_react6.default.createElement(
       "button",
       {
         style: cart.length === 0 || saving ? styles4.confirmBtnDisabled : styles4.confirmBtn,
@@ -20242,7 +20343,7 @@
         disabled: cart.length === 0 || saving
       },
       saving ? "Procesando..." : "Confirmar Venta"
-    )), error && /* @__PURE__ */ import_react5.default.createElement("div", { style: styles4.errorBox }, error))), receipt && /* @__PURE__ */ import_react5.default.createElement(
+    )), error && /* @__PURE__ */ import_react6.default.createElement("div", { style: styles4.errorBox }, error))), receipt && /* @__PURE__ */ import_react6.default.createElement(
       SaleReceipt,
       {
         sale: receipt.sale,
@@ -20257,7 +20358,7 @@
   }
 
   // src/renderer/components/SaleHistory.js
-  var import_react6 = __toESM(require_react());
+  var import_react7 = __toESM(require_react());
   var styles5 = {
     toolbar: {
       display: "flex",
@@ -20352,7 +20453,7 @@
       color: "#1e293b"
     }
   };
-  function formatDate2(dateStr) {
+  function formatDate3(dateStr) {
     return new Date(dateStr).toLocaleString("es", {
       day: "2-digit",
       month: "2-digit",
@@ -20362,11 +20463,11 @@
     });
   }
   function SaleHistory() {
-    const [sales, setSales] = (0, import_react6.useState)([]);
-    const [loading, setLoading] = (0, import_react6.useState)(true);
-    const [error, setError] = (0, import_react6.useState)(null);
-    const [expanded, setExpanded] = (0, import_react6.useState)(null);
-    (0, import_react6.useEffect)(() => {
+    const [sales, setSales] = (0, import_react7.useState)([]);
+    const [loading, setLoading] = (0, import_react7.useState)(true);
+    const [error, setError] = (0, import_react7.useState)(null);
+    const [expanded, setExpanded] = (0, import_react7.useState)(null);
+    (0, import_react7.useEffect)(() => {
       window.electron.sales.getAll().then((data) => {
         setSales(data);
         setLoading(false);
@@ -20376,11 +20477,11 @@
       });
     }, []);
     const toggle = (id) => setExpanded((prev) => prev === id ? null : id);
-    return /* @__PURE__ */ import_react6.default.createElement(import_react6.default.Fragment, null, /* @__PURE__ */ import_react6.default.createElement("div", { style: styles5.toolbar }, /* @__PURE__ */ import_react6.default.createElement("h2", { style: styles5.sectionTitle }, "Historial de Ventas")), error && /* @__PURE__ */ import_react6.default.createElement("div", { style: styles5.errorBox }, error), loading ? /* @__PURE__ */ import_react6.default.createElement("p", { style: { color: "#64748b", fontSize: "14px" } }, "Cargando...") : /* @__PURE__ */ import_react6.default.createElement("div", { style: styles5.wrapper }, sales.length === 0 ? /* @__PURE__ */ import_react6.default.createElement("p", { style: styles5.empty }, "No hay ventas registradas a\xFAn.") : /* @__PURE__ */ import_react6.default.createElement("table", { style: styles5.table }, /* @__PURE__ */ import_react6.default.createElement("thead", null, /* @__PURE__ */ import_react6.default.createElement("tr", null, /* @__PURE__ */ import_react6.default.createElement("th", { style: styles5.th }, "#"), /* @__PURE__ */ import_react6.default.createElement("th", { style: styles5.th }, "Fecha"), /* @__PURE__ */ import_react6.default.createElement("th", { style: styles5.th }, "Cliente"), /* @__PURE__ */ import_react6.default.createElement("th", { style: styles5.th }, "Productos"), /* @__PURE__ */ import_react6.default.createElement("th", { style: styles5.th }, "Total"), /* @__PURE__ */ import_react6.default.createElement("th", { style: styles5.th }))), /* @__PURE__ */ import_react6.default.createElement("tbody", null, sales.map((sale) => /* @__PURE__ */ import_react6.default.createElement(import_react6.default.Fragment, { key: sale.id }, /* @__PURE__ */ import_react6.default.createElement("tr", null, /* @__PURE__ */ import_react6.default.createElement("td", { style: styles5.td }, sale.id), /* @__PURE__ */ import_react6.default.createElement("td", { style: styles5.td }, formatDate2(sale.created_at)), /* @__PURE__ */ import_react6.default.createElement("td", { style: styles5.td }, sale.customer_name || /* @__PURE__ */ import_react6.default.createElement("span", { style: { color: "#94a3b8" } }, "\u2014")), /* @__PURE__ */ import_react6.default.createElement("td", { style: styles5.td }, sale.details.length, " producto", sale.details.length !== 1 ? "s" : ""), /* @__PURE__ */ import_react6.default.createElement("td", { style: styles5.td }, /* @__PURE__ */ import_react6.default.createElement("span", { style: styles5.totalBadge }, "$", Number(sale.total).toFixed(2))), /* @__PURE__ */ import_react6.default.createElement("td", { style: styles5.td }, /* @__PURE__ */ import_react6.default.createElement("button", { style: styles5.toggleBtn, onClick: () => toggle(sale.id) }, expanded === sale.id ? "Ocultar" : "Ver detalle"))), expanded === sale.id && /* @__PURE__ */ import_react6.default.createElement("tr", { style: styles5.detailRow }, /* @__PURE__ */ import_react6.default.createElement("td", { colSpan: 6, style: styles5.detailCell }, /* @__PURE__ */ import_react6.default.createElement("table", { style: styles5.detailTable }, /* @__PURE__ */ import_react6.default.createElement("thead", null, /* @__PURE__ */ import_react6.default.createElement("tr", null, /* @__PURE__ */ import_react6.default.createElement("th", { style: styles5.detailTh }, "Producto"), /* @__PURE__ */ import_react6.default.createElement("th", { style: styles5.detailTh }, "Precio unit."), /* @__PURE__ */ import_react6.default.createElement("th", { style: styles5.detailTh }, "Cantidad"), /* @__PURE__ */ import_react6.default.createElement("th", { style: styles5.detailTh }, "Subtotal"))), /* @__PURE__ */ import_react6.default.createElement("tbody", null, sale.details.map((d) => /* @__PURE__ */ import_react6.default.createElement("tr", { key: d.id }, /* @__PURE__ */ import_react6.default.createElement("td", { style: styles5.detailTd }, d.product_name), /* @__PURE__ */ import_react6.default.createElement("td", { style: styles5.detailTd }, "$", Number(d.unit_price).toFixed(2)), /* @__PURE__ */ import_react6.default.createElement("td", { style: styles5.detailTd }, d.quantity), /* @__PURE__ */ import_react6.default.createElement("td", { style: styles5.detailTd }, "$", Number(d.subtotal).toFixed(2)))))), /* @__PURE__ */ import_react6.default.createElement("div", { style: styles5.detailTotal }, "Total: $", Number(sale.total).toFixed(2))))))))));
+    return /* @__PURE__ */ import_react7.default.createElement(import_react7.default.Fragment, null, /* @__PURE__ */ import_react7.default.createElement("div", { style: styles5.toolbar }, /* @__PURE__ */ import_react7.default.createElement("h2", { style: styles5.sectionTitle }, "Historial de Ventas")), error && /* @__PURE__ */ import_react7.default.createElement("div", { style: styles5.errorBox }, error), loading ? /* @__PURE__ */ import_react7.default.createElement("p", { style: { color: "#64748b", fontSize: "14px" } }, "Cargando...") : /* @__PURE__ */ import_react7.default.createElement("div", { style: styles5.wrapper }, sales.length === 0 ? /* @__PURE__ */ import_react7.default.createElement("p", { style: styles5.empty }, "No hay ventas registradas a\xFAn.") : /* @__PURE__ */ import_react7.default.createElement("table", { style: styles5.table }, /* @__PURE__ */ import_react7.default.createElement("thead", null, /* @__PURE__ */ import_react7.default.createElement("tr", null, /* @__PURE__ */ import_react7.default.createElement("th", { style: styles5.th }, "#"), /* @__PURE__ */ import_react7.default.createElement("th", { style: styles5.th }, "Fecha"), /* @__PURE__ */ import_react7.default.createElement("th", { style: styles5.th }, "Cliente"), /* @__PURE__ */ import_react7.default.createElement("th", { style: styles5.th }, "Productos"), /* @__PURE__ */ import_react7.default.createElement("th", { style: styles5.th }, "Total"), /* @__PURE__ */ import_react7.default.createElement("th", { style: styles5.th }))), /* @__PURE__ */ import_react7.default.createElement("tbody", null, sales.map((sale) => /* @__PURE__ */ import_react7.default.createElement(import_react7.default.Fragment, { key: sale.id }, /* @__PURE__ */ import_react7.default.createElement("tr", null, /* @__PURE__ */ import_react7.default.createElement("td", { style: styles5.td }, sale.id), /* @__PURE__ */ import_react7.default.createElement("td", { style: styles5.td }, formatDate3(sale.created_at)), /* @__PURE__ */ import_react7.default.createElement("td", { style: styles5.td }, sale.customer_name || /* @__PURE__ */ import_react7.default.createElement("span", { style: { color: "#94a3b8" } }, "\u2014")), /* @__PURE__ */ import_react7.default.createElement("td", { style: styles5.td }, sale.details.length, " producto", sale.details.length !== 1 ? "s" : ""), /* @__PURE__ */ import_react7.default.createElement("td", { style: styles5.td }, /* @__PURE__ */ import_react7.default.createElement("span", { style: styles5.totalBadge }, "$", Number(sale.total).toFixed(2))), /* @__PURE__ */ import_react7.default.createElement("td", { style: styles5.td }, /* @__PURE__ */ import_react7.default.createElement("button", { style: styles5.toggleBtn, onClick: () => toggle(sale.id) }, expanded === sale.id ? "Ocultar" : "Ver detalle"))), expanded === sale.id && /* @__PURE__ */ import_react7.default.createElement("tr", { style: styles5.detailRow }, /* @__PURE__ */ import_react7.default.createElement("td", { colSpan: 6, style: styles5.detailCell }, /* @__PURE__ */ import_react7.default.createElement("table", { style: styles5.detailTable }, /* @__PURE__ */ import_react7.default.createElement("thead", null, /* @__PURE__ */ import_react7.default.createElement("tr", null, /* @__PURE__ */ import_react7.default.createElement("th", { style: styles5.detailTh }, "Producto"), /* @__PURE__ */ import_react7.default.createElement("th", { style: styles5.detailTh }, "Precio unit."), /* @__PURE__ */ import_react7.default.createElement("th", { style: styles5.detailTh }, "Cantidad"), /* @__PURE__ */ import_react7.default.createElement("th", { style: styles5.detailTh }, "Subtotal"))), /* @__PURE__ */ import_react7.default.createElement("tbody", null, sale.details.map((d) => /* @__PURE__ */ import_react7.default.createElement("tr", { key: d.id }, /* @__PURE__ */ import_react7.default.createElement("td", { style: styles5.detailTd }, d.product_name), /* @__PURE__ */ import_react7.default.createElement("td", { style: styles5.detailTd }, "$", Number(d.unit_price).toFixed(2)), /* @__PURE__ */ import_react7.default.createElement("td", { style: styles5.detailTd }, d.quantity), /* @__PURE__ */ import_react7.default.createElement("td", { style: styles5.detailTd }, "$", Number(d.subtotal).toFixed(2)))))), /* @__PURE__ */ import_react7.default.createElement("div", { style: styles5.detailTotal }, "Total: $", Number(sale.total).toFixed(2))))))))));
   }
 
   // src/renderer/components/CategoriesView.js
-  var import_react7 = __toESM(require_react());
+  var import_react8 = __toESM(require_react());
   var styles6 = {
     toolbar: {
       display: "flex",
@@ -20539,7 +20640,7 @@
   };
   function CategoryModal({ category, onSave, onCancel }) {
     const isEdit = Boolean(category);
-    const [form, setForm] = (0, import_react7.useState)({
+    const [form, setForm] = (0, import_react8.useState)({
       name: category?.name ?? "",
       description: category?.description ?? ""
     });
@@ -20548,7 +20649,7 @@
       e.preventDefault();
       onSave({ name: form.name.trim(), description: form.description.trim() || null });
     };
-    return /* @__PURE__ */ import_react7.default.createElement("div", { style: styles6.overlay, onClick: (e) => e.target === e.currentTarget && onCancel() }, /* @__PURE__ */ import_react7.default.createElement("div", { style: styles6.modal }, /* @__PURE__ */ import_react7.default.createElement("h2", { style: styles6.modalTitle }, isEdit ? "Editar Categor\xEDa" : "Nueva Categor\xEDa"), /* @__PURE__ */ import_react7.default.createElement("form", { onSubmit: handleSubmit }, /* @__PURE__ */ import_react7.default.createElement("div", { style: styles6.field }, /* @__PURE__ */ import_react7.default.createElement("label", { style: styles6.label }, "Nombre *"), /* @__PURE__ */ import_react7.default.createElement(
+    return /* @__PURE__ */ import_react8.default.createElement("div", { style: styles6.overlay, onClick: (e) => e.target === e.currentTarget && onCancel() }, /* @__PURE__ */ import_react8.default.createElement("div", { style: styles6.modal }, /* @__PURE__ */ import_react8.default.createElement("h2", { style: styles6.modalTitle }, isEdit ? "Editar Categor\xEDa" : "Nueva Categor\xEDa"), /* @__PURE__ */ import_react8.default.createElement("form", { onSubmit: handleSubmit }, /* @__PURE__ */ import_react8.default.createElement("div", { style: styles6.field }, /* @__PURE__ */ import_react8.default.createElement("label", { style: styles6.label }, "Nombre *"), /* @__PURE__ */ import_react8.default.createElement(
       "input",
       {
         style: styles6.input,
@@ -20558,7 +20659,7 @@
         required: true,
         autoFocus: true
       }
-    )), /* @__PURE__ */ import_react7.default.createElement("div", { style: styles6.field }, /* @__PURE__ */ import_react7.default.createElement("label", { style: styles6.label }, "Descripci\xF3n"), /* @__PURE__ */ import_react7.default.createElement(
+    )), /* @__PURE__ */ import_react8.default.createElement("div", { style: styles6.field }, /* @__PURE__ */ import_react8.default.createElement("label", { style: styles6.label }, "Descripci\xF3n"), /* @__PURE__ */ import_react8.default.createElement(
       "textarea",
       {
         style: styles6.textarea,
@@ -20566,14 +20667,14 @@
         onChange: set("description"),
         placeholder: "Descripci\xF3n opcional de la categor\xEDa"
       }
-    )), /* @__PURE__ */ import_react7.default.createElement("div", { style: styles6.actions }, /* @__PURE__ */ import_react7.default.createElement("button", { type: "button", style: styles6.btnCancel, onClick: onCancel }, "Cancelar"), /* @__PURE__ */ import_react7.default.createElement("button", { type: "submit", style: styles6.btnSave }, isEdit ? "Guardar cambios" : "Crear categor\xEDa")))));
+    )), /* @__PURE__ */ import_react8.default.createElement("div", { style: styles6.actions }, /* @__PURE__ */ import_react8.default.createElement("button", { type: "button", style: styles6.btnCancel, onClick: onCancel }, "Cancelar"), /* @__PURE__ */ import_react8.default.createElement("button", { type: "submit", style: styles6.btnSave }, isEdit ? "Guardar cambios" : "Crear categor\xEDa")))));
   }
   function CategoriesView() {
-    const [categories, setCategories] = (0, import_react7.useState)([]);
-    const [loading, setLoading] = (0, import_react7.useState)(true);
-    const [error, setError] = (0, import_react7.useState)(null);
-    const [modal, setModal] = (0, import_react7.useState)(null);
-    const load = (0, import_react7.useCallback)(async () => {
+    const [categories, setCategories] = (0, import_react8.useState)([]);
+    const [loading, setLoading] = (0, import_react8.useState)(true);
+    const [error, setError] = (0, import_react8.useState)(null);
+    const [modal, setModal] = (0, import_react8.useState)(null);
+    const load = (0, import_react8.useCallback)(async () => {
       try {
         setLoading(true);
         setCategories(await window.electron.categories.getAll());
@@ -20584,7 +20685,7 @@
         setLoading(false);
       }
     }, []);
-    (0, import_react7.useEffect)(() => {
+    (0, import_react8.useEffect)(() => {
       load();
     }, [load]);
     const handleSave = async (formData) => {
@@ -20609,21 +20710,21 @@
         setError("Error al eliminar la categor\xEDa.");
       }
     };
-    return /* @__PURE__ */ import_react7.default.createElement(import_react7.default.Fragment, null, /* @__PURE__ */ import_react7.default.createElement("div", { style: styles6.toolbar }, /* @__PURE__ */ import_react7.default.createElement("h2", { style: styles6.sectionTitle }, "Categor\xEDas"), /* @__PURE__ */ import_react7.default.createElement("button", { style: styles6.btnPrimary, onClick: () => setModal("create") }, "+ Nueva Categor\xEDa")), error && /* @__PURE__ */ import_react7.default.createElement("div", { style: styles6.errorBox }, error), loading ? /* @__PURE__ */ import_react7.default.createElement("p", { style: { color: "#64748b", fontSize: "14px" } }, "Cargando...") : /* @__PURE__ */ import_react7.default.createElement("div", { style: styles6.wrapper }, categories.length === 0 ? /* @__PURE__ */ import_react7.default.createElement("p", { style: styles6.empty }, "No hay categor\xEDas. Agrega la primera.") : /* @__PURE__ */ import_react7.default.createElement("table", { style: styles6.table }, /* @__PURE__ */ import_react7.default.createElement("thead", null, /* @__PURE__ */ import_react7.default.createElement("tr", null, /* @__PURE__ */ import_react7.default.createElement("th", { style: styles6.th }, "Nombre"), /* @__PURE__ */ import_react7.default.createElement("th", { style: styles6.th }, "Descripci\xF3n"), /* @__PURE__ */ import_react7.default.createElement("th", { style: styles6.th }, "Acciones"))), /* @__PURE__ */ import_react7.default.createElement("tbody", null, categories.map((cat) => /* @__PURE__ */ import_react7.default.createElement("tr", { key: cat.id }, /* @__PURE__ */ import_react7.default.createElement("td", { style: styles6.td }, /* @__PURE__ */ import_react7.default.createElement("strong", null, cat.name)), /* @__PURE__ */ import_react7.default.createElement("td", { style: styles6.tdMuted }, cat.description || "\u2014"), /* @__PURE__ */ import_react7.default.createElement("td", { style: styles6.td }, /* @__PURE__ */ import_react7.default.createElement(
+    return /* @__PURE__ */ import_react8.default.createElement(import_react8.default.Fragment, null, /* @__PURE__ */ import_react8.default.createElement("div", { style: styles6.toolbar }, /* @__PURE__ */ import_react8.default.createElement("h2", { style: styles6.sectionTitle }, "Categor\xEDas"), /* @__PURE__ */ import_react8.default.createElement("button", { style: styles6.btnPrimary, onClick: () => setModal("create") }, "+ Nueva Categor\xEDa")), error && /* @__PURE__ */ import_react8.default.createElement("div", { style: styles6.errorBox }, error), loading ? /* @__PURE__ */ import_react8.default.createElement("p", { style: { color: "#64748b", fontSize: "14px" } }, "Cargando...") : /* @__PURE__ */ import_react8.default.createElement("div", { style: styles6.wrapper }, categories.length === 0 ? /* @__PURE__ */ import_react8.default.createElement("p", { style: styles6.empty }, "No hay categor\xEDas. Agrega la primera.") : /* @__PURE__ */ import_react8.default.createElement("table", { style: styles6.table }, /* @__PURE__ */ import_react8.default.createElement("thead", null, /* @__PURE__ */ import_react8.default.createElement("tr", null, /* @__PURE__ */ import_react8.default.createElement("th", { style: styles6.th }, "Nombre"), /* @__PURE__ */ import_react8.default.createElement("th", { style: styles6.th }, "Descripci\xF3n"), /* @__PURE__ */ import_react8.default.createElement("th", { style: styles6.th }, "Acciones"))), /* @__PURE__ */ import_react8.default.createElement("tbody", null, categories.map((cat) => /* @__PURE__ */ import_react8.default.createElement("tr", { key: cat.id }, /* @__PURE__ */ import_react8.default.createElement("td", { style: styles6.td }, /* @__PURE__ */ import_react8.default.createElement("strong", null, cat.name)), /* @__PURE__ */ import_react8.default.createElement("td", { style: styles6.tdMuted }, cat.description || "\u2014"), /* @__PURE__ */ import_react8.default.createElement("td", { style: styles6.td }, /* @__PURE__ */ import_react8.default.createElement(
       "button",
       {
         style: styles6.btnEdit,
         onClick: () => setModal({ mode: "edit", category: cat })
       },
       "Editar"
-    ), /* @__PURE__ */ import_react7.default.createElement(
+    ), /* @__PURE__ */ import_react8.default.createElement(
       "button",
       {
         style: styles6.btnDelete,
         onClick: () => handleDelete(cat.id)
       },
       "Eliminar"
-    ))))))), modal && /* @__PURE__ */ import_react7.default.createElement(
+    ))))))), modal && /* @__PURE__ */ import_react8.default.createElement(
       CategoryModal,
       {
         category: modal !== "create" ? modal.category : null,
@@ -20634,7 +20735,7 @@
   }
 
   // src/renderer/components/CustomersView.js
-  var import_react8 = __toESM(require_react());
+  var import_react9 = __toESM(require_react());
   var styles7 = {
     toolbar: {
       display: "flex",
@@ -20781,7 +20882,7 @@
   };
   function CustomerModal({ customer, onSave, onCancel }) {
     const isEdit = Boolean(customer);
-    const [form, setForm] = (0, import_react8.useState)({
+    const [form, setForm] = (0, import_react9.useState)({
       name: customer?.name ?? "",
       phone: customer?.phone ?? "",
       email: customer?.email ?? ""
@@ -20795,7 +20896,7 @@
         email: form.email.trim() || null
       });
     };
-    return /* @__PURE__ */ import_react8.default.createElement("div", { style: styles7.overlay, onClick: (e) => e.target === e.currentTarget && onCancel() }, /* @__PURE__ */ import_react8.default.createElement("div", { style: styles7.modal }, /* @__PURE__ */ import_react8.default.createElement("h2", { style: styles7.modalTitle }, isEdit ? "Editar Cliente" : "Nuevo Cliente"), /* @__PURE__ */ import_react8.default.createElement("form", { onSubmit: handleSubmit }, /* @__PURE__ */ import_react8.default.createElement("div", { style: styles7.field }, /* @__PURE__ */ import_react8.default.createElement("label", { style: styles7.label }, "Nombre *"), /* @__PURE__ */ import_react8.default.createElement(
+    return /* @__PURE__ */ import_react9.default.createElement("div", { style: styles7.overlay, onClick: (e) => e.target === e.currentTarget && onCancel() }, /* @__PURE__ */ import_react9.default.createElement("div", { style: styles7.modal }, /* @__PURE__ */ import_react9.default.createElement("h2", { style: styles7.modalTitle }, isEdit ? "Editar Cliente" : "Nuevo Cliente"), /* @__PURE__ */ import_react9.default.createElement("form", { onSubmit: handleSubmit }, /* @__PURE__ */ import_react9.default.createElement("div", { style: styles7.field }, /* @__PURE__ */ import_react9.default.createElement("label", { style: styles7.label }, "Nombre *"), /* @__PURE__ */ import_react9.default.createElement(
       "input",
       {
         style: styles7.input,
@@ -20805,7 +20906,7 @@
         required: true,
         autoFocus: true
       }
-    )), /* @__PURE__ */ import_react8.default.createElement("div", { style: styles7.field }, /* @__PURE__ */ import_react8.default.createElement("label", { style: styles7.label }, "Tel\xE9fono"), /* @__PURE__ */ import_react8.default.createElement(
+    )), /* @__PURE__ */ import_react9.default.createElement("div", { style: styles7.field }, /* @__PURE__ */ import_react9.default.createElement("label", { style: styles7.label }, "Tel\xE9fono"), /* @__PURE__ */ import_react9.default.createElement(
       "input",
       {
         style: styles7.input,
@@ -20814,7 +20915,7 @@
         placeholder: "Ej: 555-1234",
         type: "tel"
       }
-    )), /* @__PURE__ */ import_react8.default.createElement("div", { style: styles7.field }, /* @__PURE__ */ import_react8.default.createElement("label", { style: styles7.label }, "Correo electr\xF3nico"), /* @__PURE__ */ import_react8.default.createElement(
+    )), /* @__PURE__ */ import_react9.default.createElement("div", { style: styles7.field }, /* @__PURE__ */ import_react9.default.createElement("label", { style: styles7.label }, "Correo electr\xF3nico"), /* @__PURE__ */ import_react9.default.createElement(
       "input",
       {
         style: styles7.input,
@@ -20823,14 +20924,14 @@
         placeholder: "correo@ejemplo.com",
         type: "email"
       }
-    )), /* @__PURE__ */ import_react8.default.createElement("div", { style: styles7.actions }, /* @__PURE__ */ import_react8.default.createElement("button", { type: "button", style: styles7.btnCancel, onClick: onCancel }, "Cancelar"), /* @__PURE__ */ import_react8.default.createElement("button", { type: "submit", style: styles7.btnSave }, isEdit ? "Guardar cambios" : "Crear cliente")))));
+    )), /* @__PURE__ */ import_react9.default.createElement("div", { style: styles7.actions }, /* @__PURE__ */ import_react9.default.createElement("button", { type: "button", style: styles7.btnCancel, onClick: onCancel }, "Cancelar"), /* @__PURE__ */ import_react9.default.createElement("button", { type: "submit", style: styles7.btnSave }, isEdit ? "Guardar cambios" : "Crear cliente")))));
   }
   function CustomersView() {
-    const [customers, setCustomers] = (0, import_react8.useState)([]);
-    const [loading, setLoading] = (0, import_react8.useState)(true);
-    const [error, setError] = (0, import_react8.useState)(null);
-    const [modal, setModal] = (0, import_react8.useState)(null);
-    const load = (0, import_react8.useCallback)(async () => {
+    const [customers, setCustomers] = (0, import_react9.useState)([]);
+    const [loading, setLoading] = (0, import_react9.useState)(true);
+    const [error, setError] = (0, import_react9.useState)(null);
+    const [modal, setModal] = (0, import_react9.useState)(null);
+    const load = (0, import_react9.useCallback)(async () => {
       try {
         setLoading(true);
         setCustomers(await window.electron.customers.getAll());
@@ -20841,7 +20942,7 @@
         setLoading(false);
       }
     }, []);
-    (0, import_react8.useEffect)(() => {
+    (0, import_react9.useEffect)(() => {
       load();
     }, [load]);
     const handleSave = async (formData) => {
@@ -20866,21 +20967,21 @@
         setError("Error al eliminar el cliente.");
       }
     };
-    return /* @__PURE__ */ import_react8.default.createElement(import_react8.default.Fragment, null, /* @__PURE__ */ import_react8.default.createElement("div", { style: styles7.toolbar }, /* @__PURE__ */ import_react8.default.createElement("h2", { style: styles7.sectionTitle }, "Clientes"), /* @__PURE__ */ import_react8.default.createElement("button", { style: styles7.btnPrimary, onClick: () => setModal("create") }, "+ Nuevo Cliente")), error && /* @__PURE__ */ import_react8.default.createElement("div", { style: styles7.errorBox }, error), loading ? /* @__PURE__ */ import_react8.default.createElement("p", { style: { color: "#64748b", fontSize: "14px" } }, "Cargando...") : /* @__PURE__ */ import_react8.default.createElement("div", { style: styles7.wrapper }, customers.length === 0 ? /* @__PURE__ */ import_react8.default.createElement("p", { style: styles7.empty }, "No hay clientes registrados. Agrega el primero.") : /* @__PURE__ */ import_react8.default.createElement("table", { style: styles7.table }, /* @__PURE__ */ import_react8.default.createElement("thead", null, /* @__PURE__ */ import_react8.default.createElement("tr", null, /* @__PURE__ */ import_react8.default.createElement("th", { style: styles7.th }, "Nombre"), /* @__PURE__ */ import_react8.default.createElement("th", { style: styles7.th }, "Tel\xE9fono"), /* @__PURE__ */ import_react8.default.createElement("th", { style: styles7.th }, "Correo electr\xF3nico"), /* @__PURE__ */ import_react8.default.createElement("th", { style: styles7.th }, "Acciones"))), /* @__PURE__ */ import_react8.default.createElement("tbody", null, customers.map((customer) => /* @__PURE__ */ import_react8.default.createElement("tr", { key: customer.id }, /* @__PURE__ */ import_react8.default.createElement("td", { style: styles7.td }, /* @__PURE__ */ import_react8.default.createElement("strong", null, customer.name)), /* @__PURE__ */ import_react8.default.createElement("td", { style: styles7.tdMuted }, customer.phone || "\u2014"), /* @__PURE__ */ import_react8.default.createElement("td", { style: styles7.tdMuted }, customer.email || "\u2014"), /* @__PURE__ */ import_react8.default.createElement("td", { style: styles7.td }, /* @__PURE__ */ import_react8.default.createElement(
+    return /* @__PURE__ */ import_react9.default.createElement(import_react9.default.Fragment, null, /* @__PURE__ */ import_react9.default.createElement("div", { style: styles7.toolbar }, /* @__PURE__ */ import_react9.default.createElement("h2", { style: styles7.sectionTitle }, "Clientes"), /* @__PURE__ */ import_react9.default.createElement("button", { style: styles7.btnPrimary, onClick: () => setModal("create") }, "+ Nuevo Cliente")), error && /* @__PURE__ */ import_react9.default.createElement("div", { style: styles7.errorBox }, error), loading ? /* @__PURE__ */ import_react9.default.createElement("p", { style: { color: "#64748b", fontSize: "14px" } }, "Cargando...") : /* @__PURE__ */ import_react9.default.createElement("div", { style: styles7.wrapper }, customers.length === 0 ? /* @__PURE__ */ import_react9.default.createElement("p", { style: styles7.empty }, "No hay clientes registrados. Agrega el primero.") : /* @__PURE__ */ import_react9.default.createElement("table", { style: styles7.table }, /* @__PURE__ */ import_react9.default.createElement("thead", null, /* @__PURE__ */ import_react9.default.createElement("tr", null, /* @__PURE__ */ import_react9.default.createElement("th", { style: styles7.th }, "Nombre"), /* @__PURE__ */ import_react9.default.createElement("th", { style: styles7.th }, "Tel\xE9fono"), /* @__PURE__ */ import_react9.default.createElement("th", { style: styles7.th }, "Correo electr\xF3nico"), /* @__PURE__ */ import_react9.default.createElement("th", { style: styles7.th }, "Acciones"))), /* @__PURE__ */ import_react9.default.createElement("tbody", null, customers.map((customer) => /* @__PURE__ */ import_react9.default.createElement("tr", { key: customer.id }, /* @__PURE__ */ import_react9.default.createElement("td", { style: styles7.td }, /* @__PURE__ */ import_react9.default.createElement("strong", null, customer.name)), /* @__PURE__ */ import_react9.default.createElement("td", { style: styles7.tdMuted }, customer.phone || "\u2014"), /* @__PURE__ */ import_react9.default.createElement("td", { style: styles7.tdMuted }, customer.email || "\u2014"), /* @__PURE__ */ import_react9.default.createElement("td", { style: styles7.td }, /* @__PURE__ */ import_react9.default.createElement(
       "button",
       {
         style: styles7.btnEdit,
         onClick: () => setModal({ mode: "edit", customer })
       },
       "Editar"
-    ), /* @__PURE__ */ import_react8.default.createElement(
+    ), /* @__PURE__ */ import_react9.default.createElement(
       "button",
       {
         style: styles7.btnDelete,
         onClick: () => handleDelete(customer.id)
       },
       "Eliminar"
-    ))))))), modal && /* @__PURE__ */ import_react8.default.createElement(
+    ))))))), modal && /* @__PURE__ */ import_react9.default.createElement(
       CustomerModal,
       {
         customer: modal !== "create" ? modal.customer : null,
@@ -20892,6 +20993,7 @@
 
   // src/renderer/app.js
   var TABS = [
+    { id: "dashboard", label: "Dashboard" },
     { id: "inventory", label: "Inventario" },
     { id: "new-sale", label: "Nueva Venta" },
     { id: "history", label: "Historial" },
@@ -20935,8 +21037,8 @@
     main: { padding: "24px" }
   };
   function App() {
-    const [activeTab, setActiveTab] = (0, import_react9.useState)("inventory");
-    return /* @__PURE__ */ import_react9.default.createElement("div", { style: styles8.app }, /* @__PURE__ */ import_react9.default.createElement("header", { style: styles8.header }, /* @__PURE__ */ import_react9.default.createElement("span", { style: styles8.title }, "Inventario y Ventas"), /* @__PURE__ */ import_react9.default.createElement("nav", { style: styles8.nav }, TABS.map((tab) => /* @__PURE__ */ import_react9.default.createElement(
+    const [activeTab, setActiveTab] = (0, import_react10.useState)("dashboard");
+    return /* @__PURE__ */ import_react10.default.createElement("div", { style: styles8.app }, /* @__PURE__ */ import_react10.default.createElement("header", { style: styles8.header }, /* @__PURE__ */ import_react10.default.createElement("span", { style: styles8.title }, "Inventario y Ventas"), /* @__PURE__ */ import_react10.default.createElement("nav", { style: styles8.nav }, TABS.map((tab) => /* @__PURE__ */ import_react10.default.createElement(
       "button",
       {
         key: tab.id,
@@ -20944,12 +21046,12 @@
         onClick: () => setActiveTab(tab.id)
       },
       tab.label
-    )))), /* @__PURE__ */ import_react9.default.createElement("main", { style: styles8.main }, activeTab === "inventory" && /* @__PURE__ */ import_react9.default.createElement(InventoryView, null), activeTab === "new-sale" && /* @__PURE__ */ import_react9.default.createElement(NewSale, { onSaleComplete: () => setActiveTab("history") }), activeTab === "history" && /* @__PURE__ */ import_react9.default.createElement(SaleHistory, null), activeTab === "categories" && /* @__PURE__ */ import_react9.default.createElement(CategoriesView, null), activeTab === "customers" && /* @__PURE__ */ import_react9.default.createElement(CustomersView, null)));
+    )))), /* @__PURE__ */ import_react10.default.createElement("main", { style: styles8.main }, activeTab === "dashboard" && /* @__PURE__ */ import_react10.default.createElement(DashboardView, { onNavigate: setActiveTab }), activeTab === "inventory" && /* @__PURE__ */ import_react10.default.createElement(InventoryView, null), activeTab === "new-sale" && /* @__PURE__ */ import_react10.default.createElement(NewSale, { onSaleComplete: () => setActiveTab("history") }), activeTab === "history" && /* @__PURE__ */ import_react10.default.createElement(SaleHistory, null), activeTab === "categories" && /* @__PURE__ */ import_react10.default.createElement(CategoriesView, null), activeTab === "customers" && /* @__PURE__ */ import_react10.default.createElement(CustomersView, null)));
   }
 
   // src/renderer/index.js
   var root = (0, import_client.createRoot)(document.getElementById("root"));
-  root.render(/* @__PURE__ */ import_react10.default.createElement(App, null));
+  root.render(/* @__PURE__ */ import_react11.default.createElement(App, null));
 })();
 /*! Bundled license information:
 

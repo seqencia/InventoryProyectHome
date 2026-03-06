@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import DashboardView from './components/DashboardView';
 import InventoryView from './components/InventoryView';
 import NewSale from './components/NewSale';
 import SaleHistory from './components/SaleHistory';
@@ -6,6 +7,7 @@ import CategoriesView from './components/CategoriesView';
 import CustomersView from './components/CustomersView';
 
 const TABS = [
+  { id: 'dashboard', label: 'Dashboard' },
   { id: 'inventory', label: 'Inventario' },
   { id: 'new-sale', label: 'Nueva Venta' },
   { id: 'history', label: 'Historial' },
@@ -51,7 +53,7 @@ const styles = {
 };
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState('inventory');
+  const [activeTab, setActiveTab] = useState('dashboard');
 
   return (
     <div style={styles.app}>
@@ -70,6 +72,7 @@ export default function App() {
         </nav>
       </header>
       <main style={styles.main}>
+        {activeTab === 'dashboard' && <DashboardView onNavigate={setActiveTab} />}
         {activeTab === 'inventory' && <InventoryView />}
         {activeTab === 'new-sale' && (
           <NewSale onSaleComplete={() => setActiveTab('history')} />

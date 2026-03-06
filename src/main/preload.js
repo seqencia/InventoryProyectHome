@@ -1,6 +1,9 @@
 const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld('electron', {
+  dashboard: {
+    getSummary: () => ipcRenderer.invoke('dashboard:getSummary'),
+  },
   products: {
     getAll: () => ipcRenderer.invoke('products:getAll'),
     create: (data) => ipcRenderer.invoke('products:create', data),

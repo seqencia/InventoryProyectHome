@@ -10,6 +10,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [0.6.0] - 2026-03-05
+
+### Added
+
+#### Dashboard
+- `dashboard:getSummary` IPC handler aggregates all metrics in a single call: loads sales, sale details, and products in parallel, then computes everything in JS
+- **Ventas Hoy** stat card: count of today's sales with average per sale
+- **Ingresos Hoy** stat card: total revenue for today
+- **Alertas de Stock Bajo** card: products with stock ≤ 5 sorted by stock ascending; shows "Sin stock" badge in red, low stock in amber; clicking navigates to Inventario; green confirmation when all stock is healthy
+- **Top 5 Más Vendidos** card: aggregates all-time quantity sold per product from `sale_details`, ranked list with proportional bar visualization
+- **Ventas Recientes** card: last 5 sales with date, customer, and total; "Ver todas →" link navigates to Historial
+- Skeleton loading state while data is fetched
+- Dashboard added as the first tab and default home screen
+
+---
+
 ## [0.5.0] - 2026-03-05
 
 ### Added
