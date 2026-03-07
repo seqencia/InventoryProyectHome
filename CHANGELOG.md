@@ -10,6 +10,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [0.10.0] - 2026-03-07
+
+### Added
+
+#### Barcode scanner support
+- **ProductForm (Catálogo)**: barcode input captures scanner input (keyboard wedge); pressing Enter moves focus to the Número de serie field instead of submitting the form; barcode label shows a small scanner icon
+- **Nueva Venta — barcode lookup**: dedicated barcode input at the top of the product panel; pressing Enter (or scanner trigger) finds the product by exact barcode match and adds it to the cart; displays a 2-second inline feedback message (green on success, red if not found or out of stock); input clears and re-focuses automatically after each scan
+- Scanner icon (inline SVG barcode pattern) shown next to both barcode fields
+
+---
+
 ## [0.9.0] - 2026-03-05
 
 ### Added

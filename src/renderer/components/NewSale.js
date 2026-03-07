@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import SaleReceipt from './SaleReceipt';
 
 const styles = {
@@ -261,6 +261,44 @@ const styles = {
     color: '#1e293b',
     marginBottom: '16px',
   },
+  barcodeSection: {
+    padding: '10px 16px',
+    borderBottom: '1px solid #f1f5f9',
+    background: '#fafafa',
+  },
+  barcodeLabel: {
+    fontSize: '11px',
+    fontWeight: '600',
+    color: '#64748b',
+    textTransform: 'uppercase',
+    letterSpacing: '0.5px',
+    marginBottom: '5px',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '5px',
+  },
+  barcodeInput: {
+    width: '100%',
+    padding: '7px 10px',
+    border: '1px solid #e2e8f0',
+    borderRadius: '6px',
+    fontSize: '13px',
+    outline: 'none',
+    boxSizing: 'border-box',
+    fontFamily: 'monospace',
+  },
+  barcodeMsgOk: {
+    fontSize: '11px',
+    color: '#16a34a',
+    marginTop: '4px',
+    fontWeight: '500',
+  },
+  barcodeMsgErr: {
+    fontSize: '11px',
+    color: '#dc2626',
+    marginTop: '4px',
+    fontWeight: '500',
+  },
 };
 
 export default function NewSale({ onSaleComplete }) {
@@ -274,6 +312,10 @@ export default function NewSale({ onSaleComplete }) {
   const [selectedCustomer, setSelectedCustomer] = useState(null);
   const [customerQuery, setCustomerQuery] = useState('');
   const [paymentMethod, setPaymentMethod] = useState('Efectivo');
+  const [barcodeQuery, setBarcodeQuery] = useState('');
+  const [barcodeMsg, setBarcodeMsg] = useState(null); // { type: 'ok'|'err', text }
+  const barcodeRef = useRef(null);
+  const barcodeMsgTimerRef = useRef(null);
 
   useEffect(() => {
     window.electron.products.getAll().then(setAllProducts);
@@ -306,6 +348,34 @@ export default function NewSale({ onSaleComplete }) {
   };
 
   const availableStock = (product) => product.stock - cartQtyFor(product.id);
+
+  const showBarcodeMsg = (type, text) => {
+    if (barcodeMsgTimerRef.current) clearTimeout(barcodeMsgTimerRef.current);
+    setBarcodeMsg({ type, text });
+    barcodeMsgTimerRef.current = setTimeout(() => setBarcodeMsg(null), 2000);
+  };
+
+  const handleBarcodeScan = (e) => {
+    if (e.key !== 'Enter') return;
+    e.preventDefault();
+    const code = barcodeQuery.trim();
+    if (!code) return;
+
+    const product = allProducts.find(
+      (p) => p.barcode && p.barcode.trim() === code
+    );
+
+    if (!product) {
+      showBarcodeMsg('err', `Sin resultados para "${code}"`);
+    } else if (availableStock(product) <= 0) {
+      showBarcodeMsg('err', `Sin stock: ${product.name}`);
+    } else {
+      addToCart(product);
+      showBarcodeMsg('ok', `Agregado: ${product.name}`);
+    }
+    setBarcodeQuery('');
+    barcodeRef.current?.focus();
+  };
 
   const addToCart = (product) => {
     if (availableStock(product) <= 0) return;
@@ -386,6 +456,34 @@ export default function NewSale({ onSaleComplete }) {
         {/* Product search panel */}
         <div style={styles.panel}>
           <div style={styles.panelHeader}>Productos</div>
+
+          {/* Barcode scanner input */}
+          <div style={styles.barcodeSection}>
+            <div style={styles.barcodeLabel}>
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor" style={{ opacity: 0.6 }}>
+                <rect x="0"   y="0" width="1.5" height="12" />
+                <rect x="3"   y="0" width="1"   height="12" />
+                <rect x="5.5" y="0" width="2"   height="12" />
+                <rect x="9"   y="0" width="1"   height="12" />
+                <rect x="11" y="0" width="1"   height="12" />
+              </svg>
+              Escanear código de barras
+            </div>
+            <input
+              ref={barcodeRef}
+              style={styles.barcodeInput}
+              placeholder="Escanea o escribe el código y presiona Enter"
+              value={barcodeQuery}
+              onChange={(e) => setBarcodeQuery(e.target.value)}
+              onKeyDown={handleBarcodeScan}
+            />
+            {barcodeMsg && (
+              <div style={barcodeMsg.type === 'ok' ? styles.barcodeMsgOk : styles.barcodeMsgErr}>
+                {barcodeMsg.text}
+              </div>
+            )}
+          </div>
+
           <div style={styles.searchBox}>
             <input
               style={styles.searchInput}

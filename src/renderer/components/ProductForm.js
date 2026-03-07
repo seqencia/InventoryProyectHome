@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 const CONDITIONS = ['Nuevo', 'Bueno', 'Regular', 'Para reparar'];
 const STATUSES = ['Disponible', 'Reservado', 'Vendido', 'En reparación'];
@@ -118,8 +118,22 @@ function SectionTitle({ children }) {
   return <div style={s.sectionTitle}>{children}</div>;
 }
 
+function BarcodeIcon() {
+  return (
+    <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor"
+      style={{ display: 'inline-block', verticalAlign: 'middle', marginLeft: '5px', opacity: 0.45 }}>
+      <rect x="0"    y="0" width="1.5" height="12" />
+      <rect x="3"    y="0" width="1"   height="12" />
+      <rect x="5.5"  y="0" width="2"   height="12" />
+      <rect x="9"    y="0" width="1"   height="12" />
+      <rect x="11"   y="0" width="1"   height="12" />
+    </svg>
+  );
+}
+
 export default function ProductForm({ product, onSave, onCancel }) {
   const isEdit = Boolean(product);
+  const serialNumberRef = useRef(null);
 
   const [form, setForm] = useState({
     name: product?.name ?? '',
@@ -202,12 +216,18 @@ export default function ProductForm({ product, onSave, onCancel }) {
                   <div style={s.hint}>Se genera automáticamente si se deja vacío</div>
                 </div>
                 <div style={s.field}>
-                  <label style={s.label}>Código de barras</label>
+                  <label style={s.label}>Código de barras <BarcodeIcon /></label>
                   <input
                     style={s.input}
                     value={form.barcode}
                     onChange={set('barcode')}
                     placeholder="Escanear o ingresar"
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        e.preventDefault();
+                        serialNumberRef.current?.focus();
+                      }
+                    }}
                   />
                 </div>
               </div>
@@ -215,6 +235,7 @@ export default function ProductForm({ product, onSave, onCancel }) {
               <div style={s.field}>
                 <label style={s.label}>Número de serie</label>
                 <input
+                  ref={serialNumberRef}
                   style={s.input}
                   value={form.serial_number}
                   onChange={set('serial_number')}
