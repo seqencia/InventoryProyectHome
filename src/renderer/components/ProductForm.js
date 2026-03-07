@@ -5,112 +5,54 @@ const STATUSES = ['Disponible', 'Reservado', 'Vendido', 'En reparación'];
 
 const s = {
   overlay: {
-    position: 'fixed',
-    inset: 0,
-    background: 'rgba(0,0,0,0.5)',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    zIndex: 1000,
+    position: 'fixed', inset: 0,
+    background: 'rgba(0,0,0,0.4)',
+    backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)',
+    display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000,
   },
   modal: {
-    background: 'white',
-    borderRadius: '12px',
-    width: '580px',
-    maxWidth: '95vw',
-    maxHeight: '90vh',
-    display: 'flex',
-    flexDirection: 'column',
-    boxShadow: '0 20px 60px rgba(0,0,0,0.3)',
+    background: 'white', borderRadius: '12px', width: '580px',
+    maxWidth: '95vw', maxHeight: '90vh', display: 'flex', flexDirection: 'column',
+    boxShadow: '0 24px 64px rgba(0,0,0,0.18)',
   },
-  header: {
-    padding: '20px 24px 16px',
-    borderBottom: '1px solid #f1f5f9',
-    flexShrink: 0,
-  },
-  title: { fontSize: '17px', fontWeight: '600', color: '#1e293b', margin: 0 },
+  header: { padding: '20px 24px 16px', borderBottom: '1px solid #f0f0f0', flexShrink: 0 },
+  title: { fontSize: '17px', fontWeight: '700', color: '#1a1a1a', margin: 0 },
   body: { padding: '0 24px', overflowY: 'auto', flex: 1 },
   footer: {
-    padding: '16px 24px',
-    borderTop: '1px solid #f1f5f9',
-    display: 'flex',
-    justifyContent: 'flex-end',
-    gap: '8px',
-    flexShrink: 0,
+    padding: '16px 24px', borderTop: '1px solid #f0f0f0',
+    display: 'flex', justifyContent: 'flex-end', gap: '8px', flexShrink: 0,
   },
-  // Section
   section: { paddingTop: '16px', paddingBottom: '4px' },
   sectionTitle: {
-    fontSize: '11px',
-    fontWeight: '700',
-    color: '#94a3b8',
-    textTransform: 'uppercase',
-    letterSpacing: '0.8px',
-    marginBottom: '12px',
-    paddingBottom: '6px',
-    borderBottom: '1px solid #f1f5f9',
+    fontSize: '11px', fontWeight: '700', color: '#9e9e9e',
+    textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: '12px',
+    paddingBottom: '6px', borderBottom: '1px solid #f0f0f0',
   },
-  // Fields
   field: { marginBottom: '12px' },
-  label: {
-    display: 'block',
-    fontSize: '12px',
-    fontWeight: '500',
-    color: '#475569',
-    marginBottom: '4px',
-  },
-  hint: { fontSize: '11px', color: '#94a3b8', marginTop: '3px' },
+  label: { display: 'block', fontSize: '12px', fontWeight: '600', color: '#5c5c5c', marginBottom: '4px' },
+  hint: { fontSize: '11px', color: '#9e9e9e', marginTop: '3px' },
   input: {
-    width: '100%',
-    padding: '7px 10px',
-    border: '1px solid #e2e8f0',
-    borderRadius: '6px',
-    fontSize: '13px',
-    outline: 'none',
-    boxSizing: 'border-box',
+    width: '100%', padding: '8px 12px', border: '1px solid #d1d1d1',
+    borderRadius: '6px', fontSize: '13px', boxSizing: 'border-box',
   },
   select: {
-    width: '100%',
-    padding: '7px 10px',
-    border: '1px solid #e2e8f0',
-    borderRadius: '6px',
-    fontSize: '13px',
-    background: 'white',
-    boxSizing: 'border-box',
+    width: '100%', padding: '8px 12px', border: '1px solid #d1d1d1',
+    borderRadius: '6px', fontSize: '13px', background: 'white', boxSizing: 'border-box',
   },
   textarea: {
-    width: '100%',
-    padding: '7px 10px',
-    border: '1px solid #e2e8f0',
-    borderRadius: '6px',
-    fontSize: '13px',
-    resize: 'vertical',
-    minHeight: '64px',
-    boxSizing: 'border-box',
-    fontFamily: 'inherit',
+    width: '100%', padding: '8px 12px', border: '1px solid #d1d1d1',
+    borderRadius: '6px', fontSize: '13px', resize: 'vertical', minHeight: '64px',
+    boxSizing: 'border-box', fontFamily: 'inherit',
   },
   grid2: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' },
   grid3: { display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '12px' },
-  grid4: { display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: '12px' },
-  // Buttons
   btnCancel: {
-    background: '#f1f5f9',
-    border: 'none',
-    padding: '8px 16px',
-    borderRadius: '6px',
-    cursor: 'pointer',
-    fontSize: '14px',
-    color: '#475569',
+    background: 'white', border: '1px solid #d1d1d1',
+    padding: '8px 16px', borderRadius: '8px', cursor: 'pointer', fontSize: '14px', color: '#5c5c5c',
   },
   btnSave: {
-    background: '#3b82f6',
-    color: 'white',
-    border: 'none',
-    padding: '8px 20px',
-    borderRadius: '6px',
-    cursor: 'pointer',
-    fontSize: '14px',
-    fontWeight: '500',
+    background: '#0078d4', color: 'white', border: 'none',
+    padding: '8px 20px', borderRadius: '8px', cursor: 'pointer', fontSize: '14px', fontWeight: '500',
   },
 };
 
@@ -122,11 +64,11 @@ function BarcodeIcon() {
   return (
     <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor"
       style={{ display: 'inline-block', verticalAlign: 'middle', marginLeft: '5px', opacity: 0.45 }}>
-      <rect x="0"    y="0" width="1.5" height="12" />
-      <rect x="3"    y="0" width="1"   height="12" />
-      <rect x="5.5"  y="0" width="2"   height="12" />
-      <rect x="9"    y="0" width="1"   height="12" />
-      <rect x="11"   y="0" width="1"   height="12" />
+      <rect x="0"   y="0" width="1.5" height="12" />
+      <rect x="3"   y="0" width="1"   height="12" />
+      <rect x="5.5" y="0" width="2"   height="12" />
+      <rect x="9"   y="0" width="1"   height="12" />
+      <rect x="11"  y="0" width="1"   height="12" />
     </svg>
   );
 }
@@ -156,8 +98,7 @@ export default function ProductForm({ product, onSave, onCancel }) {
     window.electron.categories.getAll().then(setCategories).catch(() => {});
   }, []);
 
-  const set = (field) => (e) =>
-    setForm((prev) => ({ ...prev, [field]: e.target.value }));
+  const set = (field) => (e) => setForm((prev) => ({ ...prev, [field]: e.target.value }));
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -195,6 +136,7 @@ export default function ProductForm({ product, onSave, onCancel }) {
               <div style={s.field}>
                 <label style={s.label}>Nombre *</label>
                 <input
+                  className="fl-input"
                   style={s.input}
                   value={form.name}
                   onChange={set('name')}
@@ -208,6 +150,7 @@ export default function ProductForm({ product, onSave, onCancel }) {
                 <div style={s.field}>
                   <label style={s.label}>SKU / Código</label>
                   <input
+                    className="fl-input"
                     style={s.input}
                     value={form.sku}
                     onChange={set('sku')}
@@ -218,6 +161,7 @@ export default function ProductForm({ product, onSave, onCancel }) {
                 <div style={s.field}>
                   <label style={s.label}>Código de barras <BarcodeIcon /></label>
                   <input
+                    className="fl-input"
                     style={s.input}
                     value={form.barcode}
                     onChange={set('barcode')}
@@ -236,6 +180,7 @@ export default function ProductForm({ product, onSave, onCancel }) {
                 <label style={s.label}>Número de serie</label>
                 <input
                   ref={serialNumberRef}
+                  className="fl-input"
                   style={s.input}
                   value={form.serial_number}
                   onChange={set('serial_number')}
@@ -250,14 +195,14 @@ export default function ProductForm({ product, onSave, onCancel }) {
               <div style={s.grid2}>
                 <div style={s.field}>
                   <label style={s.label}>Condición</label>
-                  <select style={s.select} value={form.condition} onChange={set('condition')}>
+                  <select className="fl-select" style={s.select} value={form.condition} onChange={set('condition')}>
                     <option value="">Sin especificar</option>
                     {CONDITIONS.map((c) => <option key={c} value={c}>{c}</option>)}
                   </select>
                 </div>
                 <div style={s.field}>
                   <label style={s.label}>Estado</label>
-                  <select style={s.select} value={form.status} onChange={set('status')}>
+                  <select className="fl-select" style={s.select} value={form.status} onChange={set('status')}>
                     {STATUSES.map((st) => <option key={st} value={st}>{st}</option>)}
                   </select>
                 </div>
@@ -270,68 +215,34 @@ export default function ProductForm({ product, onSave, onCancel }) {
               <div style={s.grid3}>
                 <div style={s.field}>
                   <label style={s.label}>Precio de costo ($)</label>
-                  <input
-                    style={s.input}
-                    type="number"
-                    min="0"
-                    step="0.01"
-                    value={form.cost_price}
-                    onChange={set('cost_price')}
-                    placeholder="0.00"
-                  />
+                  <input className="fl-input" style={s.input} type="number" min="0" step="0.01" value={form.cost_price} onChange={set('cost_price')} placeholder="0.00" />
                 </div>
                 <div style={s.field}>
                   <label style={s.label}>Precio de venta ($) *</label>
-                  <input
-                    style={s.input}
-                    type="number"
-                    min="0"
-                    step="0.01"
-                    value={form.sale_price}
-                    onChange={set('sale_price')}
-                    placeholder="0.00"
-                    required
-                  />
+                  <input className="fl-input" style={s.input} type="number" min="0" step="0.01" value={form.sale_price} onChange={set('sale_price')} placeholder="0.00" required />
                 </div>
                 <div style={s.field}>
                   <label style={s.label}>Precio oferta ($)</label>
-                  <input
-                    style={s.input}
-                    type="number"
-                    min="0"
-                    step="0.01"
-                    value={form.offer_price}
-                    onChange={set('offer_price')}
-                    placeholder="Vacío = sin oferta"
-                  />
+                  <input className="fl-input" style={s.input} type="number" min="0" step="0.01" value={form.offer_price} onChange={set('offer_price')} placeholder="Vacío = sin oferta" />
                 </div>
               </div>
             </div>
 
-            {/* ── Clasificación y Ubicación ────────────────────────── */}
+            {/* ── Clasificación y Ubicación ───────────────────────── */}
             <div style={s.section}>
               <SectionTitle>Clasificación y Ubicación</SectionTitle>
               <div style={s.grid2}>
                 <div style={s.field}>
                   <label style={s.label}>Categoría</label>
-                  <select style={s.select} value={form.category} onChange={set('category')}>
+                  <select className="fl-select" style={s.select} value={form.category} onChange={set('category')}>
                     <option value="">Sin categoría</option>
-                    {categories.map((cat) => (
-                      <option key={cat.id} value={cat.name}>{cat.name}</option>
-                    ))}
+                    {categories.map((cat) => <option key={cat.id} value={cat.name}>{cat.name}</option>)}
                   </select>
-                  {categories.length === 0 && (
-                    <div style={s.hint}>Gestiona categorías en la pestaña "Categorías"</div>
-                  )}
+                  {categories.length === 0 && <div style={s.hint}>Gestiona categorías en la pestaña "Categorías"</div>}
                 </div>
                 <div style={s.field}>
                   <label style={s.label}>Ubicación física</label>
-                  <input
-                    style={s.input}
-                    value={form.location}
-                    onChange={set('location')}
-                    placeholder="Ej: Estante A3"
-                  />
+                  <input className="fl-input" style={s.input} value={form.location} onChange={set('location')} placeholder="Ej: Estante A3" />
                 </div>
               </div>
             </div>
@@ -341,31 +252,19 @@ export default function ProductForm({ product, onSave, onCancel }) {
               <SectionTitle>Descripción y Notas</SectionTitle>
               <div style={s.field}>
                 <label style={s.label}>Descripción</label>
-                <textarea
-                  style={s.textarea}
-                  value={form.description}
-                  onChange={set('description')}
-                  placeholder="Descripción general del producto"
-                />
+                <textarea className="fl-input" style={s.textarea} value={form.description} onChange={set('description')} placeholder="Descripción general del producto" />
               </div>
               <div style={s.field}>
                 <label style={s.label}>Notas técnicas</label>
-                <textarea
-                  style={{ ...s.textarea, minHeight: '56px' }}
-                  value={form.technical_notes}
-                  onChange={set('technical_notes')}
-                  placeholder="Reparaciones, detalles técnicos, observaciones..."
-                />
+                <textarea className="fl-input" style={{ ...s.textarea, minHeight: '56px' }} value={form.technical_notes} onChange={set('technical_notes')} placeholder="Reparaciones, detalles técnicos, observaciones..." />
               </div>
             </div>
 
           </div>
 
           <div style={s.footer}>
-            <button type="button" style={s.btnCancel} onClick={onCancel}>
-              Cancelar
-            </button>
-            <button type="submit" style={s.btnSave}>
+            <button type="button" className="fl-btn-ghost" style={s.btnCancel} onClick={onCancel}>Cancelar</button>
+            <button type="submit" className="fl-btn-primary" style={s.btnSave}>
               {isEdit ? 'Guardar cambios' : 'Crear producto'}
             </button>
           </div>

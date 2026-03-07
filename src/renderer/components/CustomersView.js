@@ -1,147 +1,64 @@
 import React, { useState, useEffect, useCallback } from 'react';
 
-const styles = {
-  toolbar: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: '16px',
-  },
-  sectionTitle: { fontSize: '17px', fontWeight: '600', color: '#1e293b' },
+const s = {
+  toolbar: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' },
+  sectionTitle: { fontSize: '18px', fontWeight: '700', color: '#1a1a1a', letterSpacing: '-0.3px' },
   btnPrimary: {
-    background: '#3b82f6',
-    color: 'white',
-    border: 'none',
-    padding: '8px 16px',
-    borderRadius: '6px',
-    cursor: 'pointer',
-    fontSize: '14px',
-    fontWeight: '500',
+    background: '#0078d4', color: 'white', border: 'none',
+    padding: '8px 18px', borderRadius: '8px', cursor: 'pointer',
+    fontSize: '14px', fontWeight: '500',
   },
   errorBox: {
-    background: '#fee2e2',
-    color: '#dc2626',
-    padding: '12px 16px',
-    borderRadius: '6px',
-    marginBottom: '16px',
-    fontSize: '14px',
+    background: '#ffebee', color: '#a4262c', padding: '12px 16px',
+    borderRadius: '8px', marginBottom: '16px', fontSize: '14px',
   },
   wrapper: {
-    background: 'white',
-    borderRadius: '8px',
-    boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-    overflow: 'hidden',
+    background: 'white', borderRadius: '12px',
+    boxShadow: '0 2px 8px rgba(0,0,0,0.07)', overflow: 'hidden',
   },
-  table: { width: '100%', borderCollapse: 'collapse', fontSize: '14px' },
+  table: { width: '100%', borderCollapse: 'collapse', fontSize: '13px' },
   th: {
-    background: '#f8fafc',
-    padding: '11px 16px',
-    textAlign: 'left',
-    fontWeight: '600',
-    color: '#475569',
-    borderBottom: '2px solid #e2e8f0',
+    background: '#f7f7f7', padding: '10px 16px', textAlign: 'left',
+    fontWeight: '700', fontSize: '11px', color: '#9e9e9e',
+    borderBottom: '1px solid #e5e5e5', textTransform: 'uppercase', letterSpacing: '0.5px',
   },
-  td: {
-    padding: '11px 16px',
-    borderBottom: '1px solid #f1f5f9',
-    verticalAlign: 'middle',
-  },
-  tdMuted: {
-    padding: '11px 16px',
-    borderBottom: '1px solid #f1f5f9',
-    verticalAlign: 'middle',
-    color: '#64748b',
-  },
+  td: { padding: '12px 16px', borderBottom: '1px solid #f5f5f5', verticalAlign: 'middle', fontSize: '13px' },
   btnEdit: {
-    background: '#f1f5f9',
-    border: 'none',
-    padding: '5px 12px',
-    borderRadius: '4px',
-    cursor: 'pointer',
-    fontSize: '13px',
-    marginRight: '6px',
-    color: '#334155',
+    background: 'white', border: '1px solid #d1d1d1',
+    padding: '5px 12px', borderRadius: '6px', cursor: 'pointer',
+    fontSize: '12px', marginRight: '6px', color: '#1a1a1a', fontWeight: '500',
   },
   btnDelete: {
-    background: '#fee2e2',
-    border: 'none',
-    padding: '5px 12px',
-    borderRadius: '4px',
-    cursor: 'pointer',
-    fontSize: '13px',
-    color: '#dc2626',
+    background: 'white', border: '1px solid #fad9d9',
+    padding: '5px 12px', borderRadius: '6px', cursor: 'pointer',
+    fontSize: '12px', color: '#a4262c', fontWeight: '500',
   },
-  empty: {
-    textAlign: 'center',
-    padding: '48px',
-    color: '#94a3b8',
-    fontSize: '15px',
-  },
-  // Modal
+  empty: { textAlign: 'center', padding: '56px 32px', color: '#9e9e9e', fontSize: '15px' },
   overlay: {
-    position: 'fixed',
-    inset: 0,
-    background: 'rgba(0,0,0,0.5)',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    zIndex: 1000,
+    position: 'fixed', inset: 0,
+    background: 'rgba(0,0,0,0.4)',
+    backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)',
+    display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000,
   },
   modal: {
-    background: 'white',
-    borderRadius: '12px',
-    padding: '28px',
-    width: '440px',
-    maxWidth: '90vw',
-    boxShadow: '0 20px 60px rgba(0,0,0,0.3)',
+    background: 'white', borderRadius: '12px', padding: '28px',
+    width: '440px', maxWidth: '90vw', boxShadow: '0 24px 64px rgba(0,0,0,0.18)',
   },
-  modalTitle: {
-    fontSize: '17px',
-    fontWeight: '600',
-    marginBottom: '20px',
-    color: '#1e293b',
-  },
+  modalTitle: { fontSize: '17px', fontWeight: '700', marginBottom: '20px', color: '#1a1a1a' },
   field: { marginBottom: '14px' },
-  label: {
-    display: 'block',
-    fontSize: '13px',
-    fontWeight: '500',
-    color: '#475569',
-    marginBottom: '5px',
-  },
+  label: { display: 'block', fontSize: '12px', fontWeight: '600', color: '#5c5c5c', marginBottom: '5px' },
   input: {
-    width: '100%',
-    padding: '8px 11px',
-    border: '1px solid #e2e8f0',
-    borderRadius: '6px',
-    fontSize: '14px',
-    outline: 'none',
-    boxSizing: 'border-box',
+    width: '100%', padding: '8px 12px', border: '1px solid #d1d1d1',
+    borderRadius: '6px', fontSize: '14px', boxSizing: 'border-box',
   },
-  actions: {
-    display: 'flex',
-    justifyContent: 'flex-end',
-    gap: '8px',
-    marginTop: '22px',
-  },
+  actions: { display: 'flex', justifyContent: 'flex-end', gap: '8px', marginTop: '22px' },
   btnCancel: {
-    background: '#f1f5f9',
-    border: 'none',
-    padding: '8px 16px',
-    borderRadius: '6px',
-    cursor: 'pointer',
-    fontSize: '14px',
-    color: '#475569',
+    background: 'white', border: '1px solid #d1d1d1',
+    padding: '8px 16px', borderRadius: '8px', cursor: 'pointer', fontSize: '14px', color: '#5c5c5c',
   },
   btnSave: {
-    background: '#3b82f6',
-    color: 'white',
-    border: 'none',
-    padding: '8px 20px',
-    borderRadius: '6px',
-    cursor: 'pointer',
-    fontSize: '14px',
-    fontWeight: '500',
+    background: '#0078d4', color: 'white', border: 'none',
+    padding: '8px 20px', borderRadius: '8px', cursor: 'pointer', fontSize: '14px', fontWeight: '500',
   },
 };
 
@@ -153,8 +70,7 @@ function CustomerModal({ customer, onSave, onCancel }) {
     email: customer?.email ?? '',
   });
 
-  const set = (field) => (e) =>
-    setForm((prev) => ({ ...prev, [field]: e.target.value }));
+  const set = (field) => (e) => setForm((prev) => ({ ...prev, [field]: e.target.value }));
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -166,50 +82,25 @@ function CustomerModal({ customer, onSave, onCancel }) {
   };
 
   return (
-    <div style={styles.overlay} onClick={(e) => e.target === e.currentTarget && onCancel()}>
-      <div style={styles.modal}>
-        <h2 style={styles.modalTitle}>
-          {isEdit ? 'Editar Cliente' : 'Nuevo Cliente'}
-        </h2>
+    <div style={s.overlay} onClick={(e) => e.target === e.currentTarget && onCancel()}>
+      <div style={s.modal}>
+        <h2 style={s.modalTitle}>{isEdit ? 'Editar Cliente' : 'Nuevo Cliente'}</h2>
         <form onSubmit={handleSubmit}>
-          <div style={styles.field}>
-            <label style={styles.label}>Nombre *</label>
-            <input
-              style={styles.input}
-              value={form.name}
-              onChange={set('name')}
-              placeholder="Nombre completo"
-              required
-              autoFocus
-            />
+          <div style={s.field}>
+            <label style={s.label}>Nombre *</label>
+            <input className="fl-input" style={s.input} value={form.name} onChange={set('name')} placeholder="Nombre completo" required autoFocus />
           </div>
-          <div style={styles.field}>
-            <label style={styles.label}>Teléfono</label>
-            <input
-              style={styles.input}
-              value={form.phone}
-              onChange={set('phone')}
-              placeholder="Ej: 555-1234"
-              type="tel"
-            />
+          <div style={s.field}>
+            <label style={s.label}>Teléfono</label>
+            <input className="fl-input" style={s.input} value={form.phone} onChange={set('phone')} placeholder="Ej: 555-1234" type="tel" />
           </div>
-          <div style={styles.field}>
-            <label style={styles.label}>Correo electrónico</label>
-            <input
-              style={styles.input}
-              value={form.email}
-              onChange={set('email')}
-              placeholder="correo@ejemplo.com"
-              type="email"
-            />
+          <div style={s.field}>
+            <label style={s.label}>Correo electrónico</label>
+            <input className="fl-input" style={s.input} value={form.email} onChange={set('email')} placeholder="correo@ejemplo.com" type="email" />
           </div>
-          <div style={styles.actions}>
-            <button type="button" style={styles.btnCancel} onClick={onCancel}>
-              Cancelar
-            </button>
-            <button type="submit" style={styles.btnSave}>
-              {isEdit ? 'Guardar cambios' : 'Crear cliente'}
-            </button>
+          <div style={s.actions}>
+            <button type="button" className="fl-btn-ghost" style={s.btnCancel} onClick={onCancel}>Cancelar</button>
+            <button type="submit" className="fl-btn-primary" style={s.btnSave}>{isEdit ? 'Guardar cambios' : 'Crear cliente'}</button>
           </div>
         </form>
       </div>
@@ -221,7 +112,7 @@ export default function CustomersView() {
   const [customers, setCustomers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [modal, setModal] = useState(null); // null | 'create' | { mode: 'edit', customer }
+  const [modal, setModal] = useState(null);
 
   const load = useCallback(async () => {
     try {
@@ -263,50 +154,40 @@ export default function CustomersView() {
 
   return (
     <>
-      <div style={styles.toolbar}>
-        <h2 style={styles.sectionTitle}>Clientes</h2>
-        <button style={styles.btnPrimary} onClick={() => setModal('create')}>
+      <div style={s.toolbar}>
+        <h2 style={s.sectionTitle}>Clientes</h2>
+        <button className="fl-btn-primary" style={s.btnPrimary} onClick={() => setModal('create')}>
           + Nuevo Cliente
         </button>
       </div>
 
-      {error && <div style={styles.errorBox}>{error}</div>}
+      {error && <div style={s.errorBox}>{error}</div>}
 
       {loading ? (
-        <p style={{ color: '#64748b', fontSize: '14px' }}>Cargando...</p>
+        <p style={{ color: '#9e9e9e', fontSize: '14px' }}>Cargando...</p>
       ) : (
-        <div style={styles.wrapper}>
+        <div style={s.wrapper}>
           {customers.length === 0 ? (
-            <p style={styles.empty}>No hay clientes registrados. Agrega el primero.</p>
+            <p style={s.empty}>No hay clientes registrados. Agrega el primero.</p>
           ) : (
-            <table style={styles.table}>
+            <table style={s.table}>
               <thead>
                 <tr>
-                  <th style={styles.th}>Nombre</th>
-                  <th style={styles.th}>Teléfono</th>
-                  <th style={styles.th}>Correo electrónico</th>
-                  <th style={styles.th}>Acciones</th>
+                  <th style={s.th}>Nombre</th>
+                  <th style={s.th}>Teléfono</th>
+                  <th style={s.th}>Correo electrónico</th>
+                  <th style={s.th}>Acciones</th>
                 </tr>
               </thead>
               <tbody>
                 {customers.map((customer) => (
-                  <tr key={customer.id}>
-                    <td style={styles.td}><strong>{customer.name}</strong></td>
-                    <td style={styles.tdMuted}>{customer.phone || '—'}</td>
-                    <td style={styles.tdMuted}>{customer.email || '—'}</td>
-                    <td style={styles.td}>
-                      <button
-                        style={styles.btnEdit}
-                        onClick={() => setModal({ mode: 'edit', customer })}
-                      >
-                        Editar
-                      </button>
-                      <button
-                        style={styles.btnDelete}
-                        onClick={() => handleDelete(customer.id)}
-                      >
-                        Eliminar
-                      </button>
+                  <tr key={customer.id} className="fl-tr">
+                    <td style={{ ...s.td, fontWeight: '600' }}>{customer.name}</td>
+                    <td style={{ ...s.td, color: '#5c5c5c' }}>{customer.phone || '—'}</td>
+                    <td style={{ ...s.td, color: '#5c5c5c' }}>{customer.email || '—'}</td>
+                    <td style={s.td}>
+                      <button className="fl-btn-secondary" style={s.btnEdit} onClick={() => setModal({ mode: 'edit', customer })}>Editar</button>
+                      <button className="fl-btn-danger" style={s.btnDelete} onClick={() => handleDelete(customer.id)}>Eliminar</button>
                     </td>
                   </tr>
                 ))}

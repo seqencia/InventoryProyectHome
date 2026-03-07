@@ -10,6 +10,26 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [0.11.0] - 2026-03-07
+
+### Changed
+
+#### Full UI redesign — Windows 11 Fluent Design
+- **Global CSS** injected in `app.js`: Segoe UI font, hover/focus effects for buttons (`.fl-btn-primary/secondary/ghost/danger`), table row hover (`.fl-tr`, `.fl-tr-amber`), product row hover (`.fl-product-row`), input/select focus ring in Windows blue (`.fl-input`, `.fl-select`)
+- **Navbar**: frosted glass acrylic effect (`rgba(255,255,255,0.85)` + `backdrop-filter: blur(20px)`), sticky top position, pill-shaped active tab in `#0078d4` (Windows blue), emoji icons next to each tab label, title updated to "TechStore"
+- **Cards**: 12px border radius, soft shadow `0 2px 8px rgba(0,0,0,0.07)` across all panels and wrappers
+- **Tables**: uppercase 11px column headers (`#9e9e9e`), row hover via CSS class, tighter border colors (`#f5f5f5` separator)
+- **Badges**: softened palette — green `#e8f5e9/#2e7d32`, blue `#e3f2fd/#1565c0`, amber `#fff8e1/#8a5700`, red `#ffebee/#a4262c`, purple `#ede7f6/#6a1b9a`; replaces all harsh Tailwind-era colors
+- **Buttons**: Primary uses `#0078d4` (Windows blue) with hover `#106ebe` and drop shadow; secondary outlined with hover fill; danger outlined with hover fill; all with 8px radius
+- **Modal overlays**: frosted glass backdrop (`rgba(0,0,0,0.4)` + `blur(8px)`) across all modals (ProductForm, CategoryModal, CustomerModal, SupplierModal, StockEntryModal, SaleReceipt)
+- **ProductForm**: Fluent inputs with `.fl-input` focus ring, section headings refined to uppercase labels
+- **NewSale**: panels updated to 12px radius, cart totals in Windows blue, confirm button in `#107c10`, product row hover
+- **SaleReceipt**: frosted overlay, refined print/close buttons
+- **DashboardView**: stat cards retain colored top border accent; bar chart uses `#0078d4`/`#a8d0f0`; recent sales total in blue
+- Page background: `#f3f3f3` (Windows 11 system gray)
+
+---
+
 ## [0.10.0] - 2026-03-07
 
 ### Added

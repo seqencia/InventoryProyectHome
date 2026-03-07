@@ -3,30 +3,16 @@ import ProductList from './ProductList';
 import ProductForm from './ProductForm';
 
 const styles = {
-  toolbar: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: '16px',
-  },
-  sectionTitle: { fontSize: '17px', fontWeight: '600', color: '#1e293b' },
+  toolbar: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' },
+  sectionTitle: { fontSize: '18px', fontWeight: '700', color: '#1a1a1a', letterSpacing: '-0.3px' },
   btnPrimary: {
-    background: '#3b82f6',
-    color: 'white',
-    border: 'none',
-    padding: '8px 16px',
-    borderRadius: '6px',
-    cursor: 'pointer',
-    fontSize: '14px',
-    fontWeight: '500',
+    background: '#0078d4', color: 'white', border: 'none',
+    padding: '8px 18px', borderRadius: '8px', cursor: 'pointer',
+    fontSize: '14px', fontWeight: '500',
   },
   errorBox: {
-    background: '#fee2e2',
-    color: '#dc2626',
-    padding: '12px 16px',
-    borderRadius: '6px',
-    marginBottom: '16px',
-    fontSize: '14px',
+    background: '#ffebee', color: '#a4262c', padding: '12px 16px',
+    borderRadius: '8px', marginBottom: '16px', fontSize: '14px',
   },
 };
 
@@ -78,7 +64,7 @@ export default function InventoryView() {
     <>
       <div style={styles.toolbar}>
         <h2 style={styles.sectionTitle}>Catálogo de Productos</h2>
-        <button style={styles.btnPrimary} onClick={() => setModal('create')}>
+        <button className="fl-btn-primary" style={styles.btnPrimary} onClick={() => setModal('create')}>
           + Nuevo Producto
         </button>
       </div>

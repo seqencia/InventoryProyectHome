@@ -8,79 +8,78 @@ function formatDate(dateStr) {
 }
 
 const s = {
-  toolbar: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' },
-  sectionTitle: { fontSize: '17px', fontWeight: '600', color: '#1e293b' },
+  toolbar: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' },
+  sectionTitle: { fontSize: '18px', fontWeight: '700', color: '#1a1a1a', letterSpacing: '-0.3px' },
   btnPrimary: {
-    background: '#3b82f6', color: 'white', border: 'none',
-    padding: '8px 16px', borderRadius: '6px', cursor: 'pointer', fontSize: '14px', fontWeight: '500',
+    background: '#0078d4', color: 'white', border: 'none',
+    padding: '8px 18px', borderRadius: '8px', cursor: 'pointer', fontSize: '14px', fontWeight: '500',
   },
   errorBox: {
-    background: '#fee2e2', color: '#dc2626', padding: '12px 16px',
-    borderRadius: '6px', marginBottom: '16px', fontSize: '14px',
+    background: '#ffebee', color: '#a4262c', padding: '12px 16px',
+    borderRadius: '8px', marginBottom: '16px', fontSize: '14px',
   },
-  wrapper: { background: 'white', borderRadius: '8px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)', overflow: 'hidden' },
+  wrapper: {
+    background: 'white', borderRadius: '12px',
+    boxShadow: '0 2px 8px rgba(0,0,0,0.07)', overflow: 'hidden',
+  },
   table: { width: '100%', borderCollapse: 'collapse', fontSize: '13px' },
   th: {
-    background: '#f8fafc', padding: '10px 14px', textAlign: 'left',
-    fontWeight: '600', color: '#475569', borderBottom: '2px solid #e2e8f0', whiteSpace: 'nowrap',
+    background: '#f7f7f7', padding: '10px 16px', textAlign: 'left',
+    fontWeight: '700', fontSize: '11px', color: '#9e9e9e',
+    borderBottom: '1px solid #e5e5e5', textTransform: 'uppercase', letterSpacing: '0.5px',
   },
-  td: { padding: '10px 14px', borderBottom: '1px solid #f1f5f9', verticalAlign: 'middle' },
-  empty: { textAlign: 'center', padding: '48px', color: '#94a3b8', fontSize: '15px' },
+  td: { padding: '12px 16px', borderBottom: '1px solid #f5f5f5', verticalAlign: 'middle', fontSize: '13px' },
+  empty: { textAlign: 'center', padding: '56px 32px', color: '#9e9e9e', fontSize: '15px' },
   qtyBadge: {
-    display: 'inline-block', background: '#dcfce7', color: '#16a34a',
-    fontWeight: '700', fontSize: '12px', padding: '2px 9px', borderRadius: '12px',
+    display: 'inline-block', background: '#e8f5e9', color: '#2e7d32',
+    fontWeight: '700', fontSize: '12px', padding: '3px 9px', borderRadius: '12px',
   },
-  // Modal
   overlay: {
-    position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)',
+    position: 'fixed', inset: 0,
+    background: 'rgba(0,0,0,0.4)',
+    backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)',
     display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000,
   },
   modal: {
     background: 'white', borderRadius: '12px', width: '520px',
-    maxWidth: '95vw', boxShadow: '0 20px 60px rgba(0,0,0,0.3)', overflow: 'hidden',
+    maxWidth: '95vw', boxShadow: '0 24px 64px rgba(0,0,0,0.18)', overflow: 'hidden',
   },
-  modalHeader: { padding: '18px 22px 14px', borderBottom: '1px solid #f1f5f9' },
-  modalTitle: { fontSize: '16px', fontWeight: '600', color: '#1e293b', margin: 0 },
-  modalBody: { padding: '16px 22px' },
+  modalHeader: { padding: '20px 24px 16px', borderBottom: '1px solid #f0f0f0' },
+  modalTitle: { fontSize: '17px', fontWeight: '700', color: '#1a1a1a', margin: 0 },
+  modalBody: { padding: '18px 24px' },
   modalFooter: {
-    padding: '14px 22px', borderTop: '1px solid #f1f5f9',
+    padding: '14px 24px', borderTop: '1px solid #f0f0f0',
     display: 'flex', justifyContent: 'flex-end', gap: '8px',
   },
-  field: { marginBottom: '12px' },
-  label: { display: 'block', fontSize: '12px', fontWeight: '500', color: '#475569', marginBottom: '4px' },
-  hint: { fontSize: '11px', color: '#94a3b8', marginTop: '3px' },
+  field: { marginBottom: '14px' },
+  label: { display: 'block', fontSize: '12px', fontWeight: '600', color: '#5c5c5c', marginBottom: '5px' },
+  hint: { fontSize: '11px', color: '#9e9e9e', marginTop: '3px' },
   input: {
-    width: '100%', padding: '7px 10px', border: '1px solid #e2e8f0',
-    borderRadius: '6px', fontSize: '13px', outline: 'none', boxSizing: 'border-box',
+    width: '100%', padding: '8px 12px', border: '1px solid #d1d1d1',
+    borderRadius: '6px', fontSize: '14px', boxSizing: 'border-box',
   },
   select: {
-    width: '100%', padding: '7px 10px', border: '1px solid #e2e8f0',
-    borderRadius: '6px', fontSize: '13px', background: 'white', boxSizing: 'border-box',
+    width: '100%', padding: '8px 12px', border: '1px solid #d1d1d1',
+    borderRadius: '6px', fontSize: '14px', background: 'white', boxSizing: 'border-box',
   },
   textarea: {
-    width: '100%', padding: '7px 10px', border: '1px solid #e2e8f0',
-    borderRadius: '6px', fontSize: '13px', resize: 'vertical', minHeight: '60px',
+    width: '100%', padding: '8px 12px', border: '1px solid #d1d1d1',
+    borderRadius: '6px', fontSize: '14px', resize: 'vertical', minHeight: '60px',
     boxSizing: 'border-box', fontFamily: 'inherit',
   },
   grid2: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' },
   btnCancel: {
-    background: '#f1f5f9', border: 'none', padding: '8px 16px',
-    borderRadius: '6px', cursor: 'pointer', fontSize: '14px', color: '#475569',
+    background: 'white', border: '1px solid #d1d1d1',
+    padding: '8px 16px', borderRadius: '8px', cursor: 'pointer', fontSize: '14px', color: '#5c5c5c',
   },
   btnSave: {
-    background: '#16a34a', color: 'white', border: 'none',
-    padding: '8px 20px', borderRadius: '6px', cursor: 'pointer', fontSize: '14px', fontWeight: '500',
+    background: '#107c10', color: 'white', border: 'none',
+    padding: '8px 20px', borderRadius: '8px', cursor: 'pointer', fontSize: '14px', fontWeight: '500',
   },
 };
 
 function StockEntryModal({ products, suppliers, onSave, onCancel }) {
-  const [form, setForm] = useState({
-    product_id: '',
-    quantity: '',
-    unit_cost: '',
-    supplier_id: '',
-    notes: '',
-  });
+  const [form, setForm] = useState({ product_id: '', quantity: '', unit_cost: '', supplier_id: '', notes: '' });
   const [saving, setSaving] = useState(false);
 
   const set = (field) => (e) => setForm((prev) => ({ ...prev, [field]: e.target.value }));
@@ -108,7 +107,7 @@ function StockEntryModal({ products, suppliers, onSave, onCancel }) {
           <div style={s.modalBody}>
             <div style={s.field}>
               <label style={s.label}>Producto *</label>
-              <select style={s.select} value={form.product_id} onChange={set('product_id')} required autoFocus>
+              <select className="fl-select" style={s.select} value={form.product_id} onChange={set('product_id')} required autoFocus>
                 <option value="">Seleccionar producto...</option>
                 {products.map((p) => (
                   <option key={p.id} value={p.id}>
@@ -117,62 +116,33 @@ function StockEntryModal({ products, suppliers, onSave, onCancel }) {
                 ))}
               </select>
             </div>
-
             <div style={s.grid2}>
               <div style={s.field}>
                 <label style={s.label}>Cantidad *</label>
-                <input
-                  style={s.input}
-                  type="number"
-                  min="1"
-                  step="1"
-                  value={form.quantity}
-                  onChange={set('quantity')}
-                  placeholder="0"
-                  required
-                />
-                <div style={s.hint}>Se suma al stock actual del producto</div>
+                <input className="fl-input" style={s.input} type="number" min="1" step="1" value={form.quantity} onChange={set('quantity')} placeholder="0" required />
+                <div style={s.hint}>Se suma al stock actual</div>
               </div>
               <div style={s.field}>
                 <label style={s.label}>Costo unitario ($)</label>
-                <input
-                  style={s.input}
-                  type="number"
-                  min="0"
-                  step="0.01"
-                  value={form.unit_cost}
-                  onChange={set('unit_cost')}
-                  placeholder="0.00"
-                />
+                <input className="fl-input" style={s.input} type="number" min="0" step="0.01" value={form.unit_cost} onChange={set('unit_cost')} placeholder="0.00" />
               </div>
             </div>
-
             <div style={s.field}>
               <label style={s.label}>Proveedor</label>
-              <select style={s.select} value={form.supplier_id} onChange={set('supplier_id')}>
+              <select className="fl-select" style={s.select} value={form.supplier_id} onChange={set('supplier_id')}>
                 <option value="">Sin proveedor / no aplica</option>
-                {suppliers.map((sup) => (
-                  <option key={sup.id} value={sup.id}>{sup.name}</option>
-                ))}
+                {suppliers.map((sup) => <option key={sup.id} value={sup.id}>{sup.name}</option>)}
               </select>
-              {suppliers.length === 0 && (
-                <div style={s.hint}>Registra proveedores en la pestaña "Proveedores"</div>
-              )}
+              {suppliers.length === 0 && <div style={s.hint}>Registra proveedores en la pestaña "Proveedores"</div>}
             </div>
-
             <div style={s.field}>
               <label style={s.label}>Notas</label>
-              <textarea
-                style={s.textarea}
-                value={form.notes}
-                onChange={set('notes')}
-                placeholder="Número de factura, lote, observaciones..."
-              />
+              <textarea className="fl-input" style={s.textarea} value={form.notes} onChange={set('notes')} placeholder="Número de factura, lote, observaciones..." />
             </div>
           </div>
           <div style={s.modalFooter}>
-            <button type="button" style={s.btnCancel} onClick={onCancel}>Cancelar</button>
-            <button type="submit" style={s.btnSave} disabled={saving}>
+            <button type="button" className="fl-btn-ghost" style={s.btnCancel} onClick={onCancel}>Cancelar</button>
+            <button type="submit" className="fl-btn-primary" style={s.btnSave} disabled={saving}>
               {saving ? 'Registrando...' : 'Registrar entrada'}
             </button>
           </div>
@@ -198,9 +168,7 @@ export default function StockEntriesView() {
         window.electron.products.getAll(),
         window.electron.suppliers.getAll(),
       ]);
-      setEntries(e);
-      setProducts(p);
-      setSuppliers(sup);
+      setEntries(e); setProducts(p); setSuppliers(sup);
       setError(null);
     } catch {
       setError('Error al cargar las entradas.');
@@ -225,13 +193,13 @@ export default function StockEntriesView() {
     <>
       <div style={s.toolbar}>
         <h2 style={s.sectionTitle}>Entradas de Inventario</h2>
-        <button style={s.btnPrimary} onClick={() => setModal(true)}>+ Nueva Entrada</button>
+        <button className="fl-btn-primary" style={s.btnPrimary} onClick={() => setModal(true)}>+ Nueva Entrada</button>
       </div>
 
       {error && <div style={s.errorBox}>{error}</div>}
 
       {loading ? (
-        <p style={{ color: '#64748b', fontSize: '14px' }}>Cargando...</p>
+        <p style={{ color: '#9e9e9e', fontSize: '14px' }}>Cargando...</p>
       ) : (
         <div style={s.wrapper}>
           {entries.length === 0 ? (
@@ -251,18 +219,18 @@ export default function StockEntriesView() {
               </thead>
               <tbody>
                 {entries.map((entry) => (
-                  <tr key={entry.id}>
-                    <td style={{ ...s.td, color: '#94a3b8' }}>{entry.id}</td>
+                  <tr key={entry.id} className="fl-tr">
+                    <td style={{ ...s.td, color: '#9e9e9e' }}>{entry.id}</td>
                     <td style={s.td}>{formatDate(entry.created_at)}</td>
-                    <td style={{ ...s.td, fontWeight: '600', color: '#1e293b' }}>{entry.product_name}</td>
+                    <td style={{ ...s.td, fontWeight: '600' }}>{entry.product_name}</td>
                     <td style={s.td}><span style={s.qtyBadge}>+{entry.quantity}</span></td>
-                    <td style={{ ...s.td, color: entry.unit_cost ? '#334155' : '#94a3b8' }}>
+                    <td style={{ ...s.td, color: entry.unit_cost ? '#1a1a1a' : '#9e9e9e' }}>
                       {entry.unit_cost ? `$${Number(entry.unit_cost).toFixed(2)}` : '—'}
                     </td>
-                    <td style={{ ...s.td, color: entry.supplier_name ? '#334155' : '#94a3b8' }}>
+                    <td style={{ ...s.td, color: entry.supplier_name ? '#1a1a1a' : '#9e9e9e' }}>
                       {entry.supplier_name || '—'}
                     </td>
-                    <td style={{ ...s.td, color: entry.notes ? '#334155' : '#94a3b8', maxWidth: '200px' }}>
+                    <td style={{ ...s.td, color: entry.notes ? '#1a1a1a' : '#9e9e9e', maxWidth: '200px' }}>
                       {entry.notes || '—'}
                     </td>
                   </tr>
@@ -274,12 +242,7 @@ export default function StockEntriesView() {
       )}
 
       {modal && (
-        <StockEntryModal
-          products={products}
-          suppliers={suppliers}
-          onSave={handleSave}
-          onCancel={() => setModal(false)}
-        />
+        <StockEntryModal products={products} suppliers={suppliers} onSave={handleSave} onCancel={() => setModal(false)} />
       )}
     </>
   );

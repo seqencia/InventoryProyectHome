@@ -1,116 +1,24 @@
 import React, { useState, useEffect } from 'react';
 
-const styles = {
-  toolbar: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: '16px',
-  },
-  sectionTitle: { fontSize: '17px', fontWeight: '600', color: '#1e293b' },
-  wrapper: {
-    background: 'white',
-    borderRadius: '8px',
-    boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-    overflow: 'hidden',
-  },
-  table: {
-    width: '100%',
-    borderCollapse: 'collapse',
-    fontSize: '14px',
-  },
-  th: {
-    background: '#f8fafc',
-    padding: '11px 16px',
-    textAlign: 'left',
-    fontWeight: '600',
-    color: '#475569',
-    borderBottom: '2px solid #e2e8f0',
-    whiteSpace: 'nowrap',
-  },
-  td: {
-    padding: '11px 16px',
-    borderBottom: '1px solid #f1f5f9',
-    verticalAlign: 'middle',
-  },
-  toggleBtn: {
-    background: '#f1f5f9',
-    border: 'none',
-    padding: '4px 10px',
-    borderRadius: '4px',
-    cursor: 'pointer',
-    fontSize: '13px',
-    color: '#334155',
-  },
-  detailRow: {
-    background: '#f8fafc',
-  },
-  detailCell: {
-    padding: '0',
-    borderBottom: '1px solid #e2e8f0',
-  },
-  detailTable: {
-    width: '100%',
-    borderCollapse: 'collapse',
-    fontSize: '13px',
-  },
-  detailTh: {
-    padding: '8px 24px',
-    textAlign: 'left',
-    fontWeight: '600',
-    color: '#64748b',
-    borderBottom: '1px solid #e2e8f0',
-    background: '#f1f5f9',
-  },
-  detailTd: {
-    padding: '8px 24px',
-    borderBottom: '1px solid #f1f5f9',
-    color: '#334155',
-  },
-  detailTotal: {
-    padding: '8px 24px',
-    textAlign: 'right',
-    fontWeight: '600',
-    color: '#1e293b',
-    fontSize: '13px',
-    borderTop: '1px solid #e2e8f0',
-  },
-  empty: {
-    textAlign: 'center',
-    padding: '48px',
-    color: '#94a3b8',
-    fontSize: '15px',
-  },
-  errorBox: {
-    background: '#fee2e2',
-    color: '#dc2626',
-    padding: '12px 16px',
-    borderRadius: '6px',
-    marginBottom: '16px',
-    fontSize: '14px',
-  },
-  totalBadge: {
-    fontWeight: '700',
-    color: '#1e293b',
-  },
-};
-
 const STATUS_STYLE = {
-  'Completada': { background: '#dcfce7', color: '#16a34a' },
-  'Cancelada':  { background: '#fee2e2', color: '#dc2626' },
-  'Pendiente':  { background: '#fef3c7', color: '#b45309' },
+  'Completada': { background: '#e8f5e9', color: '#2e7d32' },
+  'Cancelada':  { background: '#ffebee', color: '#a4262c' },
+  'Pendiente':  { background: '#fff8e1', color: '#8a5700' },
 };
 
 const PAYMENT_STYLE = {
-  'Efectivo':      { background: '#f0fdf4', color: '#15803d' },
-  'Tarjeta':       { background: '#eff6ff', color: '#1d4ed8' },
-  'Transferencia': { background: '#f5f3ff', color: '#7c3aed' },
+  'Efectivo':      { background: '#e8f5e9', color: '#2e7d32' },
+  'Tarjeta':       { background: '#e3f2fd', color: '#1565c0' },
+  'Transferencia': { background: '#ede7f6', color: '#6a1b9a' },
 };
 
 function Badge({ map, value }) {
-  const col = map[value] || { background: '#f1f5f9', color: '#64748b' };
+  const col = map[value] || { background: '#f5f5f5', color: '#5c5c5c' };
   return (
-    <span style={{ display: 'inline-block', padding: '2px 8px', borderRadius: '10px', fontSize: '12px', fontWeight: '600', ...col }}>
+    <span style={{
+      display: 'inline-block', padding: '3px 9px', borderRadius: '12px',
+      fontSize: '12px', fontWeight: '600', ...col,
+    }}>
       {value || '—'}
     </span>
   );
@@ -118,13 +26,52 @@ function Badge({ map, value }) {
 
 function formatDate(dateStr) {
   return new Date(dateStr).toLocaleString('es', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
+    day: '2-digit', month: '2-digit', year: 'numeric',
+    hour: '2-digit', minute: '2-digit',
   });
 }
+
+const styles = {
+  toolbar: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' },
+  sectionTitle: { fontSize: '18px', fontWeight: '700', color: '#1a1a1a', letterSpacing: '-0.3px' },
+  wrapper: {
+    background: 'white', borderRadius: '12px',
+    boxShadow: '0 2px 8px rgba(0,0,0,0.07)', overflow: 'hidden',
+  },
+  table: { width: '100%', borderCollapse: 'collapse', fontSize: '13px' },
+  th: {
+    background: '#f7f7f7', padding: '10px 16px', textAlign: 'left',
+    fontWeight: '700', fontSize: '11px', color: '#9e9e9e',
+    borderBottom: '1px solid #e5e5e5', textTransform: 'uppercase',
+    letterSpacing: '0.5px', whiteSpace: 'nowrap',
+  },
+  td: { padding: '12px 16px', borderBottom: '1px solid #f5f5f5', verticalAlign: 'middle' },
+  toggleBtn: {
+    background: 'white', border: '1px solid #d1d1d1',
+    padding: '4px 12px', borderRadius: '6px', cursor: 'pointer',
+    fontSize: '12px', color: '#1a1a1a', fontWeight: '500',
+  },
+  detailRow: { background: '#fafafa' },
+  detailCell: { padding: 0, borderBottom: '1px solid #e5e5e5' },
+  detailTable: { width: '100%', borderCollapse: 'collapse', fontSize: '13px' },
+  detailTh: {
+    padding: '8px 24px', textAlign: 'left', fontWeight: '600',
+    color: '#9e9e9e', fontSize: '11px', borderBottom: '1px solid #e5e5e5',
+    background: '#f5f5f5', textTransform: 'uppercase', letterSpacing: '0.4px',
+  },
+  detailTd: { padding: '8px 24px', borderBottom: '1px solid #f0f0f0', color: '#1a1a1a' },
+  detailTotal: {
+    padding: '10px 24px', textAlign: 'right', fontWeight: '600',
+    color: '#1a1a1a', fontSize: '13px', borderTop: '1px solid #e5e5e5',
+    background: '#f9f9f9',
+  },
+  empty: { textAlign: 'center', padding: '56px 32px', color: '#9e9e9e', fontSize: '15px' },
+  errorBox: {
+    background: '#ffebee', color: '#a4262c', padding: '12px 16px',
+    borderRadius: '8px', marginBottom: '16px', fontSize: '14px',
+  },
+  totalBadge: { fontWeight: '700', color: '#0078d4' },
+};
 
 export default function SaleHistory() {
   const [sales, setSales] = useState([]);
@@ -150,7 +97,7 @@ export default function SaleHistory() {
       {error && <div style={styles.errorBox}>{error}</div>}
 
       {loading ? (
-        <p style={{ color: '#64748b', fontSize: '14px' }}>Cargando...</p>
+        <p style={{ color: '#9e9e9e', fontSize: '14px' }}>Cargando...</p>
       ) : (
         <div style={styles.wrapper}>
           {sales.length === 0 ? (
@@ -172,18 +119,30 @@ export default function SaleHistory() {
               <tbody>
                 {sales.map((sale) => (
                   <React.Fragment key={sale.id}>
-                    <tr>
-                      <td style={styles.td}>{sale.id}</td>
+                    <tr className="fl-tr">
+                      <td style={{ ...styles.td, color: '#9e9e9e' }}>{sale.id}</td>
                       <td style={styles.td}>{formatDate(sale.created_at)}</td>
-                      <td style={styles.td}>{sale.customer_name || <span style={{ color: '#94a3b8' }}>—</span>}</td>
-                      <td style={styles.td}><Badge map={PAYMENT_STYLE} value={sale.payment_method || 'Efectivo'} /></td>
-                      <td style={styles.td}><Badge map={STATUS_STYLE} value={sale.status || 'Completada'} /></td>
-                      <td style={styles.td}>{sale.details.length} producto{sale.details.length !== 1 ? 's' : ''}</td>
+                      <td style={{ ...styles.td, color: sale.customer_name ? '#1a1a1a' : '#9e9e9e' }}>
+                        {sale.customer_name || '—'}
+                      </td>
+                      <td style={styles.td}>
+                        <Badge map={PAYMENT_STYLE} value={sale.payment_method || 'Efectivo'} />
+                      </td>
+                      <td style={styles.td}>
+                        <Badge map={STATUS_STYLE} value={sale.status || 'Completada'} />
+                      </td>
+                      <td style={{ ...styles.td, color: '#5c5c5c' }}>
+                        {sale.details.length} producto{sale.details.length !== 1 ? 's' : ''}
+                      </td>
                       <td style={styles.td}>
                         <span style={styles.totalBadge}>${Number(sale.total).toFixed(2)}</span>
                       </td>
                       <td style={styles.td}>
-                        <button style={styles.toggleBtn} onClick={() => toggle(sale.id)}>
+                        <button
+                          className="fl-btn-secondary"
+                          style={styles.toggleBtn}
+                          onClick={() => toggle(sale.id)}
+                        >
                           {expanded === sale.id ? 'Ocultar' : 'Ver detalle'}
                         </button>
                       </td>
@@ -202,7 +161,7 @@ export default function SaleHistory() {
                             </thead>
                             <tbody>
                               {sale.details.map((d) => (
-                                <tr key={d.id}>
+                                <tr key={d.id} className="fl-tr">
                                   <td style={styles.detailTd}>{d.product_name}</td>
                                   <td style={styles.detailTd}>${Number(d.unit_price).toFixed(2)}</td>
                                   <td style={styles.detailTd}>{d.quantity}</td>
@@ -214,10 +173,10 @@ export default function SaleHistory() {
                           <div style={styles.detailTotal}>
                             {sale.subtotal != null && (
                               <>
-                                <span style={{ fontWeight: '400', color: '#64748b', marginRight: '16px' }}>
+                                <span style={{ fontWeight: '400', color: '#9e9e9e', marginRight: '16px' }}>
                                   Subtotal: ${Number(sale.subtotal).toFixed(2)}
                                 </span>
-                                <span style={{ fontWeight: '400', color: '#64748b', marginRight: '16px' }}>
+                                <span style={{ fontWeight: '400', color: '#9e9e9e', marginRight: '16px' }}>
                                   IVA 13%: ${Number(sale.tax).toFixed(2)}
                                 </span>
                               </>

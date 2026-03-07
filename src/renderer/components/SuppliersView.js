@@ -1,66 +1,73 @@
 import React, { useState, useEffect, useCallback } from 'react';
 
 const s = {
-  toolbar: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' },
-  sectionTitle: { fontSize: '17px', fontWeight: '600', color: '#1e293b' },
+  toolbar: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' },
+  sectionTitle: { fontSize: '18px', fontWeight: '700', color: '#1a1a1a', letterSpacing: '-0.3px' },
   btnPrimary: {
-    background: '#3b82f6', color: 'white', border: 'none',
-    padding: '8px 16px', borderRadius: '6px', cursor: 'pointer', fontSize: '14px', fontWeight: '500',
+    background: '#0078d4', color: 'white', border: 'none',
+    padding: '8px 18px', borderRadius: '8px', cursor: 'pointer', fontSize: '14px', fontWeight: '500',
   },
   errorBox: {
-    background: '#fee2e2', color: '#dc2626', padding: '12px 16px',
-    borderRadius: '6px', marginBottom: '16px', fontSize: '14px',
+    background: '#ffebee', color: '#a4262c', padding: '12px 16px',
+    borderRadius: '8px', marginBottom: '16px', fontSize: '14px',
   },
-  wrapper: { background: 'white', borderRadius: '8px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)', overflow: 'hidden' },
+  wrapper: {
+    background: 'white', borderRadius: '12px',
+    boxShadow: '0 2px 8px rgba(0,0,0,0.07)', overflow: 'hidden',
+  },
   table: { width: '100%', borderCollapse: 'collapse', fontSize: '13px' },
   th: {
-    background: '#f8fafc', padding: '10px 14px', textAlign: 'left',
-    fontWeight: '600', color: '#475569', borderBottom: '2px solid #e2e8f0', whiteSpace: 'nowrap',
+    background: '#f7f7f7', padding: '10px 16px', textAlign: 'left',
+    fontWeight: '700', fontSize: '11px', color: '#9e9e9e',
+    borderBottom: '1px solid #e5e5e5', textTransform: 'uppercase', letterSpacing: '0.5px',
   },
-  td: { padding: '10px 14px', borderBottom: '1px solid #f1f5f9', verticalAlign: 'middle' },
-  empty: { textAlign: 'center', padding: '48px', color: '#94a3b8', fontSize: '15px' },
+  td: { padding: '12px 16px', borderBottom: '1px solid #f5f5f5', verticalAlign: 'middle', fontSize: '13px' },
+  empty: { textAlign: 'center', padding: '56px 32px', color: '#9e9e9e', fontSize: '15px' },
   btnEdit: {
-    background: '#f1f5f9', border: 'none', padding: '5px 11px', borderRadius: '4px',
-    cursor: 'pointer', fontSize: '12px', marginRight: '5px', color: '#334155',
+    background: 'white', border: '1px solid #d1d1d1',
+    padding: '5px 12px', borderRadius: '6px', cursor: 'pointer',
+    fontSize: '12px', marginRight: '6px', color: '#1a1a1a', fontWeight: '500',
   },
   btnDelete: {
-    background: '#fee2e2', border: 'none', padding: '5px 11px',
-    borderRadius: '4px', cursor: 'pointer', fontSize: '12px', color: '#dc2626',
+    background: 'white', border: '1px solid #fad9d9',
+    padding: '5px 12px', borderRadius: '6px', cursor: 'pointer',
+    fontSize: '12px', color: '#a4262c', fontWeight: '500',
   },
-  // Modal
   overlay: {
-    position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)',
+    position: 'fixed', inset: 0,
+    background: 'rgba(0,0,0,0.4)',
+    backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)',
     display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000,
   },
   modal: {
     background: 'white', borderRadius: '12px', width: '480px',
-    maxWidth: '95vw', boxShadow: '0 20px 60px rgba(0,0,0,0.3)', overflow: 'hidden',
+    maxWidth: '95vw', boxShadow: '0 24px 64px rgba(0,0,0,0.18)', overflow: 'hidden',
   },
-  modalHeader: { padding: '18px 22px 14px', borderBottom: '1px solid #f1f5f9' },
-  modalTitle: { fontSize: '16px', fontWeight: '600', color: '#1e293b', margin: 0 },
-  modalBody: { padding: '16px 22px' },
+  modalHeader: { padding: '20px 24px 16px', borderBottom: '1px solid #f0f0f0' },
+  modalTitle: { fontSize: '17px', fontWeight: '700', color: '#1a1a1a', margin: 0 },
+  modalBody: { padding: '18px 24px' },
   modalFooter: {
-    padding: '14px 22px', borderTop: '1px solid #f1f5f9',
+    padding: '14px 24px', borderTop: '1px solid #f0f0f0',
     display: 'flex', justifyContent: 'flex-end', gap: '8px',
   },
-  field: { marginBottom: '12px' },
-  label: { display: 'block', fontSize: '12px', fontWeight: '500', color: '#475569', marginBottom: '4px' },
+  field: { marginBottom: '14px' },
+  label: { display: 'block', fontSize: '12px', fontWeight: '600', color: '#5c5c5c', marginBottom: '5px' },
   input: {
-    width: '100%', padding: '7px 10px', border: '1px solid #e2e8f0',
-    borderRadius: '6px', fontSize: '13px', outline: 'none', boxSizing: 'border-box',
+    width: '100%', padding: '8px 12px', border: '1px solid #d1d1d1',
+    borderRadius: '6px', fontSize: '14px', boxSizing: 'border-box',
   },
   textarea: {
-    width: '100%', padding: '7px 10px', border: '1px solid #e2e8f0',
-    borderRadius: '6px', fontSize: '13px', resize: 'vertical', minHeight: '64px',
+    width: '100%', padding: '8px 12px', border: '1px solid #d1d1d1',
+    borderRadius: '6px', fontSize: '14px', resize: 'vertical', minHeight: '64px',
     boxSizing: 'border-box', fontFamily: 'inherit',
   },
   btnCancel: {
-    background: '#f1f5f9', border: 'none', padding: '8px 16px',
-    borderRadius: '6px', cursor: 'pointer', fontSize: '14px', color: '#475569',
+    background: 'white', border: '1px solid #d1d1d1',
+    padding: '8px 16px', borderRadius: '8px', cursor: 'pointer', fontSize: '14px', color: '#5c5c5c',
   },
   btnSave: {
-    background: '#3b82f6', color: 'white', border: 'none',
-    padding: '8px 20px', borderRadius: '6px', cursor: 'pointer', fontSize: '14px', fontWeight: '500',
+    background: '#0078d4', color: 'white', border: 'none',
+    padding: '8px 20px', borderRadius: '8px', cursor: 'pointer', fontSize: '14px', fontWeight: '500',
   },
 };
 
@@ -97,30 +104,30 @@ function SupplierModal({ supplier, onSave, onCancel }) {
           <div style={s.modalBody}>
             <div style={s.field}>
               <label style={s.label}>Nombre *</label>
-              <input style={s.input} value={form.name} onChange={set('name')} required autoFocus placeholder="Nombre del proveedor" />
+              <input className="fl-input" style={s.input} value={form.name} onChange={set('name')} required autoFocus placeholder="Nombre del proveedor" />
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
               <div style={s.field}>
                 <label style={s.label}>Teléfono</label>
-                <input style={s.input} value={form.phone} onChange={set('phone')} placeholder="+506 0000-0000" />
+                <input className="fl-input" style={s.input} value={form.phone} onChange={set('phone')} placeholder="+506 0000-0000" />
               </div>
               <div style={s.field}>
                 <label style={s.label}>Email</label>
-                <input style={s.input} type="email" value={form.email} onChange={set('email')} placeholder="proveedor@ejemplo.com" />
+                <input className="fl-input" style={s.input} type="email" value={form.email} onChange={set('email')} placeholder="proveedor@ejemplo.com" />
               </div>
             </div>
             <div style={s.field}>
               <label style={s.label}>Dirección</label>
-              <input style={s.input} value={form.address} onChange={set('address')} placeholder="Dirección o zona" />
+              <input className="fl-input" style={s.input} value={form.address} onChange={set('address')} placeholder="Dirección o zona" />
             </div>
             <div style={s.field}>
               <label style={s.label}>Notas</label>
-              <textarea style={s.textarea} value={form.notes} onChange={set('notes')} placeholder="Observaciones, condiciones de pago, etc." />
+              <textarea className="fl-input" style={s.textarea} value={form.notes} onChange={set('notes')} placeholder="Observaciones, condiciones de pago, etc." />
             </div>
           </div>
           <div style={s.modalFooter}>
-            <button type="button" style={s.btnCancel} onClick={onCancel}>Cancelar</button>
-            <button type="submit" style={s.btnSave}>{isEdit ? 'Guardar cambios' : 'Crear proveedor'}</button>
+            <button type="button" className="fl-btn-ghost" style={s.btnCancel} onClick={onCancel}>Cancelar</button>
+            <button type="submit" className="fl-btn-primary" style={s.btnSave}>{isEdit ? 'Guardar cambios' : 'Crear proveedor'}</button>
           </div>
         </form>
       </div>
@@ -132,7 +139,7 @@ export default function SuppliersView() {
   const [suppliers, setSuppliers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [modal, setModal] = useState(null); // null | 'create' | { mode: 'edit', supplier }
+  const [modal, setModal] = useState(null);
 
   const load = useCallback(async () => {
     try {
@@ -176,13 +183,13 @@ export default function SuppliersView() {
     <>
       <div style={s.toolbar}>
         <h2 style={s.sectionTitle}>Proveedores</h2>
-        <button style={s.btnPrimary} onClick={() => setModal('create')}>+ Nuevo Proveedor</button>
+        <button className="fl-btn-primary" style={s.btnPrimary} onClick={() => setModal('create')}>+ Nuevo Proveedor</button>
       </div>
 
       {error && <div style={s.errorBox}>{error}</div>}
 
       {loading ? (
-        <p style={{ color: '#64748b', fontSize: '14px' }}>Cargando...</p>
+        <p style={{ color: '#9e9e9e', fontSize: '14px' }}>Cargando...</p>
       ) : (
         <div style={s.wrapper}>
           {suppliers.length === 0 ? (
@@ -200,14 +207,14 @@ export default function SuppliersView() {
               </thead>
               <tbody>
                 {suppliers.map((sup) => (
-                  <tr key={sup.id}>
-                    <td style={{ ...s.td, fontWeight: '600', color: '#1e293b' }}>{sup.name}</td>
-                    <td style={{ ...s.td, color: sup.phone ? '#334155' : '#94a3b8' }}>{sup.phone || '—'}</td>
-                    <td style={{ ...s.td, color: sup.email ? '#334155' : '#94a3b8' }}>{sup.email || '—'}</td>
-                    <td style={{ ...s.td, color: sup.address ? '#334155' : '#94a3b8' }}>{sup.address || '—'}</td>
+                  <tr key={sup.id} className="fl-tr">
+                    <td style={{ ...s.td, fontWeight: '600' }}>{sup.name}</td>
+                    <td style={{ ...s.td, color: sup.phone ? '#1a1a1a' : '#9e9e9e' }}>{sup.phone || '—'}</td>
+                    <td style={{ ...s.td, color: sup.email ? '#1a1a1a' : '#9e9e9e' }}>{sup.email || '—'}</td>
+                    <td style={{ ...s.td, color: sup.address ? '#1a1a1a' : '#9e9e9e' }}>{sup.address || '—'}</td>
                     <td style={s.td}>
-                      <button style={s.btnEdit} onClick={() => setModal({ mode: 'edit', supplier: sup })}>Editar</button>
-                      <button style={s.btnDelete} onClick={() => handleDelete(sup.id)}>Eliminar</button>
+                      <button className="fl-btn-secondary" style={s.btnEdit} onClick={() => setModal({ mode: 'edit', supplier: sup })}>Editar</button>
+                      <button className="fl-btn-danger" style={s.btnDelete} onClick={() => handleDelete(sup.id)}>Eliminar</button>
                     </td>
                   </tr>
                 ))}
