@@ -9,14 +9,14 @@ import CategoriesView from './components/CategoriesView';
 import CustomersView from './components/CustomersView';
 
 const TABS = [
-  { id: 'dashboard',     label: 'Dashboard',    icon: '📊' },
-  { id: 'catalog',       label: 'Catálogo',      icon: '📦' },
-  { id: 'stock-entries', label: 'Entradas',      icon: '📥' },
-  { id: 'suppliers',     label: 'Proveedores',   icon: '🏢' },
-  { id: 'new-sale',      label: 'Nueva Venta',   icon: '🛒' },
-  { id: 'history',       label: 'Historial',     icon: '📋' },
-  { id: 'categories',    label: 'Categorías',    icon: '🏷️' },
-  { id: 'customers',     label: 'Clientes',      icon: '👤' },
+  { id: 'dashboard', label: 'Dashboard', icon: '📊' },
+  { id: 'catalog', label: 'Catálogo', icon: '📦' },
+  { id: 'stock-entries', label: 'Entradas', icon: '📥' },
+  { id: 'suppliers', label: 'Proveedores', icon: '🏢' },
+  { id: 'new-sale', label: 'Nueva Venta', icon: '🛒' },
+  { id: 'history', label: 'Historial', icon: '📋' },
+  { id: 'categories', label: 'Categorías', icon: '🏷️' },
+  { id: 'customers', label: 'Clientes', icon: '👤' },
 ];
 
 // ── Global CSS (hover / focus effects impossible with pure inline styles) ────
@@ -149,7 +149,7 @@ export default function App() {
       <style>{GLOBAL_CSS}</style>
       <div style={styles.app}>
         <header style={styles.header}>
-          <span style={styles.title}>TechStore</span>
+          <span style={styles.title}>StarTecnology</span>
           <nav style={styles.nav}>
             {TABS.map((tab) => (
               <button
@@ -165,14 +165,18 @@ export default function App() {
           </nav>
         </header>
         <main style={styles.main}>
-          {activeTab === 'dashboard'     && <DashboardView onNavigate={setActiveTab} />}
-          {activeTab === 'catalog'       && <InventoryView />}
+          {activeTab === 'dashboard' && (
+            <DashboardView onNavigate={setActiveTab} />
+          )}
+          {activeTab === 'catalog' && <InventoryView />}
           {activeTab === 'stock-entries' && <StockEntriesView />}
-          {activeTab === 'suppliers'     && <SuppliersView />}
-          {activeTab === 'new-sale'      && <NewSale onSaleComplete={() => setActiveTab('history')} />}
-          {activeTab === 'history'       && <SaleHistory />}
-          {activeTab === 'categories'    && <CategoriesView />}
-          {activeTab === 'customers'     && <CustomersView />}
+          {activeTab === 'suppliers' && <SuppliersView />}
+          {activeTab === 'new-sale' && (
+            <NewSale onSaleComplete={() => setActiveTab('history')} />
+          )}
+          {activeTab === 'history' && <SaleHistory />}
+          {activeTab === 'categories' && <CategoriesView />}
+          {activeTab === 'customers' && <CustomersView />}
         </main>
       </div>
     </>

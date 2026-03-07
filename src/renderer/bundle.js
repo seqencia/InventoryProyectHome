@@ -1474,7 +1474,7 @@
           return dispatcher;
         }
         "undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(Error());
-        var React12 = require_react(), Internals = {
+        var React14 = require_react(), Internals = {
           d: {
             f: noop,
             r: function() {
@@ -1492,7 +1492,7 @@
           },
           p: 0,
           findDOMNode: null
-        }, REACT_PORTAL_TYPE = Symbol.for("react.portal"), ReactSharedInternals = React12.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE;
+        }, REACT_PORTAL_TYPE = Symbol.for("react.portal"), ReactSharedInternals = React14.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE;
         "function" === typeof Map && null != Map.prototype && "function" === typeof Map.prototype.forEach && "function" === typeof Set && null != Set.prototype && "function" === typeof Set.prototype.clear && "function" === typeof Set.prototype.forEach || console.error(
           "React depends on Map and Set built-in types. Make sure that you load a polyfill in older browsers. https://reactjs.org/link/react-polyfills"
         );
@@ -2948,7 +2948,7 @@
           "number" === type && getActiveElement(node.ownerDocument) === node || node.defaultValue === "" + value || (node.defaultValue = "" + value);
         }
         function validateOptionProps(element, props) {
-          null == props.value && ("object" === typeof props.children && null !== props.children ? React12.Children.forEach(props.children, function(child) {
+          null == props.value && ("object" === typeof props.children && null !== props.children ? React14.Children.forEach(props.children, function(child) {
             null == child || "string" === typeof child || "number" === typeof child || "bigint" === typeof child || didWarnInvalidChild || (didWarnInvalidChild = true, console.error(
               "Cannot infer the option value of complex children. Pass a `value` prop or use a plain string as children to <option>."
             ));
@@ -3538,28 +3538,28 @@
           ))));
           null == value || "boolean" === typeof value || "" === value ? isCustomProperty ? style2.setProperty(styleName, "") : "float" === styleName ? style2.cssFloat = "" : style2[styleName] = "" : isCustomProperty ? style2.setProperty(styleName, value) : "number" !== typeof value || 0 === value || unitlessNumbers.has(styleName) ? "float" === styleName ? style2.cssFloat = value : (checkCSSPropertyStringCoercion(value, styleName), style2[styleName] = ("" + value).trim()) : style2[styleName] = value + "px";
         }
-        function setValueForStyles(node, styles7, prevStyles) {
-          if (null != styles7 && "object" !== typeof styles7)
+        function setValueForStyles(node, styles5, prevStyles) {
+          if (null != styles5 && "object" !== typeof styles5)
             throw Error(
               "The `style` prop expects a mapping from style properties to values, not a string. For example, style={{marginRight: spacing + 'em'}} when using JSX."
             );
-          styles7 && Object.freeze(styles7);
+          styles5 && Object.freeze(styles5);
           node = node.style;
           if (null != prevStyles) {
-            if (styles7) {
+            if (styles5) {
               var expandedUpdates = {};
               if (prevStyles) {
                 for (var key in prevStyles)
-                  if (prevStyles.hasOwnProperty(key) && !styles7.hasOwnProperty(key))
+                  if (prevStyles.hasOwnProperty(key) && !styles5.hasOwnProperty(key))
                     for (var longhands = shorthandToLonghand[key] || [key], i = 0; i < longhands.length; i++)
                       expandedUpdates[longhands[i]] = key;
               }
-              for (var _key in styles7)
-                if (styles7.hasOwnProperty(_key) && (!prevStyles || prevStyles[_key] !== styles7[_key]))
+              for (var _key in styles5)
+                if (styles5.hasOwnProperty(_key) && (!prevStyles || prevStyles[_key] !== styles5[_key]))
                   for (key = shorthandToLonghand[_key] || [_key], longhands = 0; longhands < key.length; longhands++)
                     expandedUpdates[key[longhands]] = _key;
               _key = {};
-              for (var key$jscomp$0 in styles7)
+              for (var key$jscomp$0 in styles5)
                 for (key = shorthandToLonghand[key$jscomp$0] || [key$jscomp$0], longhands = 0; longhands < key.length; longhands++)
                   _key[key[longhands]] = key$jscomp$0;
               key$jscomp$0 = {};
@@ -3567,7 +3567,7 @@
                 if (key = expandedUpdates[_key2], (longhands = _key[_key2]) && key !== longhands && (i = key + "," + longhands, !key$jscomp$0[i])) {
                   key$jscomp$0[i] = true;
                   i = console;
-                  var value = styles7[key];
+                  var value = styles5[key];
                   i.error.call(
                     i,
                     "%s a style property during rerender (%s) when a conflicting property is set (%s) can lead to styling bugs. To avoid this, don't mix shorthand and non-shorthand properties for the same value; instead, replace the shorthand with separate values.",
@@ -3578,12 +3578,12 @@
                 }
             }
             for (var styleName in prevStyles)
-              !prevStyles.hasOwnProperty(styleName) || null != styles7 && styles7.hasOwnProperty(styleName) || (0 === styleName.indexOf("--") ? node.setProperty(styleName, "") : "float" === styleName ? node.cssFloat = "" : node[styleName] = "");
-            for (var _styleName in styles7)
-              _key2 = styles7[_styleName], styles7.hasOwnProperty(_styleName) && prevStyles[_styleName] !== _key2 && setValueForStyle(node, _styleName, _key2);
+              !prevStyles.hasOwnProperty(styleName) || null != styles5 && styles5.hasOwnProperty(styleName) || (0 === styleName.indexOf("--") ? node.setProperty(styleName, "") : "float" === styleName ? node.cssFloat = "" : node[styleName] = "");
+            for (var _styleName in styles5)
+              _key2 = styles5[_styleName], styles5.hasOwnProperty(_styleName) && prevStyles[_styleName] !== _key2 && setValueForStyle(node, _styleName, _key2);
           } else
-            for (expandedUpdates in styles7)
-              styles7.hasOwnProperty(expandedUpdates) && setValueForStyle(node, expandedUpdates, styles7[expandedUpdates]);
+            for (expandedUpdates in styles5)
+              styles5.hasOwnProperty(expandedUpdates) && setValueForStyle(node, expandedUpdates, styles5[expandedUpdates]);
         }
         function isCustomElement(tagName) {
           if (-1 === tagName.indexOf("-")) return false;
@@ -16418,13 +16418,13 @@
           ));
         }
         "undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(Error());
-        var Scheduler = require_scheduler(), React12 = require_react(), ReactDOM = require_react_dom(), REACT_LEGACY_ELEMENT_TYPE = Symbol.for("react.element"), REACT_ELEMENT_TYPE = Symbol.for("react.transitional.element"), REACT_PORTAL_TYPE = Symbol.for("react.portal"), REACT_FRAGMENT_TYPE = Symbol.for("react.fragment"), REACT_STRICT_MODE_TYPE = Symbol.for("react.strict_mode"), REACT_PROFILER_TYPE = Symbol.for("react.profiler"), REACT_PROVIDER_TYPE = Symbol.for("react.provider"), REACT_CONSUMER_TYPE = Symbol.for("react.consumer"), REACT_CONTEXT_TYPE = Symbol.for("react.context"), REACT_FORWARD_REF_TYPE = Symbol.for("react.forward_ref"), REACT_SUSPENSE_TYPE = Symbol.for("react.suspense"), REACT_SUSPENSE_LIST_TYPE = Symbol.for("react.suspense_list"), REACT_MEMO_TYPE = Symbol.for("react.memo"), REACT_LAZY_TYPE = Symbol.for("react.lazy");
+        var Scheduler = require_scheduler(), React14 = require_react(), ReactDOM = require_react_dom(), REACT_LEGACY_ELEMENT_TYPE = Symbol.for("react.element"), REACT_ELEMENT_TYPE = Symbol.for("react.transitional.element"), REACT_PORTAL_TYPE = Symbol.for("react.portal"), REACT_FRAGMENT_TYPE = Symbol.for("react.fragment"), REACT_STRICT_MODE_TYPE = Symbol.for("react.strict_mode"), REACT_PROFILER_TYPE = Symbol.for("react.profiler"), REACT_PROVIDER_TYPE = Symbol.for("react.provider"), REACT_CONSUMER_TYPE = Symbol.for("react.consumer"), REACT_CONTEXT_TYPE = Symbol.for("react.context"), REACT_FORWARD_REF_TYPE = Symbol.for("react.forward_ref"), REACT_SUSPENSE_TYPE = Symbol.for("react.suspense"), REACT_SUSPENSE_LIST_TYPE = Symbol.for("react.suspense_list"), REACT_MEMO_TYPE = Symbol.for("react.memo"), REACT_LAZY_TYPE = Symbol.for("react.lazy");
         Symbol.for("react.scope");
         Symbol.for("react.debug_trace_mode");
         var REACT_OFFSCREEN_TYPE = Symbol.for("react.offscreen");
         Symbol.for("react.legacy_hidden");
         Symbol.for("react.tracing_marker");
-        var REACT_MEMO_CACHE_SENTINEL = Symbol.for("react.memo_cache_sentinel"), MAYBE_ITERATOR_SYMBOL = Symbol.iterator, REACT_CLIENT_REFERENCE = Symbol.for("react.client.reference"), ReactSharedInternals = React12.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, assign = Object.assign, disabledDepth = 0, prevLog, prevInfo, prevWarn, prevError, prevGroup, prevGroupCollapsed, prevGroupEnd;
+        var REACT_MEMO_CACHE_SENTINEL = Symbol.for("react.memo_cache_sentinel"), MAYBE_ITERATOR_SYMBOL = Symbol.iterator, REACT_CLIENT_REFERENCE = Symbol.for("react.client.reference"), ReactSharedInternals = React14.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, assign = Object.assign, disabledDepth = 0, prevLog, prevInfo, prevWarn, prevError, prevGroup, prevGroupCollapsed, prevGroupEnd;
         disabledLog.__reactDisabledLog = true;
         var prefix, suffix, reentry = false;
         var componentFrameCache = new ("function" === typeof WeakMap ? WeakMap : Map)();
@@ -18974,9 +18974,9 @@
             previousDispatcher.S(href, precedence, options);
             var ownerDocument = globalDocument;
             if (ownerDocument && href) {
-              var styles7 = getResourcesFromRoot(ownerDocument).hoistableStyles, key = getStyleKey(href);
+              var styles5 = getResourcesFromRoot(ownerDocument).hoistableStyles, key = getStyleKey(href);
               precedence = precedence || "default";
-              var resource = styles7.get(key);
+              var resource = styles5.get(key);
               if (!resource) {
                 var state = { loading: NotLoaded, preload: null };
                 if (resource = ownerDocument.querySelector(
@@ -19015,7 +19015,7 @@
                   count: 1,
                   state
                 };
-                styles7.set(key, resource);
+                styles5.set(key, resource);
               }
             }
           },
@@ -19144,7 +19144,7 @@
           }
         };
         (function() {
-          var isomorphicReactPackageVersion = React12.version;
+          var isomorphicReactPackageVersion = React14.version;
           if ("19.0.0" !== isomorphicReactPackageVersion)
             throw Error(
               'Incompatible React versions: The "react" and "react-dom" packages must have the exact same version. Instead got:\n  - react:      ' + (isomorphicReactPackageVersion + "\n  - react-dom:  19.0.0\nLearn more: https://react.dev/warnings/version-mismatch")
@@ -19286,11 +19286,11 @@
   });
 
   // src/renderer/index.js
-  var import_react11 = __toESM(require_react());
+  var import_react13 = __toESM(require_react());
   var import_client = __toESM(require_client());
 
   // src/renderer/app.js
-  var import_react10 = __toESM(require_react());
+  var import_react12 = __toESM(require_react());
 
   // src/renderer/components/DashboardView.js
   var import_react = __toESM(require_react());
@@ -19304,29 +19304,57 @@
     });
   }
   function Card({ children, style }) {
-    return /* @__PURE__ */ import_react.default.createElement("div", { style: { background: "white", borderRadius: "10px", boxShadow: "0 1px 4px rgba(0,0,0,0.08)", overflow: "hidden", ...style } }, children);
+    return /* @__PURE__ */ import_react.default.createElement(
+      "div",
+      {
+        className: "fl-card",
+        style: {
+          background: "white",
+          borderRadius: "12px",
+          boxShadow: "0 2px 8px rgba(0,0,0,0.07)",
+          overflow: "hidden",
+          ...style
+        }
+      },
+      children
+    );
   }
   function CardHeader({ title }) {
-    return /* @__PURE__ */ import_react.default.createElement("div", { style: { padding: "14px 18px", borderBottom: "1px solid #f1f5f9", fontWeight: "600", fontSize: "14px", color: "#475569" } }, title);
+    return /* @__PURE__ */ import_react.default.createElement("div", { style: {
+      padding: "14px 18px",
+      borderBottom: "1px solid #f0f0f0",
+      fontWeight: "600",
+      fontSize: "13px",
+      color: "#5c5c5c",
+      letterSpacing: "0.1px"
+    } }, title);
   }
   function StatCard({ label, value, sub, accentColor }) {
-    return /* @__PURE__ */ import_react.default.createElement(Card, null, /* @__PURE__ */ import_react.default.createElement("div", { style: { borderTop: `3px solid ${accentColor}`, padding: "20px 22px" } }, /* @__PURE__ */ import_react.default.createElement("div", { style: { fontSize: "12px", fontWeight: "600", color: "#94a3b8", textTransform: "uppercase", letterSpacing: "0.6px", marginBottom: "10px" } }, label), /* @__PURE__ */ import_react.default.createElement("div", { style: { fontSize: "32px", fontWeight: "700", color: "#1e293b", lineHeight: 1 } }, value), sub && /* @__PURE__ */ import_react.default.createElement("div", { style: { fontSize: "13px", color: "#94a3b8", marginTop: "6px" } }, sub)));
+    return /* @__PURE__ */ import_react.default.createElement(Card, null, /* @__PURE__ */ import_react.default.createElement("div", { style: { borderTop: `3px solid ${accentColor}`, padding: "20px 22px" } }, /* @__PURE__ */ import_react.default.createElement("div", { style: {
+      fontSize: "11px",
+      fontWeight: "700",
+      color: "#9e9e9e",
+      textTransform: "uppercase",
+      letterSpacing: "0.7px",
+      marginBottom: "10px"
+    } }, label), /* @__PURE__ */ import_react.default.createElement("div", { style: { fontSize: "30px", fontWeight: "700", color: "#1a1a1a", lineHeight: 1 } }, value), sub && /* @__PURE__ */ import_react.default.createElement("div", { style: { fontSize: "12px", color: "#9e9e9e", marginTop: "6px" } }, sub)));
   }
   function LowStockCard({ items, onNavigate }) {
-    return /* @__PURE__ */ import_react.default.createElement(Card, null, /* @__PURE__ */ import_react.default.createElement(CardHeader, { title: "\u26A0 Alertas de Stock Bajo" }), items.length === 0 ? /* @__PURE__ */ import_react.default.createElement("div", { style: { padding: "28px 18px", textAlign: "center", color: "#16a34a", fontSize: "14px", fontWeight: "500" } }, "\u2713 Todo el inventario en orden") : /* @__PURE__ */ import_react.default.createElement("ul", { style: { listStyle: "none", margin: 0, padding: 0 } }, items.map((p) => /* @__PURE__ */ import_react.default.createElement(
+    return /* @__PURE__ */ import_react.default.createElement(Card, null, /* @__PURE__ */ import_react.default.createElement(CardHeader, { title: "\u26A0 Alertas de Stock Bajo" }), items.length === 0 ? /* @__PURE__ */ import_react.default.createElement("div", { style: { padding: "28px 18px", textAlign: "center", color: "#107c10", fontSize: "14px", fontWeight: "500" } }, "\u2713 Todo el inventario en orden") : /* @__PURE__ */ import_react.default.createElement("ul", { style: { listStyle: "none", margin: 0, padding: 0 } }, items.map((p) => /* @__PURE__ */ import_react.default.createElement(
       "li",
       {
         key: p.id,
-        style: { display: "flex", alignItems: "center", justifyContent: "space-between", padding: "10px 18px", borderBottom: "1px solid #f8fafc", cursor: "pointer" },
-        onClick: () => onNavigate("inventory"),
-        title: "Ir al inventario"
+        className: "fl-tr",
+        style: { display: "flex", alignItems: "center", justifyContent: "space-between", padding: "10px 18px", borderBottom: "1px solid #f5f5f5", cursor: "pointer" },
+        onClick: () => onNavigate("catalog"),
+        title: "Ir al cat\xE1logo"
       },
-      /* @__PURE__ */ import_react.default.createElement("span", { style: { fontSize: "14px", color: "#334155" } }, p.name),
+      /* @__PURE__ */ import_react.default.createElement("span", { style: { fontSize: "13px", color: "#1a1a1a" } }, p.name),
       /* @__PURE__ */ import_react.default.createElement("span", { style: {
-        background: p.stock === 0 ? "#fee2e2" : "#fef3c7",
-        color: p.stock === 0 ? "#dc2626" : "#b45309",
+        background: p.stock === 0 ? "#ffebee" : "#fff8e1",
+        color: p.stock === 0 ? "#a4262c" : "#8a5700",
         fontWeight: "700",
-        fontSize: "13px",
+        fontSize: "12px",
         padding: "2px 10px",
         borderRadius: "12px"
       } }, p.stock === 0 ? "Sin stock" : `${p.stock} / m\xEDn ${p.min_stock ?? 5}`)
@@ -19334,32 +19362,62 @@
   }
   function TopProductsCard({ items }) {
     const max = items[0]?.total_sold || 1;
-    return /* @__PURE__ */ import_react.default.createElement(Card, null, /* @__PURE__ */ import_react.default.createElement(CardHeader, { title: "\u2605 Top 5 M\xE1s Vendidos" }), items.length === 0 ? /* @__PURE__ */ import_react.default.createElement("div", { style: { padding: "28px 18px", textAlign: "center", color: "#94a3b8", fontSize: "14px" } }, "Sin ventas registradas a\xFAn") : /* @__PURE__ */ import_react.default.createElement("ul", { style: { listStyle: "none", margin: 0, padding: "8px 0" } }, items.map((p, i) => /* @__PURE__ */ import_react.default.createElement("li", { key: p.product_id, style: { padding: "9px 18px" } }, /* @__PURE__ */ import_react.default.createElement("div", { style: { display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "5px" } }, /* @__PURE__ */ import_react.default.createElement("div", { style: { display: "flex", alignItems: "center", gap: "10px" } }, /* @__PURE__ */ import_react.default.createElement("span", { style: { fontWeight: "700", fontSize: "13px", color: "#94a3b8", width: "16px" } }, i + 1), /* @__PURE__ */ import_react.default.createElement("span", { style: { fontSize: "14px", color: "#1e293b", fontWeight: "500" } }, p.product_name)), /* @__PURE__ */ import_react.default.createElement("span", { style: { fontSize: "13px", fontWeight: "600", color: "#475569" } }, p.total_sold, " uds")), /* @__PURE__ */ import_react.default.createElement("div", { style: { marginLeft: "26px", height: "4px", background: "#f1f5f9", borderRadius: "2px", overflow: "hidden" } }, /* @__PURE__ */ import_react.default.createElement("div", { style: {
+    return /* @__PURE__ */ import_react.default.createElement(Card, null, /* @__PURE__ */ import_react.default.createElement(CardHeader, { title: "\u2605 Top 5 M\xE1s Vendidos" }), items.length === 0 ? /* @__PURE__ */ import_react.default.createElement("div", { style: { padding: "28px 18px", textAlign: "center", color: "#9e9e9e", fontSize: "14px" } }, "Sin ventas registradas a\xFAn") : /* @__PURE__ */ import_react.default.createElement("ul", { style: { listStyle: "none", margin: 0, padding: "8px 0" } }, items.map((p, i) => /* @__PURE__ */ import_react.default.createElement("li", { key: p.product_id, style: { padding: "9px 18px" } }, /* @__PURE__ */ import_react.default.createElement("div", { style: { display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "5px" } }, /* @__PURE__ */ import_react.default.createElement("div", { style: { display: "flex", alignItems: "center", gap: "10px" } }, /* @__PURE__ */ import_react.default.createElement("span", { style: { fontWeight: "700", fontSize: "12px", color: "#9e9e9e", width: "16px" } }, i + 1), /* @__PURE__ */ import_react.default.createElement("span", { style: { fontSize: "13px", color: "#1a1a1a", fontWeight: "500" } }, p.product_name)), /* @__PURE__ */ import_react.default.createElement("span", { style: { fontSize: "12px", fontWeight: "600", color: "#5c5c5c" } }, p.total_sold, " uds")), /* @__PURE__ */ import_react.default.createElement("div", { style: { marginLeft: "26px", height: "4px", background: "#f0f0f0", borderRadius: "4px", overflow: "hidden" } }, /* @__PURE__ */ import_react.default.createElement("div", { style: {
       height: "100%",
       width: `${p.total_sold / max * 100}%`,
-      background: i === 0 ? "#3b82f6" : "#93c5fd",
-      borderRadius: "2px",
-      transition: "width 0.4s ease"
+      background: i === 0 ? "#0078d4" : "#a8d0f0",
+      borderRadius: "4px",
+      transition: "width 0.5s ease"
     } }))))));
   }
   function RecentSalesCard({ sales, onNavigate }) {
-    const th = { padding: "10px 16px", textAlign: "left", fontWeight: "600", fontSize: "12px", color: "#94a3b8", background: "#f8fafc", borderBottom: "1px solid #f1f5f9", textTransform: "uppercase", letterSpacing: "0.5px" };
-    const td = { padding: "11px 16px", borderBottom: "1px solid #f8fafc", fontSize: "14px", color: "#334155", verticalAlign: "middle" };
-    return /* @__PURE__ */ import_react.default.createElement(Card, null, /* @__PURE__ */ import_react.default.createElement("div", { style: { display: "flex", alignItems: "center", justifyContent: "space-between", padding: "14px 18px", borderBottom: "1px solid #f1f5f9" } }, /* @__PURE__ */ import_react.default.createElement("span", { style: { fontWeight: "600", fontSize: "14px", color: "#475569" } }, "Ventas Recientes"), /* @__PURE__ */ import_react.default.createElement(
+    const th = {
+      padding: "10px 16px",
+      textAlign: "left",
+      fontWeight: "600",
+      fontSize: "11px",
+      color: "#9e9e9e",
+      background: "#fafafa",
+      borderBottom: "1px solid #f0f0f0",
+      textTransform: "uppercase",
+      letterSpacing: "0.5px"
+    };
+    const td = {
+      padding: "11px 16px",
+      borderBottom: "1px solid #f5f5f5",
+      fontSize: "13px",
+      color: "#1a1a1a",
+      verticalAlign: "middle"
+    };
+    return /* @__PURE__ */ import_react.default.createElement(Card, null, /* @__PURE__ */ import_react.default.createElement("div", { style: { display: "flex", alignItems: "center", justifyContent: "space-between", padding: "14px 18px", borderBottom: "1px solid #f0f0f0" } }, /* @__PURE__ */ import_react.default.createElement("span", { style: { fontWeight: "600", fontSize: "13px", color: "#5c5c5c" } }, "Ventas Recientes"), /* @__PURE__ */ import_react.default.createElement(
       "button",
       {
+        className: "fl-btn-ghost",
         onClick: () => onNavigate("history"),
-        style: { background: "none", border: "none", color: "#3b82f6", cursor: "pointer", fontSize: "13px", fontWeight: "500" }
+        style: { background: "none", border: "none", color: "#0078d4", cursor: "pointer", fontSize: "13px", fontWeight: "500", borderRadius: "6px", padding: "4px 8px" }
       },
       "Ver todas \u2192"
-    )), sales.length === 0 ? /* @__PURE__ */ import_react.default.createElement("div", { style: { padding: "28px 18px", textAlign: "center", color: "#94a3b8", fontSize: "14px" } }, "Sin ventas registradas a\xFAn") : /* @__PURE__ */ import_react.default.createElement("table", { style: { width: "100%", borderCollapse: "collapse", fontSize: "14px" } }, /* @__PURE__ */ import_react.default.createElement("thead", null, /* @__PURE__ */ import_react.default.createElement("tr", null, /* @__PURE__ */ import_react.default.createElement("th", { style: th }, "#"), /* @__PURE__ */ import_react.default.createElement("th", { style: th }, "Fecha"), /* @__PURE__ */ import_react.default.createElement("th", { style: th }, "Cliente"), /* @__PURE__ */ import_react.default.createElement("th", { style: { ...th, textAlign: "right" } }, "Total"))), /* @__PURE__ */ import_react.default.createElement("tbody", null, sales.map((sale) => /* @__PURE__ */ import_react.default.createElement("tr", { key: sale.id }, /* @__PURE__ */ import_react.default.createElement("td", { style: { ...td, color: "#94a3b8", width: "40px" } }, sale.id), /* @__PURE__ */ import_react.default.createElement("td", { style: td }, formatDate(sale.created_at)), /* @__PURE__ */ import_react.default.createElement("td", { style: { ...td, color: sale.customer_name ? "#334155" : "#94a3b8" } }, sale.customer_name || "\u2014"), /* @__PURE__ */ import_react.default.createElement("td", { style: { ...td, textAlign: "right", fontWeight: "700", color: "#1e293b" } }, "$", Number(sale.total).toFixed(2)))))));
+    )), sales.length === 0 ? /* @__PURE__ */ import_react.default.createElement("div", { style: { padding: "28px 18px", textAlign: "center", color: "#9e9e9e", fontSize: "14px" } }, "Sin ventas registradas a\xFAn") : /* @__PURE__ */ import_react.default.createElement("table", { style: { width: "100%", borderCollapse: "collapse" } }, /* @__PURE__ */ import_react.default.createElement("thead", null, /* @__PURE__ */ import_react.default.createElement("tr", null, /* @__PURE__ */ import_react.default.createElement("th", { style: th }, "#"), /* @__PURE__ */ import_react.default.createElement("th", { style: th }, "Fecha"), /* @__PURE__ */ import_react.default.createElement("th", { style: th }, "Cliente"), /* @__PURE__ */ import_react.default.createElement("th", { style: { ...th, textAlign: "right" } }, "Total"))), /* @__PURE__ */ import_react.default.createElement("tbody", null, sales.map((sale) => /* @__PURE__ */ import_react.default.createElement("tr", { key: sale.id, className: "fl-tr" }, /* @__PURE__ */ import_react.default.createElement("td", { style: { ...td, color: "#9e9e9e", width: "40px" } }, sale.id), /* @__PURE__ */ import_react.default.createElement("td", { style: td }, formatDate(sale.created_at)), /* @__PURE__ */ import_react.default.createElement("td", { style: { ...td, color: sale.customer_name ? "#1a1a1a" : "#9e9e9e" } }, sale.customer_name || "\u2014"), /* @__PURE__ */ import_react.default.createElement("td", { style: { ...td, textAlign: "right", fontWeight: "700", color: "#0078d4" } }, "$", Number(sale.total).toFixed(2)))))));
   }
   var layout = {
-    grid2: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px", marginBottom: "16px" },
+    grid3: { display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "16px", marginBottom: "16px" },
     grid2Bottom: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px", marginBottom: "16px" },
-    title: { fontSize: "17px", fontWeight: "600", color: "#1e293b", marginBottom: "20px" },
-    errorBox: { background: "#fee2e2", color: "#dc2626", padding: "12px 16px", borderRadius: "6px", marginBottom: "16px", fontSize: "14px" },
-    skeleton: { background: "#f1f5f9", borderRadius: "10px", height: "100px", animation: "pulse 1.5s ease infinite" }
+    title: { fontSize: "18px", fontWeight: "700", color: "#1a1a1a", marginBottom: "20px", letterSpacing: "-0.3px" },
+    errorBox: {
+      background: "#ffebee",
+      color: "#a4262c",
+      padding: "12px 16px",
+      borderRadius: "8px",
+      marginBottom: "16px",
+      fontSize: "14px"
+    },
+    skeleton: {
+      background: "linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 50%, #f0f0f0 75%)",
+      backgroundSize: "200% 100%",
+      borderRadius: "12px",
+      height: "100px",
+      animation: "pulse 1.5s ease infinite"
+    }
   };
   function DashboardView({ onNavigate }) {
     const [data, setData] = (0, import_react.useState)(null);
@@ -19369,26 +19427,32 @@
       window.electron.dashboard.getSummary().then(setData).catch(() => setError("Error al cargar el dashboard.")).finally(() => setLoading(false));
     }, []);
     if (loading) {
-      return /* @__PURE__ */ import_react.default.createElement(import_react.default.Fragment, null, /* @__PURE__ */ import_react.default.createElement("div", { style: layout.title }, "Dashboard"), /* @__PURE__ */ import_react.default.createElement("div", { style: layout.grid2 }, /* @__PURE__ */ import_react.default.createElement("div", { style: layout.skeleton }), /* @__PURE__ */ import_react.default.createElement("div", { style: layout.skeleton })), /* @__PURE__ */ import_react.default.createElement("div", { style: layout.grid2Bottom }, /* @__PURE__ */ import_react.default.createElement("div", { style: { ...layout.skeleton, height: "200px" } }), /* @__PURE__ */ import_react.default.createElement("div", { style: { ...layout.skeleton, height: "200px" } })), /* @__PURE__ */ import_react.default.createElement("div", { style: { ...layout.skeleton, height: "220px" } }));
+      return /* @__PURE__ */ import_react.default.createElement(import_react.default.Fragment, null, /* @__PURE__ */ import_react.default.createElement("div", { style: layout.title }, "Dashboard"), /* @__PURE__ */ import_react.default.createElement("div", { style: layout.grid3 }, /* @__PURE__ */ import_react.default.createElement("div", { style: layout.skeleton }), /* @__PURE__ */ import_react.default.createElement("div", { style: layout.skeleton }), /* @__PURE__ */ import_react.default.createElement("div", { style: layout.skeleton })), /* @__PURE__ */ import_react.default.createElement("div", { style: layout.grid2Bottom }, /* @__PURE__ */ import_react.default.createElement("div", { style: { ...layout.skeleton, height: "200px" } }), /* @__PURE__ */ import_react.default.createElement("div", { style: { ...layout.skeleton, height: "200px" } })), /* @__PURE__ */ import_react.default.createElement("div", { style: { ...layout.skeleton, height: "220px" } }));
     }
-    if (error) {
-      return /* @__PURE__ */ import_react.default.createElement("div", { style: layout.errorBox }, error);
-    }
-    return /* @__PURE__ */ import_react.default.createElement(import_react.default.Fragment, null, /* @__PURE__ */ import_react.default.createElement("div", { style: layout.title }, "Dashboard"), /* @__PURE__ */ import_react.default.createElement("div", { style: layout.grid2 }, /* @__PURE__ */ import_react.default.createElement(
+    if (error) return /* @__PURE__ */ import_react.default.createElement("div", { style: layout.errorBox }, error);
+    return /* @__PURE__ */ import_react.default.createElement(import_react.default.Fragment, null, /* @__PURE__ */ import_react.default.createElement("div", { style: layout.title }, "Dashboard"), /* @__PURE__ */ import_react.default.createElement("div", { style: layout.grid3 }, /* @__PURE__ */ import_react.default.createElement(
       StatCard,
       {
         label: "Ventas Hoy",
         value: data.todayCount,
         sub: data.todayCount === 1 ? "1 venta realizada" : `${data.todayCount} ventas realizadas`,
-        accentColor: "#3b82f6"
+        accentColor: "#0078d4"
       }
     ), /* @__PURE__ */ import_react.default.createElement(
       StatCard,
       {
         label: "Ingresos Hoy",
         value: `$${data.todayTotal.toFixed(2)}`,
-        sub: data.todayCount === 0 ? "Sin movimiento hoy" : `Promedio $${data.todayCount > 0 ? (data.todayTotal / data.todayCount).toFixed(2) : "0.00"} por venta`,
-        accentColor: "#16a34a"
+        sub: data.todayCount === 0 ? "Sin movimiento hoy" : `Promedio $${(data.todayTotal / data.todayCount).toFixed(2)} por venta`,
+        accentColor: "#107c10"
+      }
+    ), /* @__PURE__ */ import_react.default.createElement(
+      StatCard,
+      {
+        label: "Utilidad Hoy",
+        value: `$${data.todayProfit.toFixed(2)}`,
+        sub: "Ganancia neta estimada",
+        accentColor: "#7519b5"
       }
     )), /* @__PURE__ */ import_react.default.createElement("div", { style: layout.grid2Bottom }, /* @__PURE__ */ import_react.default.createElement(LowStockCard, { items: data.lowStock, onNavigate }), /* @__PURE__ */ import_react.default.createElement(TopProductsCard, { items: data.topProducts })), /* @__PURE__ */ import_react.default.createElement(RecentSalesCard, { sales: data.recentSales, onNavigate }));
   }
@@ -19399,23 +19463,23 @@
   // src/renderer/components/ProductList.js
   var import_react2 = __toESM(require_react());
   var CONDITION_STYLE = {
-    "Nuevo": { background: "#dcfce7", color: "#16a34a" },
-    "Bueno": { background: "#dbeafe", color: "#1d4ed8" },
-    "Regular": { background: "#fef3c7", color: "#b45309" },
-    "Para reparar": { background: "#fee2e2", color: "#dc2626" }
+    "Nuevo": { background: "#e8f5e9", color: "#2e7d32" },
+    "Bueno": { background: "#e3f2fd", color: "#1565c0" },
+    "Regular": { background: "#fff8e1", color: "#8a5700" },
+    "Para reparar": { background: "#ffebee", color: "#a4262c" }
   };
   var STATUS_STYLE = {
-    "Disponible": { background: "#dcfce7", color: "#16a34a" },
-    "Reservado": { background: "#ede9fe", color: "#7c3aed" },
-    "Vendido": { background: "#f1f5f9", color: "#64748b" },
-    "En reparaci\xF3n": { background: "#ffedd5", color: "#c2410c" }
+    "Disponible": { background: "#e8f5e9", color: "#2e7d32" },
+    "Reservado": { background: "#ede7f6", color: "#6a1b9a" },
+    "Vendido": { background: "#f5f5f5", color: "#5c5c5c" },
+    "En reparaci\xF3n": { background: "#fff3e0", color: "#bf360c" }
   };
   var badge = (map, value) => {
-    const col = map[value] || { background: "#f1f5f9", color: "#64748b" };
+    const col = map[value] || { background: "#f5f5f5", color: "#5c5c5c" };
     return {
       display: "inline-block",
-      padding: "2px 8px",
-      borderRadius: "10px",
+      padding: "3px 9px",
+      borderRadius: "12px",
       fontSize: "12px",
       fontWeight: "600",
       whiteSpace: "nowrap",
@@ -19426,63 +19490,67 @@
   var s = {
     wrapper: {
       background: "white",
-      borderRadius: "8px",
-      boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
+      borderRadius: "12px",
+      boxShadow: "0 2px 8px rgba(0,0,0,0.07)",
       overflow: "hidden"
     },
     table: { width: "100%", borderCollapse: "collapse", fontSize: "13px" },
     th: {
-      background: "#f8fafc",
+      background: "#f7f7f7",
       padding: "10px 14px",
       textAlign: "left",
-      fontWeight: "600",
-      color: "#475569",
-      borderBottom: "2px solid #e2e8f0",
+      fontWeight: "700",
+      fontSize: "11px",
+      color: "#9e9e9e",
+      borderBottom: "1px solid #e5e5e5",
+      textTransform: "uppercase",
+      letterSpacing: "0.5px",
       whiteSpace: "nowrap"
     },
     td: {
-      padding: "10px 14px",
-      borderBottom: "1px solid #f1f5f9",
+      padding: "11px 14px",
+      borderBottom: "1px solid #f5f5f5",
       verticalAlign: "middle"
     },
-    rowLowStock: { background: "#fffbeb" },
-    skuText: { fontSize: "11px", color: "#94a3b8", marginTop: "2px", fontFamily: "monospace" },
-    priceMain: { fontWeight: "700", color: "#1e293b" },
-    priceOffer: { fontWeight: "700", color: "#16a34a" },
-    priceStrike: { textDecoration: "line-through", color: "#94a3b8", fontSize: "11px", marginLeft: "4px" },
+    skuText: { fontSize: "11px", color: "#9e9e9e", marginTop: "2px", fontFamily: "monospace" },
+    priceMain: { fontWeight: "700", color: "#1a1a1a" },
+    priceOffer: { fontWeight: "700", color: "#107c10" },
+    priceStrike: { textDecoration: "line-through", color: "#9e9e9e", fontSize: "11px", marginLeft: "5px" },
     stockBadge: (p) => ({
       display: "inline-block",
-      padding: "2px 9px",
+      padding: "3px 9px",
       borderRadius: "12px",
       fontWeight: "700",
       fontSize: "12px",
-      background: p.stock === 0 ? "#fee2e2" : isLowStock(p) ? "#fef3c7" : "#dcfce7",
-      color: p.stock === 0 ? "#dc2626" : isLowStock(p) ? "#b45309" : "#16a34a"
+      background: p.stock === 0 ? "#ffebee" : isLowStock(p) ? "#fff8e1" : "#e8f5e9",
+      color: p.stock === 0 ? "#a4262c" : isLowStock(p) ? "#8a5700" : "#2e7d32"
     }),
-    minStockHint: { fontSize: "11px", color: "#94a3b8", marginTop: "2px" },
+    minStockHint: { fontSize: "11px", color: "#9e9e9e", marginTop: "2px" },
     btnEdit: {
-      background: "#f1f5f9",
-      border: "none",
-      padding: "5px 11px",
-      borderRadius: "4px",
+      background: "white",
+      border: "1px solid #d1d1d1",
+      padding: "5px 12px",
+      borderRadius: "6px",
       cursor: "pointer",
       fontSize: "12px",
-      marginRight: "5px",
-      color: "#334155"
+      marginRight: "6px",
+      color: "#1a1a1a",
+      fontWeight: "500"
     },
     btnDelete: {
-      background: "#fee2e2",
-      border: "none",
-      padding: "5px 11px",
-      borderRadius: "4px",
+      background: "white",
+      border: "1px solid #fad9d9",
+      padding: "5px 12px",
+      borderRadius: "6px",
       cursor: "pointer",
       fontSize: "12px",
-      color: "#dc2626"
+      color: "#a4262c",
+      fontWeight: "500"
     },
     empty: {
       textAlign: "center",
-      padding: "48px",
-      color: "#94a3b8",
+      padding: "56px 32px",
+      color: "#9e9e9e",
       fontSize: "15px"
     }
   };
@@ -19490,7 +19558,20 @@
     if (products.length === 0) {
       return /* @__PURE__ */ import_react2.default.createElement("div", { style: s.wrapper }, /* @__PURE__ */ import_react2.default.createElement("p", { style: s.empty }, "No hay productos registrados. Agrega el primero."));
     }
-    return /* @__PURE__ */ import_react2.default.createElement("div", { style: s.wrapper }, /* @__PURE__ */ import_react2.default.createElement("table", { style: s.table }, /* @__PURE__ */ import_react2.default.createElement("thead", null, /* @__PURE__ */ import_react2.default.createElement("tr", null, /* @__PURE__ */ import_react2.default.createElement("th", { style: s.th }, "Nombre / SKU"), /* @__PURE__ */ import_react2.default.createElement("th", { style: s.th }, "Condici\xF3n"), /* @__PURE__ */ import_react2.default.createElement("th", { style: s.th }, "Estado"), /* @__PURE__ */ import_react2.default.createElement("th", { style: s.th }, "Precio venta"), /* @__PURE__ */ import_react2.default.createElement("th", { style: s.th }, "Stock"), /* @__PURE__ */ import_react2.default.createElement("th", { style: s.th }, "Acciones"))), /* @__PURE__ */ import_react2.default.createElement("tbody", null, products.map((p) => /* @__PURE__ */ import_react2.default.createElement("tr", { key: p.id, style: isLowStock(p) ? s.rowLowStock : void 0 }, /* @__PURE__ */ import_react2.default.createElement("td", { style: s.td }, /* @__PURE__ */ import_react2.default.createElement("div", { style: { fontWeight: "600", color: "#1e293b" } }, p.name), p.sku && /* @__PURE__ */ import_react2.default.createElement("div", { style: s.skuText }, p.sku)), /* @__PURE__ */ import_react2.default.createElement("td", { style: s.td }, p.condition ? /* @__PURE__ */ import_react2.default.createElement("span", { style: badge(CONDITION_STYLE, p.condition) }, p.condition) : /* @__PURE__ */ import_react2.default.createElement("span", { style: { color: "#94a3b8" } }, "\u2014")), /* @__PURE__ */ import_react2.default.createElement("td", { style: s.td }, p.status ? /* @__PURE__ */ import_react2.default.createElement("span", { style: badge(STATUS_STYLE, p.status) }, p.status) : /* @__PURE__ */ import_react2.default.createElement("span", { style: { color: "#94a3b8" } }, "\u2014")), /* @__PURE__ */ import_react2.default.createElement("td", { style: s.td }, p.offer_price ? /* @__PURE__ */ import_react2.default.createElement(import_react2.default.Fragment, null, /* @__PURE__ */ import_react2.default.createElement("span", { style: s.priceOffer }, "$", Number(p.offer_price).toFixed(2)), /* @__PURE__ */ import_react2.default.createElement("span", { style: s.priceStrike }, "$", Number(p.sale_price).toFixed(2))) : /* @__PURE__ */ import_react2.default.createElement("span", { style: s.priceMain }, "$", Number(p.sale_price).toFixed(2)), p.cost_price && /* @__PURE__ */ import_react2.default.createElement("div", { style: { fontSize: "11px", color: "#94a3b8", marginTop: "1px" } }, "Costo: $", Number(p.cost_price).toFixed(2))), /* @__PURE__ */ import_react2.default.createElement("td", { style: s.td }, /* @__PURE__ */ import_react2.default.createElement("span", { style: s.stockBadge(p) }, p.stock), /* @__PURE__ */ import_react2.default.createElement("div", { style: s.minStockHint }, "m\xEDn ", p.min_stock ?? 5)), /* @__PURE__ */ import_react2.default.createElement("td", { style: s.td }, /* @__PURE__ */ import_react2.default.createElement("button", { style: s.btnEdit, onClick: () => onEdit(p) }, "Editar"), /* @__PURE__ */ import_react2.default.createElement("button", { style: s.btnDelete, onClick: () => onDelete(p.id) }, "Eliminar")))))));
+    return /* @__PURE__ */ import_react2.default.createElement("div", { style: s.wrapper }, /* @__PURE__ */ import_react2.default.createElement("table", { style: s.table }, /* @__PURE__ */ import_react2.default.createElement("thead", null, /* @__PURE__ */ import_react2.default.createElement("tr", null, /* @__PURE__ */ import_react2.default.createElement("th", { style: s.th }, "Nombre / SKU"), /* @__PURE__ */ import_react2.default.createElement("th", { style: s.th }, "Condici\xF3n"), /* @__PURE__ */ import_react2.default.createElement("th", { style: s.th }, "Estado"), /* @__PURE__ */ import_react2.default.createElement("th", { style: s.th }, "Precio venta"), /* @__PURE__ */ import_react2.default.createElement("th", { style: s.th }, "Stock"), /* @__PURE__ */ import_react2.default.createElement("th", { style: s.th }, "Acciones"))), /* @__PURE__ */ import_react2.default.createElement("tbody", null, products.map((p) => /* @__PURE__ */ import_react2.default.createElement(
+      "tr",
+      {
+        key: p.id,
+        className: isLowStock(p) ? "fl-tr-amber" : "fl-tr",
+        style: isLowStock(p) ? { background: "#fffdf5" } : void 0
+      },
+      /* @__PURE__ */ import_react2.default.createElement("td", { style: s.td }, /* @__PURE__ */ import_react2.default.createElement("div", { style: { fontWeight: "600", color: "#1a1a1a" } }, p.name), p.sku && /* @__PURE__ */ import_react2.default.createElement("div", { style: s.skuText }, p.sku)),
+      /* @__PURE__ */ import_react2.default.createElement("td", { style: s.td }, p.condition ? /* @__PURE__ */ import_react2.default.createElement("span", { style: badge(CONDITION_STYLE, p.condition) }, p.condition) : /* @__PURE__ */ import_react2.default.createElement("span", { style: { color: "#9e9e9e" } }, "\u2014")),
+      /* @__PURE__ */ import_react2.default.createElement("td", { style: s.td }, p.status ? /* @__PURE__ */ import_react2.default.createElement("span", { style: badge(STATUS_STYLE, p.status) }, p.status) : /* @__PURE__ */ import_react2.default.createElement("span", { style: { color: "#9e9e9e" } }, "\u2014")),
+      /* @__PURE__ */ import_react2.default.createElement("td", { style: s.td }, p.offer_price ? /* @__PURE__ */ import_react2.default.createElement(import_react2.default.Fragment, null, /* @__PURE__ */ import_react2.default.createElement("span", { style: s.priceOffer }, "$", Number(p.offer_price).toFixed(2)), /* @__PURE__ */ import_react2.default.createElement("span", { style: s.priceStrike }, "$", Number(p.sale_price).toFixed(2))) : /* @__PURE__ */ import_react2.default.createElement("span", { style: s.priceMain }, "$", Number(p.sale_price).toFixed(2)), p.cost_price && /* @__PURE__ */ import_react2.default.createElement("div", { style: { fontSize: "11px", color: "#9e9e9e", marginTop: "1px" } }, "Costo: $", Number(p.cost_price).toFixed(2))),
+      /* @__PURE__ */ import_react2.default.createElement("td", { style: s.td }, /* @__PURE__ */ import_react2.default.createElement("span", { style: s.stockBadge(p) }, p.stock), /* @__PURE__ */ import_react2.default.createElement("div", { style: s.minStockHint }, "m\xEDn ", p.min_stock ?? 5)),
+      /* @__PURE__ */ import_react2.default.createElement("td", { style: s.td }, /* @__PURE__ */ import_react2.default.createElement("button", { className: "fl-btn-secondary", style: s.btnEdit, onClick: () => onEdit(p) }, "Editar"), /* @__PURE__ */ import_react2.default.createElement("button", { className: "fl-btn-danger", style: s.btnDelete, onClick: () => onDelete(p.id) }, "Eliminar"))
+    )))));
   }
 
   // src/renderer/components/ProductForm.js
@@ -19501,7 +19582,9 @@
     overlay: {
       position: "fixed",
       inset: 0,
-      background: "rgba(0,0,0,0.5)",
+      background: "rgba(0,0,0,0.4)",
+      backdropFilter: "blur(8px)",
+      WebkitBackdropFilter: "blur(8px)",
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
@@ -19515,58 +19598,45 @@
       maxHeight: "90vh",
       display: "flex",
       flexDirection: "column",
-      boxShadow: "0 20px 60px rgba(0,0,0,0.3)"
+      boxShadow: "0 24px 64px rgba(0,0,0,0.18)"
     },
-    header: {
-      padding: "20px 24px 16px",
-      borderBottom: "1px solid #f1f5f9",
-      flexShrink: 0
-    },
-    title: { fontSize: "17px", fontWeight: "600", color: "#1e293b", margin: 0 },
+    header: { padding: "20px 24px 16px", borderBottom: "1px solid #f0f0f0", flexShrink: 0 },
+    title: { fontSize: "17px", fontWeight: "700", color: "#1a1a1a", margin: 0 },
     body: { padding: "0 24px", overflowY: "auto", flex: 1 },
     footer: {
       padding: "16px 24px",
-      borderTop: "1px solid #f1f5f9",
+      borderTop: "1px solid #f0f0f0",
       display: "flex",
       justifyContent: "flex-end",
       gap: "8px",
       flexShrink: 0
     },
-    // Section
     section: { paddingTop: "16px", paddingBottom: "4px" },
     sectionTitle: {
       fontSize: "11px",
       fontWeight: "700",
-      color: "#94a3b8",
+      color: "#9e9e9e",
       textTransform: "uppercase",
       letterSpacing: "0.8px",
       marginBottom: "12px",
       paddingBottom: "6px",
-      borderBottom: "1px solid #f1f5f9"
+      borderBottom: "1px solid #f0f0f0"
     },
-    // Fields
     field: { marginBottom: "12px" },
-    label: {
-      display: "block",
-      fontSize: "12px",
-      fontWeight: "500",
-      color: "#475569",
-      marginBottom: "4px"
-    },
-    hint: { fontSize: "11px", color: "#94a3b8", marginTop: "3px" },
+    label: { display: "block", fontSize: "12px", fontWeight: "600", color: "#5c5c5c", marginBottom: "4px" },
+    hint: { fontSize: "11px", color: "#9e9e9e", marginTop: "3px" },
     input: {
       width: "100%",
-      padding: "7px 10px",
-      border: "1px solid #e2e8f0",
+      padding: "8px 12px",
+      border: "1px solid #d1d1d1",
       borderRadius: "6px",
       fontSize: "13px",
-      outline: "none",
       boxSizing: "border-box"
     },
     select: {
       width: "100%",
-      padding: "7px 10px",
-      border: "1px solid #e2e8f0",
+      padding: "8px 12px",
+      border: "1px solid #d1d1d1",
       borderRadius: "6px",
       fontSize: "13px",
       background: "white",
@@ -19574,8 +19644,8 @@
     },
     textarea: {
       width: "100%",
-      padding: "7px 10px",
-      border: "1px solid #e2e8f0",
+      padding: "8px 12px",
+      border: "1px solid #d1d1d1",
       borderRadius: "6px",
       fontSize: "13px",
       resize: "vertical",
@@ -19585,23 +19655,21 @@
     },
     grid2: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" },
     grid3: { display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "12px" },
-    grid4: { display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: "12px" },
-    // Buttons
     btnCancel: {
-      background: "#f1f5f9",
-      border: "none",
+      background: "white",
+      border: "1px solid #d1d1d1",
       padding: "8px 16px",
-      borderRadius: "6px",
+      borderRadius: "8px",
       cursor: "pointer",
       fontSize: "14px",
-      color: "#475569"
+      color: "#5c5c5c"
     },
     btnSave: {
-      background: "#3b82f6",
+      background: "#0078d4",
       color: "white",
       border: "none",
       padding: "8px 20px",
-      borderRadius: "6px",
+      borderRadius: "8px",
       cursor: "pointer",
       fontSize: "14px",
       fontWeight: "500"
@@ -19610,8 +19678,26 @@
   function SectionTitle({ children }) {
     return /* @__PURE__ */ import_react3.default.createElement("div", { style: s2.sectionTitle }, children);
   }
+  function BarcodeIcon() {
+    return /* @__PURE__ */ import_react3.default.createElement(
+      "svg",
+      {
+        width: "12",
+        height: "12",
+        viewBox: "0 0 12 12",
+        fill: "currentColor",
+        style: { display: "inline-block", verticalAlign: "middle", marginLeft: "5px", opacity: 0.45 }
+      },
+      /* @__PURE__ */ import_react3.default.createElement("rect", { x: "0", y: "0", width: "1.5", height: "12" }),
+      /* @__PURE__ */ import_react3.default.createElement("rect", { x: "3", y: "0", width: "1", height: "12" }),
+      /* @__PURE__ */ import_react3.default.createElement("rect", { x: "5.5", y: "0", width: "2", height: "12" }),
+      /* @__PURE__ */ import_react3.default.createElement("rect", { x: "9", y: "0", width: "1", height: "12" }),
+      /* @__PURE__ */ import_react3.default.createElement("rect", { x: "11", y: "0", width: "1", height: "12" })
+    );
+  }
   function ProductForm({ product, onSave, onCancel }) {
     const isEdit = Boolean(product);
+    const serialNumberRef = (0, import_react3.useRef)(null);
     const [form, setForm] = (0, import_react3.useState)({
       name: product?.name ?? "",
       sku: product?.sku ?? "",
@@ -19622,8 +19708,6 @@
       cost_price: product?.cost_price ?? "",
       sale_price: product?.sale_price ?? "",
       offer_price: product?.offer_price ?? "",
-      stock: product?.stock ?? "",
-      min_stock: product?.min_stock ?? 5,
       category: product?.category ?? "",
       location: product?.location ?? "",
       description: product?.description ?? "",
@@ -19647,8 +19731,6 @@
         cost_price: form.cost_price !== "" ? parseFloat(form.cost_price) : null,
         sale_price: parseFloat(form.sale_price),
         offer_price: form.offer_price !== "" ? parseFloat(form.offer_price) : null,
-        stock: parseInt(form.stock, 10),
-        min_stock: form.min_stock !== "" ? parseInt(form.min_stock, 10) : 5,
         category: form.category || null,
         location: form.location.trim() || null,
         description: form.description.trim() || null,
@@ -19658,6 +19740,7 @@
     return /* @__PURE__ */ import_react3.default.createElement("div", { style: s2.overlay, onClick: (e) => e.target === e.currentTarget && onCancel() }, /* @__PURE__ */ import_react3.default.createElement("div", { style: s2.modal }, /* @__PURE__ */ import_react3.default.createElement("div", { style: s2.header }, /* @__PURE__ */ import_react3.default.createElement("h2", { style: s2.title }, isEdit ? "Editar Producto" : "Nuevo Producto")), /* @__PURE__ */ import_react3.default.createElement("form", { onSubmit: handleSubmit, style: { display: "contents" } }, /* @__PURE__ */ import_react3.default.createElement("div", { style: s2.body }, /* @__PURE__ */ import_react3.default.createElement("div", { style: s2.section }, /* @__PURE__ */ import_react3.default.createElement(SectionTitle, null, "Identificaci\xF3n"), /* @__PURE__ */ import_react3.default.createElement("div", { style: s2.field }, /* @__PURE__ */ import_react3.default.createElement("label", { style: s2.label }, "Nombre *"), /* @__PURE__ */ import_react3.default.createElement(
       "input",
       {
+        className: "fl-input",
         style: s2.input,
         value: form.name,
         onChange: set("name"),
@@ -19668,135 +19751,59 @@
     )), /* @__PURE__ */ import_react3.default.createElement("div", { style: s2.grid2 }, /* @__PURE__ */ import_react3.default.createElement("div", { style: s2.field }, /* @__PURE__ */ import_react3.default.createElement("label", { style: s2.label }, "SKU / C\xF3digo"), /* @__PURE__ */ import_react3.default.createElement(
       "input",
       {
+        className: "fl-input",
         style: s2.input,
         value: form.sku,
         onChange: set("sku"),
         placeholder: "Ej: PRD-001"
       }
-    ), /* @__PURE__ */ import_react3.default.createElement("div", { style: s2.hint }, "Se genera autom\xE1ticamente si se deja vac\xEDo")), /* @__PURE__ */ import_react3.default.createElement("div", { style: s2.field }, /* @__PURE__ */ import_react3.default.createElement("label", { style: s2.label }, "C\xF3digo de barras"), /* @__PURE__ */ import_react3.default.createElement(
+    ), /* @__PURE__ */ import_react3.default.createElement("div", { style: s2.hint }, "Se genera autom\xE1ticamente si se deja vac\xEDo")), /* @__PURE__ */ import_react3.default.createElement("div", { style: s2.field }, /* @__PURE__ */ import_react3.default.createElement("label", { style: s2.label }, "C\xF3digo de barras ", /* @__PURE__ */ import_react3.default.createElement(BarcodeIcon, null)), /* @__PURE__ */ import_react3.default.createElement(
       "input",
       {
+        className: "fl-input",
         style: s2.input,
         value: form.barcode,
         onChange: set("barcode"),
-        placeholder: "Escanear o ingresar"
+        placeholder: "Escanear o ingresar",
+        onKeyDown: (e) => {
+          if (e.key === "Enter") {
+            e.preventDefault();
+            serialNumberRef.current?.focus();
+          }
+        }
       }
     ))), /* @__PURE__ */ import_react3.default.createElement("div", { style: s2.field }, /* @__PURE__ */ import_react3.default.createElement("label", { style: s2.label }, "N\xFAmero de serie"), /* @__PURE__ */ import_react3.default.createElement(
       "input",
       {
+        ref: serialNumberRef,
+        className: "fl-input",
         style: s2.input,
         value: form.serial_number,
         onChange: set("serial_number"),
         placeholder: "Importante para equipos reacondicionados"
       }
-    ))), /* @__PURE__ */ import_react3.default.createElement("div", { style: s2.section }, /* @__PURE__ */ import_react3.default.createElement(SectionTitle, null, "Condici\xF3n y Estado"), /* @__PURE__ */ import_react3.default.createElement("div", { style: s2.grid2 }, /* @__PURE__ */ import_react3.default.createElement("div", { style: s2.field }, /* @__PURE__ */ import_react3.default.createElement("label", { style: s2.label }, "Condici\xF3n"), /* @__PURE__ */ import_react3.default.createElement("select", { style: s2.select, value: form.condition, onChange: set("condition") }, /* @__PURE__ */ import_react3.default.createElement("option", { value: "" }, "Sin especificar"), CONDITIONS.map((c) => /* @__PURE__ */ import_react3.default.createElement("option", { key: c, value: c }, c)))), /* @__PURE__ */ import_react3.default.createElement("div", { style: s2.field }, /* @__PURE__ */ import_react3.default.createElement("label", { style: s2.label }, "Estado"), /* @__PURE__ */ import_react3.default.createElement("select", { style: s2.select, value: form.status, onChange: set("status") }, STATUSES.map((st) => /* @__PURE__ */ import_react3.default.createElement("option", { key: st, value: st }, st)))))), /* @__PURE__ */ import_react3.default.createElement("div", { style: s2.section }, /* @__PURE__ */ import_react3.default.createElement(SectionTitle, null, "Precios"), /* @__PURE__ */ import_react3.default.createElement("div", { style: s2.grid3 }, /* @__PURE__ */ import_react3.default.createElement("div", { style: s2.field }, /* @__PURE__ */ import_react3.default.createElement("label", { style: s2.label }, "Precio de costo ($)"), /* @__PURE__ */ import_react3.default.createElement(
-      "input",
-      {
-        style: s2.input,
-        type: "number",
-        min: "0",
-        step: "0.01",
-        value: form.cost_price,
-        onChange: set("cost_price"),
-        placeholder: "0.00"
-      }
-    )), /* @__PURE__ */ import_react3.default.createElement("div", { style: s2.field }, /* @__PURE__ */ import_react3.default.createElement("label", { style: s2.label }, "Precio de venta ($) *"), /* @__PURE__ */ import_react3.default.createElement(
-      "input",
-      {
-        style: s2.input,
-        type: "number",
-        min: "0",
-        step: "0.01",
-        value: form.sale_price,
-        onChange: set("sale_price"),
-        placeholder: "0.00",
-        required: true
-      }
-    )), /* @__PURE__ */ import_react3.default.createElement("div", { style: s2.field }, /* @__PURE__ */ import_react3.default.createElement("label", { style: s2.label }, "Precio oferta ($)"), /* @__PURE__ */ import_react3.default.createElement(
-      "input",
-      {
-        style: s2.input,
-        type: "number",
-        min: "0",
-        step: "0.01",
-        value: form.offer_price,
-        onChange: set("offer_price"),
-        placeholder: "Vac\xEDo = sin oferta"
-      }
-    )))), /* @__PURE__ */ import_react3.default.createElement("div", { style: s2.section }, /* @__PURE__ */ import_react3.default.createElement(SectionTitle, null, "Inventario y Ubicaci\xF3n"), /* @__PURE__ */ import_react3.default.createElement("div", { style: s2.grid4 }, /* @__PURE__ */ import_react3.default.createElement("div", { style: s2.field }, /* @__PURE__ */ import_react3.default.createElement("label", { style: s2.label }, "Stock *"), /* @__PURE__ */ import_react3.default.createElement(
-      "input",
-      {
-        style: s2.input,
-        type: "number",
-        min: "0",
-        step: "1",
-        value: form.stock,
-        onChange: set("stock"),
-        placeholder: "0",
-        required: true
-      }
-    )), /* @__PURE__ */ import_react3.default.createElement("div", { style: s2.field }, /* @__PURE__ */ import_react3.default.createElement("label", { style: s2.label }, "Stock m\xEDnimo"), /* @__PURE__ */ import_react3.default.createElement(
-      "input",
-      {
-        style: s2.input,
-        type: "number",
-        min: "0",
-        step: "1",
-        value: form.min_stock,
-        onChange: set("min_stock"),
-        placeholder: "5"
-      }
-    )), /* @__PURE__ */ import_react3.default.createElement("div", { style: s2.field }, /* @__PURE__ */ import_react3.default.createElement("label", { style: s2.label }, "Categor\xEDa"), /* @__PURE__ */ import_react3.default.createElement("select", { style: s2.select, value: form.category, onChange: set("category") }, /* @__PURE__ */ import_react3.default.createElement("option", { value: "" }, "Sin categor\xEDa"), categories.map((cat) => /* @__PURE__ */ import_react3.default.createElement("option", { key: cat.id, value: cat.name }, cat.name))), categories.length === 0 && /* @__PURE__ */ import_react3.default.createElement("div", { style: s2.hint }, 'Gestiona categor\xEDas en la pesta\xF1a "Categor\xEDas"')), /* @__PURE__ */ import_react3.default.createElement("div", { style: s2.field }, /* @__PURE__ */ import_react3.default.createElement("label", { style: s2.label }, "Ubicaci\xF3n f\xEDsica"), /* @__PURE__ */ import_react3.default.createElement(
-      "input",
-      {
-        style: s2.input,
-        value: form.location,
-        onChange: set("location"),
-        placeholder: "Ej: Estante A3"
-      }
-    )))), /* @__PURE__ */ import_react3.default.createElement("div", { style: { ...s2.section, paddingBottom: "16px" } }, /* @__PURE__ */ import_react3.default.createElement(SectionTitle, null, "Descripci\xF3n y Notas"), /* @__PURE__ */ import_react3.default.createElement("div", { style: s2.field }, /* @__PURE__ */ import_react3.default.createElement("label", { style: s2.label }, "Descripci\xF3n"), /* @__PURE__ */ import_react3.default.createElement(
-      "textarea",
-      {
-        style: s2.textarea,
-        value: form.description,
-        onChange: set("description"),
-        placeholder: "Descripci\xF3n general del producto"
-      }
-    )), /* @__PURE__ */ import_react3.default.createElement("div", { style: s2.field }, /* @__PURE__ */ import_react3.default.createElement("label", { style: s2.label }, "Notas t\xE9cnicas"), /* @__PURE__ */ import_react3.default.createElement(
-      "textarea",
-      {
-        style: { ...s2.textarea, minHeight: "56px" },
-        value: form.technical_notes,
-        onChange: set("technical_notes"),
-        placeholder: "Reparaciones, detalles t\xE9cnicos, observaciones..."
-      }
-    )))), /* @__PURE__ */ import_react3.default.createElement("div", { style: s2.footer }, /* @__PURE__ */ import_react3.default.createElement("button", { type: "button", style: s2.btnCancel, onClick: onCancel }, "Cancelar"), /* @__PURE__ */ import_react3.default.createElement("button", { type: "submit", style: s2.btnSave }, isEdit ? "Guardar cambios" : "Crear producto")))));
+    ))), /* @__PURE__ */ import_react3.default.createElement("div", { style: s2.section }, /* @__PURE__ */ import_react3.default.createElement(SectionTitle, null, "Condici\xF3n y Estado"), /* @__PURE__ */ import_react3.default.createElement("div", { style: s2.grid2 }, /* @__PURE__ */ import_react3.default.createElement("div", { style: s2.field }, /* @__PURE__ */ import_react3.default.createElement("label", { style: s2.label }, "Condici\xF3n"), /* @__PURE__ */ import_react3.default.createElement("select", { className: "fl-select", style: s2.select, value: form.condition, onChange: set("condition") }, /* @__PURE__ */ import_react3.default.createElement("option", { value: "" }, "Sin especificar"), CONDITIONS.map((c) => /* @__PURE__ */ import_react3.default.createElement("option", { key: c, value: c }, c)))), /* @__PURE__ */ import_react3.default.createElement("div", { style: s2.field }, /* @__PURE__ */ import_react3.default.createElement("label", { style: s2.label }, "Estado"), /* @__PURE__ */ import_react3.default.createElement("select", { className: "fl-select", style: s2.select, value: form.status, onChange: set("status") }, STATUSES.map((st) => /* @__PURE__ */ import_react3.default.createElement("option", { key: st, value: st }, st)))))), /* @__PURE__ */ import_react3.default.createElement("div", { style: s2.section }, /* @__PURE__ */ import_react3.default.createElement(SectionTitle, null, "Precios"), /* @__PURE__ */ import_react3.default.createElement("div", { style: s2.grid3 }, /* @__PURE__ */ import_react3.default.createElement("div", { style: s2.field }, /* @__PURE__ */ import_react3.default.createElement("label", { style: s2.label }, "Precio de costo ($)"), /* @__PURE__ */ import_react3.default.createElement("input", { className: "fl-input", style: s2.input, type: "number", min: "0", step: "0.01", value: form.cost_price, onChange: set("cost_price"), placeholder: "0.00" })), /* @__PURE__ */ import_react3.default.createElement("div", { style: s2.field }, /* @__PURE__ */ import_react3.default.createElement("label", { style: s2.label }, "Precio de venta ($) *"), /* @__PURE__ */ import_react3.default.createElement("input", { className: "fl-input", style: s2.input, type: "number", min: "0", step: "0.01", value: form.sale_price, onChange: set("sale_price"), placeholder: "0.00", required: true })), /* @__PURE__ */ import_react3.default.createElement("div", { style: s2.field }, /* @__PURE__ */ import_react3.default.createElement("label", { style: s2.label }, "Precio oferta ($)"), /* @__PURE__ */ import_react3.default.createElement("input", { className: "fl-input", style: s2.input, type: "number", min: "0", step: "0.01", value: form.offer_price, onChange: set("offer_price"), placeholder: "Vac\xEDo = sin oferta" })))), /* @__PURE__ */ import_react3.default.createElement("div", { style: s2.section }, /* @__PURE__ */ import_react3.default.createElement(SectionTitle, null, "Clasificaci\xF3n y Ubicaci\xF3n"), /* @__PURE__ */ import_react3.default.createElement("div", { style: s2.grid2 }, /* @__PURE__ */ import_react3.default.createElement("div", { style: s2.field }, /* @__PURE__ */ import_react3.default.createElement("label", { style: s2.label }, "Categor\xEDa"), /* @__PURE__ */ import_react3.default.createElement("select", { className: "fl-select", style: s2.select, value: form.category, onChange: set("category") }, /* @__PURE__ */ import_react3.default.createElement("option", { value: "" }, "Sin categor\xEDa"), categories.map((cat) => /* @__PURE__ */ import_react3.default.createElement("option", { key: cat.id, value: cat.name }, cat.name))), categories.length === 0 && /* @__PURE__ */ import_react3.default.createElement("div", { style: s2.hint }, 'Gestiona categor\xEDas en la pesta\xF1a "Categor\xEDas"')), /* @__PURE__ */ import_react3.default.createElement("div", { style: s2.field }, /* @__PURE__ */ import_react3.default.createElement("label", { style: s2.label }, "Ubicaci\xF3n f\xEDsica"), /* @__PURE__ */ import_react3.default.createElement("input", { className: "fl-input", style: s2.input, value: form.location, onChange: set("location"), placeholder: "Ej: Estante A3" })))), /* @__PURE__ */ import_react3.default.createElement("div", { style: { ...s2.section, paddingBottom: "16px" } }, /* @__PURE__ */ import_react3.default.createElement(SectionTitle, null, "Descripci\xF3n y Notas"), /* @__PURE__ */ import_react3.default.createElement("div", { style: s2.field }, /* @__PURE__ */ import_react3.default.createElement("label", { style: s2.label }, "Descripci\xF3n"), /* @__PURE__ */ import_react3.default.createElement("textarea", { className: "fl-input", style: s2.textarea, value: form.description, onChange: set("description"), placeholder: "Descripci\xF3n general del producto" })), /* @__PURE__ */ import_react3.default.createElement("div", { style: s2.field }, /* @__PURE__ */ import_react3.default.createElement("label", { style: s2.label }, "Notas t\xE9cnicas"), /* @__PURE__ */ import_react3.default.createElement("textarea", { className: "fl-input", style: { ...s2.textarea, minHeight: "56px" }, value: form.technical_notes, onChange: set("technical_notes"), placeholder: "Reparaciones, detalles t\xE9cnicos, observaciones..." })))), /* @__PURE__ */ import_react3.default.createElement("div", { style: s2.footer }, /* @__PURE__ */ import_react3.default.createElement("button", { type: "button", className: "fl-btn-ghost", style: s2.btnCancel, onClick: onCancel }, "Cancelar"), /* @__PURE__ */ import_react3.default.createElement("button", { type: "submit", className: "fl-btn-primary", style: s2.btnSave }, isEdit ? "Guardar cambios" : "Crear producto")))));
   }
 
   // src/renderer/components/InventoryView.js
   var styles = {
-    toolbar: {
-      display: "flex",
-      justifyContent: "space-between",
-      alignItems: "center",
-      marginBottom: "16px"
-    },
-    sectionTitle: { fontSize: "17px", fontWeight: "600", color: "#1e293b" },
+    toolbar: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" },
+    sectionTitle: { fontSize: "18px", fontWeight: "700", color: "#1a1a1a", letterSpacing: "-0.3px" },
     btnPrimary: {
-      background: "#3b82f6",
+      background: "#0078d4",
       color: "white",
       border: "none",
-      padding: "8px 16px",
-      borderRadius: "6px",
+      padding: "8px 18px",
+      borderRadius: "8px",
       cursor: "pointer",
       fontSize: "14px",
       fontWeight: "500"
     },
     errorBox: {
-      background: "#fee2e2",
-      color: "#dc2626",
+      background: "#ffebee",
+      color: "#a4262c",
       padding: "12px 16px",
-      borderRadius: "6px",
+      borderRadius: "8px",
       marginBottom: "16px",
       fontSize: "14px"
     }
@@ -19842,7 +19849,7 @@
         setError("Error al eliminar el producto.");
       }
     };
-    return /* @__PURE__ */ import_react4.default.createElement(import_react4.default.Fragment, null, /* @__PURE__ */ import_react4.default.createElement("div", { style: styles.toolbar }, /* @__PURE__ */ import_react4.default.createElement("h2", { style: styles.sectionTitle }, "Inventario de Productos"), /* @__PURE__ */ import_react4.default.createElement("button", { style: styles.btnPrimary, onClick: () => setModal("create") }, "+ Nuevo Producto")), error && /* @__PURE__ */ import_react4.default.createElement("div", { style: styles.errorBox }, error), loading ? /* @__PURE__ */ import_react4.default.createElement("p", { style: { color: "#64748b", fontSize: "14px" } }, "Cargando...") : /* @__PURE__ */ import_react4.default.createElement(
+    return /* @__PURE__ */ import_react4.default.createElement(import_react4.default.Fragment, null, /* @__PURE__ */ import_react4.default.createElement("div", { style: styles.toolbar }, /* @__PURE__ */ import_react4.default.createElement("h2", { style: styles.sectionTitle }, "Cat\xE1logo de Productos"), /* @__PURE__ */ import_react4.default.createElement("button", { className: "fl-btn-primary", style: styles.btnPrimary, onClick: () => setModal("create") }, "+ Nuevo Producto")), error && /* @__PURE__ */ import_react4.default.createElement("div", { style: styles.errorBox }, error), loading ? /* @__PURE__ */ import_react4.default.createElement("p", { style: { color: "#64748b", fontSize: "14px" } }, "Cargando...") : /* @__PURE__ */ import_react4.default.createElement(
       ProductList,
       {
         products,
@@ -19859,11 +19866,418 @@
     ));
   }
 
-  // src/renderer/components/NewSale.js
+  // src/renderer/components/StockEntriesView.js
+  var import_react5 = __toESM(require_react());
+  function formatDate2(dateStr) {
+    return new Date(dateStr).toLocaleString("es", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit"
+    });
+  }
+  var s3 = {
+    toolbar: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" },
+    sectionTitle: { fontSize: "18px", fontWeight: "700", color: "#1a1a1a", letterSpacing: "-0.3px" },
+    btnPrimary: {
+      background: "#0078d4",
+      color: "white",
+      border: "none",
+      padding: "8px 18px",
+      borderRadius: "8px",
+      cursor: "pointer",
+      fontSize: "14px",
+      fontWeight: "500"
+    },
+    errorBox: {
+      background: "#ffebee",
+      color: "#a4262c",
+      padding: "12px 16px",
+      borderRadius: "8px",
+      marginBottom: "16px",
+      fontSize: "14px"
+    },
+    wrapper: {
+      background: "white",
+      borderRadius: "12px",
+      boxShadow: "0 2px 8px rgba(0,0,0,0.07)",
+      overflow: "hidden"
+    },
+    table: { width: "100%", borderCollapse: "collapse", fontSize: "13px" },
+    th: {
+      background: "#f7f7f7",
+      padding: "10px 16px",
+      textAlign: "left",
+      fontWeight: "700",
+      fontSize: "11px",
+      color: "#9e9e9e",
+      borderBottom: "1px solid #e5e5e5",
+      textTransform: "uppercase",
+      letterSpacing: "0.5px"
+    },
+    td: { padding: "12px 16px", borderBottom: "1px solid #f5f5f5", verticalAlign: "middle", fontSize: "13px" },
+    empty: { textAlign: "center", padding: "56px 32px", color: "#9e9e9e", fontSize: "15px" },
+    qtyBadge: {
+      display: "inline-block",
+      background: "#e8f5e9",
+      color: "#2e7d32",
+      fontWeight: "700",
+      fontSize: "12px",
+      padding: "3px 9px",
+      borderRadius: "12px"
+    },
+    overlay: {
+      position: "fixed",
+      inset: 0,
+      background: "rgba(0,0,0,0.4)",
+      backdropFilter: "blur(8px)",
+      WebkitBackdropFilter: "blur(8px)",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      zIndex: 1e3
+    },
+    modal: {
+      background: "white",
+      borderRadius: "12px",
+      width: "520px",
+      maxWidth: "95vw",
+      boxShadow: "0 24px 64px rgba(0,0,0,0.18)",
+      overflow: "hidden"
+    },
+    modalHeader: { padding: "20px 24px 16px", borderBottom: "1px solid #f0f0f0" },
+    modalTitle: { fontSize: "17px", fontWeight: "700", color: "#1a1a1a", margin: 0 },
+    modalBody: { padding: "18px 24px" },
+    modalFooter: {
+      padding: "14px 24px",
+      borderTop: "1px solid #f0f0f0",
+      display: "flex",
+      justifyContent: "flex-end",
+      gap: "8px"
+    },
+    field: { marginBottom: "14px" },
+    label: { display: "block", fontSize: "12px", fontWeight: "600", color: "#5c5c5c", marginBottom: "5px" },
+    hint: { fontSize: "11px", color: "#9e9e9e", marginTop: "3px" },
+    input: {
+      width: "100%",
+      padding: "8px 12px",
+      border: "1px solid #d1d1d1",
+      borderRadius: "6px",
+      fontSize: "14px",
+      boxSizing: "border-box"
+    },
+    select: {
+      width: "100%",
+      padding: "8px 12px",
+      border: "1px solid #d1d1d1",
+      borderRadius: "6px",
+      fontSize: "14px",
+      background: "white",
+      boxSizing: "border-box"
+    },
+    textarea: {
+      width: "100%",
+      padding: "8px 12px",
+      border: "1px solid #d1d1d1",
+      borderRadius: "6px",
+      fontSize: "14px",
+      resize: "vertical",
+      minHeight: "60px",
+      boxSizing: "border-box",
+      fontFamily: "inherit"
+    },
+    grid2: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" },
+    btnCancel: {
+      background: "white",
+      border: "1px solid #d1d1d1",
+      padding: "8px 16px",
+      borderRadius: "8px",
+      cursor: "pointer",
+      fontSize: "14px",
+      color: "#5c5c5c"
+    },
+    btnSave: {
+      background: "#107c10",
+      color: "white",
+      border: "none",
+      padding: "8px 20px",
+      borderRadius: "8px",
+      cursor: "pointer",
+      fontSize: "14px",
+      fontWeight: "500"
+    }
+  };
+  function StockEntryModal({ products, suppliers, onSave, onCancel }) {
+    const [form, setForm] = (0, import_react5.useState)({ product_id: "", quantity: "", unit_cost: "", supplier_id: "", notes: "" });
+    const [saving, setSaving] = (0, import_react5.useState)(false);
+    const set = (field) => (e) => setForm((prev) => ({ ...prev, [field]: e.target.value }));
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+      setSaving(true);
+      await onSave({
+        product_id: parseInt(form.product_id, 10),
+        quantity: parseInt(form.quantity, 10),
+        unit_cost: form.unit_cost !== "" ? parseFloat(form.unit_cost) : null,
+        supplier_id: form.supplier_id ? parseInt(form.supplier_id, 10) : null,
+        notes: form.notes.trim() || null
+      });
+      setSaving(false);
+    };
+    return /* @__PURE__ */ import_react5.default.createElement("div", { style: s3.overlay, onClick: (e) => e.target === e.currentTarget && onCancel() }, /* @__PURE__ */ import_react5.default.createElement("div", { style: s3.modal }, /* @__PURE__ */ import_react5.default.createElement("div", { style: s3.modalHeader }, /* @__PURE__ */ import_react5.default.createElement("h2", { style: s3.modalTitle }, "Nueva Entrada de Stock")), /* @__PURE__ */ import_react5.default.createElement("form", { onSubmit: handleSubmit }, /* @__PURE__ */ import_react5.default.createElement("div", { style: s3.modalBody }, /* @__PURE__ */ import_react5.default.createElement("div", { style: s3.field }, /* @__PURE__ */ import_react5.default.createElement("label", { style: s3.label }, "Producto *"), /* @__PURE__ */ import_react5.default.createElement("select", { className: "fl-select", style: s3.select, value: form.product_id, onChange: set("product_id"), required: true, autoFocus: true }, /* @__PURE__ */ import_react5.default.createElement("option", { value: "" }, "Seleccionar producto..."), products.map((p) => /* @__PURE__ */ import_react5.default.createElement("option", { key: p.id, value: p.id }, p.name, p.sku ? ` (${p.sku})` : "", " \u2014 Stock actual: ", p.stock)))), /* @__PURE__ */ import_react5.default.createElement("div", { style: s3.grid2 }, /* @__PURE__ */ import_react5.default.createElement("div", { style: s3.field }, /* @__PURE__ */ import_react5.default.createElement("label", { style: s3.label }, "Cantidad *"), /* @__PURE__ */ import_react5.default.createElement("input", { className: "fl-input", style: s3.input, type: "number", min: "1", step: "1", value: form.quantity, onChange: set("quantity"), placeholder: "0", required: true }), /* @__PURE__ */ import_react5.default.createElement("div", { style: s3.hint }, "Se suma al stock actual")), /* @__PURE__ */ import_react5.default.createElement("div", { style: s3.field }, /* @__PURE__ */ import_react5.default.createElement("label", { style: s3.label }, "Costo unitario ($)"), /* @__PURE__ */ import_react5.default.createElement("input", { className: "fl-input", style: s3.input, type: "number", min: "0", step: "0.01", value: form.unit_cost, onChange: set("unit_cost"), placeholder: "0.00" }))), /* @__PURE__ */ import_react5.default.createElement("div", { style: s3.field }, /* @__PURE__ */ import_react5.default.createElement("label", { style: s3.label }, "Proveedor"), /* @__PURE__ */ import_react5.default.createElement("select", { className: "fl-select", style: s3.select, value: form.supplier_id, onChange: set("supplier_id") }, /* @__PURE__ */ import_react5.default.createElement("option", { value: "" }, "Sin proveedor / no aplica"), suppliers.map((sup) => /* @__PURE__ */ import_react5.default.createElement("option", { key: sup.id, value: sup.id }, sup.name))), suppliers.length === 0 && /* @__PURE__ */ import_react5.default.createElement("div", { style: s3.hint }, 'Registra proveedores en la pesta\xF1a "Proveedores"')), /* @__PURE__ */ import_react5.default.createElement("div", { style: s3.field }, /* @__PURE__ */ import_react5.default.createElement("label", { style: s3.label }, "Notas"), /* @__PURE__ */ import_react5.default.createElement("textarea", { className: "fl-input", style: s3.textarea, value: form.notes, onChange: set("notes"), placeholder: "N\xFAmero de factura, lote, observaciones..." }))), /* @__PURE__ */ import_react5.default.createElement("div", { style: s3.modalFooter }, /* @__PURE__ */ import_react5.default.createElement("button", { type: "button", className: "fl-btn-ghost", style: s3.btnCancel, onClick: onCancel }, "Cancelar"), /* @__PURE__ */ import_react5.default.createElement("button", { type: "submit", className: "fl-btn-primary", style: s3.btnSave, disabled: saving }, saving ? "Registrando..." : "Registrar entrada")))));
+  }
+  function StockEntriesView() {
+    const [entries, setEntries] = (0, import_react5.useState)([]);
+    const [products, setProducts] = (0, import_react5.useState)([]);
+    const [suppliers, setSuppliers] = (0, import_react5.useState)([]);
+    const [loading, setLoading] = (0, import_react5.useState)(true);
+    const [error, setError] = (0, import_react5.useState)(null);
+    const [modal, setModal] = (0, import_react5.useState)(false);
+    const load = (0, import_react5.useCallback)(async () => {
+      try {
+        setLoading(true);
+        const [e, p, sup] = await Promise.all([
+          window.electron.stockEntries.getAll(),
+          window.electron.products.getAll(),
+          window.electron.suppliers.getAll()
+        ]);
+        setEntries(e);
+        setProducts(p);
+        setSuppliers(sup);
+        setError(null);
+      } catch {
+        setError("Error al cargar las entradas.");
+      } finally {
+        setLoading(false);
+      }
+    }, []);
+    (0, import_react5.useEffect)(() => {
+      load();
+    }, [load]);
+    const handleSave = async (data) => {
+      try {
+        await window.electron.stockEntries.create(data);
+        setModal(false);
+        load();
+      } catch {
+        setError("Error al registrar la entrada de stock.");
+      }
+    };
+    return /* @__PURE__ */ import_react5.default.createElement(import_react5.default.Fragment, null, /* @__PURE__ */ import_react5.default.createElement("div", { style: s3.toolbar }, /* @__PURE__ */ import_react5.default.createElement("h2", { style: s3.sectionTitle }, "Entradas de Inventario"), /* @__PURE__ */ import_react5.default.createElement("button", { className: "fl-btn-primary", style: s3.btnPrimary, onClick: () => setModal(true) }, "+ Nueva Entrada")), error && /* @__PURE__ */ import_react5.default.createElement("div", { style: s3.errorBox }, error), loading ? /* @__PURE__ */ import_react5.default.createElement("p", { style: { color: "#9e9e9e", fontSize: "14px" } }, "Cargando...") : /* @__PURE__ */ import_react5.default.createElement("div", { style: s3.wrapper }, entries.length === 0 ? /* @__PURE__ */ import_react5.default.createElement("p", { style: s3.empty }, "No hay entradas registradas. Registra la primera.") : /* @__PURE__ */ import_react5.default.createElement("table", { style: s3.table }, /* @__PURE__ */ import_react5.default.createElement("thead", null, /* @__PURE__ */ import_react5.default.createElement("tr", null, /* @__PURE__ */ import_react5.default.createElement("th", { style: s3.th }, "#"), /* @__PURE__ */ import_react5.default.createElement("th", { style: s3.th }, "Fecha"), /* @__PURE__ */ import_react5.default.createElement("th", { style: s3.th }, "Producto"), /* @__PURE__ */ import_react5.default.createElement("th", { style: s3.th }, "Cantidad"), /* @__PURE__ */ import_react5.default.createElement("th", { style: s3.th }, "Costo unit."), /* @__PURE__ */ import_react5.default.createElement("th", { style: s3.th }, "Proveedor"), /* @__PURE__ */ import_react5.default.createElement("th", { style: s3.th }, "Notas"))), /* @__PURE__ */ import_react5.default.createElement("tbody", null, entries.map((entry) => /* @__PURE__ */ import_react5.default.createElement("tr", { key: entry.id, className: "fl-tr" }, /* @__PURE__ */ import_react5.default.createElement("td", { style: { ...s3.td, color: "#9e9e9e" } }, entry.id), /* @__PURE__ */ import_react5.default.createElement("td", { style: s3.td }, formatDate2(entry.created_at)), /* @__PURE__ */ import_react5.default.createElement("td", { style: { ...s3.td, fontWeight: "600" } }, entry.product_name), /* @__PURE__ */ import_react5.default.createElement("td", { style: s3.td }, /* @__PURE__ */ import_react5.default.createElement("span", { style: s3.qtyBadge }, "+", entry.quantity)), /* @__PURE__ */ import_react5.default.createElement("td", { style: { ...s3.td, color: entry.unit_cost ? "#1a1a1a" : "#9e9e9e" } }, entry.unit_cost ? `$${Number(entry.unit_cost).toFixed(2)}` : "\u2014"), /* @__PURE__ */ import_react5.default.createElement("td", { style: { ...s3.td, color: entry.supplier_name ? "#1a1a1a" : "#9e9e9e" } }, entry.supplier_name || "\u2014"), /* @__PURE__ */ import_react5.default.createElement("td", { style: { ...s3.td, color: entry.notes ? "#1a1a1a" : "#9e9e9e", maxWidth: "200px" } }, entry.notes || "\u2014")))))), modal && /* @__PURE__ */ import_react5.default.createElement(StockEntryModal, { products, suppliers, onSave: handleSave, onCancel: () => setModal(false) }));
+  }
+
+  // src/renderer/components/SuppliersView.js
   var import_react6 = __toESM(require_react());
+  var s4 = {
+    toolbar: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" },
+    sectionTitle: { fontSize: "18px", fontWeight: "700", color: "#1a1a1a", letterSpacing: "-0.3px" },
+    btnPrimary: {
+      background: "#0078d4",
+      color: "white",
+      border: "none",
+      padding: "8px 18px",
+      borderRadius: "8px",
+      cursor: "pointer",
+      fontSize: "14px",
+      fontWeight: "500"
+    },
+    errorBox: {
+      background: "#ffebee",
+      color: "#a4262c",
+      padding: "12px 16px",
+      borderRadius: "8px",
+      marginBottom: "16px",
+      fontSize: "14px"
+    },
+    wrapper: {
+      background: "white",
+      borderRadius: "12px",
+      boxShadow: "0 2px 8px rgba(0,0,0,0.07)",
+      overflow: "hidden"
+    },
+    table: { width: "100%", borderCollapse: "collapse", fontSize: "13px" },
+    th: {
+      background: "#f7f7f7",
+      padding: "10px 16px",
+      textAlign: "left",
+      fontWeight: "700",
+      fontSize: "11px",
+      color: "#9e9e9e",
+      borderBottom: "1px solid #e5e5e5",
+      textTransform: "uppercase",
+      letterSpacing: "0.5px"
+    },
+    td: { padding: "12px 16px", borderBottom: "1px solid #f5f5f5", verticalAlign: "middle", fontSize: "13px" },
+    empty: { textAlign: "center", padding: "56px 32px", color: "#9e9e9e", fontSize: "15px" },
+    btnEdit: {
+      background: "white",
+      border: "1px solid #d1d1d1",
+      padding: "5px 12px",
+      borderRadius: "6px",
+      cursor: "pointer",
+      fontSize: "12px",
+      marginRight: "6px",
+      color: "#1a1a1a",
+      fontWeight: "500"
+    },
+    btnDelete: {
+      background: "white",
+      border: "1px solid #fad9d9",
+      padding: "5px 12px",
+      borderRadius: "6px",
+      cursor: "pointer",
+      fontSize: "12px",
+      color: "#a4262c",
+      fontWeight: "500"
+    },
+    overlay: {
+      position: "fixed",
+      inset: 0,
+      background: "rgba(0,0,0,0.4)",
+      backdropFilter: "blur(8px)",
+      WebkitBackdropFilter: "blur(8px)",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      zIndex: 1e3
+    },
+    modal: {
+      background: "white",
+      borderRadius: "12px",
+      width: "480px",
+      maxWidth: "95vw",
+      boxShadow: "0 24px 64px rgba(0,0,0,0.18)",
+      overflow: "hidden"
+    },
+    modalHeader: { padding: "20px 24px 16px", borderBottom: "1px solid #f0f0f0" },
+    modalTitle: { fontSize: "17px", fontWeight: "700", color: "#1a1a1a", margin: 0 },
+    modalBody: { padding: "18px 24px" },
+    modalFooter: {
+      padding: "14px 24px",
+      borderTop: "1px solid #f0f0f0",
+      display: "flex",
+      justifyContent: "flex-end",
+      gap: "8px"
+    },
+    field: { marginBottom: "14px" },
+    label: { display: "block", fontSize: "12px", fontWeight: "600", color: "#5c5c5c", marginBottom: "5px" },
+    input: {
+      width: "100%",
+      padding: "8px 12px",
+      border: "1px solid #d1d1d1",
+      borderRadius: "6px",
+      fontSize: "14px",
+      boxSizing: "border-box"
+    },
+    textarea: {
+      width: "100%",
+      padding: "8px 12px",
+      border: "1px solid #d1d1d1",
+      borderRadius: "6px",
+      fontSize: "14px",
+      resize: "vertical",
+      minHeight: "64px",
+      boxSizing: "border-box",
+      fontFamily: "inherit"
+    },
+    btnCancel: {
+      background: "white",
+      border: "1px solid #d1d1d1",
+      padding: "8px 16px",
+      borderRadius: "8px",
+      cursor: "pointer",
+      fontSize: "14px",
+      color: "#5c5c5c"
+    },
+    btnSave: {
+      background: "#0078d4",
+      color: "white",
+      border: "none",
+      padding: "8px 20px",
+      borderRadius: "8px",
+      cursor: "pointer",
+      fontSize: "14px",
+      fontWeight: "500"
+    }
+  };
+  function SupplierModal({ supplier, onSave, onCancel }) {
+    const isEdit = Boolean(supplier);
+    const [form, setForm] = (0, import_react6.useState)({
+      name: supplier?.name ?? "",
+      phone: supplier?.phone ?? "",
+      email: supplier?.email ?? "",
+      address: supplier?.address ?? "",
+      notes: supplier?.notes ?? ""
+    });
+    const set = (field) => (e) => setForm((prev) => ({ ...prev, [field]: e.target.value }));
+    const handleSubmit = (e) => {
+      e.preventDefault();
+      onSave({
+        name: form.name.trim(),
+        phone: form.phone.trim() || null,
+        email: form.email.trim() || null,
+        address: form.address.trim() || null,
+        notes: form.notes.trim() || null
+      });
+    };
+    return /* @__PURE__ */ import_react6.default.createElement("div", { style: s4.overlay, onClick: (e) => e.target === e.currentTarget && onCancel() }, /* @__PURE__ */ import_react6.default.createElement("div", { style: s4.modal }, /* @__PURE__ */ import_react6.default.createElement("div", { style: s4.modalHeader }, /* @__PURE__ */ import_react6.default.createElement("h2", { style: s4.modalTitle }, isEdit ? "Editar Proveedor" : "Nuevo Proveedor")), /* @__PURE__ */ import_react6.default.createElement("form", { onSubmit: handleSubmit }, /* @__PURE__ */ import_react6.default.createElement("div", { style: s4.modalBody }, /* @__PURE__ */ import_react6.default.createElement("div", { style: s4.field }, /* @__PURE__ */ import_react6.default.createElement("label", { style: s4.label }, "Nombre *"), /* @__PURE__ */ import_react6.default.createElement("input", { className: "fl-input", style: s4.input, value: form.name, onChange: set("name"), required: true, autoFocus: true, placeholder: "Nombre del proveedor" })), /* @__PURE__ */ import_react6.default.createElement("div", { style: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" } }, /* @__PURE__ */ import_react6.default.createElement("div", { style: s4.field }, /* @__PURE__ */ import_react6.default.createElement("label", { style: s4.label }, "Tel\xE9fono"), /* @__PURE__ */ import_react6.default.createElement("input", { className: "fl-input", style: s4.input, value: form.phone, onChange: set("phone"), placeholder: "+506 0000-0000" })), /* @__PURE__ */ import_react6.default.createElement("div", { style: s4.field }, /* @__PURE__ */ import_react6.default.createElement("label", { style: s4.label }, "Email"), /* @__PURE__ */ import_react6.default.createElement("input", { className: "fl-input", style: s4.input, type: "email", value: form.email, onChange: set("email"), placeholder: "proveedor@ejemplo.com" }))), /* @__PURE__ */ import_react6.default.createElement("div", { style: s4.field }, /* @__PURE__ */ import_react6.default.createElement("label", { style: s4.label }, "Direcci\xF3n"), /* @__PURE__ */ import_react6.default.createElement("input", { className: "fl-input", style: s4.input, value: form.address, onChange: set("address"), placeholder: "Direcci\xF3n o zona" })), /* @__PURE__ */ import_react6.default.createElement("div", { style: s4.field }, /* @__PURE__ */ import_react6.default.createElement("label", { style: s4.label }, "Notas"), /* @__PURE__ */ import_react6.default.createElement("textarea", { className: "fl-input", style: s4.textarea, value: form.notes, onChange: set("notes"), placeholder: "Observaciones, condiciones de pago, etc." }))), /* @__PURE__ */ import_react6.default.createElement("div", { style: s4.modalFooter }, /* @__PURE__ */ import_react6.default.createElement("button", { type: "button", className: "fl-btn-ghost", style: s4.btnCancel, onClick: onCancel }, "Cancelar"), /* @__PURE__ */ import_react6.default.createElement("button", { type: "submit", className: "fl-btn-primary", style: s4.btnSave }, isEdit ? "Guardar cambios" : "Crear proveedor")))));
+  }
+  function SuppliersView() {
+    const [suppliers, setSuppliers] = (0, import_react6.useState)([]);
+    const [loading, setLoading] = (0, import_react6.useState)(true);
+    const [error, setError] = (0, import_react6.useState)(null);
+    const [modal, setModal] = (0, import_react6.useState)(null);
+    const load = (0, import_react6.useCallback)(async () => {
+      try {
+        setLoading(true);
+        setSuppliers(await window.electron.suppliers.getAll());
+        setError(null);
+      } catch {
+        setError("Error al cargar los proveedores.");
+      } finally {
+        setLoading(false);
+      }
+    }, []);
+    (0, import_react6.useEffect)(() => {
+      load();
+    }, [load]);
+    const handleSave = async (data) => {
+      try {
+        if (modal === "create") {
+          await window.electron.suppliers.create(data);
+        } else {
+          await window.electron.suppliers.update(modal.supplier.id, data);
+        }
+        setModal(null);
+        load();
+      } catch {
+        setError("Error al guardar el proveedor.");
+      }
+    };
+    const handleDelete = async (id) => {
+      if (!window.confirm("\xBFEliminar este proveedor?")) return;
+      try {
+        await window.electron.suppliers.delete(id);
+        load();
+      } catch {
+        setError("Error al eliminar el proveedor.");
+      }
+    };
+    return /* @__PURE__ */ import_react6.default.createElement(import_react6.default.Fragment, null, /* @__PURE__ */ import_react6.default.createElement("div", { style: s4.toolbar }, /* @__PURE__ */ import_react6.default.createElement("h2", { style: s4.sectionTitle }, "Proveedores"), /* @__PURE__ */ import_react6.default.createElement("button", { className: "fl-btn-primary", style: s4.btnPrimary, onClick: () => setModal("create") }, "+ Nuevo Proveedor")), error && /* @__PURE__ */ import_react6.default.createElement("div", { style: s4.errorBox }, error), loading ? /* @__PURE__ */ import_react6.default.createElement("p", { style: { color: "#9e9e9e", fontSize: "14px" } }, "Cargando...") : /* @__PURE__ */ import_react6.default.createElement("div", { style: s4.wrapper }, suppliers.length === 0 ? /* @__PURE__ */ import_react6.default.createElement("p", { style: s4.empty }, "No hay proveedores registrados. Agrega el primero.") : /* @__PURE__ */ import_react6.default.createElement("table", { style: s4.table }, /* @__PURE__ */ import_react6.default.createElement("thead", null, /* @__PURE__ */ import_react6.default.createElement("tr", null, /* @__PURE__ */ import_react6.default.createElement("th", { style: s4.th }, "Nombre"), /* @__PURE__ */ import_react6.default.createElement("th", { style: s4.th }, "Tel\xE9fono"), /* @__PURE__ */ import_react6.default.createElement("th", { style: s4.th }, "Email"), /* @__PURE__ */ import_react6.default.createElement("th", { style: s4.th }, "Direcci\xF3n"), /* @__PURE__ */ import_react6.default.createElement("th", { style: s4.th }, "Acciones"))), /* @__PURE__ */ import_react6.default.createElement("tbody", null, suppliers.map((sup) => /* @__PURE__ */ import_react6.default.createElement("tr", { key: sup.id, className: "fl-tr" }, /* @__PURE__ */ import_react6.default.createElement("td", { style: { ...s4.td, fontWeight: "600" } }, sup.name), /* @__PURE__ */ import_react6.default.createElement("td", { style: { ...s4.td, color: sup.phone ? "#1a1a1a" : "#9e9e9e" } }, sup.phone || "\u2014"), /* @__PURE__ */ import_react6.default.createElement("td", { style: { ...s4.td, color: sup.email ? "#1a1a1a" : "#9e9e9e" } }, sup.email || "\u2014"), /* @__PURE__ */ import_react6.default.createElement("td", { style: { ...s4.td, color: sup.address ? "#1a1a1a" : "#9e9e9e" } }, sup.address || "\u2014"), /* @__PURE__ */ import_react6.default.createElement("td", { style: s4.td }, /* @__PURE__ */ import_react6.default.createElement("button", { className: "fl-btn-secondary", style: s4.btnEdit, onClick: () => setModal({ mode: "edit", supplier: sup }) }, "Editar"), /* @__PURE__ */ import_react6.default.createElement("button", { className: "fl-btn-danger", style: s4.btnDelete, onClick: () => handleDelete(sup.id) }, "Eliminar"))))))), modal && /* @__PURE__ */ import_react6.default.createElement(
+      SupplierModal,
+      {
+        supplier: modal !== "create" ? modal.supplier : null,
+        onSave: handleSave,
+        onCancel: () => setModal(null)
+      }
+    ));
+  }
+
+  // src/renderer/components/NewSale.js
+  var import_react8 = __toESM(require_react());
 
   // src/renderer/components/SaleReceipt.js
-  var import_react5 = __toESM(require_react());
+  var import_react7 = __toESM(require_react());
   var PRINT_STYLES = `
   @media print {
     body * { visibility: hidden !important; }
@@ -19881,7 +20295,7 @@
     .receipt-no-print { display: none !important; }
   }
 `;
-  function formatDate2(dateStr) {
+  function formatDate3(dateStr) {
     return new Date(dateStr || Date.now()).toLocaleString("es", {
       day: "2-digit",
       month: "2-digit",
@@ -19890,11 +20304,13 @@
       minute: "2-digit"
     });
   }
-  var s3 = {
+  var s5 = {
     overlay: {
       position: "fixed",
       inset: 0,
-      background: "rgba(0,0,0,0.65)",
+      background: "rgba(0,0,0,0.5)",
+      backdropFilter: "blur(10px)",
+      WebkitBackdropFilter: "blur(10px)",
       display: "flex",
       flexDirection: "column",
       alignItems: "center",
@@ -19908,23 +20324,24 @@
       marginBottom: "12px"
     },
     btnPrint: {
-      background: "#16a34a",
+      background: "#107c10",
       color: "white",
       border: "none",
       padding: "9px 22px",
-      borderRadius: "6px",
+      borderRadius: "8px",
       cursor: "pointer",
       fontSize: "14px",
       fontWeight: "600"
     },
     btnClose: {
-      background: "rgba(255,255,255,0.15)",
+      background: "rgba(255,255,255,0.2)",
       color: "white",
-      border: "1px solid rgba(255,255,255,0.3)",
+      border: "1px solid rgba(255,255,255,0.35)",
       padding: "9px 22px",
-      borderRadius: "6px",
+      borderRadius: "8px",
       cursor: "pointer",
-      fontSize: "14px"
+      fontSize: "14px",
+      backdropFilter: "blur(4px)"
     },
     receipt: {
       background: "white",
@@ -20022,8 +20439,8 @@
       letterSpacing: "0.5px"
     }
   };
-  function SaleReceipt({ sale, items, total, onClose }) {
-    return /* @__PURE__ */ import_react5.default.createElement(import_react5.default.Fragment, null, /* @__PURE__ */ import_react5.default.createElement("style", null, PRINT_STYLES), /* @__PURE__ */ import_react5.default.createElement("div", { style: s3.overlay }, /* @__PURE__ */ import_react5.default.createElement("div", { style: s3.actions, className: "receipt-no-print" }, /* @__PURE__ */ import_react5.default.createElement("button", { style: s3.btnPrint, onClick: () => window.print() }, "\u{1F5A8} Imprimir"), /* @__PURE__ */ import_react5.default.createElement("button", { style: s3.btnClose, onClick: onClose }, "Cerrar")), /* @__PURE__ */ import_react5.default.createElement("div", { id: "sale-receipt", style: s3.receipt }, /* @__PURE__ */ import_react5.default.createElement("div", { style: s3.headerBlock }, /* @__PURE__ */ import_react5.default.createElement("h1", { style: s3.storeName }, "TechStore"), /* @__PURE__ */ import_react5.default.createElement("p", { style: s3.storeTagline }, "Comprobante de Venta")), /* @__PURE__ */ import_react5.default.createElement("div", { style: s3.dividerSolid }), /* @__PURE__ */ import_react5.default.createElement("div", null, /* @__PURE__ */ import_react5.default.createElement("div", { style: s3.infoRow }, /* @__PURE__ */ import_react5.default.createElement("span", { style: s3.infoLabel }, "Venta #"), /* @__PURE__ */ import_react5.default.createElement("span", { style: s3.infoValue }, sale.id)), /* @__PURE__ */ import_react5.default.createElement("div", { style: s3.infoRow }, /* @__PURE__ */ import_react5.default.createElement("span", { style: s3.infoLabel }, "Fecha"), /* @__PURE__ */ import_react5.default.createElement("span", { style: s3.infoValue }, formatDate2(sale.created_at))), sale.customer_name && /* @__PURE__ */ import_react5.default.createElement("div", { style: s3.infoRow }, /* @__PURE__ */ import_react5.default.createElement("span", { style: s3.infoLabel }, "Cliente"), /* @__PURE__ */ import_react5.default.createElement("span", { style: s3.infoValue }, sale.customer_name))), /* @__PURE__ */ import_react5.default.createElement("div", { style: s3.divider }), /* @__PURE__ */ import_react5.default.createElement("div", { style: s3.itemsHeader }, /* @__PURE__ */ import_react5.default.createElement("span", { style: s3.colName }, "Producto"), /* @__PURE__ */ import_react5.default.createElement("span", { style: s3.colQty }, "Cant"), /* @__PURE__ */ import_react5.default.createElement("span", { style: s3.colUnit }, "P.Unit"), /* @__PURE__ */ import_react5.default.createElement("span", { style: s3.colSub }, "Subtotal")), /* @__PURE__ */ import_react5.default.createElement("div", { style: s3.divider }), items.map((item, i) => /* @__PURE__ */ import_react5.default.createElement("div", { key: i, style: s3.itemRow }, /* @__PURE__ */ import_react5.default.createElement("span", { style: s3.colName }, item.product_name), /* @__PURE__ */ import_react5.default.createElement("span", { style: s3.colQty }, item.quantity), /* @__PURE__ */ import_react5.default.createElement("span", { style: s3.colUnit }, "$", Number(item.unit_price).toFixed(2)), /* @__PURE__ */ import_react5.default.createElement("span", { style: s3.colSub }, "$", Number(item.subtotal).toFixed(2)))), /* @__PURE__ */ import_react5.default.createElement("div", { style: s3.dividerSolid }), /* @__PURE__ */ import_react5.default.createElement("div", { style: s3.totalRow }, /* @__PURE__ */ import_react5.default.createElement("span", { style: s3.totalLabel }, "Total"), /* @__PURE__ */ import_react5.default.createElement("span", { style: s3.totalAmount }, "$", Number(total).toFixed(2))), /* @__PURE__ */ import_react5.default.createElement("div", { style: s3.divider }), /* @__PURE__ */ import_react5.default.createElement("p", { style: s3.footer }, "\xA1Gracias por su compra!"))));
+  function SaleReceipt({ sale, items, subtotal, tax, total, onClose }) {
+    return /* @__PURE__ */ import_react7.default.createElement(import_react7.default.Fragment, null, /* @__PURE__ */ import_react7.default.createElement("style", null, PRINT_STYLES), /* @__PURE__ */ import_react7.default.createElement("div", { style: s5.overlay }, /* @__PURE__ */ import_react7.default.createElement("div", { style: s5.actions, className: "receipt-no-print" }, /* @__PURE__ */ import_react7.default.createElement("button", { style: s5.btnPrint, onClick: () => window.print() }, "\u{1F5A8} Imprimir"), /* @__PURE__ */ import_react7.default.createElement("button", { style: s5.btnClose, onClick: onClose }, "Cerrar")), /* @__PURE__ */ import_react7.default.createElement("div", { id: "sale-receipt", style: s5.receipt }, /* @__PURE__ */ import_react7.default.createElement("div", { style: s5.headerBlock }, /* @__PURE__ */ import_react7.default.createElement("h1", { style: s5.storeName }, "TechStore"), /* @__PURE__ */ import_react7.default.createElement("p", { style: s5.storeTagline }, "Comprobante de Venta")), /* @__PURE__ */ import_react7.default.createElement("div", { style: s5.dividerSolid }), /* @__PURE__ */ import_react7.default.createElement("div", null, /* @__PURE__ */ import_react7.default.createElement("div", { style: s5.infoRow }, /* @__PURE__ */ import_react7.default.createElement("span", { style: s5.infoLabel }, "Venta #"), /* @__PURE__ */ import_react7.default.createElement("span", { style: s5.infoValue }, sale.id)), /* @__PURE__ */ import_react7.default.createElement("div", { style: s5.infoRow }, /* @__PURE__ */ import_react7.default.createElement("span", { style: s5.infoLabel }, "Fecha"), /* @__PURE__ */ import_react7.default.createElement("span", { style: s5.infoValue }, formatDate3(sale.created_at))), sale.customer_name && /* @__PURE__ */ import_react7.default.createElement("div", { style: s5.infoRow }, /* @__PURE__ */ import_react7.default.createElement("span", { style: s5.infoLabel }, "Cliente"), /* @__PURE__ */ import_react7.default.createElement("span", { style: s5.infoValue }, sale.customer_name)), /* @__PURE__ */ import_react7.default.createElement("div", { style: s5.infoRow }, /* @__PURE__ */ import_react7.default.createElement("span", { style: s5.infoLabel }, "Pago"), /* @__PURE__ */ import_react7.default.createElement("span", { style: s5.infoValue }, sale.payment_method || "Efectivo"))), /* @__PURE__ */ import_react7.default.createElement("div", { style: s5.divider }), /* @__PURE__ */ import_react7.default.createElement("div", { style: s5.itemsHeader }, /* @__PURE__ */ import_react7.default.createElement("span", { style: s5.colName }, "Producto"), /* @__PURE__ */ import_react7.default.createElement("span", { style: s5.colQty }, "Cant"), /* @__PURE__ */ import_react7.default.createElement("span", { style: s5.colUnit }, "P.Unit"), /* @__PURE__ */ import_react7.default.createElement("span", { style: s5.colSub }, "Subtotal")), /* @__PURE__ */ import_react7.default.createElement("div", { style: s5.divider }), items.map((item, i) => /* @__PURE__ */ import_react7.default.createElement("div", { key: i, style: s5.itemRow }, /* @__PURE__ */ import_react7.default.createElement("span", { style: s5.colName }, item.product_name), /* @__PURE__ */ import_react7.default.createElement("span", { style: s5.colQty }, item.quantity), /* @__PURE__ */ import_react7.default.createElement("span", { style: s5.colUnit }, "$", Number(item.unit_price).toFixed(2)), /* @__PURE__ */ import_react7.default.createElement("span", { style: s5.colSub }, "$", Number(item.subtotal).toFixed(2)))), /* @__PURE__ */ import_react7.default.createElement("div", { style: s5.dividerSolid }), /* @__PURE__ */ import_react7.default.createElement("div", { style: { marginBottom: "8px" } }, /* @__PURE__ */ import_react7.default.createElement("div", { style: { ...s5.infoRow, marginBottom: "4px" } }, /* @__PURE__ */ import_react7.default.createElement("span", { style: s5.infoLabel }, "Subtotal"), /* @__PURE__ */ import_react7.default.createElement("span", { style: s5.infoValue }, "$", Number(subtotal ?? sale.subtotal ?? total).toFixed(2))), /* @__PURE__ */ import_react7.default.createElement("div", { style: { ...s5.infoRow, marginBottom: "4px" } }, /* @__PURE__ */ import_react7.default.createElement("span", { style: s5.infoLabel }, "IVA (13%)"), /* @__PURE__ */ import_react7.default.createElement("span", { style: s5.infoValue }, "$", Number(tax ?? sale.tax ?? 0).toFixed(2)))), /* @__PURE__ */ import_react7.default.createElement("div", { style: s5.totalRow }, /* @__PURE__ */ import_react7.default.createElement("span", { style: s5.totalLabel }, "Total"), /* @__PURE__ */ import_react7.default.createElement("span", { style: s5.totalAmount }, "$", Number(total).toFixed(2))), /* @__PURE__ */ import_react7.default.createElement("div", { style: s5.divider }), /* @__PURE__ */ import_react7.default.createElement("p", { style: s5.footer }, "\xA1Gracias por su compra!"))));
   }
 
   // src/renderer/components/NewSale.js
@@ -20036,26 +20453,27 @@
     },
     panel: {
       background: "white",
-      borderRadius: "8px",
-      boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
+      borderRadius: "12px",
+      boxShadow: "0 2px 8px rgba(0,0,0,0.07)",
       overflow: "hidden"
     },
     panelHeader: {
       padding: "14px 16px",
-      borderBottom: "1px solid #f1f5f9",
-      fontWeight: "600",
-      fontSize: "15px",
-      color: "#1e293b"
+      borderBottom: "1px solid #f0f0f0",
+      fontWeight: "700",
+      fontSize: "14px",
+      color: "#1a1a1a",
+      letterSpacing: "-0.1px"
     },
     searchBox: {
       padding: "12px 16px",
-      borderBottom: "1px solid #f1f5f9"
+      borderBottom: "1px solid #f0f0f0"
     },
     searchInput: {
       width: "100%",
       padding: "8px 12px",
-      border: "1px solid #e2e8f0",
-      borderRadius: "6px",
+      border: "1px solid #d1d1d1",
+      borderRadius: "8px",
       fontSize: "14px",
       outline: "none",
       boxSizing: "border-box"
@@ -20069,50 +20487,49 @@
       alignItems: "center",
       justifyContent: "space-between",
       padding: "10px 16px",
-      borderBottom: "1px solid #f8fafc",
-      cursor: "pointer",
-      transition: "background 0.1s"
+      borderBottom: "1px solid #f5f5f5",
+      cursor: "pointer"
     },
     productRowDisabled: {
       display: "flex",
       alignItems: "center",
       justifyContent: "space-between",
       padding: "10px 16px",
-      borderBottom: "1px solid #f8fafc",
-      opacity: 0.45
+      borderBottom: "1px solid #f5f5f5",
+      opacity: 0.4
     },
-    productName: { fontWeight: "500", fontSize: "14px", color: "#1e293b" },
-    productMeta: { fontSize: "12px", color: "#94a3b8", marginTop: "2px" },
+    productName: { fontWeight: "600", fontSize: "13px", color: "#1a1a1a" },
+    productMeta: { fontSize: "12px", color: "#9e9e9e", marginTop: "2px" },
     productRight: { textAlign: "right" },
-    productPrice: { fontWeight: "600", fontSize: "14px", color: "#1e293b" },
-    productStock: { fontSize: "12px", color: "#64748b" },
+    productPrice: { fontWeight: "700", fontSize: "13px", color: "#1a1a1a" },
+    productStock: { fontSize: "12px", color: "#5c5c5c" },
     addBtn: {
-      background: "#eff6ff",
-      border: "1px solid #bfdbfe",
-      color: "#2563eb",
+      background: "#eff6fc",
+      border: "1px solid #c7e0f4",
+      color: "#0078d4",
       padding: "4px 10px",
-      borderRadius: "4px",
+      borderRadius: "6px",
       cursor: "pointer",
-      fontSize: "13px",
-      fontWeight: "500",
+      fontSize: "12px",
+      fontWeight: "600",
       whiteSpace: "nowrap",
       marginLeft: "12px"
     },
     inCartBadge: {
-      background: "#f0fdf4",
-      border: "1px solid #bbf7d0",
-      color: "#16a34a",
+      background: "#e8f5e9",
+      border: "1px solid #c8e6c9",
+      color: "#2e7d32",
       padding: "4px 10px",
-      borderRadius: "4px",
-      fontSize: "13px",
-      fontWeight: "500",
+      borderRadius: "6px",
+      fontSize: "12px",
+      fontWeight: "600",
       whiteSpace: "nowrap",
       marginLeft: "12px"
     },
     emptySearch: {
       padding: "32px 16px",
       textAlign: "center",
-      color: "#94a3b8",
+      color: "#9e9e9e",
       fontSize: "14px"
     },
     // Cart
@@ -20173,7 +20590,7 @@
     },
     cartFooter: {
       padding: "14px 16px",
-      borderTop: "2px solid #f1f5f9"
+      borderTop: "1px solid #f0f0f0"
     },
     totalRow: {
       display: "flex",
@@ -20181,47 +20598,47 @@
       alignItems: "center",
       marginBottom: "12px"
     },
-    totalLabel: { fontWeight: "600", fontSize: "15px", color: "#1e293b" },
-    totalAmount: { fontWeight: "700", fontSize: "20px", color: "#1e293b" },
+    totalLabel: { fontWeight: "700", fontSize: "15px", color: "#1a1a1a" },
+    totalAmount: { fontWeight: "700", fontSize: "22px", color: "#0078d4" },
     confirmBtn: {
       width: "100%",
-      background: "#16a34a",
+      background: "#107c10",
       color: "white",
       border: "none",
-      padding: "10px",
-      borderRadius: "6px",
+      padding: "11px",
+      borderRadius: "8px",
       cursor: "pointer",
       fontSize: "15px",
       fontWeight: "600"
     },
     confirmBtnDisabled: {
       width: "100%",
-      background: "#d1fae5",
-      color: "#6ee7b7",
+      background: "#e8f5e9",
+      color: "#a5d6a7",
       border: "none",
-      padding: "10px",
-      borderRadius: "6px",
+      padding: "11px",
+      borderRadius: "8px",
       cursor: "not-allowed",
       fontSize: "15px",
       fontWeight: "600"
     },
     errorBox: {
-      background: "#fee2e2",
-      color: "#dc2626",
+      background: "#ffebee",
+      color: "#a4262c",
       padding: "10px 16px",
       fontSize: "13px",
-      borderTop: "1px solid #fecaca"
+      borderTop: "1px solid #ffcdd2"
     },
     // Customer selector
     customerSection: {
       padding: "10px 16px",
-      borderBottom: "1px solid #f1f5f9",
+      borderBottom: "1px solid #f0f0f0",
       background: "#fafafa"
     },
     customerLabel: {
       fontSize: "11px",
-      fontWeight: "600",
-      color: "#64748b",
+      fontWeight: "700",
+      color: "#9e9e9e",
       textTransform: "uppercase",
       letterSpacing: "0.5px",
       marginBottom: "6px"
@@ -20282,34 +20699,78 @@
     customerOptionName: { fontWeight: "500", fontSize: "13px", color: "#1e293b" },
     customerOptionMeta: { fontSize: "11px", color: "#94a3b8", marginTop: "2px" },
     sectionTitle: {
-      fontSize: "17px",
+      fontSize: "18px",
+      fontWeight: "700",
+      color: "#1a1a1a",
+      marginBottom: "16px",
+      letterSpacing: "-0.3px"
+    },
+    barcodeSection: {
+      padding: "10px 16px",
+      borderBottom: "1px solid #f1f5f9",
+      background: "#fafafa"
+    },
+    barcodeLabel: {
+      fontSize: "11px",
       fontWeight: "600",
-      color: "#1e293b",
-      marginBottom: "16px"
+      color: "#64748b",
+      textTransform: "uppercase",
+      letterSpacing: "0.5px",
+      marginBottom: "5px",
+      display: "flex",
+      alignItems: "center",
+      gap: "5px"
+    },
+    barcodeInput: {
+      width: "100%",
+      padding: "7px 10px",
+      border: "1px solid #e2e8f0",
+      borderRadius: "6px",
+      fontSize: "13px",
+      outline: "none",
+      boxSizing: "border-box",
+      fontFamily: "monospace"
+    },
+    barcodeMsgOk: {
+      fontSize: "11px",
+      color: "#16a34a",
+      marginTop: "4px",
+      fontWeight: "500"
+    },
+    barcodeMsgErr: {
+      fontSize: "11px",
+      color: "#dc2626",
+      marginTop: "4px",
+      fontWeight: "500"
     }
   };
   function NewSale({ onSaleComplete }) {
-    const [allProducts, setAllProducts] = (0, import_react6.useState)([]);
-    const [query, setQuery] = (0, import_react6.useState)("");
-    const [cart, setCart] = (0, import_react6.useState)([]);
-    const [saving, setSaving] = (0, import_react6.useState)(false);
-    const [error, setError] = (0, import_react6.useState)(null);
-    const [receipt, setReceipt] = (0, import_react6.useState)(null);
-    const [allCustomers, setAllCustomers] = (0, import_react6.useState)([]);
-    const [selectedCustomer, setSelectedCustomer] = (0, import_react6.useState)(null);
-    const [customerQuery, setCustomerQuery] = (0, import_react6.useState)("");
-    (0, import_react6.useEffect)(() => {
+    const [allProducts, setAllProducts] = (0, import_react8.useState)([]);
+    const [query, setQuery] = (0, import_react8.useState)("");
+    const [cart, setCart] = (0, import_react8.useState)([]);
+    const [saving, setSaving] = (0, import_react8.useState)(false);
+    const [error, setError] = (0, import_react8.useState)(null);
+    const [receipt, setReceipt] = (0, import_react8.useState)(null);
+    const [allCustomers, setAllCustomers] = (0, import_react8.useState)([]);
+    const [selectedCustomer, setSelectedCustomer] = (0, import_react8.useState)(null);
+    const [customerQuery, setCustomerQuery] = (0, import_react8.useState)("");
+    const [paymentMethod, setPaymentMethod] = (0, import_react8.useState)("Efectivo");
+    const [barcodeQuery, setBarcodeQuery] = (0, import_react8.useState)("");
+    const [barcodeMsg, setBarcodeMsg] = (0, import_react8.useState)(null);
+    const barcodeRef = (0, import_react8.useRef)(null);
+    const barcodeMsgTimerRef = (0, import_react8.useRef)(null);
+    (0, import_react8.useEffect)(() => {
       window.electron.products.getAll().then(setAllProducts);
       window.electron.customers.getAll().then(setAllCustomers);
     }, []);
-    const filteredCustomers = (0, import_react6.useMemo)(() => {
+    const filteredCustomers = (0, import_react8.useMemo)(() => {
       const q = customerQuery.toLowerCase().trim();
       if (!q) return [];
       return allCustomers.filter(
         (c) => c.name.toLowerCase().includes(q) || (c.phone || "").includes(q)
       ).slice(0, 5);
     }, [allCustomers, customerQuery]);
-    const filteredProducts = (0, import_react6.useMemo)(() => {
+    const filteredProducts = (0, import_react8.useMemo)(() => {
       const q = query.toLowerCase().trim();
       return allProducts.filter(
         (p) => !q || p.name.toLowerCase().includes(q) || (p.category || "").toLowerCase().includes(q)
@@ -20320,6 +20781,30 @@
       return item ? item.quantity : 0;
     };
     const availableStock = (product) => product.stock - cartQtyFor(product.id);
+    const showBarcodeMsg = (type, text) => {
+      if (barcodeMsgTimerRef.current) clearTimeout(barcodeMsgTimerRef.current);
+      setBarcodeMsg({ type, text });
+      barcodeMsgTimerRef.current = setTimeout(() => setBarcodeMsg(null), 2e3);
+    };
+    const handleBarcodeScan = (e) => {
+      if (e.key !== "Enter") return;
+      e.preventDefault();
+      const code = barcodeQuery.trim();
+      if (!code) return;
+      const product = allProducts.find(
+        (p) => p.barcode && p.barcode.trim() === code
+      );
+      if (!product) {
+        showBarcodeMsg("err", `Sin resultados para "${code}"`);
+      } else if (availableStock(product) <= 0) {
+        showBarcodeMsg("err", `Sin stock: ${product.name}`);
+      } else {
+        addToCart(product);
+        showBarcodeMsg("ok", `Agregado: ${product.name}`);
+      }
+      setBarcodeQuery("");
+      barcodeRef.current?.focus();
+    };
     const addToCart = (product) => {
       if (availableStock(product) <= 0) return;
       const effectivePrice = product.offer_price ? Number(product.offer_price) : Number(product.sale_price);
@@ -20355,7 +20840,9 @@
         )
       );
     };
-    const total = cart.reduce((sum, item) => sum + item.subtotal, 0);
+    const subtotal = cart.reduce((sum, item) => sum + item.subtotal, 0);
+    const tax = subtotal * 0.13;
+    const total = subtotal + tax;
     const confirmSale = async () => {
       if (cart.length === 0 || saving) return;
       setSaving(true);
@@ -20364,20 +20851,33 @@
         const savedSale = await window.electron.sales.create(
           cart,
           selectedCustomer?.id ?? null,
-          selectedCustomer?.name ?? null
+          selectedCustomer?.name ?? null,
+          paymentMethod,
+          "Completada"
         );
-        setReceipt({ sale: savedSale, items: [...cart], total });
+        setReceipt({ sale: savedSale, items: [...cart], subtotal, tax, total });
         setCart([]);
         setQuery("");
         setSelectedCustomer(null);
         setCustomerQuery("");
+        setPaymentMethod("Efectivo");
       } catch {
         setError("Error al confirmar la venta. Intenta de nuevo.");
       } finally {
         setSaving(false);
       }
     };
-    return /* @__PURE__ */ import_react6.default.createElement(import_react6.default.Fragment, null, /* @__PURE__ */ import_react6.default.createElement("h2", { style: styles2.sectionTitle }, "Nueva Venta"), /* @__PURE__ */ import_react6.default.createElement("div", { style: styles2.layout }, /* @__PURE__ */ import_react6.default.createElement("div", { style: styles2.panel }, /* @__PURE__ */ import_react6.default.createElement("div", { style: styles2.panelHeader }, "Productos"), /* @__PURE__ */ import_react6.default.createElement("div", { style: styles2.searchBox }, /* @__PURE__ */ import_react6.default.createElement(
+    return /* @__PURE__ */ import_react8.default.createElement(import_react8.default.Fragment, null, /* @__PURE__ */ import_react8.default.createElement("h2", { style: styles2.sectionTitle }, "Nueva Venta"), /* @__PURE__ */ import_react8.default.createElement("div", { style: styles2.layout }, /* @__PURE__ */ import_react8.default.createElement("div", { style: styles2.panel }, /* @__PURE__ */ import_react8.default.createElement("div", { style: styles2.panelHeader }, "Productos"), /* @__PURE__ */ import_react8.default.createElement("div", { style: styles2.barcodeSection }, /* @__PURE__ */ import_react8.default.createElement("div", { style: styles2.barcodeLabel }, /* @__PURE__ */ import_react8.default.createElement("svg", { width: "12", height: "12", viewBox: "0 0 12 12", fill: "currentColor", style: { opacity: 0.6 } }, /* @__PURE__ */ import_react8.default.createElement("rect", { x: "0", y: "0", width: "1.5", height: "12" }), /* @__PURE__ */ import_react8.default.createElement("rect", { x: "3", y: "0", width: "1", height: "12" }), /* @__PURE__ */ import_react8.default.createElement("rect", { x: "5.5", y: "0", width: "2", height: "12" }), /* @__PURE__ */ import_react8.default.createElement("rect", { x: "9", y: "0", width: "1", height: "12" }), /* @__PURE__ */ import_react8.default.createElement("rect", { x: "11", y: "0", width: "1", height: "12" })), "Escanear c\xF3digo de barras"), /* @__PURE__ */ import_react8.default.createElement(
+      "input",
+      {
+        ref: barcodeRef,
+        style: styles2.barcodeInput,
+        placeholder: "Escanea o escribe el c\xF3digo y presiona Enter",
+        value: barcodeQuery,
+        onChange: (e) => setBarcodeQuery(e.target.value),
+        onKeyDown: handleBarcodeScan
+      }
+    ), barcodeMsg && /* @__PURE__ */ import_react8.default.createElement("div", { style: barcodeMsg.type === "ok" ? styles2.barcodeMsgOk : styles2.barcodeMsgErr }, barcodeMsg.text)), /* @__PURE__ */ import_react8.default.createElement("div", { style: styles2.searchBox }, /* @__PURE__ */ import_react8.default.createElement(
       "input",
       {
         style: styles2.searchInput,
@@ -20386,21 +20886,22 @@
         onChange: (e) => setQuery(e.target.value),
         autoFocus: true
       }
-    )), /* @__PURE__ */ import_react6.default.createElement("div", { style: styles2.productList }, filteredProducts.length === 0 ? /* @__PURE__ */ import_react6.default.createElement("p", { style: styles2.emptySearch }, 'Sin resultados para "', query, '"') : filteredProducts.map((product) => {
+    )), /* @__PURE__ */ import_react8.default.createElement("div", { style: styles2.productList }, filteredProducts.length === 0 ? /* @__PURE__ */ import_react8.default.createElement("p", { style: styles2.emptySearch }, 'Sin resultados para "', query, '"') : filteredProducts.map((product) => {
       const inCart = cartQtyFor(product.id);
       const avail = availableStock(product);
       const outOfStock = avail <= 0;
-      return /* @__PURE__ */ import_react6.default.createElement(
+      return /* @__PURE__ */ import_react8.default.createElement(
         "div",
         {
           key: product.id,
+          className: outOfStock ? void 0 : "fl-product-row",
           style: outOfStock ? styles2.productRowDisabled : styles2.productRow,
           onClick: () => !outOfStock && addToCart(product)
         },
-        /* @__PURE__ */ import_react6.default.createElement("div", null, /* @__PURE__ */ import_react6.default.createElement("div", { style: styles2.productName }, product.name), /* @__PURE__ */ import_react6.default.createElement("div", { style: styles2.productMeta }, product.category || "Sin categor\xEDa", " \xB7 Stock: ", avail, inCart > 0 && ` (${inCart} en carrito)`)),
-        /* @__PURE__ */ import_react6.default.createElement("div", { style: { display: "flex", alignItems: "center" } }, /* @__PURE__ */ import_react6.default.createElement("div", { style: styles2.productRight }, /* @__PURE__ */ import_react6.default.createElement("div", { style: styles2.productPrice }, product.offer_price ? /* @__PURE__ */ import_react6.default.createElement(import_react6.default.Fragment, null, "$", Number(product.offer_price).toFixed(2), " ", /* @__PURE__ */ import_react6.default.createElement("span", { style: { textDecoration: "line-through", color: "#94a3b8", fontSize: "11px" } }, "$", Number(product.sale_price).toFixed(2))) : `$${Number(product.sale_price).toFixed(2)}`)), outOfStock ? /* @__PURE__ */ import_react6.default.createElement("span", { style: { ...styles2.inCartBadge, background: "#f8fafc", border: "1px solid #e2e8f0", color: "#94a3b8" } }, "Sin stock") : inCart > 0 ? /* @__PURE__ */ import_react6.default.createElement("span", { style: styles2.inCartBadge }, "+", inCart) : /* @__PURE__ */ import_react6.default.createElement("span", { style: styles2.addBtn }, "Agregar"))
+        /* @__PURE__ */ import_react8.default.createElement("div", null, /* @__PURE__ */ import_react8.default.createElement("div", { style: styles2.productName }, product.name), /* @__PURE__ */ import_react8.default.createElement("div", { style: styles2.productMeta }, product.category || "Sin categor\xEDa", " \xB7 Stock: ", avail, inCart > 0 && ` (${inCart} en carrito)`)),
+        /* @__PURE__ */ import_react8.default.createElement("div", { style: { display: "flex", alignItems: "center" } }, /* @__PURE__ */ import_react8.default.createElement("div", { style: styles2.productRight }, /* @__PURE__ */ import_react8.default.createElement("div", { style: styles2.productPrice }, product.offer_price ? /* @__PURE__ */ import_react8.default.createElement(import_react8.default.Fragment, null, "$", Number(product.offer_price).toFixed(2), " ", /* @__PURE__ */ import_react8.default.createElement("span", { style: { textDecoration: "line-through", color: "#94a3b8", fontSize: "11px" } }, "$", Number(product.sale_price).toFixed(2))) : `$${Number(product.sale_price).toFixed(2)}`)), outOfStock ? /* @__PURE__ */ import_react8.default.createElement("span", { style: { ...styles2.inCartBadge, background: "#f8fafc", border: "1px solid #e2e8f0", color: "#94a3b8" } }, "Sin stock") : inCart > 0 ? /* @__PURE__ */ import_react8.default.createElement("span", { style: styles2.inCartBadge }, "+", inCart) : /* @__PURE__ */ import_react8.default.createElement("span", { style: styles2.addBtn }, "Agregar"))
       );
-    }))), /* @__PURE__ */ import_react6.default.createElement("div", { style: styles2.panel }, /* @__PURE__ */ import_react6.default.createElement("div", { style: styles2.panelHeader }, "Carrito"), /* @__PURE__ */ import_react6.default.createElement("div", { style: styles2.customerSection }, /* @__PURE__ */ import_react6.default.createElement("div", { style: styles2.customerLabel }, "Cliente ", /* @__PURE__ */ import_react6.default.createElement("span", { style: { fontWeight: "400", textTransform: "none", letterSpacing: 0 } }, "(opcional)")), selectedCustomer ? /* @__PURE__ */ import_react6.default.createElement("div", { style: styles2.customerPill }, /* @__PURE__ */ import_react6.default.createElement("span", { style: styles2.customerPillName }, selectedCustomer.name), selectedCustomer.phone && /* @__PURE__ */ import_react6.default.createElement("span", { style: styles2.customerPillMeta }, selectedCustomer.phone), /* @__PURE__ */ import_react6.default.createElement(
+    }))), /* @__PURE__ */ import_react8.default.createElement("div", { style: styles2.panel }, /* @__PURE__ */ import_react8.default.createElement("div", { style: styles2.panelHeader }, "Carrito"), /* @__PURE__ */ import_react8.default.createElement("div", { style: styles2.customerSection }, /* @__PURE__ */ import_react8.default.createElement("div", { style: styles2.customerLabel }, "Cliente ", /* @__PURE__ */ import_react8.default.createElement("span", { style: { fontWeight: "400", textTransform: "none", letterSpacing: 0 } }, "(opcional)")), selectedCustomer ? /* @__PURE__ */ import_react8.default.createElement("div", { style: styles2.customerPill }, /* @__PURE__ */ import_react8.default.createElement("span", { style: styles2.customerPillName }, selectedCustomer.name), selectedCustomer.phone && /* @__PURE__ */ import_react8.default.createElement("span", { style: styles2.customerPillMeta }, selectedCustomer.phone), /* @__PURE__ */ import_react8.default.createElement(
       "button",
       {
         style: styles2.customerClearBtn,
@@ -20408,7 +20909,7 @@
         title: "Quitar cliente"
       },
       "\xD7"
-    )) : /* @__PURE__ */ import_react6.default.createElement("div", { style: styles2.customerSearchWrap }, /* @__PURE__ */ import_react6.default.createElement(
+    )) : /* @__PURE__ */ import_react8.default.createElement("div", { style: styles2.customerSearchWrap }, /* @__PURE__ */ import_react8.default.createElement(
       "input",
       {
         style: styles2.customerInput,
@@ -20416,7 +20917,7 @@
         value: customerQuery,
         onChange: (e) => setCustomerQuery(e.target.value)
       }
-    ), filteredCustomers.length > 0 && /* @__PURE__ */ import_react6.default.createElement("div", { style: styles2.customerDropdown }, filteredCustomers.map((c) => /* @__PURE__ */ import_react6.default.createElement(
+    ), filteredCustomers.length > 0 && /* @__PURE__ */ import_react8.default.createElement("div", { style: styles2.customerDropdown }, filteredCustomers.map((c) => /* @__PURE__ */ import_react8.default.createElement(
       "div",
       {
         key: c.id,
@@ -20426,9 +20927,9 @@
           setCustomerQuery("");
         }
       },
-      /* @__PURE__ */ import_react6.default.createElement("div", { style: styles2.customerOptionName }, c.name),
-      c.phone && /* @__PURE__ */ import_react6.default.createElement("div", { style: styles2.customerOptionMeta }, c.phone)
-    ))))), /* @__PURE__ */ import_react6.default.createElement("div", { style: styles2.cartBody }, cart.length === 0 ? /* @__PURE__ */ import_react6.default.createElement("p", { style: styles2.emptyCart }, "Haz clic en un producto para agregarlo.") : cart.map((item) => /* @__PURE__ */ import_react6.default.createElement("div", { key: item.product_id, style: styles2.cartItem }, /* @__PURE__ */ import_react6.default.createElement("div", { style: styles2.cartItemName }, /* @__PURE__ */ import_react6.default.createElement("span", null, item.product_name), /* @__PURE__ */ import_react6.default.createElement(
+      /* @__PURE__ */ import_react8.default.createElement("div", { style: styles2.customerOptionName }, c.name),
+      c.phone && /* @__PURE__ */ import_react8.default.createElement("div", { style: styles2.customerOptionMeta }, c.phone)
+    ))))), /* @__PURE__ */ import_react8.default.createElement("div", { style: styles2.cartBody }, cart.length === 0 ? /* @__PURE__ */ import_react8.default.createElement("p", { style: styles2.emptyCart }, "Haz clic en un producto para agregarlo.") : cart.map((item) => /* @__PURE__ */ import_react8.default.createElement("div", { key: item.product_id, style: styles2.cartItem }, /* @__PURE__ */ import_react8.default.createElement("div", { style: styles2.cartItemName }, /* @__PURE__ */ import_react8.default.createElement("span", null, item.product_name), /* @__PURE__ */ import_react8.default.createElement(
       "button",
       {
         style: styles2.removeBtn,
@@ -20436,21 +20937,31 @@
         title: "Quitar del carrito"
       },
       "\xD7"
-    )), /* @__PURE__ */ import_react6.default.createElement("div", { style: styles2.qtyRow }, /* @__PURE__ */ import_react6.default.createElement("div", { style: styles2.qtyControls }, /* @__PURE__ */ import_react6.default.createElement(
+    )), /* @__PURE__ */ import_react8.default.createElement("div", { style: styles2.qtyRow }, /* @__PURE__ */ import_react8.default.createElement("div", { style: styles2.qtyControls }, /* @__PURE__ */ import_react8.default.createElement(
       "button",
       {
         style: styles2.qtyBtn,
         onClick: () => setQty(item.product_id, item.quantity - 1)
       },
       "\u2212"
-    ), /* @__PURE__ */ import_react6.default.createElement("span", { style: styles2.qtyValue }, item.quantity), /* @__PURE__ */ import_react6.default.createElement(
+    ), /* @__PURE__ */ import_react8.default.createElement("span", { style: styles2.qtyValue }, item.quantity), /* @__PURE__ */ import_react8.default.createElement(
       "button",
       {
         style: styles2.qtyBtn,
         onClick: () => setQty(item.product_id, item.quantity + 1)
       },
       "+"
-    )), /* @__PURE__ */ import_react6.default.createElement("span", { style: styles2.itemSubtotal }, "$", item.subtotal.toFixed(2)))))), /* @__PURE__ */ import_react6.default.createElement("div", { style: styles2.cartFooter }, /* @__PURE__ */ import_react6.default.createElement("div", { style: styles2.totalRow }, /* @__PURE__ */ import_react6.default.createElement("span", { style: styles2.totalLabel }, "Total"), /* @__PURE__ */ import_react6.default.createElement("span", { style: styles2.totalAmount }, "$", total.toFixed(2))), /* @__PURE__ */ import_react6.default.createElement(
+    )), /* @__PURE__ */ import_react8.default.createElement("span", { style: styles2.itemSubtotal }, "$", item.subtotal.toFixed(2)))))), /* @__PURE__ */ import_react8.default.createElement("div", { style: styles2.cartFooter }, /* @__PURE__ */ import_react8.default.createElement("div", { style: { marginBottom: "10px" } }, /* @__PURE__ */ import_react8.default.createElement("div", { style: { fontSize: "11px", fontWeight: "600", color: "#64748b", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "5px" } }, "M\xE9todo de pago"), /* @__PURE__ */ import_react8.default.createElement(
+      "select",
+      {
+        value: paymentMethod,
+        onChange: (e) => setPaymentMethod(e.target.value),
+        style: { width: "100%", padding: "6px 10px", border: "1px solid #e2e8f0", borderRadius: "6px", fontSize: "13px", background: "white", boxSizing: "border-box" }
+      },
+      /* @__PURE__ */ import_react8.default.createElement("option", { value: "Efectivo" }, "Efectivo"),
+      /* @__PURE__ */ import_react8.default.createElement("option", { value: "Tarjeta" }, "Tarjeta"),
+      /* @__PURE__ */ import_react8.default.createElement("option", { value: "Transferencia" }, "Transferencia")
+    )), /* @__PURE__ */ import_react8.default.createElement("div", { style: { fontSize: "13px", color: "#64748b", marginBottom: "8px" } }, /* @__PURE__ */ import_react8.default.createElement("div", { style: { display: "flex", justifyContent: "space-between", marginBottom: "3px" } }, /* @__PURE__ */ import_react8.default.createElement("span", null, "Subtotal"), /* @__PURE__ */ import_react8.default.createElement("span", null, "$", subtotal.toFixed(2))), /* @__PURE__ */ import_react8.default.createElement("div", { style: { display: "flex", justifyContent: "space-between", marginBottom: "3px" } }, /* @__PURE__ */ import_react8.default.createElement("span", null, "IVA (13%)"), /* @__PURE__ */ import_react8.default.createElement("span", null, "$", tax.toFixed(2)))), /* @__PURE__ */ import_react8.default.createElement("div", { style: styles2.totalRow }, /* @__PURE__ */ import_react8.default.createElement("span", { style: styles2.totalLabel }, "Total"), /* @__PURE__ */ import_react8.default.createElement("span", { style: styles2.totalAmount }, "$", total.toFixed(2))), /* @__PURE__ */ import_react8.default.createElement(
       "button",
       {
         style: cart.length === 0 || saving ? styles2.confirmBtnDisabled : styles2.confirmBtn,
@@ -20458,11 +20969,13 @@
         disabled: cart.length === 0 || saving
       },
       saving ? "Procesando..." : "Confirmar Venta"
-    )), error && /* @__PURE__ */ import_react6.default.createElement("div", { style: styles2.errorBox }, error))), receipt && /* @__PURE__ */ import_react6.default.createElement(
+    )), error && /* @__PURE__ */ import_react8.default.createElement("div", { style: styles2.errorBox }, error))), receipt && /* @__PURE__ */ import_react8.default.createElement(
       SaleReceipt,
       {
         sale: receipt.sale,
         items: receipt.items,
+        subtotal: receipt.subtotal,
+        tax: receipt.tax,
         total: receipt.total,
         onClose: () => {
           setReceipt(null);
@@ -20473,102 +20986,29 @@
   }
 
   // src/renderer/components/SaleHistory.js
-  var import_react7 = __toESM(require_react());
-  var styles3 = {
-    toolbar: {
-      display: "flex",
-      justifyContent: "space-between",
-      alignItems: "center",
-      marginBottom: "16px"
-    },
-    sectionTitle: { fontSize: "17px", fontWeight: "600", color: "#1e293b" },
-    wrapper: {
-      background: "white",
-      borderRadius: "8px",
-      boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
-      overflow: "hidden"
-    },
-    table: {
-      width: "100%",
-      borderCollapse: "collapse",
-      fontSize: "14px"
-    },
-    th: {
-      background: "#f8fafc",
-      padding: "11px 16px",
-      textAlign: "left",
-      fontWeight: "600",
-      color: "#475569",
-      borderBottom: "2px solid #e2e8f0",
-      whiteSpace: "nowrap"
-    },
-    td: {
-      padding: "11px 16px",
-      borderBottom: "1px solid #f1f5f9",
-      verticalAlign: "middle"
-    },
-    toggleBtn: {
-      background: "#f1f5f9",
-      border: "none",
-      padding: "4px 10px",
-      borderRadius: "4px",
-      cursor: "pointer",
-      fontSize: "13px",
-      color: "#334155"
-    },
-    detailRow: {
-      background: "#f8fafc"
-    },
-    detailCell: {
-      padding: "0",
-      borderBottom: "1px solid #e2e8f0"
-    },
-    detailTable: {
-      width: "100%",
-      borderCollapse: "collapse",
-      fontSize: "13px"
-    },
-    detailTh: {
-      padding: "8px 24px",
-      textAlign: "left",
-      fontWeight: "600",
-      color: "#64748b",
-      borderBottom: "1px solid #e2e8f0",
-      background: "#f1f5f9"
-    },
-    detailTd: {
-      padding: "8px 24px",
-      borderBottom: "1px solid #f1f5f9",
-      color: "#334155"
-    },
-    detailTotal: {
-      padding: "8px 24px",
-      textAlign: "right",
-      fontWeight: "600",
-      color: "#1e293b",
-      fontSize: "13px",
-      borderTop: "1px solid #e2e8f0"
-    },
-    empty: {
-      textAlign: "center",
-      padding: "48px",
-      color: "#94a3b8",
-      fontSize: "15px"
-    },
-    errorBox: {
-      background: "#fee2e2",
-      color: "#dc2626",
-      padding: "12px 16px",
-      borderRadius: "6px",
-      marginBottom: "16px",
-      fontSize: "14px"
-    },
-    totalBadge: {
-      fontWeight: "700",
-      color: "#1e293b"
-    }
+  var import_react9 = __toESM(require_react());
+  var STATUS_STYLE2 = {
+    "Completada": { background: "#e8f5e9", color: "#2e7d32" },
+    "Cancelada": { background: "#ffebee", color: "#a4262c" },
+    "Pendiente": { background: "#fff8e1", color: "#8a5700" }
   };
-  function formatDate3(dateStr) {
+  var PAYMENT_STYLE = {
+    "Efectivo": { background: "#e8f5e9", color: "#2e7d32" },
+    "Tarjeta": { background: "#e3f2fd", color: "#1565c0" },
+    "Transferencia": { background: "#ede7f6", color: "#6a1b9a" }
+  };
+  function Badge({ map, value }) {
+    const col = map[value] || { background: "#f5f5f5", color: "#5c5c5c" };
+    return /* @__PURE__ */ import_react9.default.createElement("span", { style: {
+      display: "inline-block",
+      padding: "3px 9px",
+      borderRadius: "12px",
+      fontSize: "12px",
+      fontWeight: "600",
+      ...col
+    } }, value || "\u2014");
+  }
+  function formatDate4(dateStr) {
     return new Date(dateStr).toLocaleString("es", {
       day: "2-digit",
       month: "2-digit",
@@ -20577,12 +21017,80 @@
       minute: "2-digit"
     });
   }
+  var styles3 = {
+    toolbar: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" },
+    sectionTitle: { fontSize: "18px", fontWeight: "700", color: "#1a1a1a", letterSpacing: "-0.3px" },
+    wrapper: {
+      background: "white",
+      borderRadius: "12px",
+      boxShadow: "0 2px 8px rgba(0,0,0,0.07)",
+      overflow: "hidden"
+    },
+    table: { width: "100%", borderCollapse: "collapse", fontSize: "13px" },
+    th: {
+      background: "#f7f7f7",
+      padding: "10px 16px",
+      textAlign: "left",
+      fontWeight: "700",
+      fontSize: "11px",
+      color: "#9e9e9e",
+      borderBottom: "1px solid #e5e5e5",
+      textTransform: "uppercase",
+      letterSpacing: "0.5px",
+      whiteSpace: "nowrap"
+    },
+    td: { padding: "12px 16px", borderBottom: "1px solid #f5f5f5", verticalAlign: "middle" },
+    toggleBtn: {
+      background: "white",
+      border: "1px solid #d1d1d1",
+      padding: "4px 12px",
+      borderRadius: "6px",
+      cursor: "pointer",
+      fontSize: "12px",
+      color: "#1a1a1a",
+      fontWeight: "500"
+    },
+    detailRow: { background: "#fafafa" },
+    detailCell: { padding: 0, borderBottom: "1px solid #e5e5e5" },
+    detailTable: { width: "100%", borderCollapse: "collapse", fontSize: "13px" },
+    detailTh: {
+      padding: "8px 24px",
+      textAlign: "left",
+      fontWeight: "600",
+      color: "#9e9e9e",
+      fontSize: "11px",
+      borderBottom: "1px solid #e5e5e5",
+      background: "#f5f5f5",
+      textTransform: "uppercase",
+      letterSpacing: "0.4px"
+    },
+    detailTd: { padding: "8px 24px", borderBottom: "1px solid #f0f0f0", color: "#1a1a1a" },
+    detailTotal: {
+      padding: "10px 24px",
+      textAlign: "right",
+      fontWeight: "600",
+      color: "#1a1a1a",
+      fontSize: "13px",
+      borderTop: "1px solid #e5e5e5",
+      background: "#f9f9f9"
+    },
+    empty: { textAlign: "center", padding: "56px 32px", color: "#9e9e9e", fontSize: "15px" },
+    errorBox: {
+      background: "#ffebee",
+      color: "#a4262c",
+      padding: "12px 16px",
+      borderRadius: "8px",
+      marginBottom: "16px",
+      fontSize: "14px"
+    },
+    totalBadge: { fontWeight: "700", color: "#0078d4" }
+  };
   function SaleHistory() {
-    const [sales, setSales] = (0, import_react7.useState)([]);
-    const [loading, setLoading] = (0, import_react7.useState)(true);
-    const [error, setError] = (0, import_react7.useState)(null);
-    const [expanded, setExpanded] = (0, import_react7.useState)(null);
-    (0, import_react7.useEffect)(() => {
+    const [sales, setSales] = (0, import_react9.useState)([]);
+    const [loading, setLoading] = (0, import_react9.useState)(true);
+    const [error, setError] = (0, import_react9.useState)(null);
+    const [expanded, setExpanded] = (0, import_react9.useState)(null);
+    (0, import_react9.useEffect)(() => {
       window.electron.sales.getAll().then((data) => {
         setSales(data);
         setLoading(false);
@@ -20592,94 +21100,87 @@
       });
     }, []);
     const toggle = (id) => setExpanded((prev) => prev === id ? null : id);
-    return /* @__PURE__ */ import_react7.default.createElement(import_react7.default.Fragment, null, /* @__PURE__ */ import_react7.default.createElement("div", { style: styles3.toolbar }, /* @__PURE__ */ import_react7.default.createElement("h2", { style: styles3.sectionTitle }, "Historial de Ventas")), error && /* @__PURE__ */ import_react7.default.createElement("div", { style: styles3.errorBox }, error), loading ? /* @__PURE__ */ import_react7.default.createElement("p", { style: { color: "#64748b", fontSize: "14px" } }, "Cargando...") : /* @__PURE__ */ import_react7.default.createElement("div", { style: styles3.wrapper }, sales.length === 0 ? /* @__PURE__ */ import_react7.default.createElement("p", { style: styles3.empty }, "No hay ventas registradas a\xFAn.") : /* @__PURE__ */ import_react7.default.createElement("table", { style: styles3.table }, /* @__PURE__ */ import_react7.default.createElement("thead", null, /* @__PURE__ */ import_react7.default.createElement("tr", null, /* @__PURE__ */ import_react7.default.createElement("th", { style: styles3.th }, "#"), /* @__PURE__ */ import_react7.default.createElement("th", { style: styles3.th }, "Fecha"), /* @__PURE__ */ import_react7.default.createElement("th", { style: styles3.th }, "Cliente"), /* @__PURE__ */ import_react7.default.createElement("th", { style: styles3.th }, "Productos"), /* @__PURE__ */ import_react7.default.createElement("th", { style: styles3.th }, "Total"), /* @__PURE__ */ import_react7.default.createElement("th", { style: styles3.th }))), /* @__PURE__ */ import_react7.default.createElement("tbody", null, sales.map((sale) => /* @__PURE__ */ import_react7.default.createElement(import_react7.default.Fragment, { key: sale.id }, /* @__PURE__ */ import_react7.default.createElement("tr", null, /* @__PURE__ */ import_react7.default.createElement("td", { style: styles3.td }, sale.id), /* @__PURE__ */ import_react7.default.createElement("td", { style: styles3.td }, formatDate3(sale.created_at)), /* @__PURE__ */ import_react7.default.createElement("td", { style: styles3.td }, sale.customer_name || /* @__PURE__ */ import_react7.default.createElement("span", { style: { color: "#94a3b8" } }, "\u2014")), /* @__PURE__ */ import_react7.default.createElement("td", { style: styles3.td }, sale.details.length, " producto", sale.details.length !== 1 ? "s" : ""), /* @__PURE__ */ import_react7.default.createElement("td", { style: styles3.td }, /* @__PURE__ */ import_react7.default.createElement("span", { style: styles3.totalBadge }, "$", Number(sale.total).toFixed(2))), /* @__PURE__ */ import_react7.default.createElement("td", { style: styles3.td }, /* @__PURE__ */ import_react7.default.createElement("button", { style: styles3.toggleBtn, onClick: () => toggle(sale.id) }, expanded === sale.id ? "Ocultar" : "Ver detalle"))), expanded === sale.id && /* @__PURE__ */ import_react7.default.createElement("tr", { style: styles3.detailRow }, /* @__PURE__ */ import_react7.default.createElement("td", { colSpan: 6, style: styles3.detailCell }, /* @__PURE__ */ import_react7.default.createElement("table", { style: styles3.detailTable }, /* @__PURE__ */ import_react7.default.createElement("thead", null, /* @__PURE__ */ import_react7.default.createElement("tr", null, /* @__PURE__ */ import_react7.default.createElement("th", { style: styles3.detailTh }, "Producto"), /* @__PURE__ */ import_react7.default.createElement("th", { style: styles3.detailTh }, "Precio unit."), /* @__PURE__ */ import_react7.default.createElement("th", { style: styles3.detailTh }, "Cantidad"), /* @__PURE__ */ import_react7.default.createElement("th", { style: styles3.detailTh }, "Subtotal"))), /* @__PURE__ */ import_react7.default.createElement("tbody", null, sale.details.map((d) => /* @__PURE__ */ import_react7.default.createElement("tr", { key: d.id }, /* @__PURE__ */ import_react7.default.createElement("td", { style: styles3.detailTd }, d.product_name), /* @__PURE__ */ import_react7.default.createElement("td", { style: styles3.detailTd }, "$", Number(d.unit_price).toFixed(2)), /* @__PURE__ */ import_react7.default.createElement("td", { style: styles3.detailTd }, d.quantity), /* @__PURE__ */ import_react7.default.createElement("td", { style: styles3.detailTd }, "$", Number(d.subtotal).toFixed(2)))))), /* @__PURE__ */ import_react7.default.createElement("div", { style: styles3.detailTotal }, "Total: $", Number(sale.total).toFixed(2))))))))));
+    return /* @__PURE__ */ import_react9.default.createElement(import_react9.default.Fragment, null, /* @__PURE__ */ import_react9.default.createElement("div", { style: styles3.toolbar }, /* @__PURE__ */ import_react9.default.createElement("h2", { style: styles3.sectionTitle }, "Historial de Ventas")), error && /* @__PURE__ */ import_react9.default.createElement("div", { style: styles3.errorBox }, error), loading ? /* @__PURE__ */ import_react9.default.createElement("p", { style: { color: "#9e9e9e", fontSize: "14px" } }, "Cargando...") : /* @__PURE__ */ import_react9.default.createElement("div", { style: styles3.wrapper }, sales.length === 0 ? /* @__PURE__ */ import_react9.default.createElement("p", { style: styles3.empty }, "No hay ventas registradas a\xFAn.") : /* @__PURE__ */ import_react9.default.createElement("table", { style: styles3.table }, /* @__PURE__ */ import_react9.default.createElement("thead", null, /* @__PURE__ */ import_react9.default.createElement("tr", null, /* @__PURE__ */ import_react9.default.createElement("th", { style: styles3.th }, "#"), /* @__PURE__ */ import_react9.default.createElement("th", { style: styles3.th }, "Fecha"), /* @__PURE__ */ import_react9.default.createElement("th", { style: styles3.th }, "Cliente"), /* @__PURE__ */ import_react9.default.createElement("th", { style: styles3.th }, "M\xE9todo"), /* @__PURE__ */ import_react9.default.createElement("th", { style: styles3.th }, "Estado"), /* @__PURE__ */ import_react9.default.createElement("th", { style: styles3.th }, "Productos"), /* @__PURE__ */ import_react9.default.createElement("th", { style: styles3.th }, "Total"), /* @__PURE__ */ import_react9.default.createElement("th", { style: styles3.th }))), /* @__PURE__ */ import_react9.default.createElement("tbody", null, sales.map((sale) => /* @__PURE__ */ import_react9.default.createElement(import_react9.default.Fragment, { key: sale.id }, /* @__PURE__ */ import_react9.default.createElement("tr", { className: "fl-tr" }, /* @__PURE__ */ import_react9.default.createElement("td", { style: { ...styles3.td, color: "#9e9e9e" } }, sale.id), /* @__PURE__ */ import_react9.default.createElement("td", { style: styles3.td }, formatDate4(sale.created_at)), /* @__PURE__ */ import_react9.default.createElement("td", { style: { ...styles3.td, color: sale.customer_name ? "#1a1a1a" : "#9e9e9e" } }, sale.customer_name || "\u2014"), /* @__PURE__ */ import_react9.default.createElement("td", { style: styles3.td }, /* @__PURE__ */ import_react9.default.createElement(Badge, { map: PAYMENT_STYLE, value: sale.payment_method || "Efectivo" })), /* @__PURE__ */ import_react9.default.createElement("td", { style: styles3.td }, /* @__PURE__ */ import_react9.default.createElement(Badge, { map: STATUS_STYLE2, value: sale.status || "Completada" })), /* @__PURE__ */ import_react9.default.createElement("td", { style: { ...styles3.td, color: "#5c5c5c" } }, sale.details.length, " producto", sale.details.length !== 1 ? "s" : ""), /* @__PURE__ */ import_react9.default.createElement("td", { style: styles3.td }, /* @__PURE__ */ import_react9.default.createElement("span", { style: styles3.totalBadge }, "$", Number(sale.total).toFixed(2))), /* @__PURE__ */ import_react9.default.createElement("td", { style: styles3.td }, /* @__PURE__ */ import_react9.default.createElement(
+      "button",
+      {
+        className: "fl-btn-secondary",
+        style: styles3.toggleBtn,
+        onClick: () => toggle(sale.id)
+      },
+      expanded === sale.id ? "Ocultar" : "Ver detalle"
+    ))), expanded === sale.id && /* @__PURE__ */ import_react9.default.createElement("tr", { style: styles3.detailRow }, /* @__PURE__ */ import_react9.default.createElement("td", { colSpan: 8, style: styles3.detailCell }, /* @__PURE__ */ import_react9.default.createElement("table", { style: styles3.detailTable }, /* @__PURE__ */ import_react9.default.createElement("thead", null, /* @__PURE__ */ import_react9.default.createElement("tr", null, /* @__PURE__ */ import_react9.default.createElement("th", { style: styles3.detailTh }, "Producto"), /* @__PURE__ */ import_react9.default.createElement("th", { style: styles3.detailTh }, "Precio unit."), /* @__PURE__ */ import_react9.default.createElement("th", { style: styles3.detailTh }, "Cantidad"), /* @__PURE__ */ import_react9.default.createElement("th", { style: styles3.detailTh }, "Subtotal"))), /* @__PURE__ */ import_react9.default.createElement("tbody", null, sale.details.map((d) => /* @__PURE__ */ import_react9.default.createElement("tr", { key: d.id, className: "fl-tr" }, /* @__PURE__ */ import_react9.default.createElement("td", { style: styles3.detailTd }, d.product_name), /* @__PURE__ */ import_react9.default.createElement("td", { style: styles3.detailTd }, "$", Number(d.unit_price).toFixed(2)), /* @__PURE__ */ import_react9.default.createElement("td", { style: styles3.detailTd }, d.quantity), /* @__PURE__ */ import_react9.default.createElement("td", { style: styles3.detailTd }, "$", Number(d.subtotal).toFixed(2)))))), /* @__PURE__ */ import_react9.default.createElement("div", { style: styles3.detailTotal }, sale.subtotal != null && /* @__PURE__ */ import_react9.default.createElement(import_react9.default.Fragment, null, /* @__PURE__ */ import_react9.default.createElement("span", { style: { fontWeight: "400", color: "#9e9e9e", marginRight: "16px" } }, "Subtotal: $", Number(sale.subtotal).toFixed(2)), /* @__PURE__ */ import_react9.default.createElement("span", { style: { fontWeight: "400", color: "#9e9e9e", marginRight: "16px" } }, "IVA 13%: $", Number(sale.tax).toFixed(2))), "Total: $", Number(sale.total).toFixed(2))))))))));
   }
 
   // src/renderer/components/CategoriesView.js
-  var import_react8 = __toESM(require_react());
-  var styles4 = {
-    toolbar: {
-      display: "flex",
-      justifyContent: "space-between",
-      alignItems: "center",
-      marginBottom: "16px"
-    },
-    sectionTitle: { fontSize: "17px", fontWeight: "600", color: "#1e293b" },
+  var import_react10 = __toESM(require_react());
+  var s6 = {
+    toolbar: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" },
+    sectionTitle: { fontSize: "18px", fontWeight: "700", color: "#1a1a1a", letterSpacing: "-0.3px" },
     btnPrimary: {
-      background: "#3b82f6",
+      background: "#0078d4",
       color: "white",
       border: "none",
-      padding: "8px 16px",
-      borderRadius: "6px",
+      padding: "8px 18px",
+      borderRadius: "8px",
       cursor: "pointer",
       fontSize: "14px",
       fontWeight: "500"
     },
     errorBox: {
-      background: "#fee2e2",
-      color: "#dc2626",
+      background: "#ffebee",
+      color: "#a4262c",
       padding: "12px 16px",
-      borderRadius: "6px",
+      borderRadius: "8px",
       marginBottom: "16px",
       fontSize: "14px"
     },
-    // Table
     wrapper: {
       background: "white",
-      borderRadius: "8px",
-      boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
+      borderRadius: "12px",
+      boxShadow: "0 2px 8px rgba(0,0,0,0.07)",
       overflow: "hidden"
     },
-    table: { width: "100%", borderCollapse: "collapse", fontSize: "14px" },
+    table: { width: "100%", borderCollapse: "collapse", fontSize: "13px" },
     th: {
-      background: "#f8fafc",
-      padding: "11px 16px",
+      background: "#f7f7f7",
+      padding: "10px 16px",
       textAlign: "left",
-      fontWeight: "600",
-      color: "#475569",
-      borderBottom: "2px solid #e2e8f0"
+      fontWeight: "700",
+      fontSize: "11px",
+      color: "#9e9e9e",
+      borderBottom: "1px solid #e5e5e5",
+      textTransform: "uppercase",
+      letterSpacing: "0.5px"
     },
-    td: {
-      padding: "11px 16px",
-      borderBottom: "1px solid #f1f5f9",
-      verticalAlign: "middle"
-    },
-    tdMuted: {
-      padding: "11px 16px",
-      borderBottom: "1px solid #f1f5f9",
-      verticalAlign: "middle",
-      color: "#64748b"
-    },
+    td: { padding: "12px 16px", borderBottom: "1px solid #f5f5f5", verticalAlign: "middle", fontSize: "13px" },
     btnEdit: {
-      background: "#f1f5f9",
-      border: "none",
+      background: "white",
+      border: "1px solid #d1d1d1",
       padding: "5px 12px",
-      borderRadius: "4px",
+      borderRadius: "6px",
       cursor: "pointer",
-      fontSize: "13px",
+      fontSize: "12px",
       marginRight: "6px",
-      color: "#334155"
+      color: "#1a1a1a",
+      fontWeight: "500"
     },
     btnDelete: {
-      background: "#fee2e2",
-      border: "none",
+      background: "white",
+      border: "1px solid #fad9d9",
       padding: "5px 12px",
-      borderRadius: "4px",
+      borderRadius: "6px",
       cursor: "pointer",
-      fontSize: "13px",
-      color: "#dc2626"
+      fontSize: "12px",
+      color: "#a4262c",
+      fontWeight: "500"
     },
-    empty: {
-      textAlign: "center",
-      padding: "48px",
-      color: "#94a3b8",
-      fontSize: "15px"
-    },
-    // Modal
+    empty: { textAlign: "center", padding: "56px 32px", color: "#9e9e9e", fontSize: "15px" },
     overlay: {
       position: "fixed",
       inset: 0,
-      background: "rgba(0,0,0,0.5)",
+      background: "rgba(0,0,0,0.4)",
+      backdropFilter: "blur(8px)",
+      WebkitBackdropFilter: "blur(8px)",
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
@@ -20691,35 +21192,23 @@
       padding: "28px",
       width: "420px",
       maxWidth: "90vw",
-      boxShadow: "0 20px 60px rgba(0,0,0,0.3)"
+      boxShadow: "0 24px 64px rgba(0,0,0,0.18)"
     },
-    modalTitle: {
-      fontSize: "17px",
-      fontWeight: "600",
-      marginBottom: "20px",
-      color: "#1e293b"
-    },
+    modalTitle: { fontSize: "17px", fontWeight: "700", marginBottom: "20px", color: "#1a1a1a" },
     field: { marginBottom: "14px" },
-    label: {
-      display: "block",
-      fontSize: "13px",
-      fontWeight: "500",
-      color: "#475569",
-      marginBottom: "5px"
-    },
+    label: { display: "block", fontSize: "12px", fontWeight: "600", color: "#5c5c5c", marginBottom: "5px" },
     input: {
       width: "100%",
-      padding: "8px 11px",
-      border: "1px solid #e2e8f0",
+      padding: "8px 12px",
+      border: "1px solid #d1d1d1",
       borderRadius: "6px",
       fontSize: "14px",
-      outline: "none",
       boxSizing: "border-box"
     },
     textarea: {
       width: "100%",
-      padding: "8px 11px",
-      border: "1px solid #e2e8f0",
+      padding: "8px 12px",
+      border: "1px solid #d1d1d1",
       borderRadius: "6px",
       fontSize: "14px",
       resize: "vertical",
@@ -20727,27 +21216,22 @@
       boxSizing: "border-box",
       fontFamily: "inherit"
     },
-    actions: {
-      display: "flex",
-      justifyContent: "flex-end",
-      gap: "8px",
-      marginTop: "22px"
-    },
+    actions: { display: "flex", justifyContent: "flex-end", gap: "8px", marginTop: "22px" },
     btnCancel: {
-      background: "#f1f5f9",
-      border: "none",
+      background: "white",
+      border: "1px solid #d1d1d1",
       padding: "8px 16px",
-      borderRadius: "6px",
+      borderRadius: "8px",
       cursor: "pointer",
       fontSize: "14px",
-      color: "#475569"
+      color: "#5c5c5c"
     },
     btnSave: {
-      background: "#3b82f6",
+      background: "#0078d4",
       color: "white",
       border: "none",
       padding: "8px 20px",
-      borderRadius: "6px",
+      borderRadius: "8px",
       cursor: "pointer",
       fontSize: "14px",
       fontWeight: "500"
@@ -20755,7 +21239,7 @@
   };
   function CategoryModal({ category, onSave, onCancel }) {
     const isEdit = Boolean(category);
-    const [form, setForm] = (0, import_react8.useState)({
+    const [form, setForm] = (0, import_react10.useState)({
       name: category?.name ?? "",
       description: category?.description ?? ""
     });
@@ -20764,32 +21248,34 @@
       e.preventDefault();
       onSave({ name: form.name.trim(), description: form.description.trim() || null });
     };
-    return /* @__PURE__ */ import_react8.default.createElement("div", { style: styles4.overlay, onClick: (e) => e.target === e.currentTarget && onCancel() }, /* @__PURE__ */ import_react8.default.createElement("div", { style: styles4.modal }, /* @__PURE__ */ import_react8.default.createElement("h2", { style: styles4.modalTitle }, isEdit ? "Editar Categor\xEDa" : "Nueva Categor\xEDa"), /* @__PURE__ */ import_react8.default.createElement("form", { onSubmit: handleSubmit }, /* @__PURE__ */ import_react8.default.createElement("div", { style: styles4.field }, /* @__PURE__ */ import_react8.default.createElement("label", { style: styles4.label }, "Nombre *"), /* @__PURE__ */ import_react8.default.createElement(
+    return /* @__PURE__ */ import_react10.default.createElement("div", { style: s6.overlay, onClick: (e) => e.target === e.currentTarget && onCancel() }, /* @__PURE__ */ import_react10.default.createElement("div", { style: s6.modal }, /* @__PURE__ */ import_react10.default.createElement("h2", { style: s6.modalTitle }, isEdit ? "Editar Categor\xEDa" : "Nueva Categor\xEDa"), /* @__PURE__ */ import_react10.default.createElement("form", { onSubmit: handleSubmit }, /* @__PURE__ */ import_react10.default.createElement("div", { style: s6.field }, /* @__PURE__ */ import_react10.default.createElement("label", { style: s6.label }, "Nombre *"), /* @__PURE__ */ import_react10.default.createElement(
       "input",
       {
-        style: styles4.input,
+        className: "fl-input",
+        style: s6.input,
         value: form.name,
         onChange: set("name"),
         placeholder: "Ej: Computadoras",
         required: true,
         autoFocus: true
       }
-    )), /* @__PURE__ */ import_react8.default.createElement("div", { style: styles4.field }, /* @__PURE__ */ import_react8.default.createElement("label", { style: styles4.label }, "Descripci\xF3n"), /* @__PURE__ */ import_react8.default.createElement(
+    )), /* @__PURE__ */ import_react10.default.createElement("div", { style: s6.field }, /* @__PURE__ */ import_react10.default.createElement("label", { style: s6.label }, "Descripci\xF3n"), /* @__PURE__ */ import_react10.default.createElement(
       "textarea",
       {
-        style: styles4.textarea,
+        className: "fl-input",
+        style: s6.textarea,
         value: form.description,
         onChange: set("description"),
         placeholder: "Descripci\xF3n opcional de la categor\xEDa"
       }
-    )), /* @__PURE__ */ import_react8.default.createElement("div", { style: styles4.actions }, /* @__PURE__ */ import_react8.default.createElement("button", { type: "button", style: styles4.btnCancel, onClick: onCancel }, "Cancelar"), /* @__PURE__ */ import_react8.default.createElement("button", { type: "submit", style: styles4.btnSave }, isEdit ? "Guardar cambios" : "Crear categor\xEDa")))));
+    )), /* @__PURE__ */ import_react10.default.createElement("div", { style: s6.actions }, /* @__PURE__ */ import_react10.default.createElement("button", { type: "button", className: "fl-btn-ghost", style: s6.btnCancel, onClick: onCancel }, "Cancelar"), /* @__PURE__ */ import_react10.default.createElement("button", { type: "submit", className: "fl-btn-primary", style: s6.btnSave }, isEdit ? "Guardar cambios" : "Crear categor\xEDa")))));
   }
   function CategoriesView() {
-    const [categories, setCategories] = (0, import_react8.useState)([]);
-    const [loading, setLoading] = (0, import_react8.useState)(true);
-    const [error, setError] = (0, import_react8.useState)(null);
-    const [modal, setModal] = (0, import_react8.useState)(null);
-    const load = (0, import_react8.useCallback)(async () => {
+    const [categories, setCategories] = (0, import_react10.useState)([]);
+    const [loading, setLoading] = (0, import_react10.useState)(true);
+    const [error, setError] = (0, import_react10.useState)(null);
+    const [modal, setModal] = (0, import_react10.useState)(null);
+    const load = (0, import_react10.useCallback)(async () => {
       try {
         setLoading(true);
         setCategories(await window.electron.categories.getAll());
@@ -20800,7 +21286,7 @@
         setLoading(false);
       }
     }, []);
-    (0, import_react8.useEffect)(() => {
+    (0, import_react10.useEffect)(() => {
       load();
     }, [load]);
     const handleSave = async (formData) => {
@@ -20825,21 +21311,7 @@
         setError("Error al eliminar la categor\xEDa.");
       }
     };
-    return /* @__PURE__ */ import_react8.default.createElement(import_react8.default.Fragment, null, /* @__PURE__ */ import_react8.default.createElement("div", { style: styles4.toolbar }, /* @__PURE__ */ import_react8.default.createElement("h2", { style: styles4.sectionTitle }, "Categor\xEDas"), /* @__PURE__ */ import_react8.default.createElement("button", { style: styles4.btnPrimary, onClick: () => setModal("create") }, "+ Nueva Categor\xEDa")), error && /* @__PURE__ */ import_react8.default.createElement("div", { style: styles4.errorBox }, error), loading ? /* @__PURE__ */ import_react8.default.createElement("p", { style: { color: "#64748b", fontSize: "14px" } }, "Cargando...") : /* @__PURE__ */ import_react8.default.createElement("div", { style: styles4.wrapper }, categories.length === 0 ? /* @__PURE__ */ import_react8.default.createElement("p", { style: styles4.empty }, "No hay categor\xEDas. Agrega la primera.") : /* @__PURE__ */ import_react8.default.createElement("table", { style: styles4.table }, /* @__PURE__ */ import_react8.default.createElement("thead", null, /* @__PURE__ */ import_react8.default.createElement("tr", null, /* @__PURE__ */ import_react8.default.createElement("th", { style: styles4.th }, "Nombre"), /* @__PURE__ */ import_react8.default.createElement("th", { style: styles4.th }, "Descripci\xF3n"), /* @__PURE__ */ import_react8.default.createElement("th", { style: styles4.th }, "Acciones"))), /* @__PURE__ */ import_react8.default.createElement("tbody", null, categories.map((cat) => /* @__PURE__ */ import_react8.default.createElement("tr", { key: cat.id }, /* @__PURE__ */ import_react8.default.createElement("td", { style: styles4.td }, /* @__PURE__ */ import_react8.default.createElement("strong", null, cat.name)), /* @__PURE__ */ import_react8.default.createElement("td", { style: styles4.tdMuted }, cat.description || "\u2014"), /* @__PURE__ */ import_react8.default.createElement("td", { style: styles4.td }, /* @__PURE__ */ import_react8.default.createElement(
-      "button",
-      {
-        style: styles4.btnEdit,
-        onClick: () => setModal({ mode: "edit", category: cat })
-      },
-      "Editar"
-    ), /* @__PURE__ */ import_react8.default.createElement(
-      "button",
-      {
-        style: styles4.btnDelete,
-        onClick: () => handleDelete(cat.id)
-      },
-      "Eliminar"
-    ))))))), modal && /* @__PURE__ */ import_react8.default.createElement(
+    return /* @__PURE__ */ import_react10.default.createElement(import_react10.default.Fragment, null, /* @__PURE__ */ import_react10.default.createElement("div", { style: s6.toolbar }, /* @__PURE__ */ import_react10.default.createElement("h2", { style: s6.sectionTitle }, "Categor\xEDas"), /* @__PURE__ */ import_react10.default.createElement("button", { className: "fl-btn-primary", style: s6.btnPrimary, onClick: () => setModal("create") }, "+ Nueva Categor\xEDa")), error && /* @__PURE__ */ import_react10.default.createElement("div", { style: s6.errorBox }, error), loading ? /* @__PURE__ */ import_react10.default.createElement("p", { style: { color: "#9e9e9e", fontSize: "14px" } }, "Cargando...") : /* @__PURE__ */ import_react10.default.createElement("div", { style: s6.wrapper }, categories.length === 0 ? /* @__PURE__ */ import_react10.default.createElement("p", { style: s6.empty }, "No hay categor\xEDas. Agrega la primera.") : /* @__PURE__ */ import_react10.default.createElement("table", { style: s6.table }, /* @__PURE__ */ import_react10.default.createElement("thead", null, /* @__PURE__ */ import_react10.default.createElement("tr", null, /* @__PURE__ */ import_react10.default.createElement("th", { style: s6.th }, "Nombre"), /* @__PURE__ */ import_react10.default.createElement("th", { style: s6.th }, "Descripci\xF3n"), /* @__PURE__ */ import_react10.default.createElement("th", { style: s6.th }, "Acciones"))), /* @__PURE__ */ import_react10.default.createElement("tbody", null, categories.map((cat) => /* @__PURE__ */ import_react10.default.createElement("tr", { key: cat.id, className: "fl-tr" }, /* @__PURE__ */ import_react10.default.createElement("td", { style: { ...s6.td, fontWeight: "600" } }, cat.name), /* @__PURE__ */ import_react10.default.createElement("td", { style: { ...s6.td, color: "#5c5c5c" } }, cat.description || "\u2014"), /* @__PURE__ */ import_react10.default.createElement("td", { style: s6.td }, /* @__PURE__ */ import_react10.default.createElement("button", { className: "fl-btn-secondary", style: s6.btnEdit, onClick: () => setModal({ mode: "edit", category: cat }) }, "Editar"), /* @__PURE__ */ import_react10.default.createElement("button", { className: "fl-btn-danger", style: s6.btnDelete, onClick: () => handleDelete(cat.id) }, "Eliminar"))))))), modal && /* @__PURE__ */ import_react10.default.createElement(
       CategoryModal,
       {
         category: modal !== "create" ? modal.category : null,
@@ -20850,89 +21322,75 @@
   }
 
   // src/renderer/components/CustomersView.js
-  var import_react9 = __toESM(require_react());
-  var styles5 = {
-    toolbar: {
-      display: "flex",
-      justifyContent: "space-between",
-      alignItems: "center",
-      marginBottom: "16px"
-    },
-    sectionTitle: { fontSize: "17px", fontWeight: "600", color: "#1e293b" },
+  var import_react11 = __toESM(require_react());
+  var s7 = {
+    toolbar: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" },
+    sectionTitle: { fontSize: "18px", fontWeight: "700", color: "#1a1a1a", letterSpacing: "-0.3px" },
     btnPrimary: {
-      background: "#3b82f6",
+      background: "#0078d4",
       color: "white",
       border: "none",
-      padding: "8px 16px",
-      borderRadius: "6px",
+      padding: "8px 18px",
+      borderRadius: "8px",
       cursor: "pointer",
       fontSize: "14px",
       fontWeight: "500"
     },
     errorBox: {
-      background: "#fee2e2",
-      color: "#dc2626",
+      background: "#ffebee",
+      color: "#a4262c",
       padding: "12px 16px",
-      borderRadius: "6px",
+      borderRadius: "8px",
       marginBottom: "16px",
       fontSize: "14px"
     },
     wrapper: {
       background: "white",
-      borderRadius: "8px",
-      boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
+      borderRadius: "12px",
+      boxShadow: "0 2px 8px rgba(0,0,0,0.07)",
       overflow: "hidden"
     },
-    table: { width: "100%", borderCollapse: "collapse", fontSize: "14px" },
+    table: { width: "100%", borderCollapse: "collapse", fontSize: "13px" },
     th: {
-      background: "#f8fafc",
-      padding: "11px 16px",
+      background: "#f7f7f7",
+      padding: "10px 16px",
       textAlign: "left",
-      fontWeight: "600",
-      color: "#475569",
-      borderBottom: "2px solid #e2e8f0"
+      fontWeight: "700",
+      fontSize: "11px",
+      color: "#9e9e9e",
+      borderBottom: "1px solid #e5e5e5",
+      textTransform: "uppercase",
+      letterSpacing: "0.5px"
     },
-    td: {
-      padding: "11px 16px",
-      borderBottom: "1px solid #f1f5f9",
-      verticalAlign: "middle"
-    },
-    tdMuted: {
-      padding: "11px 16px",
-      borderBottom: "1px solid #f1f5f9",
-      verticalAlign: "middle",
-      color: "#64748b"
-    },
+    td: { padding: "12px 16px", borderBottom: "1px solid #f5f5f5", verticalAlign: "middle", fontSize: "13px" },
     btnEdit: {
-      background: "#f1f5f9",
-      border: "none",
+      background: "white",
+      border: "1px solid #d1d1d1",
       padding: "5px 12px",
-      borderRadius: "4px",
+      borderRadius: "6px",
       cursor: "pointer",
-      fontSize: "13px",
+      fontSize: "12px",
       marginRight: "6px",
-      color: "#334155"
+      color: "#1a1a1a",
+      fontWeight: "500"
     },
     btnDelete: {
-      background: "#fee2e2",
-      border: "none",
+      background: "white",
+      border: "1px solid #fad9d9",
       padding: "5px 12px",
-      borderRadius: "4px",
+      borderRadius: "6px",
       cursor: "pointer",
-      fontSize: "13px",
-      color: "#dc2626"
+      fontSize: "12px",
+      color: "#a4262c",
+      fontWeight: "500"
     },
-    empty: {
-      textAlign: "center",
-      padding: "48px",
-      color: "#94a3b8",
-      fontSize: "15px"
-    },
-    // Modal
+    empty: { textAlign: "center", padding: "56px 32px", color: "#9e9e9e", fontSize: "15px" },
     overlay: {
       position: "fixed",
       inset: 0,
-      background: "rgba(0,0,0,0.5)",
+      background: "rgba(0,0,0,0.4)",
+      backdropFilter: "blur(8px)",
+      WebkitBackdropFilter: "blur(8px)",
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
@@ -20944,52 +21402,35 @@
       padding: "28px",
       width: "440px",
       maxWidth: "90vw",
-      boxShadow: "0 20px 60px rgba(0,0,0,0.3)"
+      boxShadow: "0 24px 64px rgba(0,0,0,0.18)"
     },
-    modalTitle: {
-      fontSize: "17px",
-      fontWeight: "600",
-      marginBottom: "20px",
-      color: "#1e293b"
-    },
+    modalTitle: { fontSize: "17px", fontWeight: "700", marginBottom: "20px", color: "#1a1a1a" },
     field: { marginBottom: "14px" },
-    label: {
-      display: "block",
-      fontSize: "13px",
-      fontWeight: "500",
-      color: "#475569",
-      marginBottom: "5px"
-    },
+    label: { display: "block", fontSize: "12px", fontWeight: "600", color: "#5c5c5c", marginBottom: "5px" },
     input: {
       width: "100%",
-      padding: "8px 11px",
-      border: "1px solid #e2e8f0",
+      padding: "8px 12px",
+      border: "1px solid #d1d1d1",
       borderRadius: "6px",
       fontSize: "14px",
-      outline: "none",
       boxSizing: "border-box"
     },
-    actions: {
-      display: "flex",
-      justifyContent: "flex-end",
-      gap: "8px",
-      marginTop: "22px"
-    },
+    actions: { display: "flex", justifyContent: "flex-end", gap: "8px", marginTop: "22px" },
     btnCancel: {
-      background: "#f1f5f9",
-      border: "none",
+      background: "white",
+      border: "1px solid #d1d1d1",
       padding: "8px 16px",
-      borderRadius: "6px",
+      borderRadius: "8px",
       cursor: "pointer",
       fontSize: "14px",
-      color: "#475569"
+      color: "#5c5c5c"
     },
     btnSave: {
-      background: "#3b82f6",
+      background: "#0078d4",
       color: "white",
       border: "none",
       padding: "8px 20px",
-      borderRadius: "6px",
+      borderRadius: "8px",
       cursor: "pointer",
       fontSize: "14px",
       fontWeight: "500"
@@ -20997,7 +21438,7 @@
   };
   function CustomerModal({ customer, onSave, onCancel }) {
     const isEdit = Boolean(customer);
-    const [form, setForm] = (0, import_react9.useState)({
+    const [form, setForm] = (0, import_react11.useState)({
       name: customer?.name ?? "",
       phone: customer?.phone ?? "",
       email: customer?.email ?? ""
@@ -21011,42 +21452,14 @@
         email: form.email.trim() || null
       });
     };
-    return /* @__PURE__ */ import_react9.default.createElement("div", { style: styles5.overlay, onClick: (e) => e.target === e.currentTarget && onCancel() }, /* @__PURE__ */ import_react9.default.createElement("div", { style: styles5.modal }, /* @__PURE__ */ import_react9.default.createElement("h2", { style: styles5.modalTitle }, isEdit ? "Editar Cliente" : "Nuevo Cliente"), /* @__PURE__ */ import_react9.default.createElement("form", { onSubmit: handleSubmit }, /* @__PURE__ */ import_react9.default.createElement("div", { style: styles5.field }, /* @__PURE__ */ import_react9.default.createElement("label", { style: styles5.label }, "Nombre *"), /* @__PURE__ */ import_react9.default.createElement(
-      "input",
-      {
-        style: styles5.input,
-        value: form.name,
-        onChange: set("name"),
-        placeholder: "Nombre completo",
-        required: true,
-        autoFocus: true
-      }
-    )), /* @__PURE__ */ import_react9.default.createElement("div", { style: styles5.field }, /* @__PURE__ */ import_react9.default.createElement("label", { style: styles5.label }, "Tel\xE9fono"), /* @__PURE__ */ import_react9.default.createElement(
-      "input",
-      {
-        style: styles5.input,
-        value: form.phone,
-        onChange: set("phone"),
-        placeholder: "Ej: 555-1234",
-        type: "tel"
-      }
-    )), /* @__PURE__ */ import_react9.default.createElement("div", { style: styles5.field }, /* @__PURE__ */ import_react9.default.createElement("label", { style: styles5.label }, "Correo electr\xF3nico"), /* @__PURE__ */ import_react9.default.createElement(
-      "input",
-      {
-        style: styles5.input,
-        value: form.email,
-        onChange: set("email"),
-        placeholder: "correo@ejemplo.com",
-        type: "email"
-      }
-    )), /* @__PURE__ */ import_react9.default.createElement("div", { style: styles5.actions }, /* @__PURE__ */ import_react9.default.createElement("button", { type: "button", style: styles5.btnCancel, onClick: onCancel }, "Cancelar"), /* @__PURE__ */ import_react9.default.createElement("button", { type: "submit", style: styles5.btnSave }, isEdit ? "Guardar cambios" : "Crear cliente")))));
+    return /* @__PURE__ */ import_react11.default.createElement("div", { style: s7.overlay, onClick: (e) => e.target === e.currentTarget && onCancel() }, /* @__PURE__ */ import_react11.default.createElement("div", { style: s7.modal }, /* @__PURE__ */ import_react11.default.createElement("h2", { style: s7.modalTitle }, isEdit ? "Editar Cliente" : "Nuevo Cliente"), /* @__PURE__ */ import_react11.default.createElement("form", { onSubmit: handleSubmit }, /* @__PURE__ */ import_react11.default.createElement("div", { style: s7.field }, /* @__PURE__ */ import_react11.default.createElement("label", { style: s7.label }, "Nombre *"), /* @__PURE__ */ import_react11.default.createElement("input", { className: "fl-input", style: s7.input, value: form.name, onChange: set("name"), placeholder: "Nombre completo", required: true, autoFocus: true })), /* @__PURE__ */ import_react11.default.createElement("div", { style: s7.field }, /* @__PURE__ */ import_react11.default.createElement("label", { style: s7.label }, "Tel\xE9fono"), /* @__PURE__ */ import_react11.default.createElement("input", { className: "fl-input", style: s7.input, value: form.phone, onChange: set("phone"), placeholder: "Ej: 555-1234", type: "tel" })), /* @__PURE__ */ import_react11.default.createElement("div", { style: s7.field }, /* @__PURE__ */ import_react11.default.createElement("label", { style: s7.label }, "Correo electr\xF3nico"), /* @__PURE__ */ import_react11.default.createElement("input", { className: "fl-input", style: s7.input, value: form.email, onChange: set("email"), placeholder: "correo@ejemplo.com", type: "email" })), /* @__PURE__ */ import_react11.default.createElement("div", { style: s7.actions }, /* @__PURE__ */ import_react11.default.createElement("button", { type: "button", className: "fl-btn-ghost", style: s7.btnCancel, onClick: onCancel }, "Cancelar"), /* @__PURE__ */ import_react11.default.createElement("button", { type: "submit", className: "fl-btn-primary", style: s7.btnSave }, isEdit ? "Guardar cambios" : "Crear cliente")))));
   }
   function CustomersView() {
-    const [customers, setCustomers] = (0, import_react9.useState)([]);
-    const [loading, setLoading] = (0, import_react9.useState)(true);
-    const [error, setError] = (0, import_react9.useState)(null);
-    const [modal, setModal] = (0, import_react9.useState)(null);
-    const load = (0, import_react9.useCallback)(async () => {
+    const [customers, setCustomers] = (0, import_react11.useState)([]);
+    const [loading, setLoading] = (0, import_react11.useState)(true);
+    const [error, setError] = (0, import_react11.useState)(null);
+    const [modal, setModal] = (0, import_react11.useState)(null);
+    const load = (0, import_react11.useCallback)(async () => {
       try {
         setLoading(true);
         setCustomers(await window.electron.customers.getAll());
@@ -21057,7 +21470,7 @@
         setLoading(false);
       }
     }, []);
-    (0, import_react9.useEffect)(() => {
+    (0, import_react11.useEffect)(() => {
       load();
     }, [load]);
     const handleSave = async (formData) => {
@@ -21082,21 +21495,7 @@
         setError("Error al eliminar el cliente.");
       }
     };
-    return /* @__PURE__ */ import_react9.default.createElement(import_react9.default.Fragment, null, /* @__PURE__ */ import_react9.default.createElement("div", { style: styles5.toolbar }, /* @__PURE__ */ import_react9.default.createElement("h2", { style: styles5.sectionTitle }, "Clientes"), /* @__PURE__ */ import_react9.default.createElement("button", { style: styles5.btnPrimary, onClick: () => setModal("create") }, "+ Nuevo Cliente")), error && /* @__PURE__ */ import_react9.default.createElement("div", { style: styles5.errorBox }, error), loading ? /* @__PURE__ */ import_react9.default.createElement("p", { style: { color: "#64748b", fontSize: "14px" } }, "Cargando...") : /* @__PURE__ */ import_react9.default.createElement("div", { style: styles5.wrapper }, customers.length === 0 ? /* @__PURE__ */ import_react9.default.createElement("p", { style: styles5.empty }, "No hay clientes registrados. Agrega el primero.") : /* @__PURE__ */ import_react9.default.createElement("table", { style: styles5.table }, /* @__PURE__ */ import_react9.default.createElement("thead", null, /* @__PURE__ */ import_react9.default.createElement("tr", null, /* @__PURE__ */ import_react9.default.createElement("th", { style: styles5.th }, "Nombre"), /* @__PURE__ */ import_react9.default.createElement("th", { style: styles5.th }, "Tel\xE9fono"), /* @__PURE__ */ import_react9.default.createElement("th", { style: styles5.th }, "Correo electr\xF3nico"), /* @__PURE__ */ import_react9.default.createElement("th", { style: styles5.th }, "Acciones"))), /* @__PURE__ */ import_react9.default.createElement("tbody", null, customers.map((customer) => /* @__PURE__ */ import_react9.default.createElement("tr", { key: customer.id }, /* @__PURE__ */ import_react9.default.createElement("td", { style: styles5.td }, /* @__PURE__ */ import_react9.default.createElement("strong", null, customer.name)), /* @__PURE__ */ import_react9.default.createElement("td", { style: styles5.tdMuted }, customer.phone || "\u2014"), /* @__PURE__ */ import_react9.default.createElement("td", { style: styles5.tdMuted }, customer.email || "\u2014"), /* @__PURE__ */ import_react9.default.createElement("td", { style: styles5.td }, /* @__PURE__ */ import_react9.default.createElement(
-      "button",
-      {
-        style: styles5.btnEdit,
-        onClick: () => setModal({ mode: "edit", customer })
-      },
-      "Editar"
-    ), /* @__PURE__ */ import_react9.default.createElement(
-      "button",
-      {
-        style: styles5.btnDelete,
-        onClick: () => handleDelete(customer.id)
-      },
-      "Eliminar"
-    ))))))), modal && /* @__PURE__ */ import_react9.default.createElement(
+    return /* @__PURE__ */ import_react11.default.createElement(import_react11.default.Fragment, null, /* @__PURE__ */ import_react11.default.createElement("div", { style: s7.toolbar }, /* @__PURE__ */ import_react11.default.createElement("h2", { style: s7.sectionTitle }, "Clientes"), /* @__PURE__ */ import_react11.default.createElement("button", { className: "fl-btn-primary", style: s7.btnPrimary, onClick: () => setModal("create") }, "+ Nuevo Cliente")), error && /* @__PURE__ */ import_react11.default.createElement("div", { style: s7.errorBox }, error), loading ? /* @__PURE__ */ import_react11.default.createElement("p", { style: { color: "#9e9e9e", fontSize: "14px" } }, "Cargando...") : /* @__PURE__ */ import_react11.default.createElement("div", { style: s7.wrapper }, customers.length === 0 ? /* @__PURE__ */ import_react11.default.createElement("p", { style: s7.empty }, "No hay clientes registrados. Agrega el primero.") : /* @__PURE__ */ import_react11.default.createElement("table", { style: s7.table }, /* @__PURE__ */ import_react11.default.createElement("thead", null, /* @__PURE__ */ import_react11.default.createElement("tr", null, /* @__PURE__ */ import_react11.default.createElement("th", { style: s7.th }, "Nombre"), /* @__PURE__ */ import_react11.default.createElement("th", { style: s7.th }, "Tel\xE9fono"), /* @__PURE__ */ import_react11.default.createElement("th", { style: s7.th }, "Correo electr\xF3nico"), /* @__PURE__ */ import_react11.default.createElement("th", { style: s7.th }, "Acciones"))), /* @__PURE__ */ import_react11.default.createElement("tbody", null, customers.map((customer) => /* @__PURE__ */ import_react11.default.createElement("tr", { key: customer.id, className: "fl-tr" }, /* @__PURE__ */ import_react11.default.createElement("td", { style: { ...s7.td, fontWeight: "600" } }, customer.name), /* @__PURE__ */ import_react11.default.createElement("td", { style: { ...s7.td, color: "#5c5c5c" } }, customer.phone || "\u2014"), /* @__PURE__ */ import_react11.default.createElement("td", { style: { ...s7.td, color: "#5c5c5c" } }, customer.email || "\u2014"), /* @__PURE__ */ import_react11.default.createElement("td", { style: s7.td }, /* @__PURE__ */ import_react11.default.createElement("button", { className: "fl-btn-secondary", style: s7.btnEdit, onClick: () => setModal({ mode: "edit", customer }) }, "Editar"), /* @__PURE__ */ import_react11.default.createElement("button", { className: "fl-btn-danger", style: s7.btnDelete, onClick: () => handleDelete(customer.id) }, "Eliminar"))))))), modal && /* @__PURE__ */ import_react11.default.createElement(
       CustomerModal,
       {
         customer: modal !== "create" ? modal.customer : null,
@@ -21108,65 +21507,152 @@
 
   // src/renderer/app.js
   var TABS = [
-    { id: "dashboard", label: "Dashboard" },
-    { id: "inventory", label: "Inventario" },
-    { id: "new-sale", label: "Nueva Venta" },
-    { id: "history", label: "Historial" },
-    { id: "categories", label: "Categor\xEDas" },
-    { id: "customers", label: "Clientes" }
+    { id: "dashboard", label: "Dashboard", icon: "\u{1F4CA}" },
+    { id: "catalog", label: "Cat\xE1logo", icon: "\u{1F4E6}" },
+    { id: "stock-entries", label: "Entradas", icon: "\u{1F4E5}" },
+    { id: "suppliers", label: "Proveedores", icon: "\u{1F3E2}" },
+    { id: "new-sale", label: "Nueva Venta", icon: "\u{1F6D2}" },
+    { id: "history", label: "Historial", icon: "\u{1F4CB}" },
+    { id: "categories", label: "Categor\xEDas", icon: "\u{1F3F7}\uFE0F" },
+    { id: "customers", label: "Clientes", icon: "\u{1F464}" }
   ];
-  var styles6 = {
-    app: { minHeight: "100vh", background: "#f0f2f5" },
+  var GLOBAL_CSS = `
+  * { box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    margin: 0;
+    background: #f3f3f3;
+    color: #1a1a1a;
+    -webkit-font-smoothing: antialiased;
+  }
+  input, select, textarea, button { font-family: inherit; }
+
+  /* Input focus ring */
+  .fl-input:focus, .fl-select:focus {
+    border-color: #0078d4 !important;
+    box-shadow: 0 0 0 3px rgba(0, 120, 212, 0.14) !important;
+    outline: none !important;
+  }
+
+  /* Buttons */
+  .fl-btn-primary { transition: background 0.15s, box-shadow 0.15s !important; }
+  .fl-btn-primary:hover {
+    background: #106ebe !important;
+    box-shadow: 0 4px 14px rgba(0, 120, 212, 0.38) !important;
+  }
+  .fl-btn-primary:active { transform: translateY(1px); }
+
+  .fl-btn-secondary { transition: background 0.15s, border-color 0.15s, color 0.15s !important; }
+  .fl-btn-secondary:hover {
+    background: #eff6fc !important;
+    border-color: #0078d4 !important;
+    color: #0078d4 !important;
+  }
+
+  .fl-btn-ghost { transition: background 0.15s !important; }
+  .fl-btn-ghost:hover { background: rgba(0, 0, 0, 0.05) !important; }
+
+  .fl-btn-danger { transition: background 0.15s, border-color 0.15s, color 0.15s !important; }
+  .fl-btn-danger:hover {
+    background: #fdf3f3 !important;
+    border-color: #d83b3b !important;
+    color: #a4262c !important;
+  }
+
+  /* Table rows */
+  .fl-tr:hover td { background: #f5f5f5 !important; transition: background 0.1s; }
+  .fl-tr-amber:hover td { background: #fffbf0 !important; }
+
+  /* Tabs */
+  .fl-tab { transition: background 0.15s !important; }
+  .fl-tab:hover { background: rgba(255, 255, 255, 0.18) !important; }
+
+  /* Product rows in NewSale */
+  .fl-product-row { transition: background 0.1s !important; }
+  .fl-product-row:hover { background: #f5f5f5 !important; }
+
+  /* Cards */
+  .fl-card { transition: box-shadow 0.2s !important; }
+  .fl-card:hover { box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12) !important; }
+
+  /* Customer option */
+  .fl-option { transition: background 0.1s !important; }
+  .fl-option:hover { background: #f0f7ff !important; }
+`;
+  var styles4 = {
+    app: { minHeight: "100vh", background: "#f3f3f3" },
     header: {
-      background: "#1a1a2e",
-      color: "white",
-      padding: "0 24px",
+      background: "rgba(255, 255, 255, 0.85)",
+      backdropFilter: "blur(20px)",
+      WebkitBackdropFilter: "blur(20px)",
+      borderBottom: "1px solid rgba(0, 0, 0, 0.08)",
+      padding: "0 20px",
       display: "flex",
       alignItems: "center",
-      gap: "32px",
-      height: "52px",
-      boxShadow: "0 2px 6px rgba(0,0,0,0.3)"
+      gap: "16px",
+      height: "50px",
+      position: "sticky",
+      top: 0,
+      zIndex: 100
     },
-    title: { fontSize: "16px", fontWeight: "600", whiteSpace: "nowrap" },
-    nav: { display: "flex", gap: "2px" },
+    title: {
+      fontSize: "15px",
+      fontWeight: "700",
+      color: "#0078d4",
+      whiteSpace: "nowrap",
+      letterSpacing: "-0.3px"
+    },
+    nav: { display: "flex", gap: "2px", flex: 1, overflowX: "auto" },
     tab: {
       background: "transparent",
       border: "none",
-      color: "rgba(255,255,255,0.6)",
-      padding: "7px 14px",
-      borderRadius: "6px",
+      color: "#5c5c5c",
+      padding: "6px 12px",
+      borderRadius: "20px",
       cursor: "pointer",
-      fontSize: "14px",
-      fontWeight: "500"
+      fontSize: "13px",
+      fontWeight: "500",
+      display: "flex",
+      alignItems: "center",
+      gap: "5px",
+      whiteSpace: "nowrap",
+      flexShrink: 0
     },
     tabActive: {
-      background: "rgba(255,255,255,0.15)",
+      background: "#0078d4",
       border: "none",
       color: "white",
-      padding: "7px 14px",
-      borderRadius: "6px",
+      padding: "6px 12px",
+      borderRadius: "20px",
       cursor: "pointer",
-      fontSize: "14px",
-      fontWeight: "500"
+      fontSize: "13px",
+      fontWeight: "600",
+      display: "flex",
+      alignItems: "center",
+      gap: "5px",
+      whiteSpace: "nowrap",
+      flexShrink: 0
     },
     main: { padding: "24px" }
   };
   function App() {
-    const [activeTab, setActiveTab] = (0, import_react10.useState)("dashboard");
-    return /* @__PURE__ */ import_react10.default.createElement("div", { style: styles6.app }, /* @__PURE__ */ import_react10.default.createElement("header", { style: styles6.header }, /* @__PURE__ */ import_react10.default.createElement("span", { style: styles6.title }, "Inventario y Ventas"), /* @__PURE__ */ import_react10.default.createElement("nav", { style: styles6.nav }, TABS.map((tab) => /* @__PURE__ */ import_react10.default.createElement(
+    const [activeTab, setActiveTab] = (0, import_react12.useState)("dashboard");
+    return /* @__PURE__ */ import_react12.default.createElement(import_react12.default.Fragment, null, /* @__PURE__ */ import_react12.default.createElement("style", null, GLOBAL_CSS), /* @__PURE__ */ import_react12.default.createElement("div", { style: styles4.app }, /* @__PURE__ */ import_react12.default.createElement("header", { style: styles4.header }, /* @__PURE__ */ import_react12.default.createElement("span", { style: styles4.title }, "StarTecnology"), /* @__PURE__ */ import_react12.default.createElement("nav", { style: styles4.nav }, TABS.map((tab) => /* @__PURE__ */ import_react12.default.createElement(
       "button",
       {
         key: tab.id,
-        style: activeTab === tab.id ? styles6.tabActive : styles6.tab,
+        className: "fl-tab",
+        style: activeTab === tab.id ? styles4.tabActive : styles4.tab,
         onClick: () => setActiveTab(tab.id)
       },
-      tab.label
-    )))), /* @__PURE__ */ import_react10.default.createElement("main", { style: styles6.main }, activeTab === "dashboard" && /* @__PURE__ */ import_react10.default.createElement(DashboardView, { onNavigate: setActiveTab }), activeTab === "inventory" && /* @__PURE__ */ import_react10.default.createElement(InventoryView, null), activeTab === "new-sale" && /* @__PURE__ */ import_react10.default.createElement(NewSale, { onSaleComplete: () => setActiveTab("history") }), activeTab === "history" && /* @__PURE__ */ import_react10.default.createElement(SaleHistory, null), activeTab === "categories" && /* @__PURE__ */ import_react10.default.createElement(CategoriesView, null), activeTab === "customers" && /* @__PURE__ */ import_react10.default.createElement(CustomersView, null)));
+      /* @__PURE__ */ import_react12.default.createElement("span", null, tab.icon),
+      /* @__PURE__ */ import_react12.default.createElement("span", null, tab.label)
+    )))), /* @__PURE__ */ import_react12.default.createElement("main", { style: styles4.main }, activeTab === "dashboard" && /* @__PURE__ */ import_react12.default.createElement(DashboardView, { onNavigate: setActiveTab }), activeTab === "catalog" && /* @__PURE__ */ import_react12.default.createElement(InventoryView, null), activeTab === "stock-entries" && /* @__PURE__ */ import_react12.default.createElement(StockEntriesView, null), activeTab === "suppliers" && /* @__PURE__ */ import_react12.default.createElement(SuppliersView, null), activeTab === "new-sale" && /* @__PURE__ */ import_react12.default.createElement(NewSale, { onSaleComplete: () => setActiveTab("history") }), activeTab === "history" && /* @__PURE__ */ import_react12.default.createElement(SaleHistory, null), activeTab === "categories" && /* @__PURE__ */ import_react12.default.createElement(CategoriesView, null), activeTab === "customers" && /* @__PURE__ */ import_react12.default.createElement(CustomersView, null))));
   }
 
   // src/renderer/index.js
   var root = (0, import_client.createRoot)(document.getElementById("root"));
-  root.render(/* @__PURE__ */ import_react11.default.createElement(App, null));
+  root.render(/* @__PURE__ */ import_react13.default.createElement(App, null));
 })();
 /*! Bundled license information:
 

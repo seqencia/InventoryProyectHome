@@ -73,3 +73,36 @@ git add .
 git commit -m "feat: [short description of what was built]"
 Use conventional commits format: feat:, fix:, refactor:, docs:
 Do NOT push automatically, only commit.
+After completing each feature or module, always:
+
+1. git add (only relevant files, never node_modules)
+2. git commit -m "feat: [description]"
+3. Update CHANGELOG.md with what was built
+4. Do NOT push automatically, only commit.
+
+## UI Design System
+
+Style: Windows 11 Fluent Design - Clean and modern
+
+Colors:
+
+- Primary: #0078d4 (Windows blue)
+- Success: #107c10 (green)
+- Warning: #ff8c00 (orange)
+- Danger: #d13438 (red)
+- Text primary: #201f1e
+- Text secondary: #605e5c
+- Background: #f3f3f3
+- Card: #ffffff
+
+Design tokens:
+
+- Border radius: 12px
+- Font: Segoe UI
+- Cards: white with subtle box-shadow
+- Navbar: acrylic/frosted glass effect
+- Active tab: pill-shaped indicator with #0078d4
+- Inputs: bottom border focus animation (Fluent style)
+- Buttons: outlined, rounded, hover fill effect
+- Table rows: hover highlight #f5f5f5
+- Status badges: soft colored backgrounds
