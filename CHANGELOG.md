@@ -10,6 +10,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [0.16.1] - 2026-03-08
+
+### Changed
+
+#### Nueva Venta — Regalía flow redesign
+- Removed Regalía checkbox from cart items
+- Product list now shows two buttons per in-stock product: **"Agregar"** (normal price) and **"+ Regalía"** ($0.00)
+- Each button adds the product as a separate cart line: same product can appear twice — one normal, one regalía
+- Cart key changed to `product_id + type` so both lines coexist independently
+- `setQty` now takes `(productId, isRegalia, qty)` to update the correct line
+- Stock cap enforced across both lines: sum of normal + regalía qty cannot exceed available stock
+
+---
+
 ## [0.16.0] - 2026-03-08
 
 ### Added

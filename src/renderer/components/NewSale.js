@@ -343,10 +343,9 @@ export default function NewSale({ onSaleComplete }) {
     );
   }, [allProducts, query]);
 
-  const cartQtyFor = (productId) => {
-    const item = cart.find((c) => c.product_id === productId);
-    return item ? item.quantity : 0;
-  };
+  // Total qty in cart for a product across ALL lines (normal + regalía)
+  const cartQtyFor = (productId) =>
+    cart.filter((c) => c.product_id === productId).reduce((s, c) => s + c.quantity, 0);
 
   const availableStock = (product) => product.stock - cartQtyFor(product.id);
 
@@ -371,24 +370,23 @@ export default function NewSale({ onSaleComplete }) {
     } else if (availableStock(product) <= 0) {
       showBarcodeMsg('err', `Sin stock: ${product.name}`);
     } else {
-      addToCart(product);
+      addToCart(product, false);
       showBarcodeMsg('ok', `Agregado: ${product.name}`);
     }
     setBarcodeQuery('');
     barcodeRef.current?.focus();
   };
 
-  const addToCart = (product) => {
+  const addToCart = (product, isRegalia = false) => {
     if (availableStock(product) <= 0) return;
-    const effectivePrice = product.offer_price
-      ? Number(product.offer_price)
-      : Number(product.sale_price);
+    const effectivePrice = isRegalia ? 0 : (product.offer_price ? Number(product.offer_price) : Number(product.sale_price));
     setCart((prev) => {
-      const existing = prev.find((c) => c.product_id === product.id);
+      // Each (product_id, is_regalia) pair is a separate line
+      const existing = prev.find((c) => c.product_id === product.id && c.is_regalia === isRegalia);
       if (existing) {
         return prev.map((c) =>
-          c.product_id === product.id
-            ? { ...c, quantity: c.quantity + 1, subtotal: c.is_regalia ? 0 : (c.quantity + 1) * c.unit_price }
+          c.product_id === product.id && c.is_regalia === isRegalia
+            ? { ...c, quantity: c.quantity + 1, subtotal: isRegalia ? 0 : (c.quantity + 1) * c.unit_price }
             : c
         );
       }
@@ -399,36 +397,30 @@ export default function NewSale({ onSaleComplete }) {
           product_name: product.name,
           unit_price: effectivePrice,
           quantity: 1,
-          subtotal: effectivePrice,
-          is_regalia: false,
+          subtotal: isRegalia ? 0 : effectivePrice,
+          is_regalia: isRegalia,
         },
       ];
     });
   };
 
-  const setQty = (productId, qty) => {
+  const setQty = (productId, isRegalia, qty) => {
     if (qty <= 0) {
-      setCart((prev) => prev.filter((c) => c.product_id !== productId));
+      setCart((prev) => prev.filter((c) => !(c.product_id === productId && c.is_regalia === isRegalia)));
       return;
     }
     const product = allProducts.find((p) => p.id === productId);
-    if (qty > product.stock) return;
+    // Cap: total of all lines for this product must not exceed stock
+    const otherQty = cart
+      .filter((c) => c.product_id === productId && c.is_regalia !== isRegalia)
+      .reduce((s, c) => s + c.quantity, 0);
+    if (qty + otherQty > product.stock) return;
     setCart((prev) =>
       prev.map((c) =>
-        c.product_id === productId
-          ? { ...c, quantity: qty, subtotal: c.is_regalia ? 0 : qty * c.unit_price }
+        c.product_id === productId && c.is_regalia === isRegalia
+          ? { ...c, quantity: qty, subtotal: isRegalia ? 0 : qty * c.unit_price }
           : c
       )
-    );
-  };
-
-  const toggleRegalia = (productId) => {
-    setCart((prev) =>
-      prev.map((c) => {
-        if (c.product_id !== productId) return c;
-        const nowRegalia = !c.is_regalia;
-        return { ...c, is_regalia: nowRegalia, subtotal: nowRegalia ? 0 : c.quantity * c.unit_price };
-      })
     );
   };
 
@@ -518,9 +510,7 @@ export default function NewSale({ onSaleComplete }) {
                 return (
                   <div
                     key={product.id}
-                    className={outOfStock ? undefined : 'fl-product-row'}
                     style={outOfStock ? styles.productRowDisabled : styles.productRow}
-                    onClick={() => !outOfStock && addToCart(product)}
                   >
                     <div>
                       <div style={styles.productName}>{product.name}</div>
@@ -529,7 +519,7 @@ export default function NewSale({ onSaleComplete }) {
                         {inCart > 0 && ` (${inCart} en carrito)`}
                       </div>
                     </div>
-                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
                       <div style={styles.productRight}>
                         <div style={styles.productPrice}>
                           {product.offer_price
@@ -542,10 +532,21 @@ export default function NewSale({ onSaleComplete }) {
                         <span style={{ ...styles.inCartBadge, background: '#f8fafc', border: '1px solid #e2e8f0', color: '#94a3b8' }}>
                           Sin stock
                         </span>
-                      ) : inCart > 0 ? (
-                        <span style={styles.inCartBadge}>+{inCart}</span>
                       ) : (
-                        <span style={styles.addBtn}>Agregar</span>
+                        <>
+                          <span
+                            style={styles.addBtn}
+                            onClick={() => addToCart(product, false)}
+                          >
+                            Agregar
+                          </span>
+                          <span
+                            style={{ ...styles.addBtn, background: '#f3e5f5', border: '1px solid #ce93d8', color: '#6a1b9a' }}
+                            onClick={() => addToCart(product, true)}
+                          >
+                            + Regalía
+                          </span>
+                        </>
                       )}
                     </div>
                   </div>
@@ -616,42 +617,34 @@ export default function NewSale({ onSaleComplete }) {
               </p>
             ) : (
               cart.map((item) => (
-                <div key={item.product_id} style={{ ...styles.cartItem, background: item.is_regalia ? '#fdf5ff' : undefined }}>
+                <div
+                  key={`${item.product_id}_${item.is_regalia ? 'r' : 'n'}`}
+                  style={{ ...styles.cartItem, background: item.is_regalia ? '#fdf5ff' : undefined }}
+                >
                   <div style={styles.cartItemName}>
                     <div>
-                      <span style={{ opacity: item.is_regalia ? 0.55 : 1 }}>{item.product_name}</span>
+                      <span>{item.product_name}</span>
                       {item.is_regalia && (
-                        <span style={{ display: 'inline-block', marginLeft: '6px', fontSize: '10px', fontWeight: '700', color: '#7519b5', background: '#ede7f6', padding: '1px 6px', borderRadius: '8px', letterSpacing: '0.5px' }}>
+                        <span style={{ display: 'inline-block', marginLeft: '6px', fontSize: '10px', fontWeight: '700', color: '#6a1b9a', background: '#ede7f6', padding: '1px 6px', borderRadius: '8px', letterSpacing: '0.5px' }}>
                           REGALÍA
                         </span>
                       )}
                     </div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                      <label style={{ display: 'flex', alignItems: 'center', gap: '3px', cursor: 'pointer', fontSize: '11px', color: '#7519b5', fontWeight: '600', userSelect: 'none' }}>
-                        <input
-                          type="checkbox"
-                          checked={item.is_regalia}
-                          onChange={() => toggleRegalia(item.product_id)}
-                          style={{ cursor: 'pointer', accentColor: '#7519b5' }}
-                        />
-                        Regalía
-                      </label>
-                      <button
-                        style={styles.removeBtn}
-                        onClick={() => setQty(item.product_id, 0)}
-                        title="Quitar del carrito"
-                      >
-                        ×
-                      </button>
-                    </div>
+                    <button
+                      style={styles.removeBtn}
+                      onClick={() => setQty(item.product_id, item.is_regalia, 0)}
+                      title="Quitar del carrito"
+                    >
+                      ×
+                    </button>
                   </div>
                   <div style={styles.qtyRow}>
                     <div style={styles.qtyControls}>
-                      <button style={styles.qtyBtn} onClick={() => setQty(item.product_id, item.quantity - 1)}>−</button>
+                      <button style={styles.qtyBtn} onClick={() => setQty(item.product_id, item.is_regalia, item.quantity - 1)}>−</button>
                       <span style={styles.qtyValue}>{item.quantity}</span>
-                      <button style={styles.qtyBtn} onClick={() => setQty(item.product_id, item.quantity + 1)}>+</button>
+                      <button style={styles.qtyBtn} onClick={() => setQty(item.product_id, item.is_regalia, item.quantity + 1)}>+</button>
                     </div>
-                    <span style={{ ...styles.itemSubtotal, color: item.is_regalia ? '#7519b5' : styles.itemSubtotal.color }}>
+                    <span style={{ ...styles.itemSubtotal, color: item.is_regalia ? '#6a1b9a' : undefined }}>
                       {item.is_regalia ? '$0.00' : `$${item.subtotal.toFixed(2)}`}
                     </span>
                   </div>
