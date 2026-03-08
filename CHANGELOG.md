@@ -10,6 +10,28 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [0.16.0] - 2026-03-08
+
+### Added
+
+#### Stock Entries — Bonus/Gift quantity
+- New `bonus_quantity` field in `StockEntrySchema` (nullable, default 0)
+- Form: "Cantidad comprada" + "Cantidad bonificada" (optional); live preview "Total a ingresar: N unidades (X compradas + Y bonificadas)"
+- Unit cost hint clarifies it applies only over purchased quantity when bonus > 0
+- `stockEntries:create` handler increments stock by `quantity + bonus_quantity`
+- History table "Ingresado" column shows `+total` badge; when bonus > 0 shows breakdown "X compradas + Y bonificadas" below the badge
+
+#### Nueva Venta — Regalía products
+- New `is_regalia` field on `SaleDetailSchema` (nullable boolean, default false) and `regalia_count` on `SaleSchema`
+- Per cart item "Regalía" checkbox: when checked, price locks to $0.00, background tints purple, "REGALÍA" badge appears on product name
+- Subtotal and IVA 13% computed only over non-regalía items; regalía items still decrement stock normally
+- Cart breakdown shows "Subtotal (venta)" + "Regalías (N uds) $0.00" + "IVA (13%)" + "Total"
+- `sales:create` handler separates items, computes subtotal/tax/profit from regular items only, saves `is_regalia` and `regalia_count`
+- **SaleReceipt**: regular and regalía items shown in separate sections; regalía items display "REGALÍA" label and $0.00; receipt breakdown includes "Subtotal (venta)", "Regalías $0.00", "IVA (13%)", "Total"
+- **SaleHistory**: regalía items show "REGALÍA" badge and $0.00 in detail view; sales with regalías show `+N reg.` pill next to status badge
+
+---
+
 ## [0.15.0] - 2026-03-08
 
 ### Added

@@ -388,7 +388,7 @@ export default function NewSale({ onSaleComplete }) {
       if (existing) {
         return prev.map((c) =>
           c.product_id === product.id
-            ? { ...c, quantity: c.quantity + 1, subtotal: (c.quantity + 1) * c.unit_price }
+            ? { ...c, quantity: c.quantity + 1, subtotal: c.is_regalia ? 0 : (c.quantity + 1) * c.unit_price }
             : c
         );
       }
@@ -400,6 +400,7 @@ export default function NewSale({ onSaleComplete }) {
           unit_price: effectivePrice,
           quantity: 1,
           subtotal: effectivePrice,
+          is_regalia: false,
         },
       ];
     });
@@ -415,13 +416,24 @@ export default function NewSale({ onSaleComplete }) {
     setCart((prev) =>
       prev.map((c) =>
         c.product_id === productId
-          ? { ...c, quantity: qty, subtotal: qty * c.unit_price }
+          ? { ...c, quantity: qty, subtotal: c.is_regalia ? 0 : qty * c.unit_price }
           : c
       )
     );
   };
 
-  const subtotal = cart.reduce((sum, item) => sum + item.subtotal, 0);
+  const toggleRegalia = (productId) => {
+    setCart((prev) =>
+      prev.map((c) => {
+        if (c.product_id !== productId) return c;
+        const nowRegalia = !c.is_regalia;
+        return { ...c, is_regalia: nowRegalia, subtotal: nowRegalia ? 0 : c.quantity * c.unit_price };
+      })
+    );
+  };
+
+  const subtotal = cart.filter((i) => !i.is_regalia).reduce((sum, item) => sum + item.subtotal, 0);
+  const regaliaCount = cart.filter((i) => i.is_regalia).reduce((sum, i) => sum + i.quantity, 0);
   const tax = subtotal * 0.13;
   const total = subtotal + tax;
 
@@ -604,35 +616,43 @@ export default function NewSale({ onSaleComplete }) {
               </p>
             ) : (
               cart.map((item) => (
-                <div key={item.product_id} style={styles.cartItem}>
+                <div key={item.product_id} style={{ ...styles.cartItem, background: item.is_regalia ? '#fdf5ff' : undefined }}>
                   <div style={styles.cartItemName}>
-                    <span>{item.product_name}</span>
-                    <button
-                      style={styles.removeBtn}
-                      onClick={() => setQty(item.product_id, 0)}
-                      title="Quitar del carrito"
-                    >
-                      ×
-                    </button>
+                    <div>
+                      <span style={{ opacity: item.is_regalia ? 0.55 : 1 }}>{item.product_name}</span>
+                      {item.is_regalia && (
+                        <span style={{ display: 'inline-block', marginLeft: '6px', fontSize: '10px', fontWeight: '700', color: '#7519b5', background: '#ede7f6', padding: '1px 6px', borderRadius: '8px', letterSpacing: '0.5px' }}>
+                          REGALÍA
+                        </span>
+                      )}
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <label style={{ display: 'flex', alignItems: 'center', gap: '3px', cursor: 'pointer', fontSize: '11px', color: '#7519b5', fontWeight: '600', userSelect: 'none' }}>
+                        <input
+                          type="checkbox"
+                          checked={item.is_regalia}
+                          onChange={() => toggleRegalia(item.product_id)}
+                          style={{ cursor: 'pointer', accentColor: '#7519b5' }}
+                        />
+                        Regalía
+                      </label>
+                      <button
+                        style={styles.removeBtn}
+                        onClick={() => setQty(item.product_id, 0)}
+                        title="Quitar del carrito"
+                      >
+                        ×
+                      </button>
+                    </div>
                   </div>
                   <div style={styles.qtyRow}>
                     <div style={styles.qtyControls}>
-                      <button
-                        style={styles.qtyBtn}
-                        onClick={() => setQty(item.product_id, item.quantity - 1)}
-                      >
-                        −
-                      </button>
+                      <button style={styles.qtyBtn} onClick={() => setQty(item.product_id, item.quantity - 1)}>−</button>
                       <span style={styles.qtyValue}>{item.quantity}</span>
-                      <button
-                        style={styles.qtyBtn}
-                        onClick={() => setQty(item.product_id, item.quantity + 1)}
-                      >
-                        +
-                      </button>
+                      <button style={styles.qtyBtn} onClick={() => setQty(item.product_id, item.quantity + 1)}>+</button>
                     </div>
-                    <span style={styles.itemSubtotal}>
-                      ${item.subtotal.toFixed(2)}
+                    <span style={{ ...styles.itemSubtotal, color: item.is_regalia ? '#7519b5' : styles.itemSubtotal.color }}>
+                      {item.is_regalia ? '$0.00' : `$${item.subtotal.toFixed(2)}`}
                     </span>
                   </div>
                 </div>
@@ -659,9 +679,15 @@ export default function NewSale({ onSaleComplete }) {
             {/* Breakdown */}
             <div style={{ fontSize: '13px', color: '#64748b', marginBottom: '8px' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '3px' }}>
-                <span>Subtotal</span>
+                <span>Subtotal (venta)</span>
                 <span>${subtotal.toFixed(2)}</span>
               </div>
+              {regaliaCount > 0 && (
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '3px', color: '#7519b5' }}>
+                  <span>Regalías ({regaliaCount} ud{regaliaCount !== 1 ? 's' : ''})</span>
+                  <span>$0.00</span>
+                </div>
+              )}
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '3px' }}>
                 <span>IVA (13%)</span>
                 <span>${tax.toFixed(2)}</span>

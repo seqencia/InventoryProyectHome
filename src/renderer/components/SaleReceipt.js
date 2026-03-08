@@ -165,6 +165,9 @@ const s = {
 };
 
 export default function SaleReceipt({ sale, items, subtotal, tax, total, onClose }) {
+  const regularItems = items.filter((i) => !i.is_regalia);
+  const regaliaItems = items.filter((i) => i.is_regalia);
+
   return (
     <>
       <style>{PRINT_STYLES}</style>
@@ -224,8 +227,8 @@ export default function SaleReceipt({ sale, items, subtotal, tax, total, onClose
 
           <div style={s.divider} />
 
-          {/* Items */}
-          {items.map((item, i) => (
+          {/* Regular items */}
+          {regularItems.map((item, i) => (
             <div key={i} style={s.itemRow}>
               <span style={s.colName}>{item.product_name}</span>
               <span style={s.colQty}>{item.quantity}</span>
@@ -234,14 +237,38 @@ export default function SaleReceipt({ sale, items, subtotal, tax, total, onClose
             </div>
           ))}
 
+          {/* Regalía items */}
+          {regaliaItems.length > 0 && (
+            <>
+              <div style={{ ...s.divider, borderTopStyle: 'dotted', margin: '6px 0 4px' }} />
+              <div style={{ fontSize: '10px', fontWeight: '700', letterSpacing: '1px', color: '#6a1b9a', textTransform: 'uppercase', marginBottom: '4px' }}>
+                Regalías
+              </div>
+              {regaliaItems.map((item, i) => (
+                <div key={i} style={s.itemRow}>
+                  <span style={{ ...s.colName, color: '#6a1b9a' }}>{item.product_name}</span>
+                  <span style={s.colQty}>{item.quantity}</span>
+                  <span style={{ ...s.colUnit, color: '#6a1b9a', fontSize: '10px' }}>REGALÍA</span>
+                  <span style={{ ...s.colSub, color: '#6a1b9a' }}>$0.00</span>
+                </div>
+              ))}
+            </>
+          )}
+
           <div style={s.dividerSolid} />
 
           {/* Totals breakdown */}
           <div style={{ marginBottom: '8px' }}>
             <div style={{ ...s.infoRow, marginBottom: '4px' }}>
-              <span style={s.infoLabel}>Subtotal</span>
+              <span style={s.infoLabel}>Subtotal (venta)</span>
               <span style={s.infoValue}>${Number(subtotal ?? sale.subtotal ?? total).toFixed(2)}</span>
             </div>
+            {regaliaItems.length > 0 && (
+              <div style={{ ...s.infoRow, marginBottom: '4px' }}>
+                <span style={{ ...s.infoLabel, color: '#6a1b9a' }}>Regalías</span>
+                <span style={{ ...s.infoValue, color: '#6a1b9a' }}>$0.00</span>
+              </div>
+            )}
             <div style={{ ...s.infoRow, marginBottom: '4px' }}>
               <span style={s.infoLabel}>IVA (13%)</span>
               <span style={s.infoValue}>${Number(tax ?? sale.tax ?? 0).toFixed(2)}</span>

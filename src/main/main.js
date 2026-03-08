@@ -93,6 +93,7 @@ const SaleSchema = new EntitySchema({
     tax: { type: 'decimal', precision: 10, scale: 2, nullable: true },
     total: { type: 'decimal', precision: 10, scale: 2 },
     profit: { type: 'decimal', precision: 10, scale: 2, nullable: true },
+    regalia_count: { type: Number, nullable: true, default: 0 },
     customer_id: { type: Number, nullable: true },
     customer_name: { type: String, nullable: true },
     created_at: { type: 'datetime', createDate: true },
@@ -121,6 +122,7 @@ const StockEntrySchema = new EntitySchema({
     product_id: { type: Number },
     product_name: { type: String },
     quantity: { type: Number },
+    bonus_quantity: { type: Number, nullable: true, default: 0 },
     unit_cost: { type: 'decimal', precision: 10, scale: 2, nullable: true },
     supplier_id: { type: Number, nullable: true },
     supplier_name: { type: String, nullable: true },
@@ -140,6 +142,7 @@ const SaleDetailSchema = new EntitySchema({
     quantity: { type: Number },
     unit_price: { type: 'decimal', precision: 10, scale: 2 },
     subtotal: { type: 'decimal', precision: 10, scale: 2 },
+    is_regalia: { type: Boolean, nullable: true, default: false },
   },
 });
 
@@ -332,12 +335,16 @@ function setupIpcHandlers() {
         supplier_name = supplier?.name ?? null;
       }
 
+      const bonusQty = data.bonus_quantity || 0;
+      const totalQty = data.quantity + bonusQty;
+
       const entry = await manager.save(
         'StockEntry',
         manager.create('StockEntry', {
           product_id: data.product_id,
           product_name: product.name,
           quantity: data.quantity,
+          bonus_quantity: bonusQty,
           unit_cost: data.unit_cost || null,
           supplier_id: data.supplier_id || null,
           supplier_name,
@@ -345,7 +352,7 @@ function setupIpcHandlers() {
         })
       );
 
-      await manager.getRepository('Product').increment({ id: data.product_id }, 'stock', data.quantity);
+      await manager.getRepository('Product').increment({ id: data.product_id }, 'stock', totalQty);
       return entry;
     });
   });
@@ -353,18 +360,22 @@ function setupIpcHandlers() {
   // Sales
   ipcMain.handle('sales:create', async (_, { items, customerId, customerName, paymentMethod, status }) => {
     return await AppDataSource.transaction(async (manager) => {
-      const subtotal = items.reduce((sum, item) => sum + item.subtotal, 0);
+      const regularItems = items.filter((i) => !i.is_regalia);
+      const regaliaItems = items.filter((i) => i.is_regalia);
+
+      const subtotal = regularItems.reduce((sum, item) => sum + item.subtotal, 0);
       const tax = subtotal * 0.13;
       const total = subtotal + tax;
+      const regaliaCount = regaliaItems.reduce((sum, item) => sum + item.quantity, 0);
 
-      // Profit = sum of (unit_price - cost_price) * quantity per item
+      // Profit: only from regular (non-regalía) items
       const productIds = items.map((i) => i.product_id);
       const products = await manager.getRepository('Product').find({ where: { id: In(productIds) } });
       const productMap = {};
       for (const p of products) productMap[p.id] = p;
 
       let profit = 0;
-      for (const item of items) {
+      for (const item of regularItems) {
         const product = productMap[item.product_id];
         if (product && product.cost_price != null) {
           profit += (item.unit_price - Number(product.cost_price)) * item.quantity;
@@ -380,6 +391,7 @@ function setupIpcHandlers() {
           tax,
           total,
           profit,
+          regalia_count: regaliaCount,
           customer_id: customerId || null,
           customer_name: customerName || null,
         })
@@ -393,8 +405,9 @@ function setupIpcHandlers() {
             product_id: item.product_id,
             product_name: item.product_name,
             quantity: item.quantity,
-            unit_price: item.unit_price,
-            subtotal: item.subtotal,
+            unit_price: item.is_regalia ? 0 : item.unit_price,
+            subtotal: item.is_regalia ? 0 : item.subtotal,
+            is_regalia: item.is_regalia || false,
           })
         );
         await manager

@@ -461,6 +461,11 @@ export default function SaleHistory() {
                       </td>
                       <td style={styles.td}>
                         <Badge map={STATUS_STYLE} value={sale.status || 'Completada'} />
+                        {sale.regalia_count > 0 && (
+                          <span style={{ marginLeft: '5px', fontSize: '10px', fontWeight: '700', color: '#6a1b9a', background: '#f3e5f5', padding: '1px 6px', borderRadius: '8px' }}>
+                            +{sale.regalia_count} reg.
+                          </span>
+                        )}
                       </td>
                       <td style={{ ...styles.td, color: '#5c5c5c' }}>
                         {sale.details.length} producto{sale.details.length !== 1 ? 's' : ''}
@@ -502,10 +507,21 @@ export default function SaleHistory() {
                             <tbody>
                               {sale.details.map((d) => (
                                 <tr key={d.id} className="fl-tr">
-                                  <td style={styles.detailTd}>{d.product_name}</td>
-                                  <td style={styles.detailTd}>${Number(d.unit_price).toFixed(2)}</td>
+                                  <td style={styles.detailTd}>
+                                    {d.product_name}
+                                    {d.is_regalia && (
+                                      <span style={{ marginLeft: '6px', fontSize: '10px', fontWeight: '700', color: '#6a1b9a', background: '#f3e5f5', padding: '1px 6px', borderRadius: '8px' }}>
+                                        REGALÍA
+                                      </span>
+                                    )}
+                                  </td>
+                                  <td style={{ ...styles.detailTd, color: d.is_regalia ? '#6a1b9a' : undefined }}>
+                                    {d.is_regalia ? 'REGALÍA' : `$${Number(d.unit_price).toFixed(2)}`}
+                                  </td>
                                   <td style={styles.detailTd}>{d.quantity}</td>
-                                  <td style={styles.detailTd}>${Number(d.subtotal).toFixed(2)}</td>
+                                  <td style={{ ...styles.detailTd, color: d.is_regalia ? '#6a1b9a' : undefined }}>
+                                    {d.is_regalia ? '$0.00' : `$${Number(d.subtotal).toFixed(2)}`}
+                                  </td>
                                 </tr>
                               ))}
                             </tbody>

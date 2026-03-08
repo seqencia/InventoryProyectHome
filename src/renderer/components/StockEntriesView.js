@@ -79,17 +79,22 @@ const s = {
 };
 
 function StockEntryModal({ products, suppliers, onSave, onCancel }) {
-  const [form, setForm] = useState({ product_id: '', quantity: '', unit_cost: '', supplier_id: '', notes: '' });
+  const [form, setForm] = useState({ product_id: '', quantity: '', bonus_quantity: '', unit_cost: '', supplier_id: '', notes: '' });
   const [saving, setSaving] = useState(false);
 
   const set = (field) => (e) => setForm((prev) => ({ ...prev, [field]: e.target.value }));
+
+  const qty = parseInt(form.quantity, 10) || 0;
+  const bonus = parseInt(form.bonus_quantity, 10) || 0;
+  const totalQty = qty + bonus;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSaving(true);
     await onSave({
       product_id: parseInt(form.product_id, 10),
-      quantity: parseInt(form.quantity, 10),
+      quantity: qty,
+      bonus_quantity: bonus,
       unit_cost: form.unit_cost !== '' ? parseFloat(form.unit_cost) : null,
       supplier_id: form.supplier_id ? parseInt(form.supplier_id, 10) : null,
       notes: form.notes.trim() || null,
@@ -118,13 +123,30 @@ function StockEntryModal({ products, suppliers, onSave, onCancel }) {
             </div>
             <div style={s.grid2}>
               <div style={s.field}>
-                <label style={s.label}>Cantidad *</label>
+                <label style={s.label}>Cantidad comprada *</label>
                 <input className="fl-input" style={s.input} type="number" min="1" step="1" value={form.quantity} onChange={set('quantity')} placeholder="0" required />
-                <div style={s.hint}>Se suma al stock actual</div>
               </div>
+              <div style={s.field}>
+                <label style={s.label}>Cantidad bonificada</label>
+                <input className="fl-input" style={s.input} type="number" min="0" step="1" value={form.bonus_quantity} onChange={set('bonus_quantity')} placeholder="0 (opcional)" />
+                <div style={s.hint}>Unidades de regalo/bonus del proveedor</div>
+              </div>
+            </div>
+            {(qty > 0 || bonus > 0) && (
+              <div style={{ background: '#e8f5e9', border: '1px solid #c8e6c9', borderRadius: '8px', padding: '8px 12px', fontSize: '13px', color: '#2e7d32', marginBottom: '14px', fontWeight: '500' }}>
+                Total a ingresar: <strong>{totalQty} unidades</strong>
+                {bonus > 0 && (
+                  <span style={{ fontWeight: '400', color: '#5c5c5c', marginLeft: '8px' }}>
+                    ({qty} compradas + {bonus} bonificada{bonus !== 1 ? 's' : ''})
+                  </span>
+                )}
+              </div>
+            )}
+            <div style={s.grid2}>
               <div style={s.field}>
                 <label style={s.label}>Costo unitario ($)</label>
                 <input className="fl-input" style={s.input} type="number" min="0" step="0.01" value={form.unit_cost} onChange={set('unit_cost')} placeholder="0.00" />
+                {bonus > 0 && <div style={s.hint}>Solo sobre cantidad comprada ({qty} uds.)</div>}
               </div>
             </div>
             <div style={s.field}>
@@ -211,7 +233,7 @@ export default function StockEntriesView() {
                   <th style={s.th}>#</th>
                   <th style={s.th}>Fecha</th>
                   <th style={s.th}>Producto</th>
-                  <th style={s.th}>Cantidad</th>
+                  <th style={s.th}>Ingresado</th>
                   <th style={s.th}>Costo unit.</th>
                   <th style={s.th}>Proveedor</th>
                   <th style={s.th}>Notas</th>
@@ -223,7 +245,18 @@ export default function StockEntriesView() {
                     <td style={{ ...s.td, color: '#9e9e9e' }}>{entry.id}</td>
                     <td style={s.td}>{formatDate(entry.created_at)}</td>
                     <td style={{ ...s.td, fontWeight: '600' }}>{entry.product_name}</td>
-                    <td style={s.td}><span style={s.qtyBadge}>+{entry.quantity}</span></td>
+                    <td style={s.td}>
+                      {(entry.bonus_quantity > 0) ? (
+                        <span style={{ fontSize: '12px', color: '#1a1a1a' }}>
+                          <span style={s.qtyBadge}>+{entry.quantity + entry.bonus_quantity}</span>
+                          <span style={{ display: 'block', fontSize: '11px', color: '#9e9e9e', marginTop: '3px' }}>
+                            {entry.quantity} comprada{entry.quantity !== 1 ? 's' : ''} + {entry.bonus_quantity} bonificada{entry.bonus_quantity !== 1 ? 's' : ''}
+                          </span>
+                        </span>
+                      ) : (
+                        <span style={s.qtyBadge}>+{entry.quantity}</span>
+                      )}
+                    </td>
                     <td style={{ ...s.td, color: entry.unit_cost ? '#1a1a1a' : '#9e9e9e' }}>
                       {entry.unit_cost ? `$${Number(entry.unit_cost).toFixed(2)}` : '—'}
                     </td>
