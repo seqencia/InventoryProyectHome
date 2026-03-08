@@ -10,6 +10,23 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [0.15.0] - 2026-03-08
+
+### Added
+
+#### Excel export for Reports module
+- **"Exportar Excel" button** in the Reportes header (visible after generating a report)
+- Uses `xlsx` npm package to generate a `.xlsx` workbook with 4 sheets:
+  - **Resumen**: 6 KPIs — total ventas, ingreso bruto, IVA, devoluciones, ingreso neto, utilidad
+  - **Por Categoría**: categoría, unidades vendidas, ingresos
+  - **Top 10 Productos**: rank, nombre, unidades, ingresos, utilidad
+  - **Ventas Diarias**: fecha, número de ventas, total
+- Column widths configured per sheet for readability
+- File saved via Electron `dialog.showSaveDialog` with default name `reporte-{from}_{to}.xlsx`
+- `reports:exportXLSX` IPC handler in `main.js`; `preload.js` bridge updated
+
+---
+
 ## [0.14.0] - 2026-03-08
 
 ### Added

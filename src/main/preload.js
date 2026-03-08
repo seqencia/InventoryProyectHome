@@ -44,6 +44,7 @@ contextBridge.exposeInMainWorld('electron', {
   reports: {
     getData: (range) => ipcRenderer.invoke('reports:getData', range),
     exportCSV: (data) => ipcRenderer.invoke('reports:exportCSV', data),
+    exportXLSX: (data) => ipcRenderer.invoke('reports:exportXLSX', data),
   },
   backup: {
     getInfo: () => ipcRenderer.invoke('backup:getInfo'),

@@ -1,6 +1,7 @@
 const { app, BrowserWindow, ipcMain, dialog } = require('electron');
 const path = require('path');
 const fs = require('fs');
+const XLSX = require('xlsx');
 const { DataSource, EntitySchema, In } = require('typeorm');
 
 // ── Backup helpers ─────────────────────────────────────────────────────────
@@ -616,6 +617,67 @@ function setupIpcHandlers() {
       topProducts,
       dailySales,
     };
+  });
+
+  ipcMain.handle('reports:exportXLSX', async (_, { data, from, to }) => {
+    const result = await dialog.showSaveDialog(mainWindow, {
+      title: 'Exportar reporte a Excel',
+      defaultPath: `reporte-${from}_${to}.xlsx`,
+      filters: [{ name: 'Excel', extensions: ['xlsx'] }],
+    });
+    if (result.canceled || !result.filePath) return { canceled: true };
+
+    const n2 = (v) => Number(Number(v).toFixed(2));
+    const wb = XLSX.utils.book_new();
+
+    // ── Sheet 1: Summary ──
+    const ws1 = XLSX.utils.aoa_to_sheet([
+      ['REPORTE DE VENTAS — StarTecnology'],
+      [`Período: ${from} — ${to}`],
+      [],
+      ['Indicador', 'Valor'],
+      ['Total ventas', data.summary.salesCount],
+      ['Ingreso bruto ($)', n2(data.summary.grossIncome)],
+      ['IVA recaudado 13% ($)', n2(data.summary.ivaCollected)],
+      ['Devoluciones ($)', n2(data.summary.totalReturned)],
+      ['Ingreso neto ($)', n2(data.summary.netIncome)],
+      ['Utilidad estimada ($)', n2(data.summary.totalProfit)],
+    ]);
+    ws1['!cols'] = [{ wch: 28 }, { wch: 16 }];
+    XLSX.utils.book_append_sheet(wb, ws1, 'Resumen');
+
+    // ── Sheet 2: By category ──
+    const ws2 = XLSX.utils.aoa_to_sheet([
+      ['Categoría', 'Unidades vendidas', 'Ingresos ($)'],
+      ...data.byCategory.map((c) => [c.category, c.units, n2(c.income)]),
+    ]);
+    ws2['!cols'] = [{ wch: 24 }, { wch: 18 }, { wch: 14 }];
+    XLSX.utils.book_append_sheet(wb, ws2, 'Por Categoría');
+
+    // ── Sheet 3: Top 10 products ──
+    const ws3 = XLSX.utils.aoa_to_sheet([
+      ['#', 'Producto', 'Unidades vendidas', 'Ingresos ($)', 'Utilidad ($)'],
+      ...data.topProducts.map((p, i) => [
+        i + 1,
+        p.product_name,
+        p.units,
+        n2(p.income),
+        p.profit > 0 ? n2(p.profit) : '',
+      ]),
+    ]);
+    ws3['!cols'] = [{ wch: 4 }, { wch: 36 }, { wch: 18 }, { wch: 14 }, { wch: 14 }];
+    XLSX.utils.book_append_sheet(wb, ws3, 'Top 10 Productos');
+
+    // ── Sheet 4: Daily sales ──
+    const ws4 = XLSX.utils.aoa_to_sheet([
+      ['Fecha', 'Número de ventas', 'Total ($)'],
+      ...data.dailySales.map((d) => [d.date, d.count, n2(d.total)]),
+    ]);
+    ws4['!cols'] = [{ wch: 12 }, { wch: 18 }, { wch: 12 }];
+    XLSX.utils.book_append_sheet(wb, ws4, 'Ventas Diarias');
+
+    XLSX.writeFile(wb, result.filePath);
+    return { success: true, filePath: result.filePath };
   });
 
   ipcMain.handle('reports:exportCSV', async (_, { content, filename }) => {

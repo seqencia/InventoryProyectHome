@@ -340,6 +340,7 @@ export default function ReportsView() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [exportStatus, setExportStatus] = useState(null);
+  const [xlsxStatus, setXlsxStatus] = useState(null);
 
   const applyQuick = (id) => {
     setActiveQuick(id);
@@ -360,6 +361,7 @@ export default function ReportsView() {
     setError(null);
     setData(null);
     setExportStatus(null);
+    setXlsxStatus(null);
     try {
       const result = await window.electron.reports.getData({ from, to });
       setData(result);
@@ -368,6 +370,15 @@ export default function ReportsView() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleExportXLSX = async () => {
+    if (!data) return;
+    setXlsxStatus(null);
+    const result = await window.electron.reports.exportXLSX({ data, from, to });
+    if (result.canceled) return;
+    if (result.success) setXlsxStatus({ type: 'success', msg: 'Archivo Excel guardado correctamente.' });
+    else setXlsxStatus({ type: 'error', msg: 'Error al exportar Excel.' });
   };
 
   const handleExport = async () => {
@@ -404,13 +415,22 @@ export default function ReportsView() {
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
         <div style={{ fontSize: '18px', fontWeight: '700', color: '#1a1a1a', letterSpacing: '-0.3px' }}>Reportes</div>
         {data && (
-          <button
-            className="fl-btn-primary"
-            style={{ background: '#107c10', color: 'white', border: 'none', padding: '8px 18px', borderRadius: '8px', cursor: 'pointer', fontSize: '14px', fontWeight: '500' }}
-            onClick={handleExport}
-          >
-            📄 Exportar CSV
-          </button>
+          <div style={{ display: 'flex', gap: '8px' }}>
+            <button
+              className="fl-btn-primary"
+              style={{ background: '#107c10', color: 'white', border: 'none', padding: '8px 18px', borderRadius: '8px', cursor: 'pointer', fontSize: '14px', fontWeight: '500' }}
+              onClick={handleExportXLSX}
+            >
+              📊 Exportar Excel
+            </button>
+            <button
+              className="fl-btn-secondary"
+              style={{ background: 'white', border: '1px solid #d1d1d1', color: '#5c5c5c', padding: '8px 18px', borderRadius: '8px', cursor: 'pointer', fontSize: '14px' }}
+              onClick={handleExport}
+            >
+              📄 Exportar CSV
+            </button>
+          </div>
         )}
       </div>
 
@@ -450,6 +470,17 @@ export default function ReportsView() {
           {loading ? 'Generando...' : '📊 Generar reporte'}
         </button>
       </div>
+
+      {/* ── XLSX status ── */}
+      {xlsxStatus && (
+        <div style={{
+          background: xlsxStatus.type === 'success' ? '#e8f5e9' : '#ffebee',
+          color: xlsxStatus.type === 'success' ? '#2e7d32' : '#a4262c',
+          borderRadius: '8px', padding: '10px 16px', fontSize: '13px', marginBottom: '16px',
+        }}>
+          {xlsxStatus.msg}
+        </div>
+      )}
 
       {/* ── Export status ── */}
       {exportStatus && (
