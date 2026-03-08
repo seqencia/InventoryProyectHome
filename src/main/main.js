@@ -528,6 +528,107 @@ function setupIpcHandlers() {
     return { success: true };
   });
 
+  // Reports
+  ipcMain.handle('reports:getData', async (_, { from, to }) => {
+    const fromDate = new Date(from);
+    fromDate.setHours(0, 0, 0, 0);
+    const toDate = new Date(to);
+    toDate.setHours(23, 59, 59, 999);
+
+    const [allSales, allDetails, allProducts, allReturns] = await Promise.all([
+      repo('Sale').find({ order: { created_at: 'ASC' } }),
+      repo('SaleDetail').find(),
+      repo('Product').find(),
+      repo('Return').find(),
+    ]);
+
+    const salesInRange = allSales.filter((s) => {
+      const d = new Date(s.created_at);
+      return d >= fromDate && d <= toDate;
+    });
+    const saleIds = new Set(salesInRange.map((s) => s.id));
+    const details = allDetails.filter((d) => saleIds.has(d.sale_id));
+
+    const productMap = {};
+    for (const p of allProducts) productMap[p.id] = p;
+
+    const returnsInRange = allReturns.filter((r) => {
+      const d = new Date(r.created_at);
+      return d >= fromDate && d <= toDate;
+    });
+    const totalReturned = returnsInRange.reduce((s, r) => s + Number(r.total_refunded), 0);
+
+    // Summary
+    const grossIncome = salesInRange.reduce((s, sale) => s + Number(sale.total), 0);
+    const ivaCollected = salesInRange.reduce((s, sale) => s + Number(sale.tax || 0), 0);
+    const netIncome = grossIncome - totalReturned;
+    const totalProfit = salesInRange.reduce((s, sale) => s + Number(sale.profit || 0), 0);
+
+    // By payment method
+    const methodMap = {};
+    for (const sale of salesInRange) {
+      const m = sale.payment_method || 'Efectivo';
+      if (!methodMap[m]) methodMap[m] = { method: m, count: 0, amount: 0 };
+      methodMap[m].count++;
+      methodMap[m].amount += Number(sale.total);
+    }
+    const byPaymentMethod = Object.values(methodMap).sort((a, b) => b.amount - a.amount);
+
+    // By category
+    const categoryMap = {};
+    for (const d of details) {
+      const cat = productMap[d.product_id]?.category || 'Sin categoría';
+      if (!categoryMap[cat]) categoryMap[cat] = { category: cat, units: 0, income: 0 };
+      categoryMap[cat].units += d.quantity;
+      categoryMap[cat].income += Number(d.subtotal);
+    }
+    const byCategory = Object.values(categoryMap).sort((a, b) => b.income - a.income);
+
+    // Top 10 products
+    const prodMap = {};
+    for (const d of details) {
+      if (!prodMap[d.product_id]) {
+        prodMap[d.product_id] = { product_id: d.product_id, product_name: d.product_name, units: 0, income: 0, profit: 0 };
+      }
+      prodMap[d.product_id].units += d.quantity;
+      prodMap[d.product_id].income += Number(d.subtotal);
+      const p = productMap[d.product_id];
+      if (p?.cost_price != null) {
+        prodMap[d.product_id].profit += (Number(d.unit_price) - Number(p.cost_price)) * d.quantity;
+      }
+    }
+    const topProducts = Object.values(prodMap).sort((a, b) => b.units - a.units).slice(0, 10);
+
+    // Daily sales
+    const dailyMap = {};
+    for (const sale of salesInRange) {
+      const day = new Date(sale.created_at).toISOString().slice(0, 10);
+      if (!dailyMap[day]) dailyMap[day] = { date: day, count: 0, total: 0 };
+      dailyMap[day].count++;
+      dailyMap[day].total += Number(sale.total);
+    }
+    const dailySales = Object.values(dailyMap).sort((a, b) => a.date.localeCompare(b.date));
+
+    return {
+      summary: { salesCount: salesInRange.length, grossIncome, ivaCollected, netIncome, totalProfit, totalReturned },
+      byPaymentMethod,
+      byCategory,
+      topProducts,
+      dailySales,
+    };
+  });
+
+  ipcMain.handle('reports:exportCSV', async (_, { content, filename }) => {
+    const result = await dialog.showSaveDialog(mainWindow, {
+      title: 'Exportar reporte CSV',
+      defaultPath: filename,
+      filters: [{ name: 'Archivo CSV', extensions: ['csv'] }],
+    });
+    if (result.canceled || !result.filePath) return { canceled: true };
+    fs.writeFileSync(result.filePath, '\uFEFF' + content, 'utf8'); // BOM for Excel
+    return { success: true, filePath: result.filePath };
+  });
+
   ipcMain.handle('backup:manualBackup', async () => {
     const dir = backupsDir();
     if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });

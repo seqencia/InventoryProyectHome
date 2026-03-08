@@ -8,6 +8,7 @@ import SaleHistory from './components/SaleHistory';
 import CategoriesView from './components/CategoriesView';
 import CustomersView from './components/CustomersView';
 import ConfigView from './components/ConfigView';
+import ReportsView from './components/ReportsView';
 
 const TABS = [
   { id: 'dashboard', label: 'Dashboard', icon: '📊' },
@@ -18,6 +19,7 @@ const TABS = [
   { id: 'history', label: 'Historial', icon: '📋' },
   { id: 'categories', label: 'Categorías', icon: '🏷️' },
   { id: 'customers', label: 'Clientes', icon: '👤' },
+  { id: 'reports', label: 'Reportes', icon: '📈' },
   { id: 'config', label: 'Configuración', icon: '⚙️' },
 ];
 
@@ -179,6 +181,7 @@ export default function App() {
           {activeTab === 'history' && <SaleHistory />}
           {activeTab === 'categories' && <CategoriesView />}
           {activeTab === 'customers' && <CustomersView />}
+          {activeTab === 'reports' && <ReportsView />}
           {activeTab === 'config' && <ConfigView />}
         </main>
       </div>

@@ -10,6 +10,23 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [0.14.0] - 2026-03-08
+
+### Added
+
+#### Reports (Reportes) module — new tab 📈
+- **Date filters**: quick buttons (Hoy / Esta semana / Este mes / Este año) + custom date-range pickers; active quick filter highlighted; custom input clears quick selection
+- **Sales Summary card**: 6 KPIs in a horizontal grid — total ventas, ingreso bruto, IVA recaudado (13%), devoluciones, ingreso neto, utilidad estimada; each with colored top-border accent
+- **By payment method**: bar progress chart per method (Efectivo / Tarjeta / Transferencia) with amount, percentage, and count
+- **By category**: table with units sold, total income, and proportional inline bar
+- **Top 10 products**: ranked table with units sold badge, total income, and estimated profit; profit shown only when cost price is known
+- **Daily sales chart**: scrollable bar chart with gradient bars; auto-adjusts bar width by day count; dates rotate when >15 days; hover tooltip with date/count/total
+- **Export CSV**: saves UTF-8 BOM CSV (Excel-compatible) via Electron save dialog; sections for Resumen, Por método, Por categoría, Top 10, Ventas diarias
+- IPC handlers: `reports:getData` (aggregates sales, details, products, returns in range), `reports:exportCSV` (writes file via dialog)
+- `preload.js` exposes `reports: { getData, exportCSV }` bridge
+
+---
+
 ## [0.13.0] - 2026-03-08
 
 ### Added
