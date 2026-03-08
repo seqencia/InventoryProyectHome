@@ -37,4 +37,8 @@ contextBridge.exposeInMainWorld('electron', {
       ipcRenderer.invoke('sales:create', { items, customerId, customerName, paymentMethod, status }),
     getAll: () => ipcRenderer.invoke('sales:getAll'),
   },
+  returns: {
+    create: (data) => ipcRenderer.invoke('returns:create', data),
+    getAll: () => ipcRenderer.invoke('returns:getAll'),
+  },
 });

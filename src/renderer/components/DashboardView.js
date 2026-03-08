@@ -270,8 +270,12 @@ export default function DashboardView({ onNavigate }) {
         />
         <StatCard
           label="Ingresos Hoy"
-          value={`$${data.todayTotal.toFixed(2)}`}
-          sub={data.todayCount === 0 ? 'Sin movimiento hoy' : `Promedio $${(data.todayTotal / data.todayCount).toFixed(2)} por venta`}
+          value={`$${(data.todayTotal - (data.todayReturnTotal || 0)).toFixed(2)}`}
+          sub={
+            data.todayReturnCount
+              ? `Bruto $${data.todayTotal.toFixed(2)} — Dev. $${(data.todayReturnTotal || 0).toFixed(2)}`
+              : data.todayCount === 0 ? 'Sin movimiento hoy' : `Promedio $${(data.todayTotal / data.todayCount).toFixed(2)} por venta`
+          }
           accentColor="#107c10"
         />
         <StatCard

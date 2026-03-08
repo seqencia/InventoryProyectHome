@@ -4,6 +4,8 @@ const STATUS_STYLE = {
   'Completada': { background: '#e8f5e9', color: '#2e7d32' },
   'Cancelada':  { background: '#ffebee', color: '#a4262c' },
   'Pendiente':  { background: '#fff8e1', color: '#8a5700' },
+  'Devuelta':   { background: '#f3e5f5', color: '#6a1b9a' },
+  'Parcial':    { background: '#fff3e0', color: '#e65100' },
 };
 
 const PAYMENT_STYLE = {
@@ -11,6 +13,13 @@ const PAYMENT_STYLE = {
   'Tarjeta':       { background: '#e3f2fd', color: '#1565c0' },
   'Transferencia': { background: '#ede7f6', color: '#6a1b9a' },
 };
+
+const REASON_OPTIONS = [
+  'Producto defectuoso',
+  'Error en venta',
+  'Cliente arrepentido',
+  'Otro',
+];
 
 function Badge({ map, value }) {
   const col = map[value] || { background: '#f5f5f5', color: '#5c5c5c' };
@@ -31,6 +40,197 @@ function formatDate(dateStr) {
   });
 }
 
+// ── Return Modal ─────────────────────────────────────────────────────────────
+
+function ReturnModal({ sale, onClose, onConfirm }) {
+  const [selected, setSelected] = useState(() =>
+    sale.details.reduce((acc, d) => ({ ...acc, [d.id]: { checked: false, qty: d.quantity } }), {})
+  );
+  const [reason, setReason] = useState('');
+  const [notes, setNotes] = useState('');
+  const [saving, setSaving] = useState(false);
+  const [err, setErr] = useState('');
+
+  const toggle = (id) =>
+    setSelected((prev) => ({ ...prev, [id]: { ...prev[id], checked: !prev[id].checked } }));
+
+  const setQty = (id, val, max) =>
+    setSelected((prev) => ({ ...prev, [id]: { ...prev[id], qty: Math.min(max, Math.max(1, Number(val))) } }));
+
+  const selectedItems = sale.details.filter((d) => selected[d.id].checked);
+  const totalRefunded = selectedItems.reduce(
+    (sum, d) => sum + Number(d.unit_price) * selected[d.id].qty, 0
+  );
+
+  const handleConfirm = async () => {
+    if (selectedItems.length === 0) { setErr('Selecciona al menos un producto.'); return; }
+    if (!reason) { setErr('Selecciona un motivo.'); return; }
+    setSaving(true);
+    setErr('');
+    try {
+      const items = selectedItems.map((d) => ({
+        product_id: d.product_id,
+        product_name: d.product_name,
+        quantity: selected[d.id].qty,
+        unit_price: Number(d.unit_price),
+        subtotal: Number(d.unit_price) * selected[d.id].qty,
+      }));
+      await onConfirm({ saleId: sale.id, items, reason, notes });
+      onClose();
+    } catch (e) {
+      setErr('Error al procesar la devolución.');
+      setSaving(false);
+    }
+  };
+
+  const inputStyle = {
+    width: '100%', padding: '8px 12px', border: '1px solid #d1d1d1',
+    borderRadius: '6px', fontSize: '13px', boxSizing: 'border-box',
+  };
+  const selectStyle = { ...inputStyle, background: 'white' };
+
+  return (
+    <div
+      style={{
+        position: 'fixed', inset: 0,
+        background: 'rgba(0,0,0,0.45)', backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)',
+        display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000,
+      }}
+      onClick={(e) => e.target === e.currentTarget && onClose()}
+    >
+      <div style={{
+        background: 'white', borderRadius: '12px', width: '520px',
+        maxWidth: '95vw', maxHeight: '90vh', display: 'flex', flexDirection: 'column',
+        boxShadow: '0 24px 64px rgba(0,0,0,0.18)',
+      }}>
+        {/* Header */}
+        <div style={{ padding: '20px 24px 16px', borderBottom: '1px solid #f0f0f0' }}>
+          <h2 style={{ fontSize: '17px', fontWeight: '700', color: '#1a1a1a', margin: 0 }}>
+            Devolver — Venta #{sale.id}
+          </h2>
+          {sale.customer_name && (
+            <div style={{ fontSize: '12px', color: '#9e9e9e', marginTop: '4px' }}>Cliente: {sale.customer_name}</div>
+          )}
+        </div>
+
+        {/* Body */}
+        <div style={{ padding: '16px 24px', overflowY: 'auto', flex: 1 }}>
+          {/* Product selection */}
+          <div style={{ fontSize: '11px', fontWeight: '700', color: '#9e9e9e', textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: '10px' }}>
+            Selecciona los productos a devolver
+          </div>
+          {sale.details.map((d) => (
+            <div key={d.id} style={{
+              display: 'flex', alignItems: 'center', gap: '12px',
+              padding: '10px 12px', borderRadius: '8px', marginBottom: '6px',
+              background: selected[d.id].checked ? '#f0f7ff' : '#fafafa',
+              border: `1px solid ${selected[d.id].checked ? '#0078d4' : '#e5e5e5'}`,
+              cursor: 'pointer', transition: 'all 0.1s',
+            }} onClick={() => toggle(d.id)}>
+              <input
+                type="checkbox"
+                checked={selected[d.id].checked}
+                onChange={() => toggle(d.id)}
+                onClick={(e) => e.stopPropagation()}
+                style={{ width: '16px', height: '16px', cursor: 'pointer', flexShrink: 0 }}
+              />
+              <div style={{ flex: 1 }}>
+                <div style={{ fontSize: '13px', fontWeight: '500', color: '#1a1a1a' }}>{d.product_name}</div>
+                <div style={{ fontSize: '12px', color: '#9e9e9e' }}>${Number(d.unit_price).toFixed(2)} × {d.quantity} uds.</div>
+              </div>
+              {selected[d.id].checked && (
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }} onClick={(e) => e.stopPropagation()}>
+                  <span style={{ fontSize: '12px', color: '#5c5c5c' }}>Cant:</span>
+                  <input
+                    type="number"
+                    min={1}
+                    max={d.quantity}
+                    value={selected[d.id].qty}
+                    onChange={(e) => setQty(d.id, e.target.value, d.quantity)}
+                    className="fl-input"
+                    style={{ width: '60px', padding: '4px 8px', border: '1px solid #d1d1d1', borderRadius: '6px', fontSize: '13px', textAlign: 'center' }}
+                  />
+                  <span style={{ fontSize: '12px', color: '#9e9e9e' }}>/ {d.quantity}</span>
+                </div>
+              )}
+            </div>
+          ))}
+
+          {/* Reason */}
+          <div style={{ marginTop: '16px', marginBottom: '10px' }}>
+            <label style={{ display: 'block', fontSize: '12px', fontWeight: '600', color: '#5c5c5c', marginBottom: '4px' }}>
+              Motivo *
+            </label>
+            <select
+              className="fl-select"
+              style={selectStyle}
+              value={reason}
+              onChange={(e) => setReason(e.target.value)}
+            >
+              <option value="">Seleccionar motivo...</option>
+              {REASON_OPTIONS.map((r) => <option key={r} value={r}>{r}</option>)}
+            </select>
+          </div>
+
+          {/* Notes */}
+          <div style={{ marginBottom: '10px' }}>
+            <label style={{ display: 'block', fontSize: '12px', fontWeight: '600', color: '#5c5c5c', marginBottom: '4px' }}>
+              Notas (opcional)
+            </label>
+            <textarea
+              className="fl-input"
+              style={{ ...inputStyle, resize: 'vertical', minHeight: '56px', fontFamily: 'inherit' }}
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+              placeholder="Detalles adicionales..."
+            />
+          </div>
+
+          {/* Total refund preview */}
+          {selectedItems.length > 0 && (
+            <div style={{
+              background: '#f3e5f5', borderRadius: '8px', padding: '10px 14px',
+              fontSize: '13px', color: '#6a1b9a', fontWeight: '600',
+            }}>
+              Total a reembolsar: ${totalRefunded.toFixed(2)}
+            </div>
+          )}
+
+          {err && (
+            <div style={{ background: '#ffebee', color: '#a4262c', borderRadius: '8px', padding: '8px 12px', fontSize: '13px', marginTop: '10px' }}>
+              {err}
+            </div>
+          )}
+        </div>
+
+        {/* Footer */}
+        <div style={{ padding: '16px 24px', borderTop: '1px solid #f0f0f0', display: 'flex', justifyContent: 'flex-end', gap: '8px' }}>
+          <button
+            type="button"
+            className="fl-btn-ghost"
+            style={{ background: 'white', border: '1px solid #d1d1d1', padding: '8px 16px', borderRadius: '8px', cursor: 'pointer', fontSize: '14px', color: '#5c5c5c' }}
+            onClick={onClose}
+            disabled={saving}
+          >
+            Cancelar
+          </button>
+          <button
+            type="button"
+            className="fl-btn-primary"
+            style={{ background: '#6a1b9a', color: 'white', border: 'none', padding: '8px 20px', borderRadius: '8px', cursor: 'pointer', fontSize: '14px', fontWeight: '500' }}
+            onClick={handleConfirm}
+            disabled={saving}
+          >
+            {saving ? 'Procesando...' : 'Confirmar devolución'}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Styles ───────────────────────────────────────────────────────────────────
+
 const styles = {
   toolbar: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' },
   sectionTitle: { fontSize: '18px', fontWeight: '700', color: '#1a1a1a', letterSpacing: '-0.3px' },
@@ -50,6 +250,11 @@ const styles = {
     background: 'white', border: '1px solid #d1d1d1',
     padding: '4px 12px', borderRadius: '6px', cursor: 'pointer',
     fontSize: '12px', color: '#1a1a1a', fontWeight: '500',
+  },
+  returnBtn: {
+    background: 'white', border: '1px solid #ce93d8',
+    padding: '4px 12px', borderRadius: '6px', cursor: 'pointer',
+    fontSize: '12px', color: '#6a1b9a', fontWeight: '500', marginLeft: '6px',
   },
   detailRow: { background: '#fafafa' },
   detailCell: { padding: 0, borderBottom: '1px solid #e5e5e5' },
@@ -73,29 +278,155 @@ const styles = {
   totalBadge: { fontWeight: '700', color: '#0078d4' },
 };
 
+// ── Main Component ───────────────────────────────────────────────────────────
+
 export default function SaleHistory() {
   const [sales, setSales] = useState([]);
+  const [returns, setReturns] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [expanded, setExpanded] = useState(null);
+  const [returnsExpanded, setReturnsExpanded] = useState(null);
+  const [returnModal, setReturnModal] = useState(null); // sale object
+  const [showReturnsSection, setShowReturnsSection] = useState(false);
 
-  useEffect(() => {
-    window.electron.sales
-      .getAll()
-      .then((data) => { setSales(data); setLoading(false); })
-      .catch(() => { setError('Error al cargar el historial.'); setLoading(false); });
-  }, []);
+  const loadData = () => {
+    setLoading(true);
+    Promise.all([
+      window.electron.sales.getAll(),
+      window.electron.returns.getAll(),
+    ])
+      .then(([salesData, returnsData]) => {
+        setSales(salesData);
+        setReturns(returnsData);
+        setLoading(false);
+      })
+      .catch(() => {
+        setError('Error al cargar el historial.');
+        setLoading(false);
+      });
+  };
+
+  useEffect(() => { loadData(); }, []);
 
   const toggle = (id) => setExpanded((prev) => (prev === id ? null : id));
+  const toggleReturn = (id) => setReturnsExpanded((prev) => (prev === id ? null : id));
+
+  const handleReturnConfirm = async (data) => {
+    await window.electron.returns.create(data);
+    loadData();
+  };
+
+  const canReturn = (sale) =>
+    sale.status === 'Completada' || sale.status === 'Parcial';
 
   return (
     <>
       <div style={styles.toolbar}>
         <h2 style={styles.sectionTitle}>Historial de Ventas</h2>
+        {returns.length > 0 && (
+          <button
+            className="fl-btn-secondary"
+            style={{
+              background: 'white', border: '1px solid #ce93d8', padding: '6px 14px',
+              borderRadius: '8px', cursor: 'pointer', fontSize: '13px', color: '#6a1b9a', fontWeight: '500',
+            }}
+            onClick={() => setShowReturnsSection((v) => !v)}
+          >
+            {showReturnsSection ? 'Ocultar devoluciones' : `Ver Devoluciones (${returns.length})`}
+          </button>
+        )}
       </div>
 
       {error && <div style={styles.errorBox}>{error}</div>}
 
+      {/* ── Returns section ── */}
+      {showReturnsSection && returns.length > 0 && (
+        <div style={{ ...styles.wrapper, marginBottom: '20px' }}>
+          <div style={{
+            padding: '12px 18px', borderBottom: '1px solid #f0f0f0',
+            fontWeight: '600', fontSize: '13px', color: '#6a1b9a',
+            background: '#fdf5ff',
+          }}>
+            ↩ Devoluciones registradas
+          </div>
+          <table style={styles.table}>
+            <thead>
+              <tr>
+                <th style={styles.th}>#</th>
+                <th style={styles.th}>Fecha</th>
+                <th style={styles.th}>Venta #</th>
+                <th style={styles.th}>Motivo</th>
+                <th style={styles.th}>Tipo</th>
+                <th style={styles.th}>Reembolso</th>
+                <th style={styles.th}></th>
+              </tr>
+            </thead>
+            <tbody>
+              {returns.map((ret) => (
+                <React.Fragment key={ret.id}>
+                  <tr className="fl-tr">
+                    <td style={{ ...styles.td, color: '#9e9e9e' }}>{ret.id}</td>
+                    <td style={styles.td}>{formatDate(ret.created_at)}</td>
+                    <td style={{ ...styles.td, color: '#0078d4', fontWeight: '600' }}>#{ret.sale_id}</td>
+                    <td style={styles.td}>{ret.reason}</td>
+                    <td style={styles.td}>
+                      <Badge map={STATUS_STYLE} value={ret.is_partial ? 'Parcial' : 'Devuelta'} />
+                    </td>
+                    <td style={styles.td}>
+                      <span style={{ fontWeight: '700', color: '#6a1b9a' }}>
+                        ${Number(ret.total_refunded).toFixed(2)}
+                      </span>
+                    </td>
+                    <td style={styles.td}>
+                      <button
+                        className="fl-btn-secondary"
+                        style={styles.toggleBtn}
+                        onClick={() => toggleReturn(ret.id)}
+                      >
+                        {returnsExpanded === ret.id ? 'Ocultar' : 'Ver detalle'}
+                      </button>
+                    </td>
+                  </tr>
+                  {returnsExpanded === ret.id && (
+                    <tr style={styles.detailRow}>
+                      <td colSpan={7} style={styles.detailCell}>
+                        <table style={styles.detailTable}>
+                          <thead>
+                            <tr>
+                              <th style={styles.detailTh}>Producto</th>
+                              <th style={styles.detailTh}>P. Unit.</th>
+                              <th style={styles.detailTh}>Cantidad</th>
+                              <th style={styles.detailTh}>Subtotal</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {ret.details.map((d) => (
+                              <tr key={d.id} className="fl-tr">
+                                <td style={styles.detailTd}>{d.product_name}</td>
+                                <td style={styles.detailTd}>${Number(d.unit_price).toFixed(2)}</td>
+                                <td style={styles.detailTd}>{d.quantity}</td>
+                                <td style={styles.detailTd}>${Number(d.subtotal).toFixed(2)}</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                        {ret.notes && (
+                          <div style={{ ...styles.detailTotal, textAlign: 'left', color: '#5c5c5c', fontWeight: '400' }}>
+                            Notas: {ret.notes}
+                          </div>
+                        )}
+                      </td>
+                    </tr>
+                  )}
+                </React.Fragment>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+
+      {/* ── Sales table ── */}
       {loading ? (
         <p style={{ color: '#9e9e9e', fontSize: '14px' }}>Cargando...</p>
       ) : (
@@ -137,7 +468,7 @@ export default function SaleHistory() {
                       <td style={styles.td}>
                         <span style={styles.totalBadge}>${Number(sale.total).toFixed(2)}</span>
                       </td>
-                      <td style={styles.td}>
+                      <td style={{ ...styles.td, whiteSpace: 'nowrap' }}>
                         <button
                           className="fl-btn-secondary"
                           style={styles.toggleBtn}
@@ -145,6 +476,15 @@ export default function SaleHistory() {
                         >
                           {expanded === sale.id ? 'Ocultar' : 'Ver detalle'}
                         </button>
+                        {canReturn(sale) && (
+                          <button
+                            className="fl-btn-secondary"
+                            style={styles.returnBtn}
+                            onClick={() => setReturnModal(sale)}
+                          >
+                            ↩ Devolver
+                          </button>
+                        )}
                       </td>
                     </tr>
                     {expanded === sale.id && (
@@ -192,6 +532,15 @@ export default function SaleHistory() {
             </table>
           )}
         </div>
+      )}
+
+      {/* ── Return modal ── */}
+      {returnModal && (
+        <ReturnModal
+          sale={returnModal}
+          onClose={() => setReturnModal(null)}
+          onConfirm={handleReturnConfirm}
+        />
       )}
     </>
   );

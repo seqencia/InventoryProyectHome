@@ -113,6 +113,34 @@ const SaleDetailSchema = new EntitySchema({
   },
 });
 
+const ReturnSchema = new EntitySchema({
+  name: 'Return',
+  tableName: 'returns',
+  columns: {
+    id: { type: Number, primary: true, generated: true },
+    sale_id: { type: Number },
+    reason: { type: String },
+    notes: { type: String, nullable: true },
+    total_refunded: { type: 'decimal', precision: 10, scale: 2 },
+    is_partial: { type: Boolean, default: false },
+    created_at: { type: 'datetime', createDate: true },
+  },
+});
+
+const ReturnDetailSchema = new EntitySchema({
+  name: 'ReturnDetail',
+  tableName: 'return_details',
+  columns: {
+    id: { type: Number, primary: true, generated: true },
+    return_id: { type: Number },
+    product_id: { type: Number },
+    product_name: { type: String },
+    quantity: { type: Number },
+    unit_price: { type: 'decimal', precision: 10, scale: 2 },
+    subtotal: { type: 'decimal', precision: 10, scale: 2 },
+  },
+});
+
 // ── Database ───────────────────────────────────────────────────────────────
 
 let AppDataSource;
@@ -121,7 +149,7 @@ async function initDatabase() {
   AppDataSource = new DataSource({
     type: 'sqlite',
     database: path.join(app.getPath('userData'), 'database.sqlite'),
-    entities: [ProductSchema, CategorySchema, CustomerSchema, SaleSchema, SaleDetailSchema, SupplierSchema, StockEntrySchema],
+    entities: [ProductSchema, CategorySchema, CustomerSchema, SaleSchema, SaleDetailSchema, SupplierSchema, StockEntrySchema, ReturnSchema, ReturnDetailSchema],
     synchronize: true,
     logging: false,
   });
@@ -177,10 +205,11 @@ function setupIpcHandlers() {
 
   // Dashboard
   ipcMain.handle('dashboard:getSummary', async () => {
-    const [allSales, allDetails, allProducts] = await Promise.all([
+    const [allSales, allDetails, allProducts, allReturns] = await Promise.all([
       repo('Sale').find({ order: { created_at: 'DESC' } }),
       repo('SaleDetail').find(),
       repo('Product').find(),
+      repo('Return').find({ order: { created_at: 'DESC' } }),
     ]);
 
     // Today's sales (local midnight)
@@ -190,6 +219,11 @@ function setupIpcHandlers() {
     const todayTotal = todaySales.reduce((sum, s) => sum + Number(s.total), 0);
     const todayCount = todaySales.length;
     const todayProfit = todaySales.reduce((sum, s) => sum + Number(s.profit || 0), 0);
+
+    // Today's returns
+    const todayReturns = allReturns.filter((r) => new Date(r.created_at) >= todayStart);
+    const todayReturnCount = todayReturns.length;
+    const todayReturnTotal = todayReturns.reduce((sum, r) => sum + Number(r.total_refunded), 0);
 
     // Low stock — respect each product's individual minimum
     const lowStock = allProducts
@@ -211,7 +245,7 @@ function setupIpcHandlers() {
     // Recent 5 sales
     const recentSales = allSales.slice(0, 5);
 
-    return { todayTotal, todayCount, todayProfit, lowStock, topProducts, recentSales };
+    return { todayTotal, todayCount, todayProfit, todayReturnCount, todayReturnTotal, lowStock, topProducts, recentSales };
   });
 
   // Customers
@@ -348,6 +382,61 @@ function setupIpcHandlers() {
     return sales.map((sale) => ({
       ...sale,
       details: details.filter((d) => d.sale_id === sale.id),
+    }));
+  });
+
+  // Returns
+  ipcMain.handle('returns:create', async (_, { saleId, items, reason, notes }) => {
+    return await AppDataSource.transaction(async (manager) => {
+      // Get original sale details to determine if partial
+      const originalDetails = await manager.getRepository('SaleDetail').find({ where: { sale_id: saleId } });
+
+      const totalRefunded = items.reduce((sum, item) => sum + item.subtotal, 0);
+
+      // Determine partial: if any original line item is not fully returned
+      const returnedMap = {};
+      for (const item of items) returnedMap[item.product_id] = (returnedMap[item.product_id] || 0) + item.quantity;
+      const isPartial = originalDetails.some((d) => (returnedMap[d.product_id] || 0) < d.quantity);
+
+      const savedReturn = await manager.save(
+        'Return',
+        manager.create('Return', {
+          sale_id: saleId,
+          reason,
+          notes: notes || null,
+          total_refunded: totalRefunded,
+          is_partial: isPartial,
+        })
+      );
+
+      for (const item of items) {
+        await manager.save(
+          'ReturnDetail',
+          manager.create('ReturnDetail', {
+            return_id: savedReturn.id,
+            product_id: item.product_id,
+            product_name: item.product_name,
+            quantity: item.quantity,
+            unit_price: item.unit_price,
+            subtotal: item.subtotal,
+          })
+        );
+        await manager.getRepository('Product').increment({ id: item.product_id }, 'stock', item.quantity);
+      }
+
+      // Update sale status
+      await manager.getRepository('Sale').update(saleId, { status: isPartial ? 'Parcial' : 'Devuelta' });
+
+      return { ...savedReturn, is_partial: isPartial };
+    });
+  });
+
+  ipcMain.handle('returns:getAll', async () => {
+    const returns = await repo('Return').find({ order: { created_at: 'DESC' } });
+    const details = await repo('ReturnDetail').find();
+    return returns.map((r) => ({
+      ...r,
+      details: details.filter((d) => d.return_id === r.id),
     }));
   });
 }

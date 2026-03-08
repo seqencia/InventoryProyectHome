@@ -10,6 +10,26 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [0.12.0] - 2026-03-08
+
+### Added
+
+#### Returns (Devoluciones) module
+- **`returns` and `return_details` tables** in SQLite: `sale_id`, `reason`, `notes`, `total_refunded`, `is_partial`, `created_at` (return); `return_id`, `product_id`, `product_name`, `quantity`, `unit_price`, `subtotal` (detail)
+- **`returns:create` IPC handler**: runs in a transaction — creates return record, creates per-item return details, increments product stock atomically, updates sale status to `Devuelta` (full) or `Parcial` (partial)
+- **`returns:getAll` IPC handler**: returns all returns with embedded `details[]` array, sorted by date descending
+- **ReturnModal** in `SaleHistory.js`: per-item checkbox selection with quantity control (capped to original qty), required reason dropdown (Producto defectuoso, Error en venta, Cliente arrepentido, Otro), optional notes textarea, refund preview total shown in purple before confirming
+- **"↩ Devolver" button** on `Completada` and `Parcial` sales in the history table
+- **Status badges** for `Devuelta` (purple `#f3e5f5/#6a1b9a`) and `Parcial` (orange `#fff3e0/#e65100`) added to `STATUS_STYLE`
+- **"Ver Devoluciones" section** toggle button in the Historial toolbar (visible only when returns exist); table shows #, date, sale #, reason, type badge, refund total, expandable detail rows with notes
+- **Dashboard Ingresos Hoy** card now shows net income (gross − returns); sub-text shows breakdown when returns exist today
+
+### Changed
+- `preload.js` exposes `returns: { create, getAll }` bridge
+- `dashboard:getSummary` now fetches `Return` records and returns `todayReturnCount` and `todayReturnTotal`
+
+---
+
 ## [0.11.0] - 2026-03-07
 
 ### Changed
