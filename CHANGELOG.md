@@ -10,6 +10,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [0.13.0] - 2026-03-08
+
+### Added
+
+#### Database Backup module — new "Configuración" tab (⚙️)
+- **Export backup**: opens Electron save dialog; copies `database.sqlite` to user-selected path with default filename `backup-YYYY-MM-DD.sqlite`
+- **Save to backups folder**: copies the DB to `<userData>/backups/backup-YYYY-MM-DD-<timestamp>.sqlite` without a file picker
+- **Import / Restore**: opens file picker for `.sqlite` files; shows a confirmation warning modal before replacing the live database; performs atomic replace by destroying and reinitializing the TypeORM DataSource
+- **Auto-backup**: toggle stored in `<userData>/config.json`; when enabled, creates a daily backup at startup in `<userData>/backups/` (skips if today's backup already exists)
+- **Last backup info**: shows filename, formatted date, and file size of the most recent automatic backup
+- `ConfigView.js`: Fluent Design card layout with toggle switch, status alerts, and confirmation modal
+- IPC handlers: `backup:getInfo`, `backup:setAutoBackup`, `backup:export`, `backup:import`, `backup:restore`, `backup:manualBackup`
+- `preload.js` exposes full `backup` bridge
+
+---
+
 ## [0.12.0] - 2026-03-08
 
 ### Added

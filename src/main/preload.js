@@ -41,4 +41,12 @@ contextBridge.exposeInMainWorld('electron', {
     create: (data) => ipcRenderer.invoke('returns:create', data),
     getAll: () => ipcRenderer.invoke('returns:getAll'),
   },
+  backup: {
+    getInfo: () => ipcRenderer.invoke('backup:getInfo'),
+    setAutoBackup: (enabled) => ipcRenderer.invoke('backup:setAutoBackup', enabled),
+    export: () => ipcRenderer.invoke('backup:export'),
+    import: () => ipcRenderer.invoke('backup:import'),
+    restore: (filePath) => ipcRenderer.invoke('backup:restore', filePath),
+    manualBackup: () => ipcRenderer.invoke('backup:manualBackup'),
+  },
 });

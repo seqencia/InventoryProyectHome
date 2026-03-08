@@ -7,6 +7,7 @@ import NewSale from './components/NewSale';
 import SaleHistory from './components/SaleHistory';
 import CategoriesView from './components/CategoriesView';
 import CustomersView from './components/CustomersView';
+import ConfigView from './components/ConfigView';
 
 const TABS = [
   { id: 'dashboard', label: 'Dashboard', icon: '📊' },
@@ -17,6 +18,7 @@ const TABS = [
   { id: 'history', label: 'Historial', icon: '📋' },
   { id: 'categories', label: 'Categorías', icon: '🏷️' },
   { id: 'customers', label: 'Clientes', icon: '👤' },
+  { id: 'config', label: 'Configuración', icon: '⚙️' },
 ];
 
 // ── Global CSS (hover / focus effects impossible with pure inline styles) ────
@@ -177,6 +179,7 @@ export default function App() {
           {activeTab === 'history' && <SaleHistory />}
           {activeTab === 'categories' && <CategoriesView />}
           {activeTab === 'customers' && <CustomersView />}
+          {activeTab === 'config' && <ConfigView />}
         </main>
       </div>
     </>

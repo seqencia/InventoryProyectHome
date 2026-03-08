@@ -1,6 +1,35 @@
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow, ipcMain, dialog } = require('electron');
 const path = require('path');
+const fs = require('fs');
 const { DataSource, EntitySchema, In } = require('typeorm');
+
+// ── Backup helpers ─────────────────────────────────────────────────────────
+
+const dbPath = () => path.join(app.getPath('userData'), 'database.sqlite');
+const backupsDir = () => path.join(app.getPath('userData'), 'backups');
+const configPath = () => path.join(app.getPath('userData'), 'config.json');
+
+function loadConfig() {
+  try { return JSON.parse(fs.readFileSync(configPath(), 'utf8')); }
+  catch { return { autoBackup: false }; }
+}
+function saveConfig(cfg) {
+  fs.writeFileSync(configPath(), JSON.stringify(cfg, null, 2));
+}
+
+async function runAutoBackup() {
+  const cfg = loadConfig();
+  if (!cfg.autoBackup) return;
+  const dir = backupsDir();
+  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+  const today = new Date().toISOString().slice(0, 10);
+  const dest = path.join(dir, `backup-${today}.sqlite`);
+  if (!fs.existsSync(dest) && fs.existsSync(dbPath())) {
+    fs.copyFileSync(dbPath(), dest);
+  }
+}
+
+let mainWindow = null;
 
 // ── Schemas ────────────────────────────────────────────────────────────────
 
@@ -439,12 +468,83 @@ function setupIpcHandlers() {
       details: details.filter((d) => d.return_id === r.id),
     }));
   });
+
+  // Backup
+  ipcMain.handle('backup:getInfo', async () => {
+    const cfg = loadConfig();
+    const dir = backupsDir();
+    let lastBackup = null;
+    if (fs.existsSync(dir)) {
+      const files = fs.readdirSync(dir)
+        .filter((f) => f.endsWith('.sqlite'))
+        .map((f) => {
+          const stat = fs.statSync(path.join(dir, f));
+          return { name: f, date: stat.mtime, size: stat.size };
+        })
+        .sort((a, b) => new Date(b.date) - new Date(a.date));
+      if (files.length > 0) lastBackup = files[0];
+    }
+    return { autoBackup: cfg.autoBackup || false, lastBackup };
+  });
+
+  ipcMain.handle('backup:setAutoBackup', async (_, enabled) => {
+    const cfg = loadConfig();
+    cfg.autoBackup = enabled;
+    saveConfig(cfg);
+    return { success: true };
+  });
+
+  ipcMain.handle('backup:export', async () => {
+    const today = new Date().toISOString().slice(0, 10);
+    const result = await dialog.showSaveDialog(mainWindow, {
+      title: 'Guardar copia de seguridad',
+      defaultPath: `backup-${today}.sqlite`,
+      filters: [{ name: 'Base de datos SQLite', extensions: ['sqlite'] }],
+    });
+    if (result.canceled || !result.filePath) return { canceled: true };
+    fs.copyFileSync(dbPath(), result.filePath);
+    const stat = fs.statSync(result.filePath);
+    return { success: true, filePath: result.filePath, size: stat.size };
+  });
+
+  ipcMain.handle('backup:import', async () => {
+    const result = await dialog.showOpenDialog(mainWindow, {
+      title: 'Seleccionar copia de seguridad',
+      filters: [{ name: 'Base de datos SQLite', extensions: ['sqlite'] }],
+      properties: ['openFile'],
+    });
+    if (result.canceled || !result.filePaths.length) return { canceled: true };
+    const backupFile = result.filePaths[0];
+    const stat = fs.statSync(backupFile);
+    // Return the selected file path so the renderer can show a confirmation modal
+    return { selected: true, filePath: backupFile, size: stat.size };
+  });
+
+  ipcMain.handle('backup:restore', async (_, filePath) => {
+    if (!filePath || !fs.existsSync(filePath)) throw new Error('Archivo no encontrado');
+    await AppDataSource.destroy();
+    fs.copyFileSync(filePath, dbPath());
+    await AppDataSource.initialize();
+    return { success: true };
+  });
+
+  ipcMain.handle('backup:manualBackup', async () => {
+    const dir = backupsDir();
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+    const today = new Date().toISOString().slice(0, 10);
+    // Add timestamp suffix to avoid overwrite
+    const timestamp = Date.now();
+    const dest = path.join(dir, `backup-${today}-${timestamp}.sqlite`);
+    fs.copyFileSync(dbPath(), dest);
+    const stat = fs.statSync(dest);
+    return { success: true, filePath: dest, size: stat.size };
+  });
 }
 
 // ── Window ─────────────────────────────────────────────────────────────────
 
 function createWindow() {
-  const win = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     width: 1200,
     height: 800,
     webPreferences: {
@@ -453,11 +553,13 @@ function createWindow() {
       nodeIntegration: false,
     },
   });
-  win.loadFile(path.join(__dirname, '../renderer/index.html'));
+  mainWindow.loadFile(path.join(__dirname, '../renderer/index.html'));
+  return mainWindow;
 }
 
 app.whenReady().then(async () => {
   await initDatabase();
+  await runAutoBackup();
   setupIpcHandlers();
   createWindow();
 });
