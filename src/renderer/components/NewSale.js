@@ -540,12 +540,14 @@ export default function NewSale({ onSaleComplete }) {
                           >
                             Agregar
                           </span>
-                          <span
-                            style={{ ...styles.addBtn, background: '#f3e5f5', border: '1px solid #ce93d8', color: '#6a1b9a' }}
-                            onClick={() => addToCart(product, true)}
-                          >
-                            + Regalía
-                          </span>
+                          {product.disponible_regalia && (
+                            <span
+                              style={{ ...styles.addBtn, background: '#f3e5f5', border: '1px solid #ce93d8', color: '#6a1b9a' }}
+                              onClick={() => addToCart(product, true)}
+                            >
+                              + Regalía
+                            </span>
+                          )}
                         </>
                       )}
                     </div>

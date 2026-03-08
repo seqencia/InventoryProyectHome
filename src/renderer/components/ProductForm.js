@@ -84,6 +84,7 @@ export default function ProductForm({ product, onSave, onCancel }) {
     serial_number: product?.serial_number ?? '',
     condition: product?.condition ?? '',
     status: product?.status ?? 'Disponible',
+    disponible_regalia: product?.disponible_regalia ?? false,
     cost_price: product?.cost_price ?? '',
     sale_price: product?.sale_price ?? '',
     offer_price: product?.offer_price ?? '',
@@ -109,6 +110,7 @@ export default function ProductForm({ product, onSave, onCancel }) {
       serial_number: form.serial_number.trim() || null,
       condition: form.condition || null,
       status: form.status || 'Disponible',
+      disponible_regalia: form.disponible_regalia,
       cost_price: form.cost_price !== '' ? parseFloat(form.cost_price) : null,
       sale_price: parseFloat(form.sale_price),
       offer_price: form.offer_price !== '' ? parseFloat(form.offer_price) : null,
@@ -208,6 +210,23 @@ export default function ProductForm({ product, onSave, onCancel }) {
                 </div>
               </div>
             </div>
+
+              <div style={{ ...s.field, marginTop: '4px' }}>
+                <label style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer', userSelect: 'none' }}>
+                  <input
+                    type="checkbox"
+                    checked={form.disponible_regalia}
+                    onChange={(e) => setForm((prev) => ({ ...prev, disponible_regalia: e.target.checked }))}
+                    style={{ width: '16px', height: '16px', cursor: 'pointer', accentColor: '#6a1b9a' }}
+                  />
+                  <span>
+                    <span style={{ fontSize: '13px', fontWeight: '600', color: '#1a1a1a' }}>¿Disponible como regalía?</span>
+                    <span style={{ display: 'block', fontSize: '11px', color: '#9e9e9e', marginTop: '1px' }}>
+                      Muestra el botón "+ Regalía" en Nueva Venta para agregar a precio $0.00
+                    </span>
+                  </span>
+                </label>
+              </div>
 
             {/* ── Precios ─────────────────────────────────────────── */}
             <div style={s.section}>

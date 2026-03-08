@@ -48,6 +48,7 @@ const ProductSchema = new EntitySchema({
     category: { type: String, nullable: true },
     condition: { type: String, nullable: true },
     status: { type: String, nullable: true, default: 'Disponible' },
+    disponible_regalia: { type: Boolean, nullable: true, default: false },
     cost_price: { type: 'decimal', precision: 10, scale: 2, nullable: true },
     // sale_price maps to the existing 'price' DB column — zero-migration rename
     sale_price: { type: 'decimal', precision: 10, scale: 2, name: 'price' },

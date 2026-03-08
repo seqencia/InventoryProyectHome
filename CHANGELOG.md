@@ -10,6 +10,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [0.16.2] - 2026-03-08
+
+### Changed
+
+#### Regalía — controlled per product
+- `disponible_regalia` boolean column added to `ProductSchema` (nullable, default false)
+- `ProductForm`: checkbox "¿Disponible como regalía?" in Condición y Estado section with description hint
+- `NewSale` product list: "+ Regalía" button only shown when `product.disponible_regalia === true`; "Agregar" always visible for in-stock products
+
+---
+
 ## [0.16.1] - 2026-03-08
 
 ### Changed
