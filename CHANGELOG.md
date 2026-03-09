@@ -10,6 +10,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [0.17.0] - 2026-03-08
+
+### Added
+
+#### Documentation reorganization
+- Created `docs/` folder with modular reference files:
+  - `docs/ARCHITECTURE.md` — process layers diagram, component map, IPC channels, entity guide
+  - `docs/DATABASE.md` — all schemas with columns/types/notes, relationships diagram, config file info
+  - `docs/MODULES.md` — description of every tab/module (Dashboard through Configuración)
+  - `docs/DESIGN-SYSTEM.md` — color tokens, badge palette, typography, layout, global CSS classes, button variants, modal patterns
+  - `docs/BUGS.md` — open bug tracker (BUG-001: same sale can be returned multiple times)
+- Rewrote `CLAUDE.md` to be concise (~50 lines): behavior instructions, stack summary, references to each `docs/` file instead of inline content
+
+---
+
 ## [0.16.2] - 2026-03-08
 
 ### Changed
