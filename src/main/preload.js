@@ -33,8 +33,8 @@ contextBridge.exposeInMainWorld('electron', {
     create: (data) => ipcRenderer.invoke('stockEntries:create', data),
   },
   sales: {
-    create: (items, customerId, customerName, paymentMethod, status) =>
-      ipcRenderer.invoke('sales:create', { items, customerId, customerName, paymentMethod, status }),
+    create: (items, customerId, customerName, paymentMethod, status, globalDiscountAmount) =>
+      ipcRenderer.invoke('sales:create', { items, customerId, customerName, paymentMethod, status, globalDiscountAmount }),
     getAll: () => ipcRenderer.invoke('sales:getAll'),
   },
   returns: {

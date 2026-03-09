@@ -102,6 +102,7 @@ const SaleSchema = new EntitySchema({
     tax: { type: 'decimal', precision: 10, scale: 2, nullable: true },
     total: { type: 'decimal', precision: 10, scale: 2 },
     profit: { type: 'decimal', precision: 10, scale: 2, nullable: true },
+    global_discount: { type: 'decimal', precision: 16, scale: 6, nullable: true, default: 0 },
     regalia_count: { type: Number, nullable: true, default: 0 },
     customer_id: { type: Number, nullable: true },
     customer_name: { type: String, nullable: true },
@@ -405,14 +406,17 @@ function setupIpcHandlers() {
   });
 
   // Sales
-  ipcMain.handle('sales:create', async (_, { items, customerId, customerName, paymentMethod, status }) => {
+  ipcMain.handle('sales:create', async (_, { items, customerId, customerName, paymentMethod, status, globalDiscountAmount }) => {
     return await AppDataSource.transaction(async (manager) => {
       const regularItems = items.filter((i) => !i.is_regalia);
       const regaliaItems = items.filter((i) => i.is_regalia);
 
-      const subtotal = regularItems.reduce((sum, item) => sum + item.subtotal, 0);
-      const tax = subtotal * 0.13;
-      const total = subtotal + tax;
+      // Line subtotals already reflect per-line discounts (unit_price is effective price)
+      const lineSubtotal = regularItems.reduce((sum, item) => sum + item.subtotal, 0);
+      const globalDisc = r6(parseFloat(globalDiscountAmount) || 0);
+      const subtotal = r6(Math.max(0, lineSubtotal - globalDisc));
+      const tax = r6(subtotal * 0.13);
+      const total = r6(subtotal + tax);
       const regaliaCount = regaliaItems.reduce((sum, item) => sum + item.quantity, 0);
 
       // Profit: only from regular (non-regalía) items
@@ -444,6 +448,7 @@ function setupIpcHandlers() {
           tax,
           total,
           profit,
+          global_discount: globalDisc,
           regalia_count: regaliaCount,
           customer_id: customerId || null,
           customer_name: customerName || null,

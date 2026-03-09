@@ -10,6 +10,37 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [0.20.0] - 2026-03-08
+
+### Added
+
+#### Descuentos en Nueva Venta
+
+**Descuento por línea** (por cada producto en el carrito):
+- Toggle $/% para elegir el modo: monto fijo o porcentaje
+- Input de valor de descuento con preview `→ $X.XX/ud` cuando hay descuento activo
+- Precio efectivo = `precio_unit − descuento_linea`; subtotal de línea usa precio efectivo
+
+**Descuento global** (aplicado sobre el subtotal post-línea):
+- Toggle $/% + input de valor global
+- `globalDiscAmount` se envía al IPC `sales:create` como 6.° argumento
+- Capped automáticamente para que el total nunca sea negativo
+
+**Desglose de totales en el carrito**:
+- Subtotal bruto → Descuentos (−) → Subtotal neto → Regalías → IVA 13% → **Total**
+
+**Ticket/Recibo actualizado** (`SaleReceipt.js`):
+- Cada línea muestra sub-fila de descuento cuando aplica (`Desc. X% / $X.XX/ud → −$Y.YY`)
+- Sección de totales desglosa: Subtotal bruto, Desc. por línea, Desc. global, Subtotal neto, IVA, Total
+
+**Backend** (`main.js`):
+- `Sale` — nuevo campo `global_discount decimal(16,6)`
+- `sales:create` — acepta `globalDiscountAmount`; calcula `subtotalNeto = lineSubtotal − globalDiscount`; profit sigue basado en `precio_costo`
+
+**Preload** (`preload.js`): `sales.create` acepta 6.° param `globalDiscountAmount`
+
+---
+
 ## [0.19.0] - 2026-03-08
 
 ### Added

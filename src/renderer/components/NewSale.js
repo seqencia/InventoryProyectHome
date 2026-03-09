@@ -317,6 +317,8 @@ export default function NewSale({ onSaleComplete }) {
   const [barcodeMsg, setBarcodeMsg] = useState(null); // { type: 'ok'|'err', text }
   const barcodeRef = useRef(null);
   const barcodeMsgTimerRef = useRef(null);
+  const [globalDiscountMode, setGlobalDiscountMode] = useState('amount'); // 'amount' | 'percent'
+  const [globalDiscountValue, setGlobalDiscountValue] = useState('');
 
   useEffect(() => {
     window.electron.products.getAll().then(setAllProducts);
@@ -377,6 +379,21 @@ export default function NewSale({ onSaleComplete }) {
     barcodeRef.current?.focus();
   };
 
+  // ── Per-line discount helpers ─────────────────────────────────────────────
+  const getLineDiscount = (item) => {
+    if (item.is_regalia) return 0;
+    const v = parseFloat(item.line_discount_value) || 0;
+    if (item.line_discount_mode === 'percent') return Math.min(item.unit_price * v / 100, item.unit_price);
+    return Math.min(v, item.unit_price);
+  };
+  const getEffectivePrice = (item) => Math.max(0, item.unit_price - getLineDiscount(item));
+  const getLineSubtotal   = (item) => item.is_regalia ? 0 : getEffectivePrice(item) * item.quantity;
+
+  const setLineDiscount = (productId, isRegalia, field, value) =>
+    setCart((prev) => prev.map((c) =>
+      c.product_id === productId && c.is_regalia === isRegalia ? { ...c, [field]: value } : c
+    ));
+
   const addToCart = (product, isRegalia = false) => {
     if (availableStock(product) <= 0) return;
     // Effective price priority: precio_neto → offer_price → sale_price
@@ -394,7 +411,7 @@ export default function NewSale({ onSaleComplete }) {
       if (existing) {
         return prev.map((c) =>
           c.product_id === product.id && c.is_regalia === isRegalia
-            ? { ...c, quantity: c.quantity + 1, subtotal: isRegalia ? 0 : (c.quantity + 1) * c.unit_price }
+            ? { ...c, quantity: c.quantity + 1 }
             : c
         );
       }
@@ -403,12 +420,13 @@ export default function NewSale({ onSaleComplete }) {
         {
           product_id: product.id,
           product_name: product.name,
-          unit_price: effectivePrice,
+          unit_price: effectivePrice,        // product's precio_neto (before cart discount)
           quantity: 1,
-          subtotal: isRegalia ? 0 : effectivePrice,
           is_regalia: isRegalia,
-          // Pricing snapshot for SaleDetail
-          discount_amount: discountAmount,
+          line_discount_mode: 'amount',      // toggle per line: 'amount' | 'percent'
+          line_discount_value: 0,            // user-entered cart discount
+          // Product-level snapshot (for SaleDetail)
+          product_discount_amount: discountAmount,
           discount_percentage: discountPct,
         },
       ];
@@ -428,36 +446,73 @@ export default function NewSale({ onSaleComplete }) {
     if (qty + otherQty > product.stock) return;
     setCart((prev) =>
       prev.map((c) =>
-        c.product_id === productId && c.is_regalia === isRegalia
-          ? { ...c, quantity: qty, subtotal: isRegalia ? 0 : qty * c.unit_price }
-          : c
+        c.product_id === productId && c.is_regalia === isRegalia ? { ...c, quantity: qty } : c
       )
     );
   };
 
-  const subtotal = cart.filter((i) => !i.is_regalia).reduce((sum, item) => sum + item.subtotal, 0);
-  const regaliaCount = cart.filter((i) => i.is_regalia).reduce((sum, i) => sum + i.quantity, 0);
-  const tax = subtotal * 0.13;
-  const total = subtotal + tax;
+  // ── Computed totals ──────────────────────────────────────────────────────
+  const regularCart = cart.filter((i) => !i.is_regalia);
+  const regaliaCount = cart.filter((i) => i.is_regalia).reduce((s, i) => s + i.quantity, 0);
+  const subtotalBruto      = regularCart.reduce((s, i) => s + i.unit_price * i.quantity, 0);
+  const lineDiscountsTotal = regularCart.reduce((s, i) => s + getLineDiscount(i) * i.quantity, 0);
+  const subtotalPostLine   = subtotalBruto - lineDiscountsTotal;
+  const globalDiscRaw      = parseFloat(globalDiscountValue) || 0;
+  const globalDiscAmount   = globalDiscountMode === 'percent'
+    ? subtotalPostLine * globalDiscRaw / 100
+    : Math.min(globalDiscRaw, subtotalPostLine);
+  const totalDescuentos = lineDiscountsTotal + globalDiscAmount;
+  const subtotalNeto    = Math.max(0, subtotalPostLine - globalDiscAmount);
+  const tax             = subtotalNeto * 0.13;
+  const total           = subtotalNeto + tax;
 
   const confirmSale = async () => {
     if (cart.length === 0 || saving) return;
     setSaving(true);
     setError(null);
     try {
+      // Build final items with effective prices (after cart-level line discounts)
+      const itemsForSale = cart.map((item) => {
+        const discUnit = getLineDiscount(item);
+        const effPrice = item.is_regalia ? 0 : getEffectivePrice(item);
+        const lineSub  = item.is_regalia ? 0 : effPrice * item.quantity;
+        return {
+          product_id: item.product_id,
+          product_name: item.product_name,
+          unit_price: effPrice,
+          quantity: item.quantity,
+          subtotal: lineSub,
+          is_regalia: item.is_regalia,
+          discount_amount: item.is_regalia ? 0 : discUnit,
+          discount_percentage: (!item.is_regalia && item.line_discount_mode === 'percent')
+            ? parseFloat(item.line_discount_value) || 0 : 0,
+        };
+      });
+
       const savedSale = await window.electron.sales.create(
-        cart,
+        itemsForSale,
         selectedCustomer?.id ?? null,
         selectedCustomer?.name ?? null,
         paymentMethod,
-        'Completada'
+        'Completada',
+        globalDiscAmount
       );
-      setReceipt({ sale: savedSale, items: [...cart], subtotal, tax, total });
+      setReceipt({
+        sale: savedSale,
+        items: [...cart],
+        subtotalBruto,
+        totalDescuentos,
+        globalDiscountAmount: globalDiscAmount,
+        subtotalNeto,
+        tax,
+        total,
+      });
       setCart([]);
       setQuery('');
       setSelectedCustomer(null);
       setCustomerQuery('');
       setPaymentMethod('Efectivo');
+      setGlobalDiscountValue('');
     } catch {
       setError('Error al confirmar la venta. Intenta de nuevo.');
     } finally {
@@ -630,44 +685,75 @@ export default function NewSale({ onSaleComplete }) {
 
           <div style={styles.cartBody}>
             {cart.length === 0 ? (
-              <p style={styles.emptyCart}>
-                Haz clic en un producto para agregarlo.
-              </p>
+              <p style={styles.emptyCart}>Haz clic en un producto para agregarlo.</p>
             ) : (
-              cart.map((item) => (
-                <div
-                  key={`${item.product_id}_${item.is_regalia ? 'r' : 'n'}`}
-                  style={{ ...styles.cartItem, background: item.is_regalia ? '#fdf5ff' : undefined }}
-                >
-                  <div style={styles.cartItemName}>
-                    <div>
-                      <span>{item.product_name}</span>
-                      {item.is_regalia && (
-                        <span style={{ display: 'inline-block', marginLeft: '6px', fontSize: '10px', fontWeight: '700', color: '#6a1b9a', background: '#ede7f6', padding: '1px 6px', borderRadius: '8px', letterSpacing: '0.5px' }}>
-                          REGALÍA
-                        </span>
-                      )}
+              cart.map((item) => {
+                const discUnit  = getLineDiscount(item);
+                const effPrice  = getEffectivePrice(item);
+                const lineSub   = getLineSubtotal(item);
+                const hasDisc   = discUnit > 0;
+                return (
+                  <div
+                    key={`${item.product_id}_${item.is_regalia ? 'r' : 'n'}`}
+                    style={{ ...styles.cartItem, background: item.is_regalia ? '#fdf5ff' : undefined }}
+                  >
+                    {/* Name row */}
+                    <div style={styles.cartItemName}>
+                      <div>
+                        <span>{item.product_name}</span>
+                        {item.is_regalia && (
+                          <span style={{ display: 'inline-block', marginLeft: '6px', fontSize: '10px', fontWeight: '700', color: '#6a1b9a', background: '#ede7f6', padding: '1px 6px', borderRadius: '8px', letterSpacing: '0.5px' }}>
+                            REGALÍA
+                          </span>
+                        )}
+                      </div>
+                      <button style={styles.removeBtn} onClick={() => setQty(item.product_id, item.is_regalia, 0)} title="Quitar">×</button>
                     </div>
-                    <button
-                      style={styles.removeBtn}
-                      onClick={() => setQty(item.product_id, item.is_regalia, 0)}
-                      title="Quitar del carrito"
-                    >
-                      ×
-                    </button>
-                  </div>
-                  <div style={styles.qtyRow}>
-                    <div style={styles.qtyControls}>
-                      <button style={styles.qtyBtn} onClick={() => setQty(item.product_id, item.is_regalia, item.quantity - 1)}>−</button>
-                      <span style={styles.qtyValue}>{item.quantity}</span>
-                      <button style={styles.qtyBtn} onClick={() => setQty(item.product_id, item.is_regalia, item.quantity + 1)}>+</button>
+
+                    {/* Discount row — only for non-regalía */}
+                    {!item.is_regalia && (
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '5px', marginBottom: '6px', flexWrap: 'wrap' }}>
+                        <span style={{ fontSize: '11px', color: '#9e9e9e' }}>${item.unit_price.toFixed(2)}/ud</span>
+                        <span style={{ fontSize: '11px', color: '#9e9e9e' }}>Desc:</span>
+                        {/* Mode toggle */}
+                        <button
+                          style={{ fontSize: '10px', fontWeight: '700', padding: '1px 6px', border: '1px solid #d1d1d1', borderRadius: '4px', background: '#f5f5f5', cursor: 'pointer', color: '#5c5c5c' }}
+                          onClick={() => setLineDiscount(item.product_id, false, 'line_discount_mode', item.line_discount_mode === 'amount' ? 'percent' : 'amount')}
+                          title="Cambiar tipo de descuento"
+                        >
+                          {item.line_discount_mode === 'amount' ? '$' : '%'}
+                        </button>
+                        <input
+                          type="number"
+                          min="0"
+                          step="0.01"
+                          value={item.line_discount_value || ''}
+                          onChange={(e) => setLineDiscount(item.product_id, false, 'line_discount_value', e.target.value)}
+                          placeholder="0"
+                          style={{ width: '52px', padding: '2px 6px', border: '1px solid #d1d1d1', borderRadius: '4px', fontSize: '12px', textAlign: 'right' }}
+                        />
+                        {hasDisc && (
+                          <span style={{ fontSize: '11px', color: '#0078d4', fontWeight: '700' }}>
+                            → ${effPrice.toFixed(2)}/ud
+                          </span>
+                        )}
+                      </div>
+                    )}
+
+                    {/* Qty + subtotal row */}
+                    <div style={styles.qtyRow}>
+                      <div style={styles.qtyControls}>
+                        <button style={styles.qtyBtn} onClick={() => setQty(item.product_id, item.is_regalia, item.quantity - 1)}>−</button>
+                        <span style={styles.qtyValue}>{item.quantity}</span>
+                        <button style={styles.qtyBtn} onClick={() => setQty(item.product_id, item.is_regalia, item.quantity + 1)}>+</button>
+                      </div>
+                      <span style={{ ...styles.itemSubtotal, color: item.is_regalia ? '#6a1b9a' : undefined }}>
+                        {item.is_regalia ? '$0.00' : `$${lineSub.toFixed(2)}`}
+                      </span>
                     </div>
-                    <span style={{ ...styles.itemSubtotal, color: item.is_regalia ? '#6a1b9a' : undefined }}>
-                      {item.is_regalia ? '$0.00' : `$${item.subtotal.toFixed(2)}`}
-                    </span>
                   </div>
-                </div>
-              ))
+                );
+              })
             )}
           </div>
 
@@ -687,12 +773,57 @@ export default function NewSale({ onSaleComplete }) {
                 <option value="Transferencia">Transferencia</option>
               </select>
             </div>
+
+            {/* Global discount */}
+            {cart.length > 0 && regularCart.length > 0 && (
+              <div style={{ marginBottom: '10px', padding: '8px 10px', background: '#fafafa', borderRadius: '6px', border: '1px solid #e5e5e5' }}>
+                <div style={{ fontSize: '11px', fontWeight: '700', color: '#5c5c5c', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '6px' }}>
+                  Descuento global
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <button
+                    style={{ fontSize: '11px', fontWeight: '700', padding: '3px 8px', border: '1px solid #d1d1d1', borderRadius: '4px', background: '#f0f0f0', cursor: 'pointer', color: '#5c5c5c', minWidth: '28px' }}
+                    onClick={() => setGlobalDiscountMode((m) => m === 'amount' ? 'percent' : 'amount')}
+                    title="Cambiar tipo"
+                  >
+                    {globalDiscountMode === 'amount' ? '$' : '%'}
+                  </button>
+                  <input
+                    type="number"
+                    min="0"
+                    step="0.01"
+                    value={globalDiscountValue}
+                    onChange={(e) => setGlobalDiscountValue(e.target.value)}
+                    placeholder="0"
+                    style={{ flex: 1, padding: '4px 8px', border: '1px solid #d1d1d1', borderRadius: '4px', fontSize: '13px', boxSizing: 'border-box' }}
+                  />
+                  {globalDiscAmount > 0 && (
+                    <span style={{ fontSize: '12px', color: '#e65100', fontWeight: '700', whiteSpace: 'nowrap' }}>
+                      −${globalDiscAmount.toFixed(2)}
+                    </span>
+                  )}
+                </div>
+              </div>
+            )}
+
             {/* Breakdown */}
             <div style={{ fontSize: '13px', color: '#64748b', marginBottom: '8px' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '3px' }}>
-                <span>Subtotal (venta)</span>
-                <span>${subtotal.toFixed(2)}</span>
+                <span>Subtotal bruto</span>
+                <span>${subtotalBruto.toFixed(2)}</span>
               </div>
+              {totalDescuentos > 0 && (
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '3px', color: '#e65100' }}>
+                  <span>Descuentos (−)</span>
+                  <span>−${totalDescuentos.toFixed(2)}</span>
+                </div>
+              )}
+              {totalDescuentos > 0 && (
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '3px', fontWeight: '600', color: '#1a1a1a' }}>
+                  <span>Subtotal neto</span>
+                  <span>${subtotalNeto.toFixed(2)}</span>
+                </div>
+              )}
               {regaliaCount > 0 && (
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '3px', color: '#7519b5' }}>
                   <span>Regalías ({regaliaCount} ud{regaliaCount !== 1 ? 's' : ''})</span>

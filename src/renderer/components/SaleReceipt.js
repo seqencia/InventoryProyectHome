@@ -164,9 +164,11 @@ const s = {
   },
 };
 
-export default function SaleReceipt({ sale, items, subtotal, tax, total, onClose }) {
+export default function SaleReceipt({ sale, items, subtotalBruto, totalDescuentos, globalDiscountAmount, subtotalNeto, tax, total, onClose }) {
   const regularItems = items.filter((i) => !i.is_regalia);
   const regaliaItems = items.filter((i) => i.is_regalia);
+  const hasDiscounts = totalDescuentos > 0;
+  const lineDiscounts = totalDescuentos - (globalDiscountAmount || 0);
 
   return (
     <>
@@ -228,14 +230,35 @@ export default function SaleReceipt({ sale, items, subtotal, tax, total, onClose
           <div style={s.divider} />
 
           {/* Regular items */}
-          {regularItems.map((item, i) => (
-            <div key={i} style={s.itemRow}>
-              <span style={s.colName}>{item.product_name}</span>
-              <span style={s.colQty}>{item.quantity}</span>
-              <span style={s.colUnit}>${Number(item.unit_price).toFixed(2)}</span>
-              <span style={s.colSub}>${Number(item.subtotal).toFixed(2)}</span>
-            </div>
-          ))}
+          {regularItems.map((item, i) => {
+            const discUnit = item.line_discount_value > 0
+              ? (item.line_discount_mode === 'percent'
+                  ? item.unit_price * item.line_discount_value / 100
+                  : item.line_discount_value)
+              : 0;
+            const effPrice = Math.max(0, item.unit_price - discUnit);
+            const lineSub  = effPrice * item.quantity;
+            return (
+              <React.Fragment key={i}>
+                <div style={s.itemRow}>
+                  <span style={s.colName}>{item.product_name}</span>
+                  <span style={s.colQty}>{item.quantity}</span>
+                  <span style={s.colUnit}>${effPrice.toFixed(2)}</span>
+                  <span style={s.colSub}>${lineSub.toFixed(2)}</span>
+                </div>
+                {discUnit > 0 && (
+                  <div style={{ ...s.itemRow, paddingTop: 0, paddingBottom: '4px' }}>
+                    <span style={{ ...s.colName, fontSize: '11px', color: '#e65100' }}>
+                      &nbsp;&nbsp;Desc. {item.line_discount_mode === 'percent' ? `${item.line_discount_value}%` : `$${discUnit.toFixed(2)}/ud`}
+                    </span>
+                    <span style={{ ...s.colQty }}></span>
+                    <span style={{ ...s.colUnit, fontSize: '11px', color: '#e65100' }}></span>
+                    <span style={{ ...s.colSub, fontSize: '11px', color: '#e65100' }}>−${(discUnit * item.quantity).toFixed(2)}</span>
+                  </div>
+                )}
+              </React.Fragment>
+            );
+          })}
 
           {/* Regalía items */}
           {regaliaItems.length > 0 && (
@@ -260,9 +283,27 @@ export default function SaleReceipt({ sale, items, subtotal, tax, total, onClose
           {/* Totals breakdown */}
           <div style={{ marginBottom: '8px' }}>
             <div style={{ ...s.infoRow, marginBottom: '4px' }}>
-              <span style={s.infoLabel}>Subtotal (venta)</span>
-              <span style={s.infoValue}>${Number(subtotal ?? sale.subtotal ?? total).toFixed(2)}</span>
+              <span style={s.infoLabel}>{hasDiscounts ? 'Subtotal bruto' : 'Subtotal'}</span>
+              <span style={s.infoValue}>${Number(subtotalBruto ?? sale.subtotal ?? total).toFixed(2)}</span>
             </div>
+            {hasDiscounts && lineDiscounts > 0 && (
+              <div style={{ ...s.infoRow, marginBottom: '4px' }}>
+                <span style={{ ...s.infoLabel, color: '#e65100' }}>Desc. por línea</span>
+                <span style={{ ...s.infoValue, color: '#e65100' }}>−${lineDiscounts.toFixed(2)}</span>
+              </div>
+            )}
+            {hasDiscounts && globalDiscountAmount > 0 && (
+              <div style={{ ...s.infoRow, marginBottom: '4px' }}>
+                <span style={{ ...s.infoLabel, color: '#e65100' }}>Desc. global</span>
+                <span style={{ ...s.infoValue, color: '#e65100' }}>−${Number(globalDiscountAmount).toFixed(2)}</span>
+              </div>
+            )}
+            {hasDiscounts && (
+              <div style={{ ...s.infoRow, marginBottom: '4px', fontWeight: '700' }}>
+                <span style={s.infoLabel}>Subtotal neto</span>
+                <span style={s.infoValue}>${Number(subtotalNeto ?? sale.subtotal).toFixed(2)}</span>
+              </div>
+            )}
             {regaliaItems.length > 0 && (
               <div style={{ ...s.infoRow, marginBottom: '4px' }}>
                 <span style={{ ...s.infoLabel, color: '#6a1b9a' }}>Regalías</span>
