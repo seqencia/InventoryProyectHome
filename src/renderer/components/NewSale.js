@@ -372,7 +372,7 @@ export default function NewSale({ onSaleComplete }) {
     } else if (availableStock(product) <= 0) {
       showBarcodeMsg('err', `Sin stock: ${product.name}`);
     } else {
-      addToCart(product, false);
+      addToCart(product);
       showBarcodeMsg('ok', `Agregado: ${product.name}`);
     }
     setBarcodeQuery('');
@@ -389,13 +389,14 @@ export default function NewSale({ onSaleComplete }) {
   const getEffectivePrice = (item) => Math.max(0, item.unit_price - getLineDiscount(item));
   const getLineSubtotal   = (item) => item.is_regalia ? 0 : getEffectivePrice(item) * item.quantity;
 
-  const setLineDiscount = (productId, isRegalia, field, value) =>
+  const setLineDiscount = (productId, regaliaType, field, value) =>
     setCart((prev) => prev.map((c) =>
-      c.product_id === productId && c.is_regalia === isRegalia ? { ...c, [field]: value } : c
+      c.product_id === productId && c.regalia_type === regaliaType ? { ...c, [field]: value } : c
     ));
 
-  const addToCart = (product, isRegalia = false) => {
+  const addToCart = (product, regaliaType = null) => {
     if (availableStock(product) <= 0) return;
+    const isRegalia = regaliaType !== null;
     // Effective price priority: precio_neto → offer_price → sale_price
     const sinIva = Number(product.precio_venta_sin_iva) || Number(product.sale_price) || 0;
     const netoRaw = product.precio_neto != null
@@ -406,11 +407,11 @@ export default function NewSale({ onSaleComplete }) {
     const discountPct    = isRegalia ? 0 : parseFloat(Number(product.descuento_porcentaje || 0).toFixed(6));
 
     setCart((prev) => {
-      // Each (product_id, is_regalia) pair is a separate line
-      const existing = prev.find((c) => c.product_id === product.id && c.is_regalia === isRegalia);
+      // Each (product_id, regalia_type) pair is a separate line
+      const existing = prev.find((c) => c.product_id === product.id && c.regalia_type === regaliaType);
       if (existing) {
         return prev.map((c) =>
-          c.product_id === product.id && c.is_regalia === isRegalia
+          c.product_id === product.id && c.regalia_type === regaliaType
             ? { ...c, quantity: c.quantity + 1 }
             : c
         );
@@ -420,12 +421,12 @@ export default function NewSale({ onSaleComplete }) {
         {
           product_id: product.id,
           product_name: product.name,
-          unit_price: effectivePrice,        // product's precio_neto (before cart discount)
+          unit_price: effectivePrice,
           quantity: 1,
           is_regalia: isRegalia,
-          line_discount_mode: 'amount',      // toggle per line: 'amount' | 'percent'
-          line_discount_value: 0,            // user-entered cart discount
-          // Product-level snapshot (for SaleDetail)
+          regalia_type: regaliaType,         // null | 'propia' | 'bonificacion'
+          line_discount_mode: 'amount',
+          line_discount_value: 0,
           product_discount_amount: discountAmount,
           discount_percentage: discountPct,
         },
@@ -433,27 +434,28 @@ export default function NewSale({ onSaleComplete }) {
     });
   };
 
-  const setQty = (productId, isRegalia, qty) => {
+  const setQty = (productId, regaliaType, qty) => {
     if (qty <= 0) {
-      setCart((prev) => prev.filter((c) => !(c.product_id === productId && c.is_regalia === isRegalia)));
+      setCart((prev) => prev.filter((c) => !(c.product_id === productId && c.regalia_type === regaliaType)));
       return;
     }
     const product = allProducts.find((p) => p.id === productId);
     // Cap: total of all lines for this product must not exceed stock
     const otherQty = cart
-      .filter((c) => c.product_id === productId && c.is_regalia !== isRegalia)
+      .filter((c) => c.product_id === productId && c.regalia_type !== regaliaType)
       .reduce((s, c) => s + c.quantity, 0);
     if (qty + otherQty > product.stock) return;
     setCart((prev) =>
       prev.map((c) =>
-        c.product_id === productId && c.is_regalia === isRegalia ? { ...c, quantity: qty } : c
+        c.product_id === productId && c.regalia_type === regaliaType ? { ...c, quantity: qty } : c
       )
     );
   };
 
   // ── Computed totals ──────────────────────────────────────────────────────
   const regularCart = cart.filter((i) => !i.is_regalia);
-  const regaliaCount = cart.filter((i) => i.is_regalia).reduce((s, i) => s + i.quantity, 0);
+  const regaliaPropiaCount  = cart.filter((i) => i.regalia_type === 'propia').reduce((s, i) => s + i.quantity, 0);
+  const bonificacionCount   = cart.filter((i) => i.regalia_type === 'bonificacion').reduce((s, i) => s + i.quantity, 0);
   const subtotalBruto      = regularCart.reduce((s, i) => s + i.unit_price * i.quantity, 0);
   const lineDiscountsTotal = regularCart.reduce((s, i) => s + getLineDiscount(i) * i.quantity, 0);
   const subtotalPostLine   = subtotalBruto - lineDiscountsTotal;
@@ -483,6 +485,7 @@ export default function NewSale({ onSaleComplete }) {
           quantity: item.quantity,
           subtotal: lineSub,
           is_regalia: item.is_regalia,
+          regalia_type: item.regalia_type ?? null,
           discount_amount: item.is_regalia ? 0 : discUnit,
           discount_percentage: (!item.is_regalia && item.line_discount_mode === 'percent')
             ? parseFloat(item.line_discount_value) || 0 : 0,
@@ -607,17 +610,27 @@ export default function NewSale({ onSaleComplete }) {
                         <>
                           <span
                             style={styles.addBtn}
-                            onClick={() => addToCart(product, false)}
+                            onClick={() => addToCart(product)}
                           >
                             Agregar
                           </span>
                           {product.disponible_regalia && (
-                            <span
-                              style={{ ...styles.addBtn, background: '#f3e5f5', border: '1px solid #ce93d8', color: '#6a1b9a' }}
-                              onClick={() => addToCart(product, true)}
-                            >
-                              + Regalía
-                            </span>
+                            <>
+                              <span
+                                style={{ ...styles.addBtn, background: '#f3e5f5', border: '1px solid #ce93d8', color: '#6a1b9a', fontSize: '11px' }}
+                                onClick={() => addToCart(product, 'propia')}
+                                title="Regalía propia — costo absorbido por el negocio"
+                              >
+                                🎁 Regalía
+                              </span>
+                              <span
+                                style={{ ...styles.addBtn, background: '#e3f2fd', border: '1px solid #90caf9', color: '#1565c0', fontSize: '11px' }}
+                                onClick={() => addToCart(product, 'bonificacion')}
+                                title="Bonificación de proveedor — sin costo para el negocio"
+                              >
+                                📦 Bonif.
+                              </span>
+                            </>
                           )}
                         </>
                       )}
@@ -694,20 +707,29 @@ export default function NewSale({ onSaleComplete }) {
                 const hasDisc   = discUnit > 0;
                 return (
                   <div
-                    key={`${item.product_id}_${item.is_regalia ? 'r' : 'n'}`}
-                    style={{ ...styles.cartItem, background: item.is_regalia ? '#fdf5ff' : undefined }}
+                    key={`${item.product_id}_${item.regalia_type ?? 'normal'}`}
+                    style={{
+                      ...styles.cartItem,
+                      background: item.regalia_type === 'propia' ? '#fdf5ff'
+                        : item.regalia_type === 'bonificacion' ? '#f0f8ff' : undefined,
+                    }}
                   >
                     {/* Name row */}
                     <div style={styles.cartItemName}>
                       <div>
                         <span>{item.product_name}</span>
-                        {item.is_regalia && (
+                        {item.regalia_type === 'propia' && (
                           <span style={{ display: 'inline-block', marginLeft: '6px', fontSize: '10px', fontWeight: '700', color: '#6a1b9a', background: '#ede7f6', padding: '1px 6px', borderRadius: '8px', letterSpacing: '0.5px' }}>
-                            REGALÍA
+                            🎁 REGALÍA
+                          </span>
+                        )}
+                        {item.regalia_type === 'bonificacion' && (
+                          <span style={{ display: 'inline-block', marginLeft: '6px', fontSize: '10px', fontWeight: '700', color: '#1565c0', background: '#e3f2fd', padding: '1px 6px', borderRadius: '8px', letterSpacing: '0.5px' }}>
+                            📦 BONIF.
                           </span>
                         )}
                       </div>
-                      <button style={styles.removeBtn} onClick={() => setQty(item.product_id, item.is_regalia, 0)} title="Quitar">×</button>
+                      <button style={styles.removeBtn} onClick={() => setQty(item.product_id, item.regalia_type, 0)} title="Quitar">×</button>
                     </div>
 
                     {/* Discount row — only for non-regalía */}
@@ -718,7 +740,7 @@ export default function NewSale({ onSaleComplete }) {
                         {/* Mode toggle */}
                         <button
                           style={{ fontSize: '10px', fontWeight: '700', padding: '1px 6px', border: '1px solid #d1d1d1', borderRadius: '4px', background: '#f5f5f5', cursor: 'pointer', color: '#5c5c5c' }}
-                          onClick={() => setLineDiscount(item.product_id, false, 'line_discount_mode', item.line_discount_mode === 'amount' ? 'percent' : 'amount')}
+                          onClick={() => setLineDiscount(item.product_id, item.regalia_type, 'line_discount_mode', item.line_discount_mode === 'amount' ? 'percent' : 'amount')}
                           title="Cambiar tipo de descuento"
                         >
                           {item.line_discount_mode === 'amount' ? '$' : '%'}
@@ -728,7 +750,7 @@ export default function NewSale({ onSaleComplete }) {
                           min="0"
                           step="0.01"
                           value={item.line_discount_value || ''}
-                          onChange={(e) => setLineDiscount(item.product_id, false, 'line_discount_value', e.target.value)}
+                          onChange={(e) => setLineDiscount(item.product_id, item.regalia_type, 'line_discount_value', e.target.value)}
                           placeholder="0"
                           style={{ width: '52px', padding: '2px 6px', border: '1px solid #d1d1d1', borderRadius: '4px', fontSize: '12px', textAlign: 'right' }}
                         />
@@ -743,11 +765,11 @@ export default function NewSale({ onSaleComplete }) {
                     {/* Qty + subtotal row */}
                     <div style={styles.qtyRow}>
                       <div style={styles.qtyControls}>
-                        <button style={styles.qtyBtn} onClick={() => setQty(item.product_id, item.is_regalia, item.quantity - 1)}>−</button>
+                        <button style={styles.qtyBtn} onClick={() => setQty(item.product_id, item.regalia_type, item.quantity - 1)}>−</button>
                         <span style={styles.qtyValue}>{item.quantity}</span>
-                        <button style={styles.qtyBtn} onClick={() => setQty(item.product_id, item.is_regalia, item.quantity + 1)}>+</button>
+                        <button style={styles.qtyBtn} onClick={() => setQty(item.product_id, item.regalia_type, item.quantity + 1)}>+</button>
                       </div>
-                      <span style={{ ...styles.itemSubtotal, color: item.is_regalia ? '#6a1b9a' : undefined }}>
+                      <span style={{ ...styles.itemSubtotal, color: item.regalia_type === 'propia' ? '#6a1b9a' : item.regalia_type === 'bonificacion' ? '#1565c0' : undefined }}>
                         {item.is_regalia ? '$0.00' : `$${lineSub.toFixed(2)}`}
                       </span>
                     </div>
@@ -824,9 +846,15 @@ export default function NewSale({ onSaleComplete }) {
                   <span>${subtotalNeto.toFixed(2)}</span>
                 </div>
               )}
-              {regaliaCount > 0 && (
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '3px', color: '#7519b5' }}>
-                  <span>Regalías ({regaliaCount} ud{regaliaCount !== 1 ? 's' : ''})</span>
+              {regaliaPropiaCount > 0 && (
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '3px', color: '#6a1b9a' }}>
+                  <span>🎁 Regalías propias ({regaliaPropiaCount} ud{regaliaPropiaCount !== 1 ? 's' : ''})</span>
+                  <span>$0.00</span>
+                </div>
+              )}
+              {bonificacionCount > 0 && (
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '3px', color: '#1565c0' }}>
+                  <span>📦 Bonif. proveedor ({bonificacionCount} ud{bonificacionCount !== 1 ? 's' : ''})</span>
                   <span>$0.00</span>
                 </div>
               )}
@@ -855,7 +883,10 @@ export default function NewSale({ onSaleComplete }) {
         <SaleReceipt
           sale={receipt.sale}
           items={receipt.items}
-          subtotal={receipt.subtotal}
+          subtotalBruto={receipt.subtotalBruto}
+          totalDescuentos={receipt.totalDescuentos}
+          globalDiscountAmount={receipt.globalDiscountAmount}
+          subtotalNeto={receipt.subtotalNeto}
           tax={receipt.tax}
           total={receipt.total}
           onClose={() => { setReceipt(null); onSaleComplete(); }}

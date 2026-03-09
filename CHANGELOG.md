@@ -10,6 +10,36 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [0.21.0] - 2026-03-08
+
+### Added
+
+#### Distinción Regalía propia / Bonificación proveedor
+
+**Nueva Venta — listado de productos**:
+- Cuando `disponible_regalia = true`, se muestran **dos botones** en lugar de uno:
+  - 🎁 **Regalía** (morado) — costo absorbido por el negocio
+  - 📦 **Bonif.** (azul) — regalo del proveedor, sin costo para el negocio
+
+**Carrito**:
+- Badge diferenciado: `🎁 REGALÍA` (fondo lila) vs `📦 BONIF.` (fondo azul claro)
+- Fondo del ítem también diferenciado por tipo
+- Desglose de totales separado: "🎁 Regalías propias (N uds)" y "📦 Bonif. proveedor (N uds)"
+
+**Ticket / Recibo** (`SaleReceipt.js`):
+- Secciones separadas en la lista de ítems para cada tipo
+- Totales: "🎁 Regalías propias $0.00" y "📦 Bonif. proveedor $0.00"
+
+**Backend** (`main.js`):
+- `sale_details`: nuevo campo `regalia_type` (`'propia'` | `'bonificacion'` | null)
+- `sales:create`: **regalía propia resta costo del profit**; bonificación no afecta profit
+- `reports:getData`: summary incluye `regaliaCost`, `regaliaPropiaCount`, `bonificacionCount`; `topProducts.profit` usa snapshot `cost_price` del detalle y distingue por tipo
+- `dashboard:getSummary`: incluye `todayRegaliaCost` (costo de regalías propias del día)
+
+**Bugfix**: corregido el call a `<SaleReceipt>` que no pasaba las props de descuentos (`subtotalBruto`, `totalDescuentos`, `globalDiscountAmount`, `subtotalNeto`)
+
+---
+
 ## [0.20.0] - 2026-03-08
 
 ### Added

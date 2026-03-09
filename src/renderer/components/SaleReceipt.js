@@ -165,8 +165,9 @@ const s = {
 };
 
 export default function SaleReceipt({ sale, items, subtotalBruto, totalDescuentos, globalDiscountAmount, subtotalNeto, tax, total, onClose }) {
-  const regularItems = items.filter((i) => !i.is_regalia);
-  const regaliaItems = items.filter((i) => i.is_regalia);
+  const regularItems      = items.filter((i) => !i.is_regalia);
+  const regaliaPropiaItems = items.filter((i) => i.regalia_type === 'propia');
+  const bonificacionItems  = items.filter((i) => i.regalia_type === 'bonificacion');
   const hasDiscounts = totalDescuentos > 0;
   const lineDiscounts = totalDescuentos - (globalDiscountAmount || 0);
 
@@ -260,19 +261,37 @@ export default function SaleReceipt({ sale, items, subtotalBruto, totalDescuento
             );
           })}
 
-          {/* Regalía items */}
-          {regaliaItems.length > 0 && (
+          {/* Regalía propia items */}
+          {regaliaPropiaItems.length > 0 && (
             <>
               <div style={{ ...s.divider, borderTopStyle: 'dotted', margin: '6px 0 4px' }} />
               <div style={{ fontSize: '10px', fontWeight: '700', letterSpacing: '1px', color: '#6a1b9a', textTransform: 'uppercase', marginBottom: '4px' }}>
-                Regalías
+                🎁 Regalías propias
               </div>
-              {regaliaItems.map((item, i) => (
+              {regaliaPropiaItems.map((item, i) => (
                 <div key={i} style={s.itemRow}>
                   <span style={{ ...s.colName, color: '#6a1b9a' }}>{item.product_name}</span>
                   <span style={s.colQty}>{item.quantity}</span>
                   <span style={{ ...s.colUnit, color: '#6a1b9a', fontSize: '10px' }}>REGALÍA</span>
                   <span style={{ ...s.colSub, color: '#6a1b9a' }}>$0.00</span>
+                </div>
+              ))}
+            </>
+          )}
+
+          {/* Bonificación proveedor items */}
+          {bonificacionItems.length > 0 && (
+            <>
+              <div style={{ ...s.divider, borderTopStyle: 'dotted', margin: '6px 0 4px' }} />
+              <div style={{ fontSize: '10px', fontWeight: '700', letterSpacing: '1px', color: '#1565c0', textTransform: 'uppercase', marginBottom: '4px' }}>
+                📦 Bonificaciones proveedor
+              </div>
+              {bonificacionItems.map((item, i) => (
+                <div key={i} style={s.itemRow}>
+                  <span style={{ ...s.colName, color: '#1565c0' }}>{item.product_name}</span>
+                  <span style={s.colQty}>{item.quantity}</span>
+                  <span style={{ ...s.colUnit, color: '#1565c0', fontSize: '10px' }}>BONIF.</span>
+                  <span style={{ ...s.colSub, color: '#1565c0' }}>$0.00</span>
                 </div>
               ))}
             </>
@@ -304,10 +323,16 @@ export default function SaleReceipt({ sale, items, subtotalBruto, totalDescuento
                 <span style={s.infoValue}>${Number(subtotalNeto ?? sale.subtotal).toFixed(2)}</span>
               </div>
             )}
-            {regaliaItems.length > 0 && (
+            {regaliaPropiaItems.length > 0 && (
               <div style={{ ...s.infoRow, marginBottom: '4px' }}>
-                <span style={{ ...s.infoLabel, color: '#6a1b9a' }}>Regalías</span>
+                <span style={{ ...s.infoLabel, color: '#6a1b9a' }}>🎁 Regalías propias</span>
                 <span style={{ ...s.infoValue, color: '#6a1b9a' }}>$0.00</span>
+              </div>
+            )}
+            {bonificacionItems.length > 0 && (
+              <div style={{ ...s.infoRow, marginBottom: '4px' }}>
+                <span style={{ ...s.infoLabel, color: '#1565c0' }}>📦 Bonif. proveedor</span>
+                <span style={{ ...s.infoValue, color: '#1565c0' }}>$0.00</span>
               </div>
             )}
             <div style={{ ...s.infoRow, marginBottom: '4px' }}>

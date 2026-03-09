@@ -153,6 +153,7 @@ const SaleDetailSchema = new EntitySchema({
     unit_price: { type: 'decimal', precision: 10, scale: 2 },
     subtotal: { type: 'decimal', precision: 10, scale: 2 },
     is_regalia: { type: Boolean, nullable: true, default: false },
+    regalia_type: { type: String, nullable: true }, // 'propia' | 'bonificacion' | null
     // Pricing snapshot at time of sale — 6 decimal places
     cost_price:          { type: 'decimal', precision: 16, scale: 6, nullable: true },
     discount_amount:     { type: 'decimal', precision: 16, scale: 6, nullable: true, default: 0 },
@@ -301,6 +302,13 @@ function setupIpcHandlers() {
     const todayCount = todaySales.length;
     const todayProfit = todaySales.reduce((sum, s) => sum + Number(s.profit || 0), 0);
 
+    // Today's regalia cost (only propia type)
+    const todaySaleIds = new Set(todaySales.map((s) => s.id));
+    const todayDetails = allDetails.filter((d) => todaySaleIds.has(d.sale_id));
+    const todayRegaliaCost = todayDetails
+      .filter((d) => d.regalia_type === 'propia')
+      .reduce((s, d) => s + Number(d.cost_price || 0) * d.quantity, 0);
+
     // Today's returns
     const todayReturns = allReturns.filter((r) => new Date(r.created_at) >= todayStart);
     const todayReturnCount = todayReturns.length;
@@ -326,7 +334,7 @@ function setupIpcHandlers() {
     // Recent 5 sales
     const recentSales = allSales.slice(0, 5);
 
-    return { todayTotal, todayCount, todayProfit, todayReturnCount, todayReturnTotal, lowStock, topProducts, recentSales };
+    return { todayTotal, todayCount, todayProfit, todayRegaliaCost, todayReturnCount, todayReturnTotal, lowStock, topProducts, recentSales };
   });
 
   // Customers
@@ -438,6 +446,14 @@ function setupIpcHandlers() {
           profit += (item.unit_price - Number(costPrice)) * item.quantity;
         }
       }
+      // Regalía propia: cost absorbed by business → reduces profit
+      for (const item of regaliaItems.filter((i) => i.regalia_type === 'propia')) {
+        const product = productMap[item.product_id];
+        const costPrice = product?.precio_costo ?? product?.cost_price;
+        if (product && costPrice != null) {
+          profit -= Number(costPrice) * item.quantity;
+        }
+      }
 
       const savedSale = await manager.save(
         'Sale',
@@ -472,6 +488,7 @@ function setupIpcHandlers() {
             unit_price: unitP,
             subtotal: lineSub,
             is_regalia: item.is_regalia || false,
+            regalia_type: item.regalia_type ?? null,
             // Pricing snapshot at time of sale
             cost_price:          item.is_regalia ? null : (costSnap != null ? r6(costSnap) : null),
             discount_amount:     item.is_regalia ? 0    : r6(item.discount_amount ?? 0),
@@ -701,12 +718,21 @@ function setupIpcHandlers() {
       }
       prodMap[d.product_id].units += d.quantity;
       prodMap[d.product_id].income += Number(d.subtotal);
-      const p = productMap[d.product_id];
-      if (p?.cost_price != null) {
-        prodMap[d.product_id].profit += (Number(d.unit_price) - Number(p.cost_price)) * d.quantity;
+      if (!d.is_regalia) {
+        const cost = d.cost_price != null ? Number(d.cost_price) : (productMap[d.product_id]?.cost_price != null ? Number(productMap[d.product_id].cost_price) : null);
+        if (cost != null) prodMap[d.product_id].profit += (Number(d.unit_price) - cost) * d.quantity;
+      } else if (d.regalia_type === 'propia' && d.cost_price != null) {
+        prodMap[d.product_id].profit -= Number(d.cost_price) * d.quantity;
       }
     }
     const topProducts = Object.values(prodMap).sort((a, b) => b.units - a.units).slice(0, 10);
+
+    // Regalía breakdown
+    const regaliaPropiaDetails = details.filter((d) => d.regalia_type === 'propia');
+    const bonificacionDetails  = details.filter((d) => d.regalia_type === 'bonificacion');
+    const regaliaCost          = regaliaPropiaDetails.reduce((s, d) => s + Number(d.cost_price || 0) * d.quantity, 0);
+    const regaliaPropiaCount   = regaliaPropiaDetails.reduce((s, d) => s + d.quantity, 0);
+    const bonificacionCount    = bonificacionDetails.reduce((s, d) => s + d.quantity, 0);
 
     // Daily sales
     const dailyMap = {};
@@ -719,7 +745,7 @@ function setupIpcHandlers() {
     const dailySales = Object.values(dailyMap).sort((a, b) => a.date.localeCompare(b.date));
 
     return {
-      summary: { salesCount: salesInRange.length, grossIncome, ivaCollected, netIncome, totalProfit, totalReturned },
+      summary: { salesCount: salesInRange.length, grossIncome, ivaCollected, netIncome, totalProfit, totalReturned, regaliaCost, regaliaPropiaCount, bonificacionCount },
       byPaymentMethod,
       byCategory,
       topProducts,
