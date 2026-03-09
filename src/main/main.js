@@ -53,6 +53,14 @@ const ProductSchema = new EntitySchema({
     // sale_price maps to the existing 'price' DB column — zero-migration rename
     sale_price: { type: 'decimal', precision: 10, scale: 2, name: 'price' },
     offer_price: { type: 'decimal', precision: 10, scale: 2, nullable: true },
+    // Extended pricing model — 6 decimal places for monetary precision
+    precio_costo:         { type: 'decimal', precision: 16, scale: 6, nullable: true },
+    precio_venta_sin_iva: { type: 'decimal', precision: 16, scale: 6, nullable: true },
+    precio_venta_con_iva: { type: 'decimal', precision: 16, scale: 6, nullable: true },
+    descuento_monto:      { type: 'decimal', precision: 16, scale: 6, nullable: true, default: 0 },
+    descuento_porcentaje: { type: 'decimal', precision: 16, scale: 6, nullable: true, default: 0 },
+    precio_neto:          { type: 'decimal', precision: 16, scale: 6, nullable: true },
+    utilidad:             { type: 'decimal', precision: 16, scale: 6, nullable: true },
     stock: { type: Number },
     min_stock: { type: Number, nullable: true, default: 5 },
     location: { type: String, nullable: true },
@@ -144,6 +152,12 @@ const SaleDetailSchema = new EntitySchema({
     unit_price: { type: 'decimal', precision: 10, scale: 2 },
     subtotal: { type: 'decimal', precision: 10, scale: 2 },
     is_regalia: { type: Boolean, nullable: true, default: false },
+    // Pricing snapshot at time of sale — 6 decimal places
+    cost_price:          { type: 'decimal', precision: 16, scale: 6, nullable: true },
+    discount_amount:     { type: 'decimal', precision: 16, scale: 6, nullable: true, default: 0 },
+    discount_percentage: { type: 'decimal', precision: 16, scale: 6, nullable: true, default: 0 },
+    iva_amount:          { type: 'decimal', precision: 16, scale: 6, nullable: true },
+    line_total:          { type: 'decimal', precision: 16, scale: 6, nullable: true },
   },
 });
 
@@ -190,6 +204,25 @@ async function initDatabase() {
   await AppDataSource.initialize();
 }
 
+// ── Pricing helpers ────────────────────────────────────────────────────────
+
+const r6 = (v) => parseFloat(Number(v).toFixed(6));
+
+function computePricing({ precio_costo, precio_venta_sin_iva, descuento_monto, descuento_porcentaje }) {
+  const sinIva = parseFloat(precio_venta_sin_iva) || 0;
+  const costo  = parseFloat(precio_costo) || 0;
+  const dMonto = parseFloat(descuento_monto) || 0;
+  const dPorc  = parseFloat(descuento_porcentaje) || 0;
+  const conIva = r6(sinIva * 1.13);
+  const neto   = r6(Math.max(0, sinIva * (1 - dPorc / 100) - dMonto));
+  const util   = r6(neto - costo);
+  return {
+    precio_venta_con_iva: sinIva > 0 ? conIva : null,
+    precio_neto:          sinIva > 0 ? neto   : null,
+    utilidad:             (sinIva > 0 || costo > 0) ? util : null,
+  };
+}
+
 // ── IPC Handlers ───────────────────────────────────────────────────────────
 
 function setupIpcHandlers() {
@@ -205,10 +238,23 @@ function setupIpcHandlers() {
       data.sku = 'PRD-' + Date.now().toString(36).toUpperCase().slice(-6);
     }
     if (data.stock == null) data.stock = 0;
+    // Compute derived pricing fields
+    if (data.precio_venta_sin_iva != null) {
+      Object.assign(data, computePricing(data));
+      // Keep legacy fields in sync for backward compat
+      data.sale_price = data.precio_venta_sin_iva;
+      if (data.precio_costo != null) data.cost_price = data.precio_costo;
+    }
     return await repo('Product').save(repo('Product').create(data));
   });
 
   ipcMain.handle('products:update', async (_, { id, ...data }) => {
+    // Compute derived pricing fields
+    if (data.precio_venta_sin_iva != null) {
+      Object.assign(data, computePricing(data));
+      data.sale_price = data.precio_venta_sin_iva;
+      if (data.precio_costo != null) data.cost_price = data.precio_costo;
+    }
     await repo('Product').update(id, data);
     return await repo('Product').findOneBy({ id });
   });
@@ -383,8 +429,9 @@ function setupIpcHandlers() {
       let profit = 0;
       for (const item of regularItems) {
         const product = productMap[item.product_id];
-        if (product && product.cost_price != null) {
-          profit += (item.unit_price - Number(product.cost_price)) * item.quantity;
+        const costPrice = product?.precio_costo ?? product?.cost_price;
+        if (product && costPrice != null) {
+          profit += (item.unit_price - Number(costPrice)) * item.quantity;
         }
       }
 
@@ -404,6 +451,12 @@ function setupIpcHandlers() {
       );
 
       for (const item of items) {
+        const product = productMap[item.product_id];
+        const costSnap = product?.precio_costo ?? product?.cost_price ?? null;
+        const unitP    = item.is_regalia ? 0 : item.unit_price;
+        const lineSub  = item.is_regalia ? 0 : item.subtotal;
+        const ivaAmt   = item.is_regalia ? 0 : r6(lineSub * 0.13);
+        const lineTotal = item.is_regalia ? 0 : r6(lineSub + ivaAmt);
         await manager.save(
           'SaleDetail',
           manager.create('SaleDetail', {
@@ -411,9 +464,15 @@ function setupIpcHandlers() {
             product_id: item.product_id,
             product_name: item.product_name,
             quantity: item.quantity,
-            unit_price: item.is_regalia ? 0 : item.unit_price,
-            subtotal: item.is_regalia ? 0 : item.subtotal,
+            unit_price: unitP,
+            subtotal: lineSub,
             is_regalia: item.is_regalia || false,
+            // Pricing snapshot at time of sale
+            cost_price:          item.is_regalia ? null : (costSnap != null ? r6(costSnap) : null),
+            discount_amount:     item.is_regalia ? 0    : r6(item.discount_amount ?? 0),
+            discount_percentage: item.is_regalia ? 0    : r6(item.discount_percentage ?? 0),
+            iva_amount:          ivaAmt,
+            line_total:          lineTotal,
           })
         );
         await manager

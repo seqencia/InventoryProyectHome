@@ -85,9 +85,11 @@ export default function ProductForm({ product, onSave, onCancel }) {
     condition: product?.condition ?? '',
     status: product?.status ?? 'Disponible',
     disponible_regalia: product?.disponible_regalia ?? false,
-    cost_price: product?.cost_price ?? '',
-    sale_price: product?.sale_price ?? '',
-    offer_price: product?.offer_price ?? '',
+    // New pricing model (6 decimal places). Fall back to legacy fields for existing products.
+    precio_costo:         product?.precio_costo         ?? product?.cost_price  ?? '',
+    precio_venta_sin_iva: product?.precio_venta_sin_iva ?? product?.sale_price  ?? '',
+    descuento_monto:      product?.descuento_monto      ?? '',
+    descuento_porcentaje: product?.descuento_porcentaje ?? '',
     category: product?.category ?? '',
     location: product?.location ?? '',
     description: product?.description ?? '',
@@ -101,6 +103,17 @@ export default function ProductForm({ product, onSave, onCancel }) {
 
   const set = (field) => (e) => setForm((prev) => ({ ...prev, [field]: e.target.value }));
 
+  // Live-computed pricing values (6 decimal places stored, 2 displayed)
+  const sinIva = parseFloat(form.precio_venta_sin_iva) || 0;
+  const costo  = parseFloat(form.precio_costo) || 0;
+  const dMonto = parseFloat(form.descuento_monto) || 0;
+  const dPorc  = parseFloat(form.descuento_porcentaje) || 0;
+  const conIva = sinIva * 1.13;
+  const neto   = Math.max(0, sinIva * (1 - dPorc / 100) - dMonto);
+  const util   = neto - costo;
+
+  const p6 = (v) => parseFloat(v.toFixed(6));
+
   const handleSubmit = (e) => {
     e.preventDefault();
     onSave({
@@ -111,9 +124,18 @@ export default function ProductForm({ product, onSave, onCancel }) {
       condition: form.condition || null,
       status: form.status || 'Disponible',
       disponible_regalia: form.disponible_regalia,
-      cost_price: form.cost_price !== '' ? parseFloat(form.cost_price) : null,
-      sale_price: parseFloat(form.sale_price),
-      offer_price: form.offer_price !== '' ? parseFloat(form.offer_price) : null,
+      // New pricing fields (6 decimal precision)
+      precio_costo:         form.precio_costo !== ''         ? p6(parseFloat(form.precio_costo))         : null,
+      precio_venta_sin_iva: form.precio_venta_sin_iva !== '' ? p6(parseFloat(form.precio_venta_sin_iva)) : null,
+      precio_venta_con_iva: sinIva > 0 ? p6(conIva) : null,
+      descuento_monto:      dMonto > 0 ? p6(dMonto) : 0,
+      descuento_porcentaje: dPorc > 0  ? p6(dPorc)  : 0,
+      precio_neto:          sinIva > 0 ? p6(neto)   : null,
+      utilidad:             (sinIva > 0 || costo > 0) ? p6(util) : null,
+      // Legacy fields kept in sync for backward compat (sale_price DB column is NOT NULL)
+      sale_price: sinIva > 0 ? p6(sinIva) : (parseFloat(form.precio_venta_sin_iva) || 0.01),
+      cost_price: form.precio_costo !== '' ? p6(parseFloat(form.precio_costo)) : null,
+      offer_price: null,
       category: form.category || null,
       location: form.location.trim() || null,
       description: form.description.trim() || null,
@@ -231,18 +253,56 @@ export default function ProductForm({ product, onSave, onCancel }) {
             {/* ── Precios ─────────────────────────────────────────── */}
             <div style={s.section}>
               <SectionTitle>Precios</SectionTitle>
+
+              {/* Row 1: costo | sin IVA | con IVA (auto) */}
               <div style={s.grid3}>
                 <div style={s.field}>
                   <label style={s.label}>Precio de costo ($)</label>
-                  <input className="fl-input" style={s.input} type="number" min="0" step="0.01" value={form.cost_price} onChange={set('cost_price')} placeholder="0.00" />
+                  <input className="fl-input" style={s.input} type="number" min="0" step="0.01"
+                    value={form.precio_costo} onChange={set('precio_costo')} placeholder="0.00" />
                 </div>
                 <div style={s.field}>
-                  <label style={s.label}>Precio de venta ($) *</label>
-                  <input className="fl-input" style={s.input} type="number" min="0.01" step="0.01" value={form.sale_price} onChange={set('sale_price')} placeholder="0.00" required />
+                  <label style={s.label}>Precio venta s/IVA ($) *</label>
+                  <input className="fl-input" style={s.input} type="number" min="0.01" step="0.01"
+                    value={form.precio_venta_sin_iva} onChange={set('precio_venta_sin_iva')} placeholder="0.00" required />
                 </div>
                 <div style={s.field}>
-                  <label style={s.label}>Precio oferta ($)</label>
-                  <input className="fl-input" style={s.input} type="number" min="0" step="0.01" value={form.offer_price} onChange={set('offer_price')} placeholder="Vacío = sin oferta" />
+                  <label style={s.label}>Precio venta c/IVA (auto)</label>
+                  <div style={{ ...s.input, background: '#f7f7f7', color: sinIva > 0 ? '#1a1a1a' : '#9e9e9e', display: 'flex', alignItems: 'center' }}>
+                    {sinIva > 0 ? `$${conIva.toFixed(2)}` : '—'}
+                  </div>
+                  <div style={s.hint}>Precio venta s/IVA × 1.13</div>
+                </div>
+              </div>
+
+              {/* Row 2: descuento monto | descuento % | precio neto (auto) | utilidad (auto) */}
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: '12px' }}>
+                <div style={s.field}>
+                  <label style={s.label}>Descuento monto ($)</label>
+                  <input className="fl-input" style={s.input} type="number" min="0" step="0.01"
+                    value={form.descuento_monto} onChange={set('descuento_monto')} placeholder="0.00" />
+                </div>
+                <div style={s.field}>
+                  <label style={s.label}>Descuento %</label>
+                  <input className="fl-input" style={s.input} type="number" min="0" max="100" step="0.01"
+                    value={form.descuento_porcentaje} onChange={set('descuento_porcentaje')} placeholder="0.00" />
+                </div>
+                <div style={s.field}>
+                  <label style={s.label}>Precio neto (auto)</label>
+                  <div style={{ ...s.input, background: '#f7f7f7', color: sinIva > 0 ? '#0078d4' : '#9e9e9e', fontWeight: '600', display: 'flex', alignItems: 'center' }}>
+                    {sinIva > 0 ? `$${neto.toFixed(2)}` : '—'}
+                  </div>
+                  <div style={s.hint}>s/IVA − descuentos</div>
+                </div>
+                <div style={s.field}>
+                  <label style={s.label}>Utilidad (auto)</label>
+                  <div style={{
+                    ...s.input, background: '#f7f7f7', fontWeight: '600', display: 'flex', alignItems: 'center',
+                    color: (sinIva > 0 || costo > 0) ? (util >= 0 ? '#107c10' : '#a4262c') : '#9e9e9e',
+                  }}>
+                    {(sinIva > 0 || costo > 0) ? `$${util.toFixed(2)}` : '—'}
+                  </div>
+                  <div style={s.hint}>Neto − costo</div>
                 </div>
               </div>
             </div>

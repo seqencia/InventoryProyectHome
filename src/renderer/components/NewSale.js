@@ -379,7 +379,15 @@ export default function NewSale({ onSaleComplete }) {
 
   const addToCart = (product, isRegalia = false) => {
     if (availableStock(product) <= 0) return;
-    const effectivePrice = isRegalia ? 0 : (product.offer_price ? Number(product.offer_price) : Number(product.sale_price));
+    // Effective price priority: precio_neto → offer_price → sale_price
+    const sinIva = Number(product.precio_venta_sin_iva) || Number(product.sale_price) || 0;
+    const netoRaw = product.precio_neto != null
+      ? Number(product.precio_neto)
+      : (product.offer_price ? Number(product.offer_price) : sinIva);
+    const effectivePrice = isRegalia ? 0 : netoRaw;
+    const discountAmount = isRegalia ? 0 : parseFloat((sinIva - netoRaw).toFixed(6));
+    const discountPct    = isRegalia ? 0 : parseFloat(Number(product.descuento_porcentaje || 0).toFixed(6));
+
     setCart((prev) => {
       // Each (product_id, is_regalia) pair is a separate line
       const existing = prev.find((c) => c.product_id === product.id && c.is_regalia === isRegalia);
@@ -399,6 +407,9 @@ export default function NewSale({ onSaleComplete }) {
           quantity: 1,
           subtotal: isRegalia ? 0 : effectivePrice,
           is_regalia: isRegalia,
+          // Pricing snapshot for SaleDetail
+          discount_amount: discountAmount,
+          discount_percentage: discountPct,
         },
       ];
     });
@@ -522,10 +533,15 @@ export default function NewSale({ onSaleComplete }) {
                     <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
                       <div style={styles.productRight}>
                         <div style={styles.productPrice}>
-                          {product.offer_price
-                            ? <>${Number(product.offer_price).toFixed(2)} <span style={{ textDecoration: 'line-through', color: '#94a3b8', fontSize: '11px' }}>${Number(product.sale_price).toFixed(2)}</span></>
-                            : `$${Number(product.sale_price).toFixed(2)}`
-                          }
+                          {(() => {
+                            const sinIva = Number(product.precio_venta_sin_iva) || Number(product.sale_price) || 0;
+                            const neto = product.precio_neto != null ? Number(product.precio_neto)
+                              : (product.offer_price ? Number(product.offer_price) : sinIva);
+                            const hasDiscount = neto < sinIva && sinIva > 0;
+                            return hasDiscount
+                              ? <>${neto.toFixed(2)} <span style={{ textDecoration: 'line-through', color: '#94a3b8', fontSize: '11px' }}>${sinIva.toFixed(2)}</span></>
+                              : `$${neto.toFixed(2)}`;
+                          })()}
                         </div>
                       </div>
                       {outOfStock ? (

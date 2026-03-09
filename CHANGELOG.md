@@ -10,6 +10,47 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [0.19.0] - 2026-03-08
+
+### Added
+
+#### Product pricing model — extended fields (6 decimal places)
+
+**New columns in `products` table** (`decimal(16,6)`):
+- `precio_costo` — cost price
+- `precio_venta_sin_iva` — base sale price without IVA
+- `precio_venta_con_iva` — auto-computed: `sin_iva × 1.13`; stored on save
+- `descuento_monto` — fixed discount amount (default 0)
+- `descuento_porcentaje` — discount percentage (default 0)
+- `precio_neto` — auto-computed: `sin_iva × (1 − %/100) − monto`; stored on save; used as effective sale price in Nueva Venta
+- `utilidad` — auto-computed: `precio_neto − precio_costo`; stored on save
+
+Legacy fields (`cost_price`, `sale_price`, `offer_price`) are kept in DB for backward compatibility and synced automatically from the new fields on each save. `computePricing()` helper function in `main.js` handles all derived field calculations.
+
+**ProductForm — Precios section redesigned**:
+- Row 1: Precio de costo | Precio venta s/IVA (required) | Precio venta c/IVA (readonly auto)
+- Row 2: Descuento monto | Descuento % | Precio neto (readonly auto, blue) | Utilidad (readonly auto, green/red)
+- All auto fields update live as the user types; displayed to 2 decimals in UI, stored to 6 decimals in DB
+
+#### SaleDetail pricing snapshot
+
+**New columns in `sale_details` table** (`decimal(16,6)`, nullable, set at sale creation time):
+- `cost_price` — snapshot of `producto.precio_costo` (or `cost_price`) at sale time
+- `discount_amount` — per-unit discount (`precio_venta_sin_iva − unit_price`)
+- `discount_percentage` — snapshot of `producto.descuento_porcentaje`
+- `iva_amount` — `subtotal × 0.13` per line (0 for regalías)
+- `line_total` — `subtotal + iva_amount` per line (0 for regalías)
+
+All snapshot fields are written once at sale creation and never recalculated — historical financial reports always read stored values.
+
+### Changed
+- `sales:create` (main.js): populates all new SaleDetail snapshot fields; profit calculation now prefers `precio_costo` over legacy `cost_price`
+- `NewSale.js` `addToCart`: effective price priority is `precio_neto → offer_price → sale_price`; cart items carry `discount_amount` and `discount_percentage` for snapshot
+- `NewSale.js` product list: discount display reads `precio_neto` vs `precio_venta_sin_iva` (fallback to `offer_price` vs `sale_price` for legacy products)
+- `docs/DATABASE.md`: updated Product and SaleDetail schemas with all new fields and immutability note
+
+---
+
 ## [0.18.0] - 2026-03-08
 
 ### Fixed

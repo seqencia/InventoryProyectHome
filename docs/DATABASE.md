@@ -25,9 +25,16 @@ Table: `products`
 | `condition` | String? | Nuevo / Bueno / Regular / Para reparar |
 | `status` | String? | Disponible / Reservado / Vendido / En reparación |
 | `disponible_regalia` | Boolean? | default false; shows "+ Regalía" in NewSale |
-| `cost_price` | decimal(10,2)? | |
-| `sale_price` | decimal(10,2) | stored in DB column named `price` |
-| `offer_price` | decimal(10,2)? | if set, used as effective price in sales |
+| `cost_price` | decimal(10,2)? | legacy; kept in sync with `precio_costo` |
+| `sale_price` | decimal(10,2) | legacy; stored in DB column named `price`; kept in sync with `precio_venta_sin_iva` |
+| `offer_price` | decimal(10,2)? | legacy; superseded by `precio_neto` |
+| `precio_costo` | decimal(16,6)? | cost price — 6 decimal places |
+| `precio_venta_sin_iva` | decimal(16,6)? | base sale price without IVA — 6 decimal places |
+| `precio_venta_con_iva` | decimal(16,6)? | auto: `precio_venta_sin_iva × 1.13`; stored on save |
+| `descuento_monto` | decimal(16,6)? | fixed discount amount; default 0 |
+| `descuento_porcentaje` | decimal(16,6)? | discount percentage; default 0 |
+| `precio_neto` | decimal(16,6)? | auto: `sin_iva × (1 − %/100) − monto`; stored on save |
+| `utilidad` | decimal(16,6)? | auto: `precio_neto − precio_costo`; stored on save |
 | `stock` | Number | managed via stock entries, never edited directly |
 | `min_stock` | Number? | default 5; threshold for low-stock alert |
 | `location` | String? | physical shelf/bin |
@@ -112,9 +119,16 @@ Table: `sale_details`
 | `product_id` | Number | |
 | `product_name` | String | snapshot |
 | `quantity` | Number | |
-| `unit_price` | decimal(10,2) | 0 if regalía |
-| `subtotal` | decimal(10,2) | 0 if regalía |
+| `unit_price` | decimal(10,2) | effective price per unit (= `precio_neto`); 0 if regalía |
+| `subtotal` | decimal(10,2) | `unit_price × quantity`; 0 if regalía |
 | `is_regalia` | Boolean? | default false |
+| `cost_price` | decimal(16,6)? | snapshot of `producto.precio_costo` at sale time |
+| `discount_amount` | decimal(16,6)? | per-unit discount (`precio_venta_sin_iva − unit_price`); 0 if regalía |
+| `discount_percentage` | decimal(16,6)? | snapshot of `producto.descuento_porcentaje`; 0 if regalía |
+| `iva_amount` | decimal(16,6)? | `subtotal × 0.13`; 0 if regalía |
+| `line_total` | decimal(16,6)? | `subtotal + iva_amount`; 0 if regalía |
+
+> All `sale_details` snapshot fields are immutable after creation — historical reports always read stored values, never recalculate from current product prices.
 
 ### Return
 Table: `returns`
