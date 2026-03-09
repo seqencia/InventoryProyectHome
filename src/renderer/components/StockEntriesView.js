@@ -88,8 +88,12 @@ function StockEntryModal({ products, suppliers, onSave, onCancel }) {
   const bonus = parseInt(form.bonus_quantity, 10) || 0;
   const totalQty = qty + bonus;
 
+  const [formErr, setFormErr] = useState('');
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (totalQty <= 0) { setFormErr('La cantidad total debe ser mayor a 0.'); return; }
+    setFormErr('');
     setSaving(true);
     await onSave({
       product_id: parseInt(form.product_id, 10),
@@ -162,6 +166,11 @@ function StockEntryModal({ products, suppliers, onSave, onCancel }) {
               <textarea className="fl-input" style={s.textarea} value={form.notes} onChange={set('notes')} placeholder="Número de factura, lote, observaciones..." />
             </div>
           </div>
+          {formErr && (
+            <div style={{ margin: '0 24px 12px', background: '#ffebee', color: '#a4262c', borderRadius: '6px', padding: '8px 12px', fontSize: '13px' }}>
+              {formErr}
+            </div>
+          )}
           <div style={s.modalFooter}>
             <button type="button" className="fl-btn-ghost" style={s.btnCancel} onClick={onCancel}>Cancelar</button>
             <button type="submit" className="fl-btn-primary" style={s.btnSave} disabled={saving}>

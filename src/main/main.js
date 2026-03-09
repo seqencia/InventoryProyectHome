@@ -375,6 +375,11 @@ function setupIpcHandlers() {
       const productMap = {};
       for (const p of products) productMap[p.id] = p;
 
+      // Validate all products exist in DB
+      for (const item of items) {
+        if (!productMap[item.product_id]) throw new Error(`Producto ID ${item.product_id} no encontrado`);
+      }
+
       let profit = 0;
       for (const item of regularItems) {
         const product = productMap[item.product_id];
@@ -432,15 +437,40 @@ function setupIpcHandlers() {
   // Returns
   ipcMain.handle('returns:create', async (_, { saleId, items, reason, notes }) => {
     return await AppDataSource.transaction(async (manager) => {
-      // Get original sale details to determine if partial
+      // Get original sale details
       const originalDetails = await manager.getRepository('SaleDetail').find({ where: { sale_id: saleId } });
+
+      // Build already-returned quantities per product_id for this sale
+      const priorReturns = await manager.getRepository('Return').find({ where: { sale_id: saleId } });
+      const alreadyReturnedMap = {};
+      if (priorReturns.length > 0) {
+        const priorReturnIds = priorReturns.map((r) => r.id);
+        const priorDetails = await manager.getRepository('ReturnDetail').find({ where: { return_id: In(priorReturnIds) } });
+        for (const d of priorDetails) {
+          alreadyReturnedMap[d.product_id] = (alreadyReturnedMap[d.product_id] || 0) + d.quantity;
+        }
+      }
+
+      // Validate: each returned quantity must not exceed original minus already returned
+      const origMap = {};
+      for (const d of originalDetails) origMap[d.product_id] = (origMap[d.product_id] || 0) + d.quantity;
+      for (const item of items) {
+        const originalQty = origMap[item.product_id] ?? 0;
+        const alreadyReturned = alreadyReturnedMap[item.product_id] || 0;
+        const maxReturnable = originalQty - alreadyReturned;
+        if (item.quantity > maxReturnable) {
+          throw new Error(`Cantidad inválida para "${item.product_name}": máximo devolvible es ${maxReturnable}`);
+        }
+      }
 
       const totalRefunded = items.reduce((sum, item) => sum + item.subtotal, 0);
 
-      // Determine partial: if any original line item is not fully returned
-      const returnedMap = {};
-      for (const item of items) returnedMap[item.product_id] = (returnedMap[item.product_id] || 0) + item.quantity;
-      const isPartial = originalDetails.some((d) => (returnedMap[d.product_id] || 0) < d.quantity);
+      // Determine partial: consider prior returns + this return combined
+      const totalReturnedMap = { ...alreadyReturnedMap };
+      for (const item of items) {
+        totalReturnedMap[item.product_id] = (totalReturnedMap[item.product_id] || 0) + item.quantity;
+      }
+      const isPartial = originalDetails.some((d) => (totalReturnedMap[d.product_id] || 0) < d.quantity);
 
       const savedReturn = await manager.save(
         'Return',

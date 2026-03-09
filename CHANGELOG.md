@@ -10,6 +10,27 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [0.18.0] - 2026-03-08
+
+### Fixed
+
+#### QA review — 5 bugs fixed
+
+**BUG-001/002 (Critical) — Devolución duplicada sin validación**
+- `returns:create` (main.js): carga devoluciones previas por `sale_id`, construye mapa `alreadyReturnedMap` sumando `ReturnDetail` existentes, valida que cada item solicitado no exceda `original_qty − already_returned`. `isPartial` ahora considera el total acumulado de todas las devoluciones (previas + actual).
+- `SaleHistory.js`: nueva función `getAlreadyReturned(saleId)` que suma quantities ya devueltas por `product_id` desde el estado `returns`. `canReturn(sale)` verifica que quede al menos un item con saldo > 0 (antes sólo chequeaba el status). `ReturnModal` recibe prop `alreadyReturned`; items completamente devueltos aparecen grises/deshabilitados con badge "Ya devuelto"; el `max` del input se limita a `original_qty − already`; items parcialmente devueltos muestran cuántas unidades ya se devolvieron.
+
+**BUG-006 (High) — sales:create no valida existencia de producto**
+- `sales:create` (main.js): después de construir `productMap`, verifica que todos los `product_id` del carrito existan en DB; lanza error descriptivo si alguno fue eliminado entre que se agregó al carrito y se confirmó la venta.
+
+**BUG-029 (Low) — Entrada de stock con total 0 permitida**
+- `StockEntriesView.js`: validación en `handleSubmit` que bloquea el envío si `totalQty <= 0`; muestra mensaje de error inline antes del footer del modal.
+
+**BUG-033 (Medium) — Precio de venta $0.00 aceptado**
+- `ProductForm.js`: `min="0"` → `min="0.01"` en el input de precio de venta para impedir productos con precio cero.
+
+---
+
 ## [0.17.0] - 2026-03-08
 
 ### Added

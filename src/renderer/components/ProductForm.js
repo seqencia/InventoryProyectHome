@@ -238,7 +238,7 @@ export default function ProductForm({ product, onSave, onCancel }) {
                 </div>
                 <div style={s.field}>
                   <label style={s.label}>Precio de venta ($) *</label>
-                  <input className="fl-input" style={s.input} type="number" min="0" step="0.01" value={form.sale_price} onChange={set('sale_price')} placeholder="0.00" required />
+                  <input className="fl-input" style={s.input} type="number" min="0.01" step="0.01" value={form.sale_price} onChange={set('sale_price')} placeholder="0.00" required />
                 </div>
                 <div style={s.field}>
                   <label style={s.label}>Precio oferta ($)</label>

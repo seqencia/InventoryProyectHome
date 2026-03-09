@@ -42,9 +42,13 @@ function formatDate(dateStr) {
 
 // ── Return Modal ─────────────────────────────────────────────────────────────
 
-function ReturnModal({ sale, onClose, onConfirm }) {
+function ReturnModal({ sale, alreadyReturned, onClose, onConfirm }) {
   const [selected, setSelected] = useState(() =>
-    sale.details.reduce((acc, d) => ({ ...acc, [d.id]: { checked: false, qty: d.quantity } }), {})
+    sale.details.reduce((acc, d) => {
+      const already = alreadyReturned[d.product_id] || 0;
+      const maxQty = d.quantity - already;
+      return { ...acc, [d.id]: { checked: false, qty: maxQty > 0 ? maxQty : 0 } };
+    }, {})
   );
   const [reason, setReason] = useState('');
   const [notes, setNotes] = useState('');
@@ -57,7 +61,10 @@ function ReturnModal({ sale, onClose, onConfirm }) {
   const setQty = (id, val, max) =>
     setSelected((prev) => ({ ...prev, [id]: { ...prev[id], qty: Math.min(max, Math.max(1, Number(val))) } }));
 
-  const selectedItems = sale.details.filter((d) => selected[d.id].checked);
+  const selectedItems = sale.details.filter((d) => {
+    const maxQty = d.quantity - (alreadyReturned[d.product_id] || 0);
+    return maxQty > 0 && selected[d.id].checked;
+  });
   const totalRefunded = selectedItems.reduce(
     (sum, d) => sum + Number(d.unit_price) * selected[d.id].qty, 0
   );
@@ -119,42 +126,62 @@ function ReturnModal({ sale, onClose, onConfirm }) {
           <div style={{ fontSize: '11px', fontWeight: '700', color: '#9e9e9e', textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: '10px' }}>
             Selecciona los productos a devolver
           </div>
-          {sale.details.map((d) => (
+          {sale.details.map((d) => {
+            const alreadyQty = alreadyReturned[d.product_id] || 0;
+            const maxQty = d.quantity - alreadyQty;
+            const fullyReturned = maxQty <= 0;
+            return (
             <div key={d.id} style={{
               display: 'flex', alignItems: 'center', gap: '12px',
               padding: '10px 12px', borderRadius: '8px', marginBottom: '6px',
-              background: selected[d.id].checked ? '#f0f7ff' : '#fafafa',
-              border: `1px solid ${selected[d.id].checked ? '#0078d4' : '#e5e5e5'}`,
-              cursor: 'pointer', transition: 'all 0.1s',
-            }} onClick={() => toggle(d.id)}>
+              background: fullyReturned ? '#f5f5f5' : selected[d.id].checked ? '#f0f7ff' : '#fafafa',
+              border: `1px solid ${fullyReturned ? '#e5e5e5' : selected[d.id].checked ? '#0078d4' : '#e5e5e5'}`,
+              cursor: fullyReturned ? 'default' : 'pointer',
+              opacity: fullyReturned ? 0.55 : 1,
+              transition: 'all 0.1s',
+            }} onClick={() => !fullyReturned && toggle(d.id)}>
               <input
                 type="checkbox"
-                checked={selected[d.id].checked}
-                onChange={() => toggle(d.id)}
+                checked={!fullyReturned && selected[d.id].checked}
+                onChange={() => !fullyReturned && toggle(d.id)}
                 onClick={(e) => e.stopPropagation()}
-                style={{ width: '16px', height: '16px', cursor: 'pointer', flexShrink: 0 }}
+                disabled={fullyReturned}
+                style={{ width: '16px', height: '16px', cursor: fullyReturned ? 'default' : 'pointer', flexShrink: 0 }}
               />
               <div style={{ flex: 1 }}>
-                <div style={{ fontSize: '13px', fontWeight: '500', color: '#1a1a1a' }}>{d.product_name}</div>
-                <div style={{ fontSize: '12px', color: '#9e9e9e' }}>${Number(d.unit_price).toFixed(2)} × {d.quantity} uds.</div>
+                <div style={{ fontSize: '13px', fontWeight: '500', color: '#1a1a1a' }}>
+                  {d.product_name}
+                  {d.is_regalia && (
+                    <span style={{ marginLeft: '6px', fontSize: '10px', fontWeight: '700', color: '#6a1b9a', background: '#f3e5f5', padding: '1px 6px', borderRadius: '8px' }}>REGALÍA</span>
+                  )}
+                </div>
+                <div style={{ fontSize: '12px', color: '#9e9e9e' }}>
+                  {d.is_regalia ? '$0.00' : `$${Number(d.unit_price).toFixed(2)}`} × {d.quantity} uds.
+                  {alreadyQty > 0 && (
+                    <span style={{ marginLeft: '6px', color: fullyReturned ? '#a4262c' : '#8a5700', fontWeight: '600' }}>
+                      {fullyReturned ? '· Ya devuelto' : `· ${alreadyQty} ya devuelto`}
+                    </span>
+                  )}
+                </div>
               </div>
-              {selected[d.id].checked && (
+              {!fullyReturned && selected[d.id].checked && (
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }} onClick={(e) => e.stopPropagation()}>
                   <span style={{ fontSize: '12px', color: '#5c5c5c' }}>Cant:</span>
                   <input
                     type="number"
                     min={1}
-                    max={d.quantity}
+                    max={maxQty}
                     value={selected[d.id].qty}
-                    onChange={(e) => setQty(d.id, e.target.value, d.quantity)}
+                    onChange={(e) => setQty(d.id, e.target.value, maxQty)}
                     className="fl-input"
                     style={{ width: '60px', padding: '4px 8px', border: '1px solid #d1d1d1', borderRadius: '6px', fontSize: '13px', textAlign: 'center' }}
                   />
-                  <span style={{ fontSize: '12px', color: '#9e9e9e' }}>/ {d.quantity}</span>
+                  <span style={{ fontSize: '12px', color: '#9e9e9e' }}>/ {maxQty}</span>
                 </div>
               )}
             </div>
-          ))}
+            );
+          })}
 
           {/* Reason */}
           <div style={{ marginTop: '16px', marginBottom: '10px' }}>
@@ -317,8 +344,22 @@ export default function SaleHistory() {
     loadData();
   };
 
-  const canReturn = (sale) =>
-    sale.status === 'Completada' || sale.status === 'Parcial';
+  // Build already-returned quantities per product_id for a given sale
+  const getAlreadyReturned = (saleId) => {
+    const map = {};
+    for (const ret of returns.filter((r) => r.sale_id === saleId)) {
+      for (const d of ret.details) {
+        map[d.product_id] = (map[d.product_id] || 0) + d.quantity;
+      }
+    }
+    return map;
+  };
+
+  const canReturn = (sale) => {
+    if (sale.status !== 'Completada' && sale.status !== 'Parcial') return false;
+    const already = getAlreadyReturned(sale.id);
+    return sale.details.some((d) => (already[d.product_id] || 0) < d.quantity);
+  };
 
   return (
     <>
@@ -485,7 +526,7 @@ export default function SaleHistory() {
                           <button
                             className="fl-btn-secondary"
                             style={styles.returnBtn}
-                            onClick={() => setReturnModal(sale)}
+                            onClick={() => setReturnModal({ sale, alreadyReturned: getAlreadyReturned(sale.id) })}
                           >
                             ↩ Devolver
                           </button>
@@ -553,7 +594,8 @@ export default function SaleHistory() {
       {/* ── Return modal ── */}
       {returnModal && (
         <ReturnModal
-          sale={returnModal}
+          sale={returnModal.sale}
+          alreadyReturned={returnModal.alreadyReturned}
           onClose={() => setReturnModal(null)}
           onConfirm={handleReturnConfirm}
         />
