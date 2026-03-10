@@ -96,10 +96,46 @@ export default function ProductForm({ product, onSave, onCancel }) {
     technical_notes: product?.technical_notes ?? '',
   });
   const [categories, setCategories] = useState([]);
+  const [bonifInfo, setBonifInfo] = useState(null);
+  const [bonifPrice, setBonifPrice] = useState('');
+  const [bonifSaving, setBonifSaving] = useState(false);
+  const [bonifMsg, setBonifMsg] = useState(null); // { type: 'ok'|'err', text }
 
   useEffect(() => {
     window.electron.categories.getAll().then(setCategories).catch(() => {});
   }, []);
+
+  useEffect(() => {
+    if (isEdit && product?.id) {
+      window.electron.products.getBonificacionInfo(product.id)
+        .then((info) => {
+          setBonifInfo(info);
+          if (info.currentPrice != null) setBonifPrice(String(info.currentPrice));
+        })
+        .catch(() => {});
+    }
+  }, [isEdit, product?.id]);
+
+  const handleUpdateBonifPrice = async () => {
+    const price = parseFloat(bonifPrice);
+    if (!price || price <= 0) return;
+    setBonifSaving(true);
+    setBonifMsg(null);
+    try {
+      await window.electron.products.updateBonificacionPrice({
+        productId: product.id,
+        productName: product.name,
+        newPrice: price,
+      });
+      const info = await window.electron.products.getBonificacionInfo(product.id);
+      setBonifInfo(info);
+      setBonifMsg({ type: 'ok', text: 'Precio actualizado correctamente.' });
+    } catch {
+      setBonifMsg({ type: 'err', text: 'Error al actualizar el precio.' });
+    } finally {
+      setBonifSaving(false);
+    }
+  };
 
   const set = (field) => (e) => setForm((prev) => ({ ...prev, [field]: e.target.value }));
 
@@ -306,6 +342,91 @@ export default function ProductForm({ product, onSave, onCancel }) {
                 </div>
               </div>
             </div>
+
+            {/* ── Unidades Bonificadas ────────────────────────────── */}
+            {isEdit && bonifInfo && (bonifInfo.totalBonifiedUnits > 0 || bonifInfo.priceHistory.length > 0) && (
+              <div style={s.section}>
+                <SectionTitle>Unidades Bonificadas</SectionTitle>
+
+                {/* Stats */}
+                <div style={{ display: 'flex', gap: '12px', marginBottom: '14px' }}>
+                  <div style={{ flex: 1, background: '#e3f2fd', borderRadius: '8px', padding: '10px 14px', textAlign: 'center' }}>
+                    <div style={{ fontSize: '22px', fontWeight: '700', color: '#1565c0' }}>{bonifInfo.totalBonifiedUnits}</div>
+                    <div style={{ fontSize: '11px', color: '#64748b', marginTop: '2px' }}>Unidades bonificadas totales</div>
+                  </div>
+                  <div style={{ flex: 1, background: '#f0f7ff', borderRadius: '8px', padding: '10px 14px', textAlign: 'center' }}>
+                    <div style={{ fontSize: '22px', fontWeight: '700', color: '#0078d4' }}>
+                      {bonifInfo.currentPrice != null ? `$${Number(bonifInfo.currentPrice).toFixed(2)}` : '—'}
+                    </div>
+                    <div style={{ fontSize: '11px', color: '#64748b', marginTop: '2px' }}>Último precio asignado</div>
+                  </div>
+                </div>
+
+                {/* Update price */}
+                <div style={{ display: 'flex', gap: '8px', alignItems: 'flex-end', marginBottom: '8px' }}>
+                  <div style={{ flex: 1, ...s.field, marginBottom: 0 }}>
+                    <label style={s.label}>Nuevo precio de venta sin IVA ($)</label>
+                    <input
+                      className="fl-input"
+                      style={s.input}
+                      type="number"
+                      min="0"
+                      step="0.01"
+                      value={bonifPrice}
+                      onChange={(e) => setBonifPrice(e.target.value)}
+                      placeholder="0.00"
+                    />
+                  </div>
+                  <button
+                    type="button"
+                    onClick={handleUpdateBonifPrice}
+                    disabled={bonifSaving || !bonifPrice || parseFloat(bonifPrice) <= 0}
+                    style={{
+                      background: '#0078d4', color: 'white', border: 'none',
+                      padding: '8px 14px', borderRadius: '6px', cursor: bonifSaving ? 'not-allowed' : 'pointer',
+                      fontSize: '13px', fontWeight: '600', whiteSpace: 'nowrap', flexShrink: 0,
+                      opacity: (!bonifPrice || parseFloat(bonifPrice) <= 0) ? 0.5 : 1,
+                    }}
+                  >
+                    {bonifSaving ? 'Actualizando...' : 'Actualizar precio bonificados'}
+                  </button>
+                </div>
+
+                {bonifMsg && (
+                  <div style={{
+                    padding: '8px 12px', borderRadius: '6px', fontSize: '13px', marginBottom: '10px',
+                    background: bonifMsg.type === 'ok' ? '#e8f5e9' : '#ffebee',
+                    color: bonifMsg.type === 'ok' ? '#2e7d32' : '#a4262c',
+                  }}>
+                    {bonifMsg.text}
+                  </div>
+                )}
+
+                {/* Audit trail */}
+                {bonifInfo.priceHistory.length > 0 && (
+                  <div style={{ marginTop: '10px' }}>
+                    <div style={{ fontSize: '11px', fontWeight: '700', color: '#9e9e9e', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '6px' }}>
+                      Historial de precios
+                    </div>
+                    {bonifInfo.priceHistory.map((log) => (
+                      <div key={log.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '5px 0', borderBottom: '1px solid #f5f5f5', fontSize: '12px' }}>
+                        <span style={{ color: '#64748b' }}>
+                          {new Date(log.created_at).toLocaleString('es', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                        </span>
+                        <span>
+                          {log.previous_price != null && (
+                            <span style={{ color: '#9e9e9e', textDecoration: 'line-through', marginRight: '6px' }}>
+                              ${Number(log.previous_price).toFixed(2)}
+                            </span>
+                          )}
+                          <span style={{ fontWeight: '700', color: '#0078d4' }}>→ ${Number(log.new_price).toFixed(2)}</span>
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
 
             {/* ── Clasificación y Ubicación ───────────────────────── */}
             <div style={s.section}>

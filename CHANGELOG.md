@@ -10,6 +10,36 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [0.25.0] - 2026-03-09
+
+### Added
+
+#### Sección "Unidades Bonificadas" en formulario de producto (Catálogo)
+
+Visible en modo edición cuando el producto tiene unidades bonificadas recibidas o historial de precios:
+
+**Estadísticas**:
+- Tarjeta azul: total de unidades bonificadas recibidas (suma de `bonus_quantity` en todas las entradas de este producto)
+- Tarjeta celeste: último precio de venta asignado a unidades bonificadas
+
+**Actualización de precio**:
+- Input "Nuevo precio de venta sin IVA" + botón "Actualizar precio bonificados"
+- Al confirmar: actualiza `precio_venta_sin_iva` del producto y recalcula todos los campos derivados (`precio_venta_con_iva`, `precio_neto`, `utilidad`)
+- Registro de auditoría guardado en tabla `bonificacion_price_logs`
+
+**Historial de precios** (audit trail):
+- Muestra los últimos 10 cambios de precio con fecha/hora
+- Cada fila: fecha · precio anterior (tachado) → nuevo precio (azul)
+
+**Backend** (`main.js`):
+- Nueva entidad `BonificacionPriceLog` (`bonificacion_price_logs`): `product_id`, `product_name`, `previous_price`, `new_price`, `created_at`
+- Nuevo IPC `products:getBonificacionInfo(productId)` → `{ totalBonifiedUnits, currentPrice, priceHistory }`
+- Nuevo IPC `products:updateBonificacionPrice({ productId, productName, newPrice })` → actualiza producto + crea log
+
+**Preload**: expone `products.getBonificacionInfo` y `products.updateBonificacionPrice`
+
+---
+
 ## [0.24.0] - 2026-03-09
 
 ### Added

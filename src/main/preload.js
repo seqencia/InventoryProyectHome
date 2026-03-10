@@ -9,6 +9,8 @@ contextBridge.exposeInMainWorld('electron', {
     create: (data) => ipcRenderer.invoke('products:create', data),
     update: (id, data) => ipcRenderer.invoke('products:update', { id, ...data }),
     delete: (id) => ipcRenderer.invoke('products:delete', id),
+    getBonificacionInfo: (productId) => ipcRenderer.invoke('products:getBonificacionInfo', productId),
+    updateBonificacionPrice: (data) => ipcRenderer.invoke('products:updateBonificacionPrice', data),
   },
   categories: {
     getAll: () => ipcRenderer.invoke('categories:getAll'),

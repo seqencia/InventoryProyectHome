@@ -193,6 +193,20 @@ const ReturnDetailSchema = new EntitySchema({
   },
 });
 
+const BonificacionPriceLogSchema = new EntitySchema({
+  name: 'BonificacionPriceLog',
+  tableName: 'bonificacion_price_logs',
+  columns: {
+    id: { type: Number, primary: true, generated: true },
+    product_id: { type: Number },
+    product_name: { type: String },
+    previous_price: { type: 'decimal', precision: 16, scale: 6, nullable: true },
+    new_price: { type: 'decimal', precision: 16, scale: 6 },
+    notes: { type: String, nullable: true },
+    created_at: { type: 'datetime', createDate: true },
+  },
+});
+
 // ── Database ───────────────────────────────────────────────────────────────
 
 let AppDataSource;
@@ -201,7 +215,7 @@ async function initDatabase() {
   AppDataSource = new DataSource({
     type: 'sqlite',
     database: path.join(app.getPath('userData'), 'database.sqlite'),
-    entities: [ProductSchema, CategorySchema, CustomerSchema, SaleSchema, SaleDetailSchema, SupplierSchema, StockEntrySchema, ReturnSchema, ReturnDetailSchema],
+    entities: [ProductSchema, CategorySchema, CustomerSchema, SaleSchema, SaleDetailSchema, SupplierSchema, StockEntrySchema, ReturnSchema, ReturnDetailSchema, BonificacionPriceLogSchema],
     synchronize: true,
     logging: false,
   });
@@ -265,6 +279,48 @@ function setupIpcHandlers() {
 
   ipcMain.handle('products:delete', async (_, id) => {
     await repo('Product').delete(id);
+    return { success: true };
+  });
+
+  ipcMain.handle('products:getBonificacionInfo', async (_, productId) => {
+    const entries = await repo('StockEntry').find({ where: { product_id: productId } });
+    const totalBonifiedUnits = entries.reduce((s, e) => s + (Number(e.bonus_quantity) || 0), 0);
+    // Most recent stock entry with a precio_venta_bonificacion set
+    const withPrice = entries
+      .filter((e) => e.precio_venta_bonificacion != null)
+      .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+    const currentPrice = withPrice.length > 0 ? Number(withPrice[0].precio_venta_bonificacion) : null;
+    const priceHistory = await repo('BonificacionPriceLog').find({
+      where: { product_id: productId },
+      order: { created_at: 'DESC' },
+      take: 10,
+    });
+    return { totalBonifiedUnits, currentPrice, priceHistory };
+  });
+
+  ipcMain.handle('products:updateBonificacionPrice', async (_, { productId, productName, newPrice }) => {
+    const product = await repo('Product').findOneBy({ id: productId });
+    if (!product) throw new Error('Producto no encontrado');
+    const previousPrice = product.precio_venta_sin_iva != null ? Number(product.precio_venta_sin_iva) : null;
+    const pricing = computePricing({
+      precio_costo: product.precio_costo,
+      precio_venta_sin_iva: newPrice,
+      descuento_monto: product.descuento_monto || 0,
+      descuento_porcentaje: product.descuento_porcentaje || 0,
+    });
+    await repo('Product').update(productId, {
+      precio_venta_sin_iva: r6(newPrice),
+      sale_price: r6(newPrice),
+      ...pricing,
+    });
+    await repo('BonificacionPriceLog').save(
+      repo('BonificacionPriceLog').create({
+        product_id: productId,
+        product_name: productName,
+        previous_price: previousPrice != null ? r6(previousPrice) : null,
+        new_price: r6(newPrice),
+      })
+    );
     return { success: true };
   });
 
