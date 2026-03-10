@@ -342,8 +342,12 @@ export default function SaleHistory() {
   const toggleReturn = (id) => setReturnsExpanded((prev) => (prev === id ? null : id));
 
   const handleReturnConfirm = async (data) => {
-    await window.electron.returns.create(data);
-    loadData();
+    try {
+      await window.electron.returns.create(data);
+      loadData();
+    } catch (e) {
+      setError(`Error al procesar la devolución: ${e?.message || 'Intenta de nuevo.'}`);
+    }
   };
 
   // Build already-returned quantities per product_id for a given sale

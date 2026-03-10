@@ -106,7 +106,7 @@ const SaleSchema = new EntitySchema({
     regalia_count: { type: Number, nullable: true, default: 0 },
     customer_id: { type: Number, nullable: true },
     customer_name: { type: String, nullable: true },
-    created_at: { type: 'datetime', createDate: true },
+    created_at: { type: 'datetime', createDate: true, index: true },
   },
 });
 
@@ -129,7 +129,7 @@ const StockEntrySchema = new EntitySchema({
   tableName: 'stock_entries',
   columns: {
     id: { type: Number, primary: true, generated: true },
-    product_id: { type: Number },
+    product_id: { type: Number, index: true },
     product_name: { type: String },
     quantity: { type: Number },
     bonus_quantity: { type: Number, nullable: true, default: 0 },
@@ -148,8 +148,8 @@ const SaleDetailSchema = new EntitySchema({
   tableName: 'sale_details',
   columns: {
     id: { type: Number, primary: true, generated: true },
-    sale_id: { type: Number },
-    product_id: { type: Number },
+    sale_id: { type: Number, index: true },
+    product_id: { type: Number, index: true },
     product_name: { type: String },
     quantity: { type: Number },
     unit_price: { type: 'decimal', precision: 10, scale: 2 },
@@ -170,12 +170,12 @@ const ReturnSchema = new EntitySchema({
   tableName: 'returns',
   columns: {
     id: { type: Number, primary: true, generated: true },
-    sale_id: { type: Number },
+    sale_id: { type: Number, index: true },
     reason: { type: String },
     notes: { type: String, nullable: true },
     total_refunded: { type: 'decimal', precision: 10, scale: 2 },
     is_partial: { type: Boolean, default: false },
-    created_at: { type: 'datetime', createDate: true },
+    created_at: { type: 'datetime', createDate: true, index: true },
   },
 });
 
@@ -184,8 +184,8 @@ const ReturnDetailSchema = new EntitySchema({
   tableName: 'return_details',
   columns: {
     id: { type: Number, primary: true, generated: true },
-    return_id: { type: Number },
-    product_id: { type: Number },
+    return_id: { type: Number, index: true },
+    product_id: { type: Number, index: true },
     product_name: { type: String },
     quantity: { type: Number },
     unit_price: { type: 'decimal', precision: 10, scale: 2 },
@@ -502,7 +502,7 @@ function setupIpcHandlers() {
       const regaliaItems = items.filter((i) => i.is_regalia);
 
       // Line subtotals already reflect per-line discounts (unit_price is effective price)
-      const lineSubtotal = regularItems.reduce((sum, item) => sum + item.subtotal, 0);
+      const lineSubtotal = r6(regularItems.reduce((sum, item) => sum + (Number(item.subtotal) || 0), 0));
       const globalDisc = r6(parseFloat(globalDiscountAmount) || 0);
       const subtotal = r6(Math.max(0, lineSubtotal - globalDisc));
       const tax = r6(subtotal * 0.13);
@@ -525,7 +525,7 @@ function setupIpcHandlers() {
         const product = productMap[item.product_id];
         const costPrice = product?.precio_costo ?? product?.cost_price;
         if (product && costPrice != null) {
-          profit += (item.unit_price - Number(costPrice)) * item.quantity;
+          profit = r6(profit + (item.unit_price - Number(costPrice)) * item.quantity);
         }
       }
       // Regalía propia: cost absorbed by business → reduces profit
@@ -533,7 +533,7 @@ function setupIpcHandlers() {
         const product = productMap[item.product_id];
         const costPrice = product?.precio_costo ?? product?.cost_price;
         if (product && costPrice != null) {
-          profit -= Number(costPrice) * item.quantity;
+          profit = r6(profit - Number(costPrice) * item.quantity);
         }
       }
 
@@ -738,6 +738,7 @@ function setupIpcHandlers() {
 
   // Reports
   ipcMain.handle('reports:getData', async (_, { from, to }) => {
+    if (!from || !to) throw new Error('Rango de fechas requerido');
     const fromDate = new Date(from);
     fromDate.setHours(0, 0, 0, 0);
     const toDate = new Date(to);

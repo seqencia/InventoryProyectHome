@@ -322,8 +322,8 @@ export default function NewSale({ onSaleComplete }) {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
 
   useEffect(() => {
-    window.electron.products.getAll().then(setAllProducts);
-    window.electron.customers.getAll().then(setAllCustomers);
+    window.electron.products.getAll().then(setAllProducts).catch(() => setError('Error al cargar el catálogo de productos.'));
+    window.electron.customers.getAll().then(setAllCustomers).catch(() => {});
   }, []);
 
   const filteredCustomers = useMemo(() => {
@@ -454,20 +454,21 @@ export default function NewSale({ onSaleComplete }) {
   };
 
   // ── Computed totals ──────────────────────────────────────────────────────
+  const r2 = (v) => parseFloat(v.toFixed(2));
   const regularCart = cart.filter((i) => !i.is_regalia);
   const regaliaPropiaCount  = cart.filter((i) => i.regalia_type === 'propia').reduce((s, i) => s + i.quantity, 0);
   const bonificacionCount   = cart.filter((i) => i.regalia_type === 'bonificacion').reduce((s, i) => s + i.quantity, 0);
-  const subtotalBruto      = regularCart.reduce((s, i) => s + i.unit_price * i.quantity, 0);
-  const lineDiscountsTotal = regularCart.reduce((s, i) => s + getLineDiscount(i) * i.quantity, 0);
-  const subtotalPostLine   = subtotalBruto - lineDiscountsTotal;
+  const subtotalBruto      = r2(regularCart.reduce((s, i) => s + i.unit_price * i.quantity, 0));
+  const lineDiscountsTotal = r2(regularCart.reduce((s, i) => s + getLineDiscount(i) * i.quantity, 0));
+  const subtotalPostLine   = r2(subtotalBruto - lineDiscountsTotal);
   const globalDiscRaw      = parseFloat(globalDiscountValue) || 0;
-  const globalDiscAmount   = globalDiscountMode === 'percent'
+  const globalDiscAmount   = r2(globalDiscountMode === 'percent'
     ? subtotalPostLine * globalDiscRaw / 100
-    : Math.min(globalDiscRaw, subtotalPostLine);
-  const totalDescuentos = lineDiscountsTotal + globalDiscAmount;
-  const subtotalNeto    = Math.max(0, subtotalPostLine - globalDiscAmount);
-  const tax             = subtotalNeto * 0.13;
-  const total           = subtotalNeto + tax;
+    : Math.min(globalDiscRaw, subtotalPostLine));
+  const totalDescuentos = r2(lineDiscountsTotal + globalDiscAmount);
+  const subtotalNeto    = r2(Math.max(0, subtotalPostLine - globalDiscAmount));
+  const tax             = r2(subtotalNeto * 0.13);
+  const total           = r2(subtotalNeto + tax);
 
   const confirmSale = async () => {
     if (cart.length === 0 || saving) return;

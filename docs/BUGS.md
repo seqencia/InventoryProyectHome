@@ -44,6 +44,75 @@
 
 ---
 
+## [FIXED] BUG-040 — Floating-point accumulation en cálculos monetarios del carrito
+
+**Module**: `NewSale.js` — sección "Computed totals"
+
+**Severity**: Alta (podría causar discrepancias entre el precio mostrado y el almacenado)
+
+**Root cause**: Los totales del carrito (`subtotalBruto`, `lineDiscountsTotal`, `globalDiscAmount`, `tax`, `total`) se calculaban con aritmética JS nativa sin redondeo, acumulando errores de punto flotante que pueden llegar a ±$0.01 en ciertos valores.
+
+**Fix applied** (2026-03-09):
+- Añadida función auxiliar `r2(v)` = `parseFloat(v.toFixed(2))` en la sección de computed totals de `NewSale.js`.
+- Todos los totales calculados aplican `r2()` para garantizar 2 decimales exactos: `subtotalBruto`, `lineDiscountsTotal`, `subtotalPostLine`, `globalDiscAmount`, `totalDescuentos`, `subtotalNeto`, `tax`, `total`.
+
+---
+
+## [FIXED] BUG-041 — Profit en sales:create sin precisión de 6 decimales
+
+**Module**: `main.js` → `sales:create`
+
+**Severity**: Media (el profit almacenado podía tener errores de punto flotante en su acumulación)
+
+**Root cause**: El cálculo de `profit` acumulaba con `+=` y `-=` directamente sin aplicar `r6()`, lo que podía introducir imprecisiones en la suma.
+
+**Fix applied** (2026-03-09):
+- Cada iteración del loop de profit ahora aplica `r6()`: `profit = r6(profit + ...)` y `profit = r6(profit - ...)`.
+- El acumulador de `lineSubtotal` también aplica `r6()` y coerce a Number con fallback a 0: `r6(regularItems.reduce((sum, item) => sum + (Number(item.subtotal) || 0), 0))`.
+
+---
+
+## [FIXED] BUG-042 — Falta de índices en claves foráneas y fechas
+
+**Module**: `main.js` — EntitySchemas
+
+**Severity**: Media (queries completas O(n) en tablas que crecen con el uso)
+
+**Root cause**: Los campos `sale_id`, `product_id`, `return_id` en `SaleDetail`, `ReturnDetail` y `StockEntry` no tenían índices. Tampoco `Sale.created_at` y `Return.created_at` usados en filtros de rango de fechas en reportes.
+
+**Fix applied** (2026-03-09): Añadido `index: true` a los siguientes campos:
+- `SaleDetail.sale_id`, `SaleDetail.product_id`
+- `Return.sale_id`, `Return.created_at`
+- `ReturnDetail.return_id`, `ReturnDetail.product_id`
+- `StockEntry.product_id`
+- `Sale.created_at`
+
+---
+
+## [FIXED] BUG-043 — Sin manejo de error en useEffect de carga inicial (NewSale.js)
+
+**Module**: `NewSale.js`
+
+**Severity**: Baja (fallo silencioso al cargar productos/clientes)
+
+**Root cause**: Las promesas `products.getAll()` y `customers.getAll()` en el `useEffect` inicial no tenían `.catch()`, causando que un error de IPC fuera ignorado y el usuario viera una lista vacía sin mensaje explicativo.
+
+**Fix applied** (2026-03-09): Añadido `.catch(() => setError('Error al cargar el catálogo de productos.'))` en `products.getAll()` y `.catch(() => {})` en `customers.getAll()`.
+
+---
+
+## [FIXED] BUG-044 — handleReturnConfirm sin manejo de error en SaleHistory
+
+**Module**: `SaleHistory.js`
+
+**Severity**: Media (error en devolución era silencioso; UI no informaba al usuario)
+
+**Root cause**: `handleReturnConfirm` hacía `await window.electron.returns.create(data)` sin try/catch; si el IPC lanzaba error (p.ej. validación de cantidades excedidas), la excepción no era capturada y `loadData()` se llamaba igualmente, ocultando el error.
+
+**Fix applied** (2026-03-09): Envuelto en try/catch; en caso de error muestra `setError()` con el mensaje del servidor.
+
+---
+
 ## Open Bugs
 
 *(Sin bugs críticos abiertos)*

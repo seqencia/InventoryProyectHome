@@ -10,6 +10,37 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [0.26.0] - 2026-03-09
+
+### Fixed — Auditoría completa del proyecto
+
+#### BUG-040 — Floating-point en cálculos del carrito (`NewSale.js`)
+- Añadida función `r2(v)` y aplicada a todos los computed totals: `subtotalBruto`, `lineDiscountsTotal`, `subtotalPostLine`, `globalDiscAmount`, `totalDescuentos`, `subtotalNeto`, `tax`, `total`. Elimina errores de acumulación de punto flotante que podían causar discrepancias de ±$0.01.
+
+#### BUG-041 — Profit sin precisión `r6` en `sales:create` (`main.js`)
+- Cada iteración del cálculo de profit ahora aplica `r6()`: `profit = r6(profit ± delta)`.
+- `lineSubtotal` también aplica `r6()` con coerción a Number y fallback a 0.
+
+#### BUG-042 — Índices faltantes en claves foráneas y fechas (`main.js`)
+- Añadido `index: true` en: `SaleDetail.sale_id`, `SaleDetail.product_id`, `Return.sale_id`, `Return.created_at`, `ReturnDetail.return_id`, `ReturnDetail.product_id`, `StockEntry.product_id`, `Sale.created_at`.
+- TypeORM aplica los índices automáticamente vía `synchronize: true`.
+
+#### BUG-043 — useEffect sin `.catch()` en `NewSale.js`
+- `products.getAll()` ahora muestra mensaje de error si falla. `customers.getAll()` silencia el error (no crítico).
+
+#### BUG-044 — `handleReturnConfirm` sin try/catch en `SaleHistory.js`
+- Envuelto en try/catch; errores del servidor (p.ej. validación de cantidades excedidas) se muestran al usuario vía `setError()`.
+
+#### Validación de `reports:getData`
+- Añadida validación de `from`/`to` requeridos antes de ejecutar queries.
+
+### Verified — Sin cambios necesarios
+- BUG-001/002: Devolución múltiple — validación server-side y client-side completa y correcta ✓
+- IVA 13%: excluido correctamente de regalías y bonificaciones en `sales:create`, `SaleDetail`, y recibos ✓
+- CHANGELOG vs código: todas las features documentadas en v0.18–v0.25 existen y funcionan ✓
+
+---
+
 ## [0.25.0] - 2026-03-09
 
 ### Added
