@@ -319,6 +319,7 @@ export default function NewSale({ onSaleComplete }) {
   const barcodeMsgTimerRef = useRef(null);
   const [globalDiscountMode, setGlobalDiscountMode] = useState('amount'); // 'amount' | 'percent'
   const [globalDiscountValue, setGlobalDiscountValue] = useState('');
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
 
   useEffect(() => {
     window.electron.products.getAll().then(setAllProducts);
@@ -869,15 +870,148 @@ export default function NewSale({ onSaleComplete }) {
             </div>
             <button
               style={cart.length === 0 || saving ? styles.confirmBtnDisabled : styles.confirmBtn}
-              onClick={confirmSale}
+              onClick={() => { if (cart.length > 0 && !saving) setShowConfirmModal(true); }}
               disabled={cart.length === 0 || saving}
             >
-              {saving ? 'Procesando...' : 'Confirmar Venta'}
+              Confirmar Venta
             </button>
           </div>
           {error && <div style={styles.errorBox}>{error}</div>}
         </div>
       </div>
+
+      {/* ── Confirm Sale Modal ─────────────────────────────────────────── */}
+      {showConfirmModal && (
+        <div style={{
+          position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.45)',
+          backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          zIndex: 900, padding: '24px',
+        }}>
+          <div style={{
+            background: 'white', borderRadius: '12px', width: '100%', maxWidth: '500px',
+            maxHeight: '85vh', overflowY: 'auto',
+            boxShadow: '0 24px 64px rgba(0,0,0,0.3)',
+            display: 'flex', flexDirection: 'column',
+          }}>
+            {/* Header */}
+            <div style={{ padding: '16px 20px', borderBottom: '1px solid #f0f0f0', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <span style={{ fontWeight: '700', fontSize: '16px', color: '#1a1a1a' }}>Confirmar Venta</span>
+              <button
+                onClick={() => setShowConfirmModal(false)}
+                style={{ background: 'none', border: 'none', fontSize: '20px', color: '#94a3b8', cursor: 'pointer', lineHeight: 1, padding: '0 2px' }}
+              >×</button>
+            </div>
+
+            {/* Items table */}
+            <div style={{ padding: '12px 20px', flex: 1 }}>
+              {/* Table header */}
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 36px 72px 72px 72px', gap: '6px', fontSize: '11px', fontWeight: '700', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.4px', paddingBottom: '6px', borderBottom: '1px solid #e2e8f0' }}>
+                <span>Producto</span>
+                <span style={{ textAlign: 'center' }}>Cant</span>
+                <span style={{ textAlign: 'right' }}>P.Unit</span>
+                <span style={{ textAlign: 'right' }}>Desc</span>
+                <span style={{ textAlign: 'right' }}>Subtotal</span>
+              </div>
+
+              {/* Regular items */}
+              {cart.map((item) => {
+                const discUnit = getLineDiscount(item);
+                const effPrice = getEffectivePrice(item);
+                const lineSub  = getLineSubtotal(item);
+                const badgeColor = item.regalia_type === 'propia' ? '#6a1b9a' : item.regalia_type === 'bonificacion' ? '#1565c0' : null;
+                return (
+                  <div key={`${item.product_id}_${item.regalia_type ?? 'normal'}`} style={{ display: 'grid', gridTemplateColumns: '1fr 36px 72px 72px 72px', gap: '6px', fontSize: '13px', padding: '7px 0', borderBottom: '1px solid #f8fafc', alignItems: 'start' }}>
+                    <span style={{ fontWeight: '500', color: badgeColor ?? '#1e293b', wordBreak: 'break-word' }}>
+                      {item.product_name}
+                      {item.regalia_type === 'propia' && <span style={{ marginLeft: '5px', fontSize: '10px' }}>🎁</span>}
+                      {item.regalia_type === 'bonificacion' && <span style={{ marginLeft: '5px', fontSize: '10px' }}>📦</span>}
+                    </span>
+                    <span style={{ textAlign: 'center', color: '#5c5c5c' }}>{item.quantity}</span>
+                    <span style={{ textAlign: 'right', color: '#5c5c5c' }}>${item.unit_price.toFixed(2)}</span>
+                    <span style={{ textAlign: 'right', color: discUnit > 0 ? '#e65100' : '#c4c4c4', fontSize: '12px' }}>
+                      {discUnit > 0 ? `−$${discUnit.toFixed(2)}` : '—'}
+                    </span>
+                    <span style={{ textAlign: 'right', fontWeight: '600', color: badgeColor ?? '#1e293b' }}>
+                      {item.is_regalia ? '$0.00' : `$${lineSub.toFixed(2)}`}
+                    </span>
+                  </div>
+                );
+              })}
+
+              {/* Totals breakdown */}
+              <div style={{ marginTop: '12px', fontSize: '13px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', color: '#64748b', marginBottom: '4px' }}>
+                  <span>Subtotal bruto</span><span>${subtotalBruto.toFixed(2)}</span>
+                </div>
+                {totalDescuentos > 0 && (
+                  <>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', color: '#e65100', marginBottom: '4px' }}>
+                      <span>Descuentos (−)</span><span>−${totalDescuentos.toFixed(2)}</span>
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', color: '#1a1a1a', fontWeight: '600', marginBottom: '4px' }}>
+                      <span>Subtotal neto</span><span>${subtotalNeto.toFixed(2)}</span>
+                    </div>
+                  </>
+                )}
+                {regaliaPropiaCount > 0 && (
+                  <div style={{ display: 'flex', justifyContent: 'space-between', color: '#6a1b9a', marginBottom: '4px' }}>
+                    <span>🎁 Regalías propias</span><span>$0.00</span>
+                  </div>
+                )}
+                {bonificacionCount > 0 && (
+                  <div style={{ display: 'flex', justifyContent: 'space-between', color: '#1565c0', marginBottom: '4px' }}>
+                    <span>📦 Bonif. proveedor</span><span>$0.00</span>
+                  </div>
+                )}
+                <div style={{ display: 'flex', justifyContent: 'space-between', color: '#64748b', marginBottom: '4px' }}>
+                  <span>IVA (13%)</span><span>${tax.toFixed(2)}</span>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', borderTop: '2px solid #1a1a1a', paddingTop: '8px', marginTop: '4px' }}>
+                  <span style={{ fontWeight: '700', fontSize: '15px' }}>Total</span>
+                  <span style={{ fontWeight: '700', fontSize: '20px', color: '#0078d4' }}>${total.toFixed(2)}</span>
+                </div>
+              </div>
+
+              {/* Payment method */}
+              <div style={{ marginTop: '12px', padding: '8px 12px', background: '#f8fafc', borderRadius: '6px', border: '1px solid #e2e8f0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span style={{ fontSize: '12px', color: '#64748b', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.4px' }}>Método de pago</span>
+                <span style={{ fontWeight: '700', fontSize: '13px', color: '#1a1a1a' }}>{paymentMethod}</span>
+              </div>
+              {selectedCustomer && (
+                <div style={{ marginTop: '6px', padding: '8px 12px', background: '#eff6ff', borderRadius: '6px', border: '1px solid #bfdbfe', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span style={{ fontSize: '12px', color: '#64748b', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.4px' }}>Cliente</span>
+                  <span style={{ fontWeight: '700', fontSize: '13px', color: '#1d4ed8' }}>{selectedCustomer.name}</span>
+                </div>
+              )}
+            </div>
+
+            {/* Error */}
+            {error && (
+              <div style={{ margin: '0 20px', padding: '8px 12px', background: '#ffebee', color: '#a4262c', borderRadius: '6px', fontSize: '13px' }}>
+                {error}
+              </div>
+            )}
+
+            {/* Action buttons */}
+            <div style={{ padding: '16px 20px', borderTop: '1px solid #f0f0f0', display: 'flex', gap: '10px' }}>
+              <button
+                onClick={() => { setShowConfirmModal(false); setError(null); }}
+                style={{ flex: 1, padding: '10px', borderRadius: '8px', border: '1px solid #e2e8f0', background: '#f8fafc', color: '#475569', fontWeight: '600', fontSize: '14px', cursor: 'pointer' }}
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={async () => { await confirmSale(); setShowConfirmModal(false); }}
+                disabled={saving}
+                style={{ flex: 2, padding: '10px', borderRadius: '8px', border: 'none', background: saving ? '#e8f5e9' : '#107c10', color: saving ? '#a5d6a7' : 'white', fontWeight: '700', fontSize: '14px', cursor: saving ? 'not-allowed' : 'pointer' }}
+              >
+                {saving ? 'Procesando...' : 'Confirmar Venta'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {receipt && (
         <SaleReceipt

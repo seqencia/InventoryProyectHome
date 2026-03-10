@@ -10,6 +10,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [0.22.0] - 2026-03-09
+
+### Added
+
+#### Modal de confirmación antes de finalizar venta
+
+Al hacer clic en "Confirmar Venta" se abre un modal de revisión antes de procesar:
+
+- **Tabla de ítems**: Producto · Cant · P.Unit · Desc · Subtotal (con badge 🎁/📦 para regalías)
+- **Desglose de totales**: Subtotal bruto → Descuentos → Subtotal neto → Regalías propias / Bonif. proveedor → IVA 13% → **Total** destacado en azul
+- **Método de pago** y **cliente** (si aplica) en tarjetas de resumen
+- **Cancelar** — cierra el modal y vuelve al carrito sin cambios
+- **Confirmar Venta** — ejecuta la venta; si falla muestra el error dentro del modal sin cerrarlo
+
+---
+
 ## [0.21.0] - 2026-03-08
 
 ### Added
