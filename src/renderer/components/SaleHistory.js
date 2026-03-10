@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import SaleReceipt from './SaleReceipt';
 
 const STATUS_STYLE = {
   'Completada': { background: '#e8f5e9', color: '#2e7d32' },
@@ -316,6 +317,7 @@ export default function SaleHistory() {
   const [returnsExpanded, setReturnsExpanded] = useState(null);
   const [returnModal, setReturnModal] = useState(null); // sale object
   const [showReturnsSection, setShowReturnsSection] = useState(false);
+  const [ticketSale, setTicketSale] = useState(null);
 
   const loadData = () => {
     setLoading(true);
@@ -359,6 +361,39 @@ export default function SaleHistory() {
     if (sale.status !== 'Completada' && sale.status !== 'Parcial') return false;
     const already = getAlreadyReturned(sale.id);
     return sale.details.some((d) => (already[d.product_id] || 0) < d.quantity);
+  };
+
+  // Reconstruct SaleReceipt props from stored SaleDetail snapshot
+  const buildReceiptProps = (sale) => {
+    const regularDetails = sale.details.filter((d) => !d.is_regalia);
+    const items = sale.details.map((d) => ({
+      product_name: d.product_name,
+      // unit_price in DB is the effective price; add back discount_amount to get original
+      unit_price: Number(d.unit_price) + Number(d.discount_amount || 0),
+      quantity: d.quantity,
+      is_regalia: d.is_regalia,
+      regalia_type: d.regalia_type ?? null,
+      line_discount_mode: 'amount',
+      line_discount_value: Number(d.discount_amount || 0),
+    }));
+    const subtotalBruto = regularDetails.reduce(
+      (s, d) => s + (Number(d.unit_price) + Number(d.discount_amount || 0)) * d.quantity, 0
+    );
+    const lineDiscountsTotal = regularDetails.reduce(
+      (s, d) => s + Number(d.discount_amount || 0) * d.quantity, 0
+    );
+    const globalDiscountAmount = Number(sale.global_discount || 0);
+    const totalDescuentos = lineDiscountsTotal + globalDiscountAmount;
+    return {
+      sale,
+      items,
+      subtotalBruto,
+      totalDescuentos,
+      globalDiscountAmount,
+      subtotalNeto: Number(sale.subtotal),
+      tax: Number(sale.tax),
+      total: Number(sale.total),
+    };
   };
 
   return (
@@ -522,6 +557,13 @@ export default function SaleHistory() {
                         >
                           {expanded === sale.id ? 'Ocultar' : 'Ver detalle'}
                         </button>
+                        <button
+                          className="fl-btn-secondary"
+                          style={{ ...styles.toggleBtn, marginLeft: '6px', color: '#0078d4', borderColor: '#90caf9', background: '#f0f8ff' }}
+                          onClick={() => setTicketSale(sale)}
+                        >
+                          🧾 Ver Ticket
+                        </button>
                         {canReturn(sale) && (
                           <button
                             className="fl-btn-secondary"
@@ -598,6 +640,14 @@ export default function SaleHistory() {
           alreadyReturned={returnModal.alreadyReturned}
           onClose={() => setReturnModal(null)}
           onConfirm={handleReturnConfirm}
+        />
+      )}
+
+      {/* ── Ticket viewer ── */}
+      {ticketSale && (
+        <SaleReceipt
+          {...buildReceiptProps(ticketSale)}
+          onClose={() => setTicketSale(null)}
         />
       )}
     </>

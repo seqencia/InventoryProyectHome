@@ -181,6 +181,9 @@ export default function SaleReceipt({ sale, items, subtotalBruto, totalDescuento
           <button style={s.btnPrint} onClick={() => window.print()}>
             🖨 Imprimir
           </button>
+          <button style={{ ...s.btnPrint, background: '#0078d4' }} onClick={() => window.print()}>
+            📄 Exportar PDF
+          </button>
           <button style={s.btnClose} onClick={onClose}>
             Cerrar
           </button>

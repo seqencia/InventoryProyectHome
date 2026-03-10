@@ -10,6 +10,25 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [0.23.0] - 2026-03-09
+
+### Added
+
+#### Ver Ticket y Exportar PDF desde Historial de Ventas
+
+**Historial de Ventas** (`SaleHistory.js`):
+- Nuevo botón **🧾 Ver Ticket** en la columna de acciones de cada venta
+- Abre el `SaleReceipt` con los datos reconstruidos desde el snapshot de `sale_details`:
+  - `unit_price` → precio efectivo + `discount_amount` (precio original antes de descuento)
+  - `line_discount_mode: 'amount'`, `line_discount_value: discount_amount` (del detalle)
+  - `subtotalBruto`, `totalDescuentos`, `globalDiscountAmount` (de `sale.global_discount`), `subtotalNeto`, `tax`, `total` reconstruidos desde campos almacenados
+
+**Ticket/Recibo** (`SaleReceipt.js`):
+- Nuevo botón **📄 Exportar PDF** (azul) junto a 🖨 Imprimir
+- Ambos usan `window.print()` con el CSS de impresión ya definido; en el diálogo del sistema se puede seleccionar "Guardar como PDF"
+
+---
+
 ## [0.22.0] - 2026-03-09
 
 ### Added
