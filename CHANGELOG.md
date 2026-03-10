@@ -10,6 +10,36 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [0.24.0] - 2026-03-09
+
+### Added
+
+#### Modal de precio para unidades bonificadas (Entradas de Inventario)
+
+Cuando se registra una entrada con `cantidad_bonificada > 0`, aparece automáticamente un modal de seguimiento:
+
+**Modal `BonificacionPriceModal`**:
+- Muestra nombre del producto y cantidad de unidades bonificadas
+- Input de precio de venta (default: precio actual del producto)
+- Checkbox **"Sin precio de venta (decisión posterior)"** — deshabilita el input
+- Botones: Cancelar (cierra sin guardar precio) y Confirmar
+
+**Comportamiento al confirmar**:
+- **Con precio** → actualiza el producto (`precio_venta_sin_iva`, recalcula `precio_venta_con_iva`, `precio_neto`, `utilidad`) y registra `precio_venta_bonificacion` en la entrada
+- **Sin precio** → establece `precio_bonificacion_pendiente = true` en la entrada, sin modificar el producto
+
+**Tabla de entradas**: la columna "Ingresado" ahora muestra:
+- `P.V. bonif.: $X.XX` (azul) si se asignó precio
+- `⏳ Precio pendiente` (naranja) si se marcó como pendiente
+
+**Backend** (`main.js`):
+- `StockEntry` — dos nuevos campos: `precio_venta_bonificacion decimal(16,6)` y `precio_bonificacion_pendiente boolean`
+- Nuevo handler `stockEntries:updateBonificacion` — actualiza la entrada y opcionalmente el producto
+
+**Preload**: expone `stockEntries.updateBonificacion`
+
+---
+
 ## [0.23.0] - 2026-03-09
 
 ### Added

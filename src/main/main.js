@@ -137,6 +137,8 @@ const StockEntrySchema = new EntitySchema({
     supplier_id: { type: Number, nullable: true },
     supplier_name: { type: String, nullable: true },
     notes: { type: String, nullable: true },
+    precio_venta_bonificacion: { type: 'decimal', precision: 16, scale: 6, nullable: true },
+    precio_bonificacion_pendiente: { type: Boolean, nullable: true, default: false },
     created_at: { type: 'datetime', createDate: true },
   },
 });
@@ -411,6 +413,30 @@ function setupIpcHandlers() {
       await manager.getRepository('Product').increment({ id: data.product_id }, 'stock', totalQty);
       return entry;
     });
+  });
+
+  ipcMain.handle('stockEntries:updateBonificacion', async (_, { entryId, productId, precio_venta_bonificacion, precio_bonificacion_pendiente, updateProductPrice }) => {
+    await repo('StockEntry').update(entryId, {
+      precio_venta_bonificacion: precio_venta_bonificacion != null ? r6(precio_venta_bonificacion) : null,
+      precio_bonificacion_pendiente: !!precio_bonificacion_pendiente,
+    });
+    if (updateProductPrice && precio_venta_bonificacion > 0) {
+      const product = await repo('Product').findOneBy({ id: productId });
+      if (product) {
+        const pricing = computePricing({
+          precio_costo: product.precio_costo,
+          precio_venta_sin_iva: precio_venta_bonificacion,
+          descuento_monto: product.descuento_monto || 0,
+          descuento_porcentaje: product.descuento_porcentaje || 0,
+        });
+        await repo('Product').update(productId, {
+          precio_venta_sin_iva: r6(precio_venta_bonificacion),
+          sale_price: r6(precio_venta_bonificacion),
+          ...pricing,
+        });
+      }
+    }
+    return { success: true };
   });
 
   // Sales

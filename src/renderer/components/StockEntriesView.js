@@ -183,6 +183,69 @@ function StockEntryModal({ products, suppliers, onSave, onCancel }) {
   );
 }
 
+// ── Bonificación Price Modal ─────────────────────────────────────────────────
+
+function BonificacionPriceModal({ entry, product, onConfirm, onCancel }) {
+  const currentPrice = Number(product?.precio_venta_sin_iva || product?.sale_price || 0);
+  const [price, setPrice] = useState(currentPrice > 0 ? String(currentPrice) : '');
+  const [noPrecio, setNoPrecio] = useState(false);
+
+  return (
+    <div style={s.overlay} onClick={(e) => e.target === e.currentTarget && onCancel()}>
+      <div style={{ ...s.modal, width: '420px' }}>
+        <div style={s.modalHeader}>
+          <h2 style={s.modalTitle}>Precio de unidades bonificadas</h2>
+        </div>
+        <div style={s.modalBody}>
+          <div style={{ marginBottom: '6px', fontSize: '13px', fontWeight: '600', color: '#1a1a1a' }}>
+            {product?.name}
+          </div>
+          <div style={{ marginBottom: '18px', fontSize: '14px', color: '#5c5c5c', lineHeight: '1.5' }}>
+            ¿A qué precio deseas vender los <strong style={{ color: '#1a1a1a' }}>{entry.bonus_quantity}</strong> productos bonificados?
+          </div>
+          <div style={{ ...s.field, opacity: noPrecio ? 0.4 : 1 }}>
+            <label style={s.label}>Precio de venta sin IVA ($)</label>
+            <input
+              className="fl-input"
+              style={s.input}
+              type="number"
+              min="0"
+              step="0.01"
+              value={price}
+              onChange={(e) => setPrice(e.target.value)}
+              disabled={noPrecio}
+              placeholder="0.00"
+              autoFocus={!noPrecio}
+            />
+            {currentPrice > 0 && (
+              <div style={s.hint}>Precio actual del producto: ${currentPrice.toFixed(2)}</div>
+            )}
+          </div>
+          <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', color: '#5c5c5c', cursor: 'pointer', userSelect: 'none' }}>
+            <input
+              type="checkbox"
+              checked={noPrecio}
+              onChange={(e) => setNoPrecio(e.target.checked)}
+              style={{ width: '16px', height: '16px', cursor: 'pointer' }}
+            />
+            Sin precio de venta (decisión posterior)
+          </label>
+        </div>
+        <div style={s.modalFooter}>
+          <button type="button" style={s.btnCancel} onClick={onCancel}>Cancelar</button>
+          <button
+            type="button"
+            style={s.btnSave}
+            onClick={() => onConfirm({ precio: noPrecio ? null : (parseFloat(price) || null), pendiente: noPrecio })}
+          >
+            Confirmar
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function StockEntriesView() {
   const [entries, setEntries] = useState([]);
   const [products, setProducts] = useState([]);
@@ -190,6 +253,7 @@ export default function StockEntriesView() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [modal, setModal] = useState(false);
+  const [pendingBonificacion, setPendingBonificacion] = useState(null); // { entry, product }
 
   const load = useCallback(async () => {
     try {
@@ -212,11 +276,33 @@ export default function StockEntriesView() {
 
   const handleSave = async (data) => {
     try {
-      await window.electron.stockEntries.create(data);
+      const savedEntry = await window.electron.stockEntries.create(data);
       setModal(false);
-      load();
+      if (data.bonus_quantity > 0) {
+        const product = products.find((p) => p.id === data.product_id);
+        setPendingBonificacion({ entry: { ...savedEntry, bonus_quantity: data.bonus_quantity }, product });
+      } else {
+        load();
+      }
     } catch {
       setError('Error al registrar la entrada de stock.');
+    }
+  };
+
+  const handleBonificacionConfirm = async ({ precio, pendiente }) => {
+    try {
+      await window.electron.stockEntries.updateBonificacion({
+        entryId: pendingBonificacion.entry.id,
+        productId: pendingBonificacion.product.id,
+        precio_venta_bonificacion: precio,
+        precio_bonificacion_pendiente: pendiente,
+        updateProductPrice: !pendiente && precio > 0,
+      });
+    } catch {
+      // Non-critical — entry is already saved; silently proceed
+    } finally {
+      setPendingBonificacion(null);
+      load();
     }
   };
 
@@ -261,6 +347,15 @@ export default function StockEntriesView() {
                           <span style={{ display: 'block', fontSize: '11px', color: '#9e9e9e', marginTop: '3px' }}>
                             {entry.quantity} comprada{entry.quantity !== 1 ? 's' : ''} + {entry.bonus_quantity} bonificada{entry.bonus_quantity !== 1 ? 's' : ''}
                           </span>
+                          {entry.precio_venta_bonificacion != null ? (
+                            <span style={{ display: 'block', fontSize: '11px', color: '#1565c0', marginTop: '2px', fontWeight: '600' }}>
+                              P.V. bonif.: ${Number(entry.precio_venta_bonificacion).toFixed(2)}
+                            </span>
+                          ) : entry.precio_bonificacion_pendiente ? (
+                            <span style={{ display: 'block', fontSize: '11px', color: '#e65100', marginTop: '2px', fontWeight: '600' }}>
+                              ⏳ Precio pendiente
+                            </span>
+                          ) : null}
                         </span>
                       ) : (
                         <span style={s.qtyBadge}>+{entry.quantity}</span>
@@ -285,6 +380,15 @@ export default function StockEntriesView() {
 
       {modal && (
         <StockEntryModal products={products} suppliers={suppliers} onSave={handleSave} onCancel={() => setModal(false)} />
+      )}
+
+      {pendingBonificacion && (
+        <BonificacionPriceModal
+          entry={pendingBonificacion.entry}
+          product={pendingBonificacion.product}
+          onConfirm={handleBonificacionConfirm}
+          onCancel={() => { setPendingBonificacion(null); load(); }}
+        />
       )}
     </>
   );
