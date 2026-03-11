@@ -49,3 +49,11 @@ See [`docs/DESIGN-SYSTEM.md`](docs/DESIGN-SYSTEM.md) for full token/class refere
 
 - [`docs/MODULES.md`](docs/MODULES.md) — what each tab/module does
 - [`docs/BUGS.md`](docs/BUGS.md) — open bugs with fix guidance
+
+## Never
+
+- **Never modify `database.sqlite` directly** — all DB access goes through TypeORM via IPC handlers in `main.js`
+- **Never remove existing columns from an `EntitySchema`** — dropping columns destroys production data; mark unused fields as `nullable: true` instead
+- **Never change the IVA rate (13%)** without an explicit instruction from the user — it is a legal/business rule
+- **Never push to the remote repository automatically** — only commit locally unless the user explicitly says to push
+- **Never install new npm packages** without asking the user first — confirm the package name and purpose before running `npm install`

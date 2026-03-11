@@ -10,6 +10,26 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [0.28.0] - 2026-03-10
+
+### Added
+
+#### Documentación de roadmap y componentes UI
+
+- **`docs/ROADMAP.md`** — Hitos versionados: estado actual (v0.27.0), versiones planificadas v0.28–v0.32, criterios de entrada a v1.0.0 (stable), v1.1.0 con integración DTE/Hacienda El Salvador, y v2.0.0 arquitectura SaaS multi-tenant con consideraciones de migración.
+- **`docs/UI-COMPONENTS.md`** — Catálogo de componentes reutilizables: botones (primario, secundario, danger, ghost, confirmar venta), badges (estado, condición, método de pago, regalía/bonificación), inputs/selects con label, modal frosted glass, tarjeta con acento KPI, tabla estándar, banners de error/éxito, estado vacío, loading, toggle switch, selector de cliente type-to-search, desglose de totales del carrito, layout wrapper de página.
+
+#### Sección "Never" en `CLAUDE.md`
+
+Reglas que Claude Code nunca debe violar en este proyecto:
+- No modificar `database.sqlite` directamente
+- No eliminar columnas existentes de un `EntitySchema`
+- No cambiar la tasa de IVA (13%) sin instrucción explícita
+- No hacer push automático sin que el usuario lo pida
+- No instalar paquetes npm sin consultar primero
+
+---
+
 ## [0.27.0] - 2026-03-10
 
 ### Added
