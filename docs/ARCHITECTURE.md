@@ -70,11 +70,11 @@ All channels use `ipcMain.handle` / `ipcRenderer.invoke` pattern.
 
 | Namespace | Channels |
 |---|---|
-| `products` | `getAll`, `create`, `update`, `delete` |
+| `products` | `getAll`, `create`, `update`, `delete`, `getBonificacionInfo`, `updateBonificacionPrice` |
 | `categories` | `getAll`, `create`, `update`, `delete` |
 | `customers` | `getAll`, `create`, `update`, `delete` |
 | `suppliers` | `getAll`, `create`, `update`, `delete` |
-| `stockEntries` | `getAll`, `create` |
+| `stockEntries` | `getAll`, `create`, `updateBonificacion` |
 | `sales` | `getAll`, `create` |
 | `returns` | `getAll`, `create` |
 | `dashboard` | `getSummary` |

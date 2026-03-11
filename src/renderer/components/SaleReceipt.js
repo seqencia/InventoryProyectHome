@@ -193,7 +193,7 @@ export default function SaleReceipt({ sale, items, subtotalBruto, totalDescuento
         <div id="sale-receipt" style={s.receipt}>
           {/* Store header */}
           <div style={s.headerBlock}>
-            <h1 style={s.storeName}>TechStore</h1>
+            <h1 style={s.storeName}>StarTecnology</h1>
             <p style={s.storeTagline}>Comprobante de Venta</p>
           </div>
 

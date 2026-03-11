@@ -4,7 +4,7 @@ Semantic versioning: `0.x.x` = pre-release (active development), `1.0.0` = stabl
 
 ---
 
-## ✅ v0.27.0 — Estado actual (2026-03-10)
+## ✅ v0.28.0 — Estado actual (2026-03-10)
 
 Aplicación de escritorio completa para tienda de tecnología/reacondicionados. Single-user, offline-first.
 
@@ -20,11 +20,11 @@ Aplicación de escritorio completa para tienda de tecnología/reacondicionados. 
 - **Dashboard** — KPIs del día, stock bajo, top 5 vendidos, ventas recientes
 - **Modelo de precios** — 6 decimales, IVA 13%, descuentos catálogo, precio neto automático
 - **Diseño** — Windows 11 Fluent Design (inline styles, frosted glass, pill tabs)
-- **Documentación** — ARCHITECTURE, DATABASE, MODULES, DESIGN-SYSTEM, BUGS, TESTING, BUSINESS-RULES, PATTERNS, DECISIONS
+- **Documentación** — ARCHITECTURE, DATABASE, MODULES, DESIGN-SYSTEM, BUGS, TESTING, BUSINESS-RULES, PATTERNS, DECISIONS, ROADMAP, UI-COMPONENTS
 
 ---
 
-## 🔜 v0.28.0 — Estabilización y UX
+## 🔜 v0.29.0 — Estabilización y UX
 
 - [ ] Búsqueda global en Historial (por cliente, producto, método, rango de monto)
 - [ ] Editar venta pendiente antes de confirmar (agregar/quitar ítems)
@@ -34,7 +34,7 @@ Aplicación de escritorio completa para tienda de tecnología/reacondicionados. 
 
 ---
 
-## 🔜 v0.29.0 — Gestión avanzada de inventario
+## 🔜 v0.30.0 — Gestión avanzada de inventario
 
 - [ ] Ajuste de inventario manual (corrección de conteo físico) con motivo y log de auditoría
 - [ ] Transferencia de stock entre ubicaciones físicas
@@ -44,7 +44,7 @@ Aplicación de escritorio completa para tienda de tecnología/reacondicionados. 
 
 ---
 
-## 🔜 v0.30.0 — Reportes y analítica avanzada
+## 🔜 v0.31.0 — Reportes y analítica avanzada
 
 - [ ] Reporte de rentabilidad por categoría (margen %)
 - [ ] Reporte de productos sin movimiento (sin ventas en N días)
@@ -55,7 +55,7 @@ Aplicación de escritorio completa para tienda de tecnología/reacondicionados. 
 
 ---
 
-## 🔜 v0.31.0 — Clientes y fidelización
+## 🔜 v0.32.0 — Clientes y fidelización
 
 - [ ] Historial de compras por cliente (ventas + montos + productos)
 - [ ] Notas internas por cliente
@@ -64,7 +64,7 @@ Aplicación de escritorio completa para tienda de tecnología/reacondicionados. 
 
 ---
 
-## 🔜 v0.32.0 — Configuración avanzada
+## 🔜 v0.33.0 — Configuración avanzada
 
 - [ ] Nombre de la tienda configurable (mostrado en recibo)
 - [ ] Logo de la tienda (imagen local, mostrado en recibo impreso)
@@ -84,7 +84,7 @@ Aplicación de escritorio completa para tienda de tecnología/reacondicionados. 
 - [ ] Performance aceptable con ≥ 5 000 productos y ≥ 10 000 ventas
 - [ ] Instalador empaquetado con `electron-builder` (`.exe` firmado)
 
-**Incluye todo lo de v0.28 – v0.32 más**:
+**Incluye todo lo de v0.29 – v0.33 más**:
 - [ ] Onboarding para nuevos usuarios (wizard de primera configuración)
 - [ ] Pantalla de ayuda / shortcuts in-app
 - [ ] Auto-updater (`electron-updater`) para nuevas versiones

@@ -68,7 +68,7 @@ All domain-specific rules enforced by this application. Violations must be rejec
 
 ### Modelo de precios (campos `decimal(16,6)`)
 - `precio_costo` — precio de costo de adquisición
-- `precio_venta_sin_iva` — precio base sin IVA (requerido para nueva venta)
+- `precio_venta_sin_iva` — precio base sin IVA; si está presente, es el campo canónico
 - `precio_venta_con_iva` — derivado: `r6(sin_iva × 1.13)`; almacenado en DB
 - `descuento_monto` — descuento fijo del catálogo (default 0)
 - `descuento_porcentaje` — descuento porcentual del catálogo (default 0)
@@ -76,12 +76,14 @@ All domain-specific rules enforced by this application. Violations must be rejec
 - `utilidad` — `r6(precio_neto − precio_costo)`; puede ser negativa
 
 ### Prioridad de precio en carrito (NewSale)
-1. `precio_neto` (campo nuevo, si existe)
+1. `precio_neto` (campo nuevo, si existe y es > 0)
 2. `offer_price` (campo legacy)
 3. `sale_price` / `price` (campo legacy base)
 
+> Los productos creados antes de v0.19.0 pueden no tener `precio_venta_sin_iva` y ser vendidos usando `sale_price`. Ambos flujos son válidos.
+
 ### Precio de venta mínimo
-- `precio_venta_sin_iva >= 0.01` — precio $0.00 bloqueado en ProductForm (`min="0.01"`)
+- `precio_venta_sin_iva >= 0.01` — precio $0.00 bloqueado en ProductForm (`min="0.01"`) para productos nuevos/editados
 
 ### Campos legacy
 - `cost_price`, `sale_price` (columna DB `price`), `offer_price` — mantenidos por compatibilidad
@@ -155,14 +157,31 @@ Los siguientes campos se escriben una sola vez y nunca se recalculan:
 - `cost_price`, `discount_amount`, `discount_percentage`, `iva_amount`, `line_total`
 
 ### Status inicial
-- Default `Completada`; puede ser `Pendiente` si el operador lo selecciona manualmente
+- Default `Completada`; puede ser `Pendiente` si el operador lo selecciona manualmente en el dropdown de estado
+
+### Status válidos
+| Status | Descripción | Quién lo asigna |
+|---|---|---|
+| `Completada` | Venta procesada y pagada | Default en `sales:create` |
+| `Pendiente` | Venta registrada pero pago pendiente | Operador en Nueva Venta (dropdown) |
+| `Devuelta` | Todos los ítems devueltos | `returns:create` automáticamente |
+| `Parcial` | Devolución parcial | `returns:create` automáticamente |
+| `Cancelada` | Venta anulada | No existe UI para crearlo actualmente; reservado para uso futuro o corrección manual |
 
 ---
 
 ## Bonificaciones de proveedor (StockEntry)
 
-### Precio de venta de unidades bonificadas
-- Al registrar una entrada con `bonus_quantity > 0`, se puede asignar un precio de venta específico para esas unidades
-- Si se asigna precio: actualiza `precio_venta_sin_iva` del producto y recalcula todos los campos derivados; registra log en `bonificacion_price_logs`
-- Si se marca "Sin precio (decisión posterior)": `precio_bonificacion_pendiente = true` en la entrada; producto sin cambio
-- El historial de cambios se audita en `bonificacion_price_logs` (últimos 10 visibles en ProductForm)
+### Precio de venta de unidades bonificadas — dos rutas
+
+**Ruta 1: `BonificacionPriceModal`** (después de registrar una entrada con `bonus_quantity > 0`)
+- Handler: `stockEntries:updateBonificacion`
+- Si se asigna precio: actualiza `StockEntry.precio_venta_bonificacion` y opcionalmente actualiza `precio_venta_sin_iva` del producto con todos los campos derivados
+- Si se marca "Sin precio (decisión posterior)": `StockEntry.precio_bonificacion_pendiente = true`; producto sin cambio
+- **No crea** registro en `bonificacion_price_logs`
+
+**Ruta 2: Sección "Unidades Bonificadas" en ProductForm** (edición posterior del producto)
+- Handler: `products:updateBonificacionPrice`
+- Actualiza `precio_venta_sin_iva` del producto y todos los campos derivados
+- **Sí crea** registro en `bonificacion_price_logs` con `previous_price` y `new_price`
+- El historial de cambios de esta ruta es visible en ProductForm (últimos 10 registros)

@@ -37,7 +37,7 @@ Manual test cases for every critical module. No automated test runner is configu
 
 | # | Escenario | Resultado esperado |
 |---|---|---|
-| T-13 | Desc. global excede subtotal | Total = $0.00; no se puede confirmar una venta con total negativo |
+| T-13 | Desc. global excede subtotal | Total se capea a $0.00 automáticamente; la venta **sí puede confirmarse** con total $0.00 (el botón solo se deshabilita con carrito vacío) |
 | T-14 | Todos los ítems son regalías | Subtotal = $0.00 · IVA = $0.00 · Total = $0.00; venta válida |
 
 ### Regalías
@@ -48,6 +48,7 @@ Manual test cases for every critical module. No automated test runner is configu
 | T-16 | Regalía propia vs Bonif. proveedor | Badges diferenciados (🎁 morado / 📦 azul); desglose separado en carrito y recibo |
 | T-17 | Regalía propia resta costo del profit | `sales.profit` reducido por `precio_costo` del ítem regalía propia |
 | T-18 | Bonif. proveedor no afecta profit | `sales.profit` sin cambio por ítems bonificación |
+| T-19 | Producto sin `precio_costo` | Ese ítem no suma ni resta al profit; `sales.profit` calculado solo con ítems que tienen costo |
 
 ---
 
@@ -74,7 +75,7 @@ Manual test cases for every critical module. No automated test runner is configu
 | # | Escenario | Resultado esperado |
 |---|---|---|
 | T-26 | Entrada: 10 compradas + 2 bonificadas | `product.stock` += 12 |
-| T-27 | Solo bonificadas (0 compradas) | Bloqueado — `totalQty` debe ser > 0 |
+| T-27 | Solo bonificadas (0 compradas) | Bloqueado en UI — `totalQty` debe ser > 0 (validación client-side en `StockEntriesView.js`; no hay validación server-side en `stockEntries:create`) |
 | T-28 | Entrada sin bonus_quantity | `product.stock` += quantity únicamente |
 
 ---
@@ -97,6 +98,14 @@ Manual test cases for every critical module. No automated test runner is configu
 | T-34 | Confirmar devolución | Stock de cada producto devuelto incrementa exactamente en `quantity` devuelta |
 | T-35 | Transaccionalidad de devolución | Si falla algún paso (DB error), toda la operación hace rollback; stock y sale status sin cambio |
 
+### Precio de venta de unidades bonificadas (dos rutas)
+
+| # | Escenario | Resultado esperado |
+|---|---|---|
+| T-36 | Asignar precio desde `BonificacionPriceModal` (después de registrar entrada) | `StockEntry.precio_venta_bonificacion` guardado; producto actualizado (si se eligió precio); **no** se crea registro en `bonificacion_price_logs` |
+| T-37 | Actualizar precio desde sección "Unidades Bonificadas" en ProductForm | Producto actualizado Y se crea un nuevo registro en `bonificacion_price_logs` con `previous_price` y `new_price` |
+| T-38 | Marcar "Sin precio (decisión posterior)" en `BonificacionPriceModal` | `StockEntry.precio_bonificacion_pendiente = true`; producto sin cambio; no se crea log |
+
 ---
 
 ## Reportes
@@ -105,7 +114,7 @@ Manual test cases for every critical module. No automated test runner is configu
 
 | # | Escenario | Resultado esperado |
 |---|---|---|
-| T-40 | Filtro "Hoy" | Solo ventas de la fecha actual UTC (YYYY-MM-DD) |
+| T-40 | Filtro "Hoy" | Solo ventas desde medianoche del día actual (hora local del sistema, `setHours(0,0,0,0)`) |
 | T-41 | Filtro rango personalizado | `from` y `to` inclusivos; ventas del día `to` incluidas |
 | T-42 | `from` o `to` vacío | `reports:getData` retorna error de validación; no ejecuta queries |
 | T-43 | Rango sin ventas | Todos los KPIs en 0; tablas vacías; sin error |
@@ -132,7 +141,7 @@ Manual test cases for every critical module. No automated test runner is configu
 | T-52 | `utilidad` | = `r6(precio_neto - precio_costo)` — puede ser negativa (se muestra en rojo) |
 | T-53 | Legacy sync | Guardar producto actualiza también `sale_price` (columna `price`) y `cost_price` legacy |
 | T-54 | Precio de venta $0.00 | Bloqueado por `min="0.01"` en ProductForm |
-| T-55 | `precio_venta_con_iva` en venta | `unit_price` en `sale_details` = `precio_neto` del producto al momento de la venta |
+| T-55 | `unit_price` en `sale_details` | = `precio_neto` (precio efectivo **sin IVA**); el IVA se calcula y guarda por separado en `sale_details.iva_amount`; `precio_venta_con_iva` NO se usa como `unit_price` |
 
 ### Campos derivados — live preview
 

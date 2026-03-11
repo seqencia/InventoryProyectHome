@@ -10,6 +10,53 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [0.29.0] - 2026-03-10
+
+### Fixed — Auditoría cruzada de documentación y código
+
+#### I-01 — ROADMAP: versión actual desactualizada y colisión de versiones
+- Actualizado "Estado actual" de v0.27.0 a **v0.28.0** en ROADMAP
+- Versiones planificadas desplazadas: v0.28→v0.29, v0.29→v0.30, v0.30→v0.31, v0.31→v0.32, v0.32→v0.33 para evitar colisión con v0.28.0 ya commiteado en CHANGELOG
+
+#### I-02 — TESTING.md T-55: campo `unit_price` referenciado incorrectamente
+- T-55 decía "`unit_price = precio_venta_con_iva`" — **incorrecto**
+- Corregido: `unit_price` en `sale_details` = `precio_neto` (precio efectivo **sin IVA**); el IVA se guarda por separado en `iva_amount`
+
+#### I-03 — SaleReceipt.js: nombre de tienda incorrecto en recibo impreso
+- `SaleReceipt.js` mostraba "TechStore" hardcodeado; navbar, Excel y CSV ya usaban "StarTecnology"
+- Corregido: cambiado a "StarTecnology" para consistencia en todos los puntos del sistema
+
+#### I-04 — TESTING.md T-13: texto misleading sobre total $0
+- T-13 decía "no se puede confirmar una venta con total negativo" — implicaba que $0 también bloqueaba
+- Corregido: el total se capea a $0.00 automáticamente; una venta con total $0 **sí se puede confirmar** (el botón solo se deshabilita con carrito vacío)
+
+#### I-05 — ARCHITECTURE.md: 3 canales IPC no documentados
+- Añadidos a la tabla de canales: `products:getBonificacionInfo`, `products:updateBonificacionPrice`, `stockEntries:updateBonificacion`
+
+#### I-06 — BUSINESS-RULES.md: `precio_venta_sin_iva` descrito como "requerido"
+- Corregido: campo es canónico cuando existe, pero productos legacy con solo `sale_price` son plenamente válidos
+- Añadida nota de prioridad de precio con referencia a compatibilidad pre-v0.19
+
+#### I-07 — BUSINESS-RULES.md: BonificacionPriceLog inconsistente
+- Clarificadas las dos rutas de precio de bonificación:
+  - `stockEntries:updateBonificacion` (modal post-entrada): actualiza producto pero **no crea log**
+  - `products:updateBonificacionPrice` (ProductForm): actualiza producto **y crea log** en `bonificacion_price_logs`
+
+#### I-08 — BUSINESS-RULES.md: status `Cancelada` no documentado
+- Añadida tabla de todos los status válidos con descripción y origen de asignación
+
+#### I-09 — TESTING.md T-40: "UTC" incorrecto
+- Corregido: el dashboard usa hora local del sistema (`setHours(0,0,0,0)`), no UTC
+
+#### I-10 — TESTING.md T-27: validación UI-only no especificada
+- Aclarado que `totalQty > 0` se valida en `StockEntriesView.js` (client-side); no hay validación server-side en `stockEntries:create`
+
+#### I-11/I-12 — TESTING.md: casos de prueba faltantes
+- Añadido T-19: profit cuando `precio_costo = null` (ítems excluidos del cálculo)
+- Añadidos T-36, T-37, T-38: las dos rutas de precio de bonificación y el caso "decisión posterior"
+
+---
+
 ## [0.28.0] - 2026-03-10
 
 ### Added
