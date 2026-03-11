@@ -10,6 +10,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [0.27.0] - 2026-03-10
+
+### Added
+
+#### Documentación técnica ampliada (`docs/`)
+
+- **`docs/TESTING.md`** — Casos de prueba manuales para todos los módulos críticos: NewSale (IVA, regalías, descuentos, total negativo), Inventario (stock tras venta/devolución/entrada), Devoluciones (duplicados, restauración), Reportes (filtros de fecha, integridad Excel), Pricing (6 decimales, fórmulas derivadas), Base de datos (integridad referencial, índices).
+- **`docs/BUSINESS-RULES.md`** — Todas las reglas de negocio del dominio: IVA 13%, regalías propias vs bonificación de proveedor, descuentos por línea y globales, modelo de precios con 6 decimales, gestión de stock, proceso de ventas (`sales:create` paso a paso), devoluciones (elegibilidad, validación server-side, status de venta).
+- **`docs/PATTERNS.md`** — Patrones canónicos de código: cómo crear un `EntitySchema`, registrar un handler IPC en `main.js`, exponerlo en `preload.js`, consumirlo en un componente React, estructura estándar de componente, patrón de modal Fluent Design.
+- **`docs/DECISIONS.md`** — Decisiones técnicas documentadas con justificación: SQLite, TypeORM con `EntitySchema`, `synchronize: true`, esbuild, React sin CRA, proceso único de BD, `contextBridge` único, inline styles, snapshots en `sale_details`, validación server-side, backup como copia de archivo.
+
+---
+
 ## [0.26.0] - 2026-03-09
 
 ### Fixed — Auditoría completa del proyecto
