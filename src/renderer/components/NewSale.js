@@ -584,7 +584,14 @@ export default function NewSale({ onSaleComplete }) {
                     style={outOfStock ? styles.productRowDisabled : styles.productRow}
                   >
                     <div>
-                      <div style={styles.productName}>{product.name}</div>
+                      <div style={{ ...styles.productName, display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        {product.name}
+                        {!outOfStock && avail === 1 && (
+                          <span style={{ fontSize: '10px', fontWeight: '700', color: '#e65100', background: '#fff3e0', padding: '1px 6px', borderRadius: '8px', border: '1px solid #ffcc80' }}>
+                            ¡Último!
+                          </span>
+                        )}
+                      </div>
                       <div style={styles.productMeta}>
                         {product.category || 'Sin categoría'} · Stock: {avail}
                         {inCart > 0 && ` (${inCart} en carrito)`}
@@ -707,6 +714,8 @@ export default function NewSale({ onSaleComplete }) {
                 const effPrice  = getEffectivePrice(item);
                 const lineSub   = getLineSubtotal(item);
                 const hasDisc   = discUnit > 0;
+                const cartProduct = allProducts.find((p) => p.id === item.product_id);
+                const depleting = cartProduct && !item.is_regalia && cartQtyFor(item.product_id) >= cartProduct.stock;
                 return (
                   <div
                     key={`${item.product_id}_${item.regalia_type ?? 'normal'}`}
@@ -728,6 +737,11 @@ export default function NewSale({ onSaleComplete }) {
                         {item.regalia_type === 'bonificacion' && (
                           <span style={{ display: 'inline-block', marginLeft: '6px', fontSize: '10px', fontWeight: '700', color: '#1565c0', background: '#e3f2fd', padding: '1px 6px', borderRadius: '8px', letterSpacing: '0.5px' }}>
                             📦 BONIF.
+                          </span>
+                        )}
+                        {depleting && (
+                          <span style={{ display: 'inline-block', marginLeft: '6px', fontSize: '10px', fontWeight: '700', color: '#a4262c', background: '#ffebee', padding: '1px 6px', borderRadius: '8px', border: '1px solid #ef9a9a' }}>
+                            ¡Agota stock!
                           </span>
                         )}
                       </div>

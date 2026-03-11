@@ -10,6 +10,41 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [0.30.0] - 2026-03-10
+
+### Added
+
+#### Búsqueda y filtros en Historial de Ventas (`SaleHistory.js`)
+- Barra de búsqueda por nombre de cliente o producto/SKU (filtro en tiempo real)
+- Filtros rápidos por método de pago y estado de venta
+- Filtro por rango de monto total (mínimo/máximo)
+- Botón "Limpiar" que aparece solo cuando hay filtros activos
+- Contador "N de M ventas" cuando los filtros reducen la lista
+
+#### Acciones sobre ventas Pendientes (`SaleHistory.js` + `main.js` + `preload.js`)
+- Botón "✓ Completar" en ventas con estado `Pendiente`: cambia status a `Completada`
+- Botón "✗ Cancelar" en ventas con estado `Pendiente`: cambia status a `Cancelada`
+- Nuevo handler IPC `sales:updateStatus` en `main.js` (actualiza `status` y/o `payment_method`)
+- Nuevo canal `sales.updateStatus` expuesto en `preload.js`
+
+#### Impresión directa desde Historial (`SaleHistory.js` + `SaleReceipt.js`)
+- Botón "🖨 Imprimir" en cada fila del historial: abre recibo y lanza `window.print()` automáticamente
+- Prop `autoPrint` en `SaleReceipt`: si es `true`, ejecuta `window.print()` 100 ms tras el montaje del componente
+
+#### Indicadores de depleción de stock (`NewSale.js`)
+- Badge "¡Último!" (naranja) en la lista de productos cuando solo queda 1 unidad disponible
+- Badge "¡Agota stock!" (rojo) en el ítem del carrito cuando la cantidad en carrito iguala o supera el stock total del producto
+
+#### Validación de código de barras único (`main.js`)
+- `products:create`: verifica que no exista otro producto con el mismo `barcode` antes de insertar; lanza error descriptivo con el nombre del producto conflictivo
+- `products:update`: igual, excluyendo el propio producto editado
+
+#### Propagación de errores al guardar producto (`InventoryView.js` + `ProductForm.js`)
+- `InventoryView`: captura `e.message` en el catch de `handleSave` y lo almacena en estado `saveError`; limpia el error al cerrar el modal
+- `ProductForm`: acepta prop `saveError` y muestra el mensaje en el footer del modal (fondo rojo, antes de los botones de acción)
+
+---
+
 ## [0.29.0] - 2026-03-10
 
 ### Fixed — Auditoría cruzada de documentación y código

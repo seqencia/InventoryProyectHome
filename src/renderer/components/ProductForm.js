@@ -73,7 +73,7 @@ function BarcodeIcon() {
   );
 }
 
-export default function ProductForm({ product, onSave, onCancel }) {
+export default function ProductForm({ product, saveError, onSave, onCancel }) {
   const isEdit = Boolean(product);
   const serialNumberRef = useRef(null);
 
@@ -461,6 +461,12 @@ export default function ProductForm({ product, onSave, onCancel }) {
             </div>
 
           </div>
+
+          {saveError && (
+            <div style={{ background: '#ffebee', color: '#a4262c', padding: '10px 24px', fontSize: '13px', borderTop: '1px solid #ffcdd2' }}>
+              {saveError}
+            </div>
+          )}
 
           <div style={s.footer}>
             <button type="button" className="fl-btn-ghost" style={s.btnCancel} onClick={onCancel}>Cancelar</button>

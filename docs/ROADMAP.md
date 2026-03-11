@@ -4,7 +4,7 @@ Semantic versioning: `0.x.x` = pre-release (active development), `1.0.0` = stabl
 
 ---
 
-## ✅ v0.28.0 — Estado actual (2026-03-10)
+## ✅ v0.30.0 — Estado actual (2026-03-10)
 
 Aplicación de escritorio completa para tienda de tecnología/reacondicionados. Single-user, offline-first.
 
@@ -21,16 +21,19 @@ Aplicación de escritorio completa para tienda de tecnología/reacondicionados. 
 - **Modelo de precios** — 6 decimales, IVA 13%, descuentos catálogo, precio neto automático
 - **Diseño** — Windows 11 Fluent Design (inline styles, frosted glass, pill tabs)
 - **Documentación** — ARCHITECTURE, DATABASE, MODULES, DESIGN-SYSTEM, BUGS, TESTING, BUSINESS-RULES, PATTERNS, DECISIONS, ROADMAP, UI-COMPONENTS
+- **Estabilización UX** — filtros en historial, acciones sobre ventas pendientes, indicadores de stock, impresión directa, validación de barcode único, propagación de errores en formulario de producto
 
 ---
 
-## 🔜 v0.29.0 — Estabilización y UX
+## ✅ v0.29.0 — Estabilización y UX (completado en v0.30.0)
 
-- [ ] Búsqueda global en Historial (por cliente, producto, método, rango de monto)
-- [ ] Editar venta pendiente antes de confirmar (agregar/quitar ítems)
-- [ ] Indicador visual de "stock se agotará" si se venden todas las unidades disponibles
-- [ ] Imprimir/PDF desde Historial sin abrir el ticket (botón directo)
-- [ ] Validar `barcode` único al guardar producto (mostrar mensaje claro si ya existe)
+- [x] Búsqueda global en Historial (por cliente, producto, método, rango de monto)
+- [ ] ~~Editar venta pendiente antes de confirmar (agregar/quitar ítems)~~ — aplazado a v0.31.0
+- [x] Indicador visual de "stock se agotará" si se venden todas las unidades disponibles
+- [x] Imprimir/PDF desde Historial sin abrir el ticket (botón directo)
+- [x] Validar `barcode` único al guardar producto (mostrar mensaje claro si ya existe)
+- [x] Botones "✓ Completar" / "✗ Cancelar" para ventas en estado `Pendiente`
+- [x] Propagación de errores del servidor al formulario de producto
 
 ---
 

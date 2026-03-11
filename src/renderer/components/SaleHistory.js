@@ -318,6 +318,14 @@ export default function SaleHistory() {
   const [returnModal, setReturnModal] = useState(null); // sale object
   const [showReturnsSection, setShowReturnsSection] = useState(false);
   const [ticketSale, setTicketSale] = useState(null);
+  const [autoPrintSale, setAutoPrintSale] = useState(null);
+
+  // Search/filter state
+  const [searchText, setSearchText] = useState('');
+  const [filterPayment, setFilterPayment] = useState('');
+  const [filterStatus, setFilterStatus] = useState('');
+  const [filterMinTotal, setFilterMinTotal] = useState('');
+  const [filterMaxTotal, setFilterMaxTotal] = useState('');
 
   const loadData = () => {
     setLoading(true);
@@ -360,6 +368,33 @@ export default function SaleHistory() {
     }
     return map;
   };
+
+  const handleUpdateStatus = async (saleId, status) => {
+    try {
+      await window.electron.sales.updateStatus(saleId, { status });
+      loadData();
+    } catch (e) {
+      setError(`Error al actualizar estado: ${e?.message || 'Intenta de nuevo.'}`);
+    }
+  };
+
+  // Filter logic
+  const filteredSales = sales.filter((sale) => {
+    const text = searchText.trim().toLowerCase();
+    if (text) {
+      const inClient = (sale.customer_name || '').toLowerCase().includes(text);
+      const inProduct = sale.details.some(
+        (d) => d.product_name.toLowerCase().includes(text) || (d.sku || '').toLowerCase().includes(text)
+      );
+      if (!inClient && !inProduct) return false;
+    }
+    if (filterPayment && (sale.payment_method || 'Efectivo') !== filterPayment) return false;
+    if (filterStatus && (sale.status || 'Completada') !== filterStatus) return false;
+    const total = Number(sale.total);
+    if (filterMinTotal !== '' && total < Number(filterMinTotal)) return false;
+    if (filterMaxTotal !== '' && total > Number(filterMaxTotal)) return false;
+    return true;
+  });
 
   const canReturn = (sale) => {
     if (sale.status !== 'Completada' && sale.status !== 'Parcial') return false;
@@ -415,6 +450,91 @@ export default function SaleHistory() {
           >
             {showReturnsSection ? 'Ocultar devoluciones' : `Ver Devoluciones (${returns.length})`}
           </button>
+        )}
+      </div>
+
+      {/* ── Search / Filter bar ── */}
+      <div style={{
+        background: 'white', borderRadius: '10px', padding: '12px 16px',
+        marginBottom: '14px', boxShadow: '0 1px 4px rgba(0,0,0,0.06)',
+        display: 'flex', gap: '10px', flexWrap: 'wrap', alignItems: 'center',
+      }}>
+        <input
+          className="fl-input"
+          type="text"
+          placeholder="Buscar por cliente o producto..."
+          value={searchText}
+          onChange={(e) => setSearchText(e.target.value)}
+          style={{
+            flex: '1 1 200px', padding: '7px 11px', border: '1px solid #d1d1d1',
+            borderRadius: '7px', fontSize: '13px',
+          }}
+        />
+        <select
+          className="fl-select"
+          value={filterPayment}
+          onChange={(e) => setFilterPayment(e.target.value)}
+          style={{
+            padding: '7px 10px', border: '1px solid #d1d1d1', borderRadius: '7px',
+            fontSize: '13px', background: 'white', minWidth: '130px',
+          }}
+        >
+          <option value="">Todos los métodos</option>
+          <option value="Efectivo">Efectivo</option>
+          <option value="Tarjeta">Tarjeta</option>
+          <option value="Transferencia">Transferencia</option>
+        </select>
+        <select
+          className="fl-select"
+          value={filterStatus}
+          onChange={(e) => setFilterStatus(e.target.value)}
+          style={{
+            padding: '7px 10px', border: '1px solid #d1d1d1', borderRadius: '7px',
+            fontSize: '13px', background: 'white', minWidth: '130px',
+          }}
+        >
+          <option value="">Todos los estados</option>
+          <option value="Completada">Completada</option>
+          <option value="Pendiente">Pendiente</option>
+          <option value="Devuelta">Devuelta</option>
+          <option value="Parcial">Parcial</option>
+          <option value="Cancelada">Cancelada</option>
+        </select>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+          <span style={{ fontSize: '12px', color: '#9e9e9e', whiteSpace: 'nowrap' }}>Total:</span>
+          <input
+            className="fl-input"
+            type="number"
+            min="0"
+            placeholder="Mín"
+            value={filterMinTotal}
+            onChange={(e) => setFilterMinTotal(e.target.value)}
+            style={{ width: '72px', padding: '7px 8px', border: '1px solid #d1d1d1', borderRadius: '7px', fontSize: '13px' }}
+          />
+          <span style={{ fontSize: '12px', color: '#9e9e9e' }}>–</span>
+          <input
+            className="fl-input"
+            type="number"
+            min="0"
+            placeholder="Máx"
+            value={filterMaxTotal}
+            onChange={(e) => setFilterMaxTotal(e.target.value)}
+            style={{ width: '72px', padding: '7px 8px', border: '1px solid #d1d1d1', borderRadius: '7px', fontSize: '13px' }}
+          />
+        </div>
+        {(searchText || filterPayment || filterStatus || filterMinTotal || filterMaxTotal) && (
+          <button
+            className="fl-btn-ghost"
+            style={{ padding: '7px 12px', border: '1px solid #d1d1d1', borderRadius: '7px', cursor: 'pointer', fontSize: '12px', color: '#5c5c5c', background: 'white' }}
+            onClick={() => { setSearchText(''); setFilterPayment(''); setFilterStatus(''); setFilterMinTotal(''); setFilterMaxTotal(''); }}
+          >
+            Limpiar
+          </button>
+        )}
+        {filteredSales.length !== sales.length && (
+          <span style={{ fontSize: '12px', color: '#9e9e9e', marginLeft: 'auto' }}>
+            {filteredSales.length} de {sales.length} ventas
+          </span>
         )}
       </div>
 
@@ -513,6 +633,8 @@ export default function SaleHistory() {
         <div style={styles.wrapper}>
           {sales.length === 0 ? (
             <p style={styles.empty}>No hay ventas registradas aún.</p>
+          ) : filteredSales.length === 0 ? (
+            <p style={styles.empty}>No hay ventas que coincidan con los filtros.</p>
           ) : (
             <table style={styles.table}>
               <thead>
@@ -528,7 +650,7 @@ export default function SaleHistory() {
                 </tr>
               </thead>
               <tbody>
-                {sales.map((sale) => (
+                {filteredSales.map((sale) => (
                   <React.Fragment key={sale.id}>
                     <tr className="fl-tr">
                       <td style={{ ...styles.td, color: '#9e9e9e' }}>{sale.id}</td>
@@ -568,6 +690,31 @@ export default function SaleHistory() {
                         >
                           🧾 Ver Ticket
                         </button>
+                        <button
+                          className="fl-btn-secondary"
+                          style={{ ...styles.toggleBtn, marginLeft: '6px', color: '#107c10', borderColor: '#a5d6a7', background: '#f1f8f1' }}
+                          onClick={() => setAutoPrintSale(sale)}
+                        >
+                          🖨 Imprimir
+                        </button>
+                        {(sale.status === 'Pendiente') && (
+                          <>
+                            <button
+                              className="fl-btn-secondary"
+                              style={{ ...styles.toggleBtn, marginLeft: '6px', color: '#107c10', borderColor: '#a5d6a7', background: '#f1f8f1' }}
+                              onClick={() => handleUpdateStatus(sale.id, 'Completada')}
+                            >
+                              ✓ Completar
+                            </button>
+                            <button
+                              className="fl-btn-secondary"
+                              style={{ ...styles.toggleBtn, marginLeft: '6px', color: '#a4262c', borderColor: '#ef9a9a', background: '#fff5f5' }}
+                              onClick={() => handleUpdateStatus(sale.id, 'Cancelada')}
+                            >
+                              ✗ Cancelar
+                            </button>
+                          </>
+                        )}
                         {canReturn(sale) && (
                           <button
                             className="fl-btn-secondary"
@@ -652,6 +799,15 @@ export default function SaleHistory() {
         <SaleReceipt
           {...buildReceiptProps(ticketSale)}
           onClose={() => setTicketSale(null)}
+        />
+      )}
+
+      {/* ── Auto-print ticket ── */}
+      {autoPrintSale && (
+        <SaleReceipt
+          {...buildReceiptProps(autoPrintSale)}
+          autoPrint
+          onClose={() => setAutoPrintSale(null)}
         />
       )}
     </>

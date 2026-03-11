@@ -256,6 +256,11 @@ function setupIpcHandlers() {
       data.sku = 'PRD-' + Date.now().toString(36).toUpperCase().slice(-6);
     }
     if (data.stock == null) data.stock = 0;
+    // Validate barcode uniqueness
+    if (data.barcode) {
+      const dup = await repo('Product').findOneBy({ barcode: data.barcode });
+      if (dup) throw new Error(`El código de barras "${data.barcode}" ya está asignado al producto "${dup.name}".`);
+    }
     // Compute derived pricing fields
     if (data.precio_venta_sin_iva != null) {
       Object.assign(data, computePricing(data));
@@ -267,6 +272,11 @@ function setupIpcHandlers() {
   });
 
   ipcMain.handle('products:update', async (_, { id, ...data }) => {
+    // Validate barcode uniqueness (excluding this product)
+    if (data.barcode) {
+      const dup = await repo('Product').findOneBy({ barcode: data.barcode });
+      if (dup && dup.id !== id) throw new Error(`El código de barras "${data.barcode}" ya está asignado al producto "${dup.name}".`);
+    }
     // Compute derived pricing fields
     if (data.precio_venta_sin_iva != null) {
       Object.assign(data, computePricing(data));
@@ -586,6 +596,14 @@ function setupIpcHandlers() {
 
       return savedSale;
     });
+  });
+
+  ipcMain.handle('sales:updateStatus', async (_, { id, status, payment_method }) => {
+    const update = {};
+    if (status) update.status = status;
+    if (payment_method) update.payment_method = payment_method;
+    await repo('Sale').update(id, update);
+    return repo('Sale').findOneBy({ id });
   });
 
   ipcMain.handle('sales:getAll', async () => {

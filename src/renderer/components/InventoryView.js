@@ -20,6 +20,7 @@ export default function InventoryView() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [saveError, setSaveError] = useState(null);
   const [modal, setModal] = useState(null); // null | 'create' | { mode: 'edit', product }
 
   const loadProducts = useCallback(async () => {
@@ -43,10 +44,11 @@ export default function InventoryView() {
       } else {
         await window.electron.products.update(modal.product.id, formData);
       }
+      setSaveError(null);
       setModal(null);
       loadProducts();
-    } catch {
-      setError('Error al guardar el producto.');
+    } catch (e) {
+      setSaveError(e?.message || 'Error al guardar el producto.');
     }
   };
 
@@ -84,8 +86,9 @@ export default function InventoryView() {
       {modal && (
         <ProductForm
           product={modal !== 'create' ? modal.product : null}
+          saveError={saveError}
           onSave={handleSave}
-          onCancel={() => setModal(null)}
+          onCancel={() => { setModal(null); setSaveError(null); }}
         />
       )}
     </>

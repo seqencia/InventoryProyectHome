@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 const PRINT_STYLES = `
   @media print {
@@ -164,7 +164,13 @@ const s = {
   },
 };
 
-export default function SaleReceipt({ sale, items, subtotalBruto, totalDescuentos, globalDiscountAmount, subtotalNeto, tax, total, onClose }) {
+export default function SaleReceipt({ sale, items, subtotalBruto, totalDescuentos, globalDiscountAmount, subtotalNeto, tax, total, autoPrint, onClose }) {
+  useEffect(() => {
+    if (autoPrint) {
+      const t = setTimeout(() => window.print(), 100);
+      return () => clearTimeout(t);
+    }
+  }, [autoPrint]);
   const regularItems      = items.filter((i) => !i.is_regalia);
   const regaliaPropiaItems = items.filter((i) => i.regalia_type === 'propia');
   const bonificacionItems  = items.filter((i) => i.regalia_type === 'bonificacion');
