@@ -1,5 +1,18 @@
 # Modules
 
+## Login (`LoginScreen.js`)
+
+First screen shown on app start. Accepts `username` + `password`, calls `auth:login` IPC which verifies credentials against the `users` table (SHA-256 hash comparison).
+
+On success: stores `{ id, name, username, role }` in `currentUser` React state in `app.js`. On failure: shows inline error. No registration UI — users managed by Admin only via Configuración.
+
+**Access control** (enforced in `app.js`):
+- Session stored in memory; cleared on "Salir"
+- `ALL_TABS` filtered by `currentUser.role` before rendering nav
+- Roles: `Admin` (all tabs) · `Vendedor` (Dashboard, Nueva Venta, Historial, Entradas)
+
+---
+
 ## Dashboard (`DashboardView.js`)
 
 Home screen. Loads all data via `dashboard:getSummary` in a single IPC call.
@@ -7,10 +20,12 @@ Home screen. Loads all data via `dashboard:getSummary` in a single IPC call.
 **Cards**:
 - Ventas Hoy — count + sub-text
 - Ingresos Hoy — net income (gross − today's returns); shows breakdown when returns exist
-- Utilidad Hoy — estimated profit from cost prices
+- Utilidad Hoy — estimated profit from cost prices (**hidden for Vendedor role**)
 - Alertas de Stock Bajo — products where `stock ≤ min_stock`; click navigates to Catálogo
 - Top 5 Más Vendidos — all-time ranked bar chart
 - Ventas Recientes — last 5 sales; "Ver todas" navigates to Historial
+
+> Accepts `role` prop. Grid layout switches from 3 to 2 columns when Vendedor (no profit card).
 
 ---
 
@@ -32,7 +47,9 @@ Full product master data CRUD.
 
 Records incoming stock. Each entry increments `product.stock`.
 
-**Fields**: product, purchased quantity, bonus quantity (gift units from supplier), unit cost (applies to purchased qty only), supplier, notes.
+**Fields**: product, purchased quantity, bonus quantity (gift units from supplier), unit cost (applies to purchased qty only, **hidden for Vendedor**), supplier, notes.
+
+> Accepts `role` prop. Vendedor can add entries but cannot see cost prices.
 
 **Stock formula**: `stock += quantity + bonus_quantity`
 
@@ -113,9 +130,19 @@ On-demand reports for a selected date range.
 
 ## Configuración (`ConfigView`)
 
+**Admin only** tab (not visible to Vendedor).
+
 Database backup management:
 - **Export**: saves `database.sqlite` copy to user-chosen path via Electron save dialog
 - **Save to backups folder**: saves to `userData/backups/backup-YYYY-MM-DD-<ts>.sqlite`
 - **Import/Restore**: file picker + confirmation modal; destroys and reinitializes TypeORM DataSource for atomic replacement
 - **Auto-backup toggle**: stored in `userData/config.json`; daily backup created on app start if no file exists for today
 - Shows last auto-backup filename, date, and size
+
+### User Management (sub-section, Admin only — `UsersView.js`)
+
+- Table listing all users (name, username, role) — `password_hash` never exposed to renderer
+- **Create user**: name, username, password (required), role (Admin / Vendedor)
+- **Edit user**: same fields; password field optional (blank = keep current)
+- **Delete user**: confirmation required; blocked if target is the last Admin
+- Username uniqueness enforced server-side

@@ -10,6 +10,28 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [0.31.1] - 2026-03-11
+
+### Changed — Documentation & Diagrams
+
+#### docs/ — review and update for v0.31.0
+- `ARCHITECTURE.md`: added `crypto` import, `auth`/`users` IPC namespaces, `LoginScreen.js` and `UsersView.js` to component map, updated preload namespace list, added startup sequence note with `seedDefaultAdmin`
+- `DATABASE.md`: added `BonificacionPriceLog` and `User` schema tables (previously missing); added note on SHA-256 password hashing and seed user; updated relationships diagram to include `User` and `BonificacionPriceLog`
+- `MODULES.md`: added Login module section; updated Dashboard (role-based cards), Entradas (role-based cost field), and Configuración (user management sub-section)
+- `ROADMAP.md`: marked v0.31.0 as current completed state; reorganized future versions (v0.32–v0.35); removed outdated v0.29/v0.30 stubs; updated v2.0.0 to reference new roles system
+- `BUGS.md`: no new open bugs (all resolved in prior versions)
+
+#### docs/diagrams/ — new Mermaid diagram files
+- `ERD.md` — full entity relationship diagram for all 11 DB tables
+- `FLOW-SALE.md` — complete sale flow: login → search/scan → cart → discounts → confirm → DB transaction → receipt
+- `FLOW-RETURN.md` — return/devolution flow + sale status state machine
+- `FLOW-STOCK.md` — stock entry flow with bonificación modal and alternative ProductForm route
+- `FLOW-LOGIN.md` — login verification flow, role-based tab access diagram, session lifecycle state machine
+- `ARCHITECTURE.md` — 3-layer Electron architecture graph, IPC call sequence diagram, startup sequence
+- `ROLES.md` — detailed Admin vs Vendedor permission matrix, restriction breakdown, mindmap of Vendedor limitations
+
+---
+
 ## [0.31.0] - 2026-03-11
 
 ### Added

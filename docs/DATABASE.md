@@ -156,18 +156,49 @@ Table: `return_details`
 | `unit_price` | decimal(10,2) | |
 | `subtotal` | decimal(10,2) | |
 
+### BonificacionPriceLog
+Table: `bonificacion_price_logs`
+
+| Column | Type | Notes |
+|---|---|---|
+| `id` | Number PK | |
+| `product_id` | Number | FK to products |
+| `product_name` | String | snapshot |
+| `previous_price` | decimal(16,6)? | price before change |
+| `new_price` | decimal(16,6) | new price applied |
+| `notes` | String? | |
+| `created_at` | datetime | |
+
+### User
+Table: `users`
+
+| Column | Type | Notes |
+|---|---|---|
+| `id` | Number PK | |
+| `name` | String | full display name |
+| `username` | String unique | login identifier |
+| `password_hash` | String | SHA-256 hex digest; never sent to renderer |
+| `role` | String | `Admin` or `Vendedor` |
+| `created_at` | datetime | |
+
+> Default seed on first run: `admin` / `admin` / role `Admin`
+> Passwords hashed with Node built-in `crypto.createHash('sha256')`.
+
 ---
 
 ## Relationships (logical, not ORM-enforced)
 
 ```
-Category ←── Product ←── StockEntry
-                │
+User (auth only — no FK to sales)
+
+Category ←── Product ←── StockEntry ──── Supplier
+                │                 └──── BonificacionPriceLog
                 └──< SaleDetail >── Sale ──< Return ──< ReturnDetail
                                        │
                                     Customer
-                                    Supplier (via StockEntry)
 ```
+
+See [`docs/diagrams/ERD.md`](diagrams/ERD.md) for the full Mermaid ERD.
 
 ## Config file
 
