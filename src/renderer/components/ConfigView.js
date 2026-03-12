@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import UsersView from './UsersView';
 
 function formatBytes(bytes) {
   if (bytes == null) return '—';
@@ -146,7 +147,7 @@ function Alert({ type, children }) {
 
 // ── Main component ───────────────────────────────────────────────────────────
 
-export default function ConfigView() {
+export default function ConfigView({ role }) {
   const [info, setInfo] = useState(null);
   const [loading, setLoading] = useState(true);
   const [autoBackup, setAutoBackup] = useState(false);
@@ -322,6 +323,19 @@ export default function ConfigView() {
           {restoreStatus && <Alert type={restoreStatus.type}>{restoreStatus.msg}</Alert>}
         </div>
       </Card>
+
+      {/* ── Users card (Admin only) ── */}
+      {role === 'Admin' && (
+        <Card>
+          <CardHeader title="👥 Gestión de Usuarios" accent="#0078d4" />
+          <div style={{ padding: '18px 20px' }}>
+            <p style={{ fontSize: '13px', color: '#5c5c5c', margin: '0 0 4px' }}>
+              Administra los usuarios del sistema. Solo los administradores pueden crear, editar o eliminar usuarios.
+            </p>
+            <UsersView />
+          </div>
+        </Card>
+      )}
 
       {/* ── Restore confirmation modal ── */}
       {restoreCandidate && (

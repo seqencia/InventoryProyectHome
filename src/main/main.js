@@ -1,8 +1,11 @@
 const { app, BrowserWindow, ipcMain, dialog } = require('electron');
 const path = require('path');
 const fs = require('fs');
+const crypto = require('crypto');
 const XLSX = require('xlsx');
 const { DataSource, EntitySchema, In } = require('typeorm');
+
+const hashPassword = (p) => crypto.createHash('sha256').update(p).digest('hex');
 
 // ── Backup helpers ─────────────────────────────────────────────────────────
 
@@ -207,6 +210,19 @@ const BonificacionPriceLogSchema = new EntitySchema({
   },
 });
 
+const UserSchema = new EntitySchema({
+  name: 'User',
+  tableName: 'users',
+  columns: {
+    id: { type: Number, primary: true, generated: true },
+    name: { type: String },
+    username: { type: String, unique: true },
+    password_hash: { type: String },
+    role: { type: String }, // 'Admin' | 'Vendedor'
+    created_at: { type: 'datetime', createDate: true },
+  },
+});
+
 // ── Database ───────────────────────────────────────────────────────────────
 
 let AppDataSource;
@@ -215,11 +231,24 @@ async function initDatabase() {
   AppDataSource = new DataSource({
     type: 'sqlite',
     database: path.join(app.getPath('userData'), 'database.sqlite'),
-    entities: [ProductSchema, CategorySchema, CustomerSchema, SaleSchema, SaleDetailSchema, SupplierSchema, StockEntrySchema, ReturnSchema, ReturnDetailSchema, BonificacionPriceLogSchema],
+    entities: [ProductSchema, CategorySchema, CustomerSchema, SaleSchema, SaleDetailSchema, SupplierSchema, StockEntrySchema, ReturnSchema, ReturnDetailSchema, BonificacionPriceLogSchema, UserSchema],
     synchronize: true,
     logging: false,
   });
   await AppDataSource.initialize();
+}
+
+async function seedDefaultAdmin() {
+  const userRepo = AppDataSource.getRepository('User');
+  const count = await userRepo.count();
+  if (count === 0) {
+    await userRepo.save(userRepo.create({
+      name: 'Administrador',
+      username: 'admin',
+      password_hash: hashPassword('admin'),
+      role: 'Admin',
+    }));
+  }
 }
 
 // ── Pricing helpers ────────────────────────────────────────────────────────
@@ -937,6 +966,61 @@ function setupIpcHandlers() {
     const stat = fs.statSync(dest);
     return { success: true, filePath: dest, size: stat.size };
   });
+
+  // Auth
+  ipcMain.handle('auth:login', async (_, { username, password }) => {
+    const user = await repo('User').findOneBy({ username });
+    if (!user || user.password_hash !== hashPassword(password)) {
+      throw new Error('Usuario o contraseña incorrectos.');
+    }
+    return { id: user.id, name: user.name, username: user.username, role: user.role };
+  });
+
+  // Users
+  ipcMain.handle('users:getAll', async () => {
+    const users = await repo('User').find({ order: { name: 'ASC' } });
+    return users.map(({ password_hash, ...u }) => u);
+  });
+
+  ipcMain.handle('users:create', async (_, data) => {
+    const dup = await repo('User').findOneBy({ username: data.username });
+    if (dup) throw new Error('El nombre de usuario ya existe.');
+    const user = repo('User').create({
+      name: data.name,
+      username: data.username,
+      password_hash: hashPassword(data.password),
+      role: data.role,
+    });
+    const saved = await repo('User').save(user);
+    const { password_hash, ...result } = saved;
+    return result;
+  });
+
+  ipcMain.handle('users:update', async (_, { id, ...data }) => {
+    if (data.username) {
+      const dup = await repo('User').findOneBy({ username: data.username });
+      if (dup && dup.id !== id) throw new Error('El nombre de usuario ya existe.');
+    }
+    const updateData = {};
+    if (data.name) updateData.name = data.name;
+    if (data.username) updateData.username = data.username;
+    if (data.role) updateData.role = data.role;
+    if (data.password) updateData.password_hash = hashPassword(data.password);
+    await repo('User').update(id, updateData);
+    const updated = await repo('User').findOneBy({ id });
+    const { password_hash, ...result } = updated;
+    return result;
+  });
+
+  ipcMain.handle('users:delete', async (_, id) => {
+    const user = await repo('User').findOneBy({ id });
+    if (user?.role === 'Admin') {
+      const adminCount = await repo('User').count({ where: { role: 'Admin' } });
+      if (adminCount <= 1) throw new Error('No se puede eliminar el último administrador.');
+    }
+    await repo('User').delete(id);
+    return { success: true };
+  });
 }
 
 // ── Window ─────────────────────────────────────────────────────────────────
@@ -957,6 +1041,7 @@ function createWindow() {
 
 app.whenReady().then(async () => {
   await initDatabase();
+  await seedDefaultAdmin();
   await runAutoBackup();
   setupIpcHandlers();
   createWindow();

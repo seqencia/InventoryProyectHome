@@ -78,7 +78,7 @@ const s = {
   },
 };
 
-function StockEntryModal({ products, suppliers, onSave, onCancel }) {
+function StockEntryModal({ products, suppliers, onSave, onCancel, role }) {
   const [form, setForm] = useState({ product_id: '', quantity: '', bonus_quantity: '', unit_cost: '', supplier_id: '', notes: '' });
   const [saving, setSaving] = useState(false);
 
@@ -146,13 +146,15 @@ function StockEntryModal({ products, suppliers, onSave, onCancel }) {
                 )}
               </div>
             )}
-            <div style={s.grid2}>
-              <div style={s.field}>
-                <label style={s.label}>Costo unitario ($)</label>
-                <input className="fl-input" style={s.input} type="number" min="0" step="0.01" value={form.unit_cost} onChange={set('unit_cost')} placeholder="0.00" />
-                {bonus > 0 && <div style={s.hint}>Solo sobre cantidad comprada ({qty} uds.)</div>}
+            {role !== 'Vendedor' && (
+              <div style={s.grid2}>
+                <div style={s.field}>
+                  <label style={s.label}>Costo unitario ($)</label>
+                  <input className="fl-input" style={s.input} type="number" min="0" step="0.01" value={form.unit_cost} onChange={set('unit_cost')} placeholder="0.00" />
+                  {bonus > 0 && <div style={s.hint}>Solo sobre cantidad comprada ({qty} uds.)</div>}
+                </div>
               </div>
-            </div>
+            )}
             <div style={s.field}>
               <label style={s.label}>Proveedor</label>
               <select className="fl-select" style={s.select} value={form.supplier_id} onChange={set('supplier_id')}>
@@ -246,7 +248,7 @@ function BonificacionPriceModal({ entry, product, onConfirm, onCancel }) {
   );
 }
 
-export default function StockEntriesView() {
+export default function StockEntriesView({ role }) {
   const [entries, setEntries] = useState([]);
   const [products, setProducts] = useState([]);
   const [suppliers, setSuppliers] = useState([]);
@@ -329,7 +331,7 @@ export default function StockEntriesView() {
                   <th style={s.th}>Fecha</th>
                   <th style={s.th}>Producto</th>
                   <th style={s.th}>Ingresado</th>
-                  <th style={s.th}>Costo unit.</th>
+                  {role !== 'Vendedor' && <th style={s.th}>Costo unit.</th>}
                   <th style={s.th}>Proveedor</th>
                   <th style={s.th}>Notas</th>
                 </tr>
@@ -361,9 +363,11 @@ export default function StockEntriesView() {
                         <span style={s.qtyBadge}>+{entry.quantity}</span>
                       )}
                     </td>
-                    <td style={{ ...s.td, color: entry.unit_cost ? '#1a1a1a' : '#9e9e9e' }}>
-                      {entry.unit_cost ? `$${Number(entry.unit_cost).toFixed(2)}` : '—'}
-                    </td>
+                    {role !== 'Vendedor' && (
+                      <td style={{ ...s.td, color: entry.unit_cost ? '#1a1a1a' : '#9e9e9e' }}>
+                        {entry.unit_cost ? `$${Number(entry.unit_cost).toFixed(2)}` : '—'}
+                      </td>
+                    )}
                     <td style={{ ...s.td, color: entry.supplier_name ? '#1a1a1a' : '#9e9e9e' }}>
                       {entry.supplier_name || '—'}
                     </td>
@@ -379,7 +383,7 @@ export default function StockEntriesView() {
       )}
 
       {modal && (
-        <StockEntryModal products={products} suppliers={suppliers} onSave={handleSave} onCancel={() => setModal(false)} />
+        <StockEntryModal products={products} suppliers={suppliers} onSave={handleSave} onCancel={() => setModal(false)} role={role} />
       )}
 
       {pendingBonificacion && (

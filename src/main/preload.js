@@ -58,4 +58,13 @@ contextBridge.exposeInMainWorld('electron', {
     restore: (filePath) => ipcRenderer.invoke('backup:restore', filePath),
     manualBackup: () => ipcRenderer.invoke('backup:manualBackup'),
   },
+  auth: {
+    login: (credentials) => ipcRenderer.invoke('auth:login', credentials),
+  },
+  users: {
+    getAll: () => ipcRenderer.invoke('users:getAll'),
+    create: (data) => ipcRenderer.invoke('users:create', data),
+    update: (id, data) => ipcRenderer.invoke('users:update', { id, ...data }),
+    delete: (id) => ipcRenderer.invoke('users:delete', id),
+  },
 });

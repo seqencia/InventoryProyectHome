@@ -224,7 +224,7 @@ const layout = {
   },
 };
 
-export default function DashboardView({ onNavigate }) {
+export default function DashboardView({ onNavigate, role }) {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -261,7 +261,7 @@ export default function DashboardView({ onNavigate }) {
     <>
       <div style={layout.title}>Dashboard</div>
 
-      <div style={layout.grid3}>
+      <div style={role === 'Vendedor' ? layout.grid2Bottom : layout.grid3}>
         <StatCard
           label="Ventas Hoy"
           value={data.todayCount}
@@ -278,12 +278,14 @@ export default function DashboardView({ onNavigate }) {
           }
           accentColor="#107c10"
         />
-        <StatCard
-          label="Utilidad Hoy"
-          value={`$${data.todayProfit.toFixed(2)}`}
-          sub="Ganancia neta estimada"
-          accentColor="#7519b5"
-        />
+        {role !== 'Vendedor' && (
+          <StatCard
+            label="Utilidad Hoy"
+            value={`$${data.todayProfit.toFixed(2)}`}
+            sub="Ganancia neta estimada"
+            accentColor="#7519b5"
+          />
+        )}
       </div>
 
       <div style={layout.grid2Bottom}>

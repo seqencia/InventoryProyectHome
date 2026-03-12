@@ -9,18 +9,19 @@ import CategoriesView from './components/CategoriesView';
 import CustomersView from './components/CustomersView';
 import ConfigView from './components/ConfigView';
 import ReportsView from './components/ReportsView';
+import LoginScreen from './components/LoginScreen';
 
-const TABS = [
-  { id: 'dashboard', label: 'Dashboard', icon: '📊' },
-  { id: 'catalog', label: 'Catálogo', icon: '📦' },
-  { id: 'stock-entries', label: 'Entradas', icon: '📥' },
-  { id: 'suppliers', label: 'Proveedores', icon: '🏢' },
-  { id: 'new-sale', label: 'Nueva Venta', icon: '🛒' },
-  { id: 'history', label: 'Historial', icon: '📋' },
-  { id: 'categories', label: 'Categorías', icon: '🏷️' },
-  { id: 'customers', label: 'Clientes', icon: '👤' },
-  { id: 'reports', label: 'Reportes', icon: '📈' },
-  { id: 'config', label: 'Configuración', icon: '⚙️' },
+const ALL_TABS = [
+  { id: 'dashboard',     label: 'Dashboard',      icon: '📊', roles: ['Admin', 'Vendedor'] },
+  { id: 'catalog',       label: 'Catálogo',        icon: '📦', roles: ['Admin'] },
+  { id: 'stock-entries', label: 'Entradas',        icon: '📥', roles: ['Admin', 'Vendedor'] },
+  { id: 'suppliers',     label: 'Proveedores',     icon: '🏢', roles: ['Admin'] },
+  { id: 'new-sale',      label: 'Nueva Venta',     icon: '🛒', roles: ['Admin', 'Vendedor'] },
+  { id: 'history',       label: 'Historial',       icon: '📋', roles: ['Admin', 'Vendedor'] },
+  { id: 'categories',    label: 'Categorías',      icon: '🏷️', roles: ['Admin'] },
+  { id: 'customers',     label: 'Clientes',        icon: '👤', roles: ['Admin'] },
+  { id: 'reports',       label: 'Reportes',        icon: '📈', roles: ['Admin'] },
+  { id: 'config',        label: 'Configuración',   icon: '⚙️', roles: ['Admin'] },
 ];
 
 // ── Global CSS (hover / focus effects impossible with pure inline styles) ────
@@ -143,10 +144,50 @@ const styles = {
     flexShrink: 0,
   },
   main: { padding: '24px' },
+  userInfo: {
+    display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0,
+    borderLeft: '1px solid rgba(0,0,0,0.1)', paddingLeft: '14px', marginLeft: '4px',
+  },
+  userName: { fontSize: '13px', fontWeight: '600', color: '#1a1a1a', whiteSpace: 'nowrap' },
+  roleBadge: (role) => ({
+    fontSize: '11px', fontWeight: '700', padding: '2px 8px', borderRadius: '10px',
+    background: role === 'Admin' ? '#e3f2fd' : '#e8f5e9',
+    color: role === 'Admin' ? '#1565c0' : '#2e7d32',
+  }),
+  btnLogout: {
+    background: 'white', border: '1px solid #d1d1d1', color: '#5c5c5c',
+    padding: '4px 12px', borderRadius: '8px', cursor: 'pointer', fontSize: '12px',
+  },
 };
 
 export default function App() {
+  const [currentUser, setCurrentUser] = useState(null);
   const [activeTab, setActiveTab] = useState('dashboard');
+
+  const handleLogin = (user) => {
+    setCurrentUser(user);
+    setActiveTab('dashboard');
+  };
+
+  const handleLogout = () => {
+    setCurrentUser(null);
+    setActiveTab('dashboard');
+  };
+
+  if (!currentUser) {
+    return (
+      <>
+        <style>{GLOBAL_CSS}</style>
+        <LoginScreen onLogin={handleLogin} />
+      </>
+    );
+  }
+
+  const tabs = ALL_TABS.filter((t) => t.roles.includes(currentUser.role));
+
+  // If active tab is no longer accessible (e.g. after logout+login with different role)
+  const activeTabVisible = tabs.some((t) => t.id === activeTab);
+  const safeActiveTab = activeTabVisible ? activeTab : 'dashboard';
 
   return (
     <>
@@ -155,11 +196,11 @@ export default function App() {
         <header style={styles.header}>
           <span style={styles.title}>StarTecnology</span>
           <nav style={styles.nav}>
-            {TABS.map((tab) => (
+            {tabs.map((tab) => (
               <button
                 key={tab.id}
                 className="fl-tab"
-                style={activeTab === tab.id ? styles.tabActive : styles.tab}
+                style={safeActiveTab === tab.id ? styles.tabActive : styles.tab}
                 onClick={() => setActiveTab(tab.id)}
               >
                 <span>{tab.icon}</span>
@@ -167,22 +208,29 @@ export default function App() {
               </button>
             ))}
           </nav>
+          <div style={styles.userInfo}>
+            <span style={styles.userName}>{currentUser.name}</span>
+            <span style={styles.roleBadge(currentUser.role)}>{currentUser.role}</span>
+            <button className="fl-btn-ghost" style={styles.btnLogout} onClick={handleLogout}>
+              Salir
+            </button>
+          </div>
         </header>
         <main style={styles.main}>
-          {activeTab === 'dashboard' && (
-            <DashboardView onNavigate={setActiveTab} />
+          {safeActiveTab === 'dashboard' && (
+            <DashboardView onNavigate={setActiveTab} role={currentUser.role} />
           )}
-          {activeTab === 'catalog' && <InventoryView />}
-          {activeTab === 'stock-entries' && <StockEntriesView />}
-          {activeTab === 'suppliers' && <SuppliersView />}
-          {activeTab === 'new-sale' && (
+          {safeActiveTab === 'catalog' && <InventoryView />}
+          {safeActiveTab === 'stock-entries' && <StockEntriesView role={currentUser.role} />}
+          {safeActiveTab === 'suppliers' && <SuppliersView />}
+          {safeActiveTab === 'new-sale' && (
             <NewSale onSaleComplete={() => setActiveTab('history')} />
           )}
-          {activeTab === 'history' && <SaleHistory />}
-          {activeTab === 'categories' && <CategoriesView />}
-          {activeTab === 'customers' && <CustomersView />}
-          {activeTab === 'reports' && <ReportsView />}
-          {activeTab === 'config' && <ConfigView />}
+          {safeActiveTab === 'history' && <SaleHistory />}
+          {safeActiveTab === 'categories' && <CategoriesView />}
+          {safeActiveTab === 'customers' && <CustomersView />}
+          {safeActiveTab === 'reports' && <ReportsView />}
+          {safeActiveTab === 'config' && <ConfigView role={currentUser.role} />}
         </main>
       </div>
     </>

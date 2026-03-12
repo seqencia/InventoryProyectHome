@@ -10,6 +10,45 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [0.31.0] - 2026-03-11
+
+### Added
+
+#### Sistema de Login y Roles
+- Pantalla de inicio de sesión mostrada al arrancar la app (`LoginScreen.js`)
+  - Campos usuario y contraseña con diseño Fluent
+  - Botón "Iniciar Sesión"; manejo de error si credenciales incorrectas
+- Dos roles: **Admin** (acceso total) y **Vendedor** (acceso restringido)
+- Tabs visibles por rol:
+  - Vendedor: Dashboard, Nueva Venta, Historial, Entradas de Inventario
+  - Admin: todos los módulos
+- Cabecera muestra nombre del usuario, badge de rol y botón "Salir"
+- Sesión almacenada en memoria React (sin JWT); se borra al cerrar sesión
+
+#### Restricciones para Vendedor
+- **Dashboard**: oculta el card "Utilidad Hoy" (ganancia/profit)
+- **Entradas de Inventario**: oculta columna "Costo unit." en la tabla y el campo en el modal de entrada
+- Sin acceso a: Catálogo, Categorías, Proveedores, Clientes, Reportes, Configuración
+
+#### Gestión de Usuarios — Admin (`UsersView.js` + `ConfigView.js`)
+- Nueva sección "Gestión de Usuarios" dentro de Configuración (solo Admin)
+- Tabla de usuarios con nombre, login, rol y acciones Editar/Eliminar
+- Modal crear/editar usuario: nombre, username, contraseña, rol
+- Contraseña opcional al editar (vacío = mantener la actual)
+- Validación: no se puede eliminar el último administrador
+- No se puede duplicar el username
+
+#### Backend (`main.js` + `preload.js`)
+- Nuevo `EntitySchema` `User` con campos: `name`, `username`, `password_hash`, `role`, `created_at`
+- Contraseñas almacenadas como SHA-256 hash (Node built-in `crypto`)
+- Seed automático en el primer arranque: `admin` / `admin` / rol Admin
+- Handlers IPC: `auth:login`, `users:getAll`, `users:create`, `users:update`, `users:delete`
+- `users:delete` rechaza eliminar el último Admin
+- `users:getAll` nunca expone `password_hash` al renderer
+- Canales expuestos en `preload.js`: `auth.login`, `users.*`
+
+---
+
 ## [0.30.0] - 2026-03-10
 
 ### Added
