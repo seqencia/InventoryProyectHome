@@ -29,7 +29,68 @@ Semantic versioning: `0.x.x` = pre-release (active development), `1.0.0` = stabl
 
 ---
 
-## 🔜 v0.32.0 — Inventario avanzado
+## 🔜 v0.32.0 — Audit Log & Activity Tracking
+
+### Objetivo
+
+Registro completo de quién hizo qué y cuándo. Base legal y operativa para resolución de disputas entre Admin y Vendedor, y fundamento del panel de administración SaaS en v2.0.0.
+
+### Schema
+
+- Nueva tabla `audit_log`:
+
+| Campo | Tipo | Descripción |
+|---|---|---|
+| `id` | Number PK | auto-generated |
+| `user_id` | Number | FK a `users.id` (snapshot del usuario activo) |
+| `user_name` | String | snapshot del nombre al momento de la acción |
+| `action` | String | `CREATE`, `UPDATE`, `DELETE`, `LOGIN`, `LOGOUT` |
+| `entity` | String | nombre de la entidad afectada (ej. `Product`, `Sale`, `StockEntry`) |
+| `entity_id` | Number? | id del registro afectado |
+| `old_value` | String? | JSON serializado del estado anterior (solo en UPDATE/DELETE) |
+| `new_value` | String? | JSON serializado del estado nuevo (solo en CREATE/UPDATE) |
+| `created_at` | datetime | timestamp de la acción con precisión de segundos |
+
+### Operaciones a registrar
+
+- **Ventas**: creación de venta (`sales:create`) — quién vendió, qué productos, total
+- **Precios**: cambio de precio en catálogo (`products:update`) — precio anterior vs nuevo
+- **Stock**: nuevas entradas de inventario (`stockEntries:create`) — quién registró, producto, cantidades
+- **Devoluciones**: procesamiento de devolución (`returns:create`) — quién devolvió, artículos, monto
+- **Catálogo**: alta/baja/edición de productos — campos modificados con diff
+- **Usuarios**: creación/edición/eliminación de usuarios (solo Admin) — sin loguear `password_hash`
+- **Login / Logout**: registro de sesiones — user, timestamp, resultado (éxito o fallo)
+
+### Timestamps de precisión en todas las tablas
+
+Verificar que las siguientes entidades tengan `created_at` con precisión completa (datetime con segundos):
+- `Sale.created_at` — ✅ ya existe
+- `StockEntry.created_at` — ✅ ya existe
+- `Return.created_at` — ✅ ya existe
+- `BonificacionPriceLog.created_at` — ✅ ya existe
+- `Product.created_at` / `updated_at` — ✅ ya existen
+- `User.created_at` — ✅ ya existe
+- `Category`, `Customer`, `Supplier` — verificar y añadir `updated_at` si falta
+
+### Vista Admin — Timeline de actividad
+
+- Pestaña "Auditoría" en Configuración (solo Admin)
+- Timeline cronológico inverso con paginación
+- Filtros: por usuario, por tipo de acción, por entidad, por rango de fechas
+- Cada entrada muestra: fecha/hora, usuario, acción, entidad afectada, resumen del cambio
+- Expandible para ver `old_value` → `new_value` diff en cambios de precio/producto
+- Export CSV del log filtrado
+
+### Motivaciones
+
+1. **SaaS admin dashboard** — en v2.0.0, el dueño puede monitorear en tiempo real qué hacen los vendedores
+2. **Trazabilidad legal** — ante una disputa o auditoría fiscal, se puede reconstruir el historial completo
+3. **Resolución de disputas** — Admin vs Vendedor: quién modificó un precio, quién procesó una devolución
+4. **Detección de anomalías** — ventas inusuales, cambios de precio frecuentes, devoluciones repetidas
+
+---
+
+## 🔜 v0.33.0 — Inventario avanzado
 
 - [ ] Ajuste de inventario manual (corrección de conteo físico) con motivo y log de auditoría
 - [ ] Vista de movimientos de stock por producto (entradas + salidas + devoluciones en una línea de tiempo)
@@ -39,7 +100,7 @@ Semantic versioning: `0.x.x` = pre-release (active development), `1.0.0` = stabl
 
 ---
 
-## 🔜 v0.33.0 — Reportes y analítica avanzada
+## 🔜 v0.34.0 — Reportes y analítica avanzada
 
 - [ ] Reporte de rentabilidad por categoría (margen %)
 - [ ] Reporte de productos sin movimiento (sin ventas en N días)
@@ -50,7 +111,7 @@ Semantic versioning: `0.x.x` = pre-release (active development), `1.0.0` = stabl
 
 ---
 
-## 🔜 v0.34.0 — Clientes y fidelización
+## 🔜 v0.35.0 — Clientes y fidelización
 
 - [ ] Historial de compras por cliente (ventas + montos + productos)
 - [ ] Notas internas por cliente
@@ -59,7 +120,7 @@ Semantic versioning: `0.x.x` = pre-release (active development), `1.0.0` = stabl
 
 ---
 
-## 🔜 v0.35.0 — Configuración avanzada
+## 🔜 v0.36.0 — Configuración avanzada
 
 - [ ] Nombre y logo de la tienda configurables (mostrado en recibo)
 - [ ] Número de comprobante personalizable (prefijo + secuencia)
