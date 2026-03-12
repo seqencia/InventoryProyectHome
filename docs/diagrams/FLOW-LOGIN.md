@@ -4,22 +4,22 @@
 
 ```mermaid
 flowchart TD
-    A([App start]) --> B{currentUser\nin React state?}
+    A([App start]) --> B{currentUser in React state?}
     B -- No --> C[Render LoginScreen]
     B -- Yes --> MAIN[Render main app]
 
-    C --> D[User types username + password]
-    D --> E[Click 'Iniciar Sesión']
-    E --> F[renderer: window.electron.auth.login]
-    F --> G[IPC: auth:login]
+    C --> D[User types username and password]
+    D --> E[Click Iniciar Sesion]
+    E --> F[window.electron.auth.login]
+    F --> G[IPC auth:login handler]
 
-    G --> H[(Query users table\nWHERE username = ?)]
+    G --> H[(Query users table WHERE username matches)]
     H --> I{User found?}
-    I -- No --> ERR1[throw 'Usuario o contraseña incorrectos']
+    I -- No --> ERR1[Show error message]
     ERR1 --> C
 
     I -- Yes --> J[SHA-256 hash input password]
-    J --> K{hash matches\npassword_hash?}
+    J --> K{Hash matches stored hash?}
     K -- No --> ERR1
     K -- Yes --> L[Return id, name, username, role]
 
@@ -27,7 +27,7 @@ flowchart TD
     M --> MAIN
 
     MAIN --> N[Filter ALL_TABS by role]
-    N --> O[Render filtered nav + active tab]
+    N --> O[Render filtered nav and active tab]
 ```
 
 ## Role-based tab access
@@ -41,15 +41,15 @@ flowchart LR
 
     subgraph TABS
         T1[Dashboard]
-        T2[Catálogo]
+        T2[Catalogo]
         T3[Entradas]
         T4[Proveedores]
         T5[Nueva Venta]
         T6[Historial]
-        T7[Categorías]
+        T7[Categorias]
         T8[Clientes]
         T9[Reportes]
-        T10[Configuración]
+        T10[Configuracion]
     end
 
     A --> T1
@@ -73,12 +73,17 @@ flowchart LR
 
 ```mermaid
 stateDiagram-v2
-    [*] --> LoggedOut : app start
-    LoggedOut --> LoggedIn : auth:login success
-    LoggedIn --> LoggedOut : user clicks Salir
-    LoggedOut --> LoggedOut : auth:login failure (stays on LoginScreen)
-    LoggedIn --> LoggedIn : user navigates tabs
+    [*] --> LoggedOut
+    LoggedOut --> LoggedIn
+    LoggedIn --> LoggedOut
 
-    note right of LoggedOut : currentUser = null\nshows LoginScreen
-    note right of LoggedIn : currentUser = { id, name, username, role }\ntabs filtered by role
+    note right of LoggedOut
+        currentUser is null
+        Shows LoginScreen
+    end note
+
+    note right of LoggedIn
+        currentUser has id, name, username, role
+        Tabs are filtered by role
+    end note
 ```

@@ -8,7 +8,7 @@ erDiagram
     USER {
         int id PK
         string name
-        string username UK
+        string username
         string password_hash
         string role
         datetime created_at
@@ -16,14 +16,14 @@ erDiagram
 
     CATEGORY {
         int id PK
-        string name UK
+        string name
         string description
     }
 
     PRODUCT {
         int id PK
-        string sku UK
-        string barcode UK
+        string sku
+        string barcode
         string serial_number
         string name
         string description
@@ -144,8 +144,8 @@ erDiagram
         decimal subtotal
     }
 
-    PRODUCT }o--|| CATEGORY : "categorized by (denormalized)"
-    STOCK_ENTRY }o--|| PRODUCT : "replenishes stock of"
+    PRODUCT }o--|| CATEGORY : "categorized by"
+    STOCK_ENTRY }o--|| PRODUCT : "replenishes"
     STOCK_ENTRY }o--o| SUPPLIER : "supplied by"
     BONIFICACION_PRICE_LOG }o--|| PRODUCT : "price history for"
     SALE_DETAIL }o--|| SALE : "belongs to"
@@ -158,8 +158,9 @@ erDiagram
 
 ## Notes
 
-- `USER` has no FK to other tables — it is used only for authentication
-- `PRODUCT.category` stores the category **name** (denormalized string), not an FK to `CATEGORY.id`
-- `STOCK_ENTRY.supplier_name` and `SALE.customer_name` are **snapshots** taken at creation time
-- `SALE_DETAIL` fields (`cost_price`, `unit_price`, `discount_*`, `iva_amount`, `line_total`) are **immutable snapshots** — historical reports always read stored values
-- Legacy columns (`cost_price`, `sale_price`/`price`, `offer_price`) on `PRODUCT` are kept in sync with the `precio_*` fields for backward compatibility
+- `USER` has no FK to other tables — used only for authentication
+- `PRODUCT.category` stores the category name as a denormalized string, not a FK to `CATEGORY.id`
+- `STOCK_ENTRY.supplier_name` and `SALE.customer_name` are snapshots taken at creation time
+- `SALE_DETAIL` pricing fields are immutable snapshots — historical reports always read stored values
+- Legacy columns (`cost_price`, `sale_price`, `offer_price`) on `PRODUCT` are kept in sync with `precio_*` fields for backward compatibility
+- `username` and `sku` and `barcode` are unique columns (enforced in TypeORM schema)

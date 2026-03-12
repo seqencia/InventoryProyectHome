@@ -3,52 +3,42 @@
 ## Module access by role
 
 ```mermaid
-graph LR
-    subgraph ADMIN["🔑 Admin"]
-        direction TB
-        A1[Dashboard\nwith profit + costs]
-        A2[Catálogo\nfull CRUD]
-        A3[Entradas\nwith unit cost]
-        A4[Proveedores\nfull CRUD]
-        A5[Nueva Venta\nfull access]
-        A6[Historial\nfull access + returns]
-        A7[Categorías\nfull CRUD]
-        A8[Clientes\nfull CRUD]
-        A9[Reportes\nfull with profit]
-        A10[Configuración\nbackup + user mgmt]
+flowchart LR
+    subgraph ADMIN["Admin"]
+        A1[Dashboard - with profit and costs]
+        A2[Catalogo - full CRUD]
+        A3[Entradas - with unit cost]
+        A4[Proveedores - full CRUD]
+        A5[Nueva Venta]
+        A6[Historial - full access and returns]
+        A7[Categorias - full CRUD]
+        A8[Clientes - full CRUD]
+        A9[Reportes - with profit]
+        A10[Configuracion - backup and user mgmt]
     end
 
-    subgraph VENDEDOR["👤 Vendedor"]
-        direction TB
-        V1[Dashboard\nno profit · no costs]
-        V3[Entradas\nno unit cost shown]
-        V5[Nueva Venta\nfull access]
-        V6[Historial\nview + returns]
+    subgraph VENDEDOR["Vendedor"]
+        V1[Dashboard - no profit, no costs]
+        V3[Entradas - no unit cost shown]
+        V5[Nueva Venta]
+        V6[Historial - view and returns]
     end
 ```
 
 ## Permission matrix
 
-```mermaid
-%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#e3f2fd'}}}%%
-quadrantChart
-    title Module Access (Admin vs Vendedor)
-    x-axis Low Sensitivity --> High Sensitivity
-    y-axis Vendedor Only --> Both Roles
-    quadrant-1 Admin Only
-    quadrant-2 Both with restrictions
-    quadrant-3 Vendedor (limited)
-    quadrant-4 Admin Only (sensitive)
-    Nueva Venta: [0.15, 0.85]
-    Historial: [0.25, 0.80]
-    Dashboard básico: [0.2, 0.65]
-    Entradas sin costo: [0.3, 0.60]
-    Dashboard con utilidad: [0.75, 0.55]
-    Reportes: [0.8, 0.25]
-    Configuración: [0.7, 0.20]
-    Catálogo CRUD: [0.6, 0.30]
-    Gestión Usuarios: [0.9, 0.15]
-```
+| Module | Admin | Vendedor |
+|---|---|---|
+| Dashboard | Full — ventas, ingresos, utilidad, stock, top 5 | Partial — ventas e ingresos only, no profit |
+| Catalogo | Full CRUD | No access |
+| Entradas | Full — with unit cost | Add only — cost fields hidden |
+| Proveedores | Full CRUD | No access |
+| Nueva Venta | Full | Full |
+| Historial | Full — view, returns, complete/cancel | Full — view, returns, complete/cancel |
+| Categorias | Full CRUD | No access |
+| Clientes | Full CRUD | No access |
+| Reportes | Full — with profit and exports | No access |
+| Configuracion | Full — backup and user management | No access |
 
 ## Detailed restrictions
 
@@ -57,40 +47,40 @@ flowchart TD
     LOGIN([User logs in]) --> ROLE{Role?}
 
     ROLE -- Admin --> ADMIN_ALL[Full access to all 10 tabs]
-    ADMIN_ALL --> ADMIN_COST[Sees: profit · costs · utilidad\nin all modules]
-    ADMIN_ALL --> ADMIN_USERS[Can create/edit/delete users\nvia Configuración]
+    ADMIN_ALL --> ADMIN_COST[Sees profit, costs and utilidad in all modules]
+    ADMIN_ALL --> ADMIN_USERS[Can create, edit and delete users via Configuracion]
 
-    ROLE -- Vendedor --> VEND_TABS[4 tabs only:\nDashboard · Entradas · Nueva Venta · Historial]
+    ROLE -- Vendedor --> VEND_TABS[4 tabs only: Dashboard, Entradas, Nueva Venta, Historial]
 
-    VEND_TABS --> VEND_DASH[Dashboard:\n✅ Ventas Hoy\n✅ Ingresos Hoy\n❌ Utilidad Hoy hidden\n✅ Stock Bajo\n✅ Top 5 Vendidos\n✅ Ventas Recientes]
-
-    VEND_TABS --> VEND_STOCK[Entradas:\n✅ Can add stock entries\n❌ Costo unit. column hidden\n❌ Costo field hidden in modal]
-
-    VEND_TABS --> VEND_SALE[Nueva Venta:\n✅ Full sale creation\n✅ All payment methods\n✅ Discounts\n✅ Regalías]
-
-    VEND_TABS --> VEND_HIST[Historial:\n✅ View all sales\n✅ Process returns\n✅ Print receipts\n✅ Complete/Cancel pending sales]
+    VEND_TABS --> VEND_DASH[Dashboard: Ventas Hoy, Ingresos Hoy, Stock Bajo, Top 5, Ventas Recientes. Utilidad Hoy is hidden]
+    VEND_TABS --> VEND_STOCK[Entradas: Can add entries. Unit cost column and field are hidden]
+    VEND_TABS --> VEND_SALE[Nueva Venta: Full sale creation with discounts and regalias]
+    VEND_TABS --> VEND_HIST[Historial: View all sales, process returns, print receipts]
 ```
 
-## What Vendedor CANNOT do
+## What Vendedor cannot do
 
 ```mermaid
-mindmap
-    root((Vendedor\nCannot))
-        View Costs
-            producto precio_costo
-            stock unit_cost column
-            utilidad today on Dashboard
-        Manage Master Data
-            Create/edit/delete products
-            Manage categories
-            Manage suppliers
-            Manage customers
-        View Reports
-            Revenue analytics
-            Profit by category
-            Export Excel/CSV
-        System Admin
-            Backup/restore database
-            Create/edit/delete users
-            View other users
+flowchart TD
+    ROOT[Vendedor Restrictions]
+
+    ROOT --> C1[View cost prices]
+    C1 --> C1A[precio_costo on any product]
+    C1 --> C1B[unit_cost in stock entries]
+    C1 --> C1C[Utilidad Hoy on Dashboard]
+
+    ROOT --> C2[Manage master data]
+    C2 --> C2A[Create, edit or delete products]
+    C2 --> C2B[Manage categories]
+    C2 --> C2C[Manage suppliers]
+    C2 --> C2D[Manage customers]
+
+    ROOT --> C3[View reports]
+    C3 --> C3A[Revenue analytics]
+    C3 --> C3B[Profit by category]
+    C3 --> C3C[Export Excel or CSV]
+
+    ROOT --> C4[System administration]
+    C4 --> C4A[Backup or restore database]
+    C4 --> C4B[Create, edit or delete users]
 ```
