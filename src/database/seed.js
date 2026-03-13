@@ -12,9 +12,15 @@
 const path = require('path');
 const { createDataSource } = require('./dataSource');
 
-// ─── DB path ─────────────────────────────────────────────────────────────────
-// Mirrors the path Electron resolves with app.getPath('userData') on Windows.
-const DB_PATH = process.argv[2] ||
+// ─── Args ─────────────────────────────────────────────────────────────────────
+// Usage:
+//   node src/database/seed.js                        — safe mode (skips if data exists)
+//   node src/database/seed.js --force                — insert dataset even if data exists
+//   node src/database/seed.js /path/db.sqlite        — custom DB path
+//   node src/database/seed.js /path/db.sqlite --force
+const args   = process.argv.slice(2);
+const FORCE  = args.includes('--force');
+const DB_PATH = args.find(a => !a.startsWith('-')) ||
   path.join(
     process.env.APPDATA || process.env.HOME || '.',
     'inventario-venta-desktop',
@@ -22,6 +28,7 @@ const DB_PATH = process.argv[2] ||
   );
 
 console.log('\n📦  StarTecnology — Seed Script');
+if (FORCE) console.log('⚡  Modo --force: insertando dataset completo sin verificar duplicados');
 console.log(`📁  Base de datos: ${DB_PATH}\n`);
 
 // ─── DataSource (shared with main.js via src/database/dataSource.js) ─────────
@@ -230,19 +237,21 @@ async function seed() {
 
   // ── 1. Categories ────────────────────────────────────────────────────────
   let cats;
-  if (await repo('Category').count() > 0) {
+  if (!FORCE && await repo('Category').count() > 0) {
     cats = await repo('Category').find();
     console.log(`⏭  Categorías: ${cats.length} existentes, omitiendo`);
   } else {
-    cats = [];
-    for (const d of CATEGORIES) cats.push(await repo('Category').save(repo('Category').create(d)));
-    console.log(`✅ Categorías: ${cats.length} creadas`);
+    // orIgnore skips rows whose name already exists (unique constraint)
+    await AppDataSource.createQueryBuilder()
+      .insert().into('categories').values(CATEGORIES).orIgnore().execute();
+    cats = await repo('Category').find();
+    console.log(`✅ Categorías: ${cats.length} disponibles`);
   }
   const catByName = Object.fromEntries(cats.map(c => [c.name, c.id]));
 
   // ── 2. Suppliers ─────────────────────────────────────────────────────────
   let suppliers;
-  if (await repo('Supplier').count() > 0) {
+  if (!FORCE && await repo('Supplier').count() > 0) {
     suppliers = await repo('Supplier').find();
     console.log(`⏭  Proveedores: ${suppliers.length} existentes, omitiendo`);
   } else {
@@ -253,17 +262,20 @@ async function seed() {
 
   // ── 3. Products ──────────────────────────────────────────────────────────
   let products;
-  if (await repo('Product').count() > 0) {
+  let newProducts = []; // only products created this run (for stock update)
+  if (!FORCE && await repo('Product').count() > 0) {
     products = await repo('Product').find();
     console.log(`⏭  Productos: ${products.length} existentes, omitiendo`);
   } else {
-    products = [];
+    // In --force mode: prefix SKU/barcode with a 6-digit timestamp token so
+    // they never collide with existing unique values.
+    const token = FORCE ? (Date.now() % 1000000).toString().padStart(6, '0') : '000000';
     for (let i = 0; i < PRODUCTS.length; i++) {
       const [name, cat, cond, costo, sinIva, stock, minStock, desc] = PRODUCTS[i];
       const pricing = computePricing(costo, sinIva);
       const prod = await repo('Product').save(repo('Product').create({
-        sku: `PRD-${String(i + 1).padStart(3, '0')}`,
-        barcode: `7720000${String(i + 1).padStart(6, '0')}`,
+        sku:      `PRD-${token}-${String(i + 1).padStart(3, '0')}`,
+        barcode:  `77${token}${String(i + 1).padStart(5, '0')}`,
         name, description: desc,
         category: cat, condition: cond,
         status: 'Disponible',
@@ -273,20 +285,22 @@ async function seed() {
         sale_price:           r6(sinIva),
         cost_price:           r6(costo),
         ...pricing,
-        stock: 0,   // will be recalculated after entries/sales
+        stock: 0,   // recalculated after entries/sales
         min_stock: minStock,
       }));
-      products.push(prod);
+      newProducts.push(prod);
     }
-    console.log(`✅ Productos: ${products.length} creados`);
+    // In --force mode use ALL products (existing + new) for realistic sales
+    products = FORCE ? await repo('Product').find() : newProducts;
+    console.log(`✅ Productos: ${newProducts.length} creados${FORCE ? ` (${products.length} total disponibles)` : ''}`);
   }
 
-  // stock tracker (in-memory)
-  const stockMap = Object.fromEntries(products.map(p => [p.id, 0]));
+  // stock tracker (in-memory) — only tracks products created this run
+  const stockMap = Object.fromEntries(newProducts.map(p => [p.id, 0]));
 
   // ── 4. Customers ─────────────────────────────────────────────────────────
   let customers;
-  if (await repo('Customer').count() > 0) {
+  if (!FORCE && await repo('Customer').count() > 0) {
     customers = await repo('Customer').find();
     console.log(`⏭  Clientes: ${customers.length} existentes, omitiendo`);
   } else {
@@ -297,8 +311,8 @@ async function seed() {
   }
 
   // ── 5. Stock Entries ─────────────────────────────────────────────────────
-  if (await repo('StockEntry').count() > 0) {
-    // Rebuild stockMap from existing entries
+  if (!FORCE && await repo('StockEntry').count() > 0) {
+    // Rebuild stockMap from existing entries (only for products created this run)
     const existing = await repo('StockEntry').find();
     for (const e of existing) {
       if (stockMap[e.product_id] !== undefined)
@@ -354,7 +368,7 @@ async function seed() {
   // ── 6. Sales ─────────────────────────────────────────────────────────────
   const completedSalesForReturns = []; // {saleId, date, details:[{product_id,product_name,qty,unit_price}]}
 
-  if (await repo('Sale').count() > 0) {
+  if (!FORCE && await repo('Sale').count() > 0) {
     console.log(`⏭  Ventas: ${await repo('Sale').count()} existentes, omitiendo`);
   } else {
     // Pre-generate & sort all 1500 sale dates
@@ -478,7 +492,7 @@ async function seed() {
   }
 
   // ── 7. Returns ───────────────────────────────────────────────────────────
-  if (await repo('Return').count() > 0) {
+  if (!FORCE && await repo('Return').count() > 0) {
     console.log(`⏭  Devoluciones: ${await repo('Return').count()} existentes, omitiendo`);
   } else if (completedSalesForReturns.length === 0) {
     console.log(`⚠  Sin ventas completadas disponibles para devoluciones, omitiendo`);
@@ -553,8 +567,10 @@ async function seed() {
   }
 
   // ── 8. Recalculate & persist final stock ─────────────────────────────────
+  // Only update products created this run — never overwrite existing product stock.
+  const productsToUpdate = newProducts.length > 0 ? newProducts : products;
   console.log('\n   Actualizando stock final de productos…');
-  for (const prod of products) {
+  for (const prod of productsToUpdate) {
     const finalStock = Math.max(0, stockMap[prod.id] ?? 0);
     await AppDataSource.createQueryBuilder()
       .update('products')
