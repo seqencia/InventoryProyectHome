@@ -9,7 +9,8 @@
   "scripts": {
     "build:renderer": "esbuild src/renderer/index.js --bundle --loader:.js=jsx --outfile=src/renderer/bundle.js",
     "start": "npm run build:renderer && electron .",
-    "dev": "concurrently \"esbuild src/renderer/index.js --bundle --loader:.js=jsx --outfile=src/renderer/bundle.js --watch\" \"electron .\""
+    "dev": "concurrently \"esbuild src/renderer/index.js --bundle --loader:.js=jsx --outfile=src/renderer/bundle.js --watch\" \"electron .\"",
+    "seed": "node src/database/seed.js"
   },
   "dependencies": {
     "electron": "^35.0.0",
