@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import UsersView from './UsersView';
+import AuditLogView from './AuditLogView';
 
 function formatBytes(bytes) {
   if (bytes == null) return '—';
@@ -333,6 +334,19 @@ export default function ConfigView({ role }) {
               Administra los usuarios del sistema. Solo los administradores pueden crear, editar o eliminar usuarios.
             </p>
             <UsersView />
+          </div>
+        </Card>
+      )}
+
+      {/* ── Audit Log card (Admin only) ── */}
+      {role === 'Admin' && (
+        <Card>
+          <CardHeader title="📋 Registro de Actividad" accent="#0078d4" />
+          <div style={{ padding: '18px 20px' }}>
+            <p style={{ fontSize: '13px', color: '#5c5c5c', margin: '0 0 16px' }}>
+              Historial completo de acciones: inicios de sesión, creación/edición/eliminación de productos, ventas, devoluciones y usuarios.
+            </p>
+            <AuditLogView />
           </div>
         </Card>
       )}

@@ -170,6 +170,7 @@ export default function App() {
   };
 
   const handleLogout = () => {
+    window.electron.auth.logout().catch(() => {});
     setCurrentUser(null);
     setActiveTab('dashboard');
   };

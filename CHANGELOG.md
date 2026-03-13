@@ -10,6 +10,58 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [0.32.0] - 2026-03-12
+
+### Added
+
+#### Registro de Auditoría y Seguimiento de Actividad
+
+##### Nueva tabla `audit_logs`
+- Columnas: `id`, `user_id`, `user_name`, `action` (CREATE/UPDATE/DELETE/LOGIN/LOGOUT), `entity` (product/sale/return/stock_entry/user/category/supplier/customer), `entity_id`, `old_value` (JSON), `new_value` (JSON), `timestamp` (datetime completo con segundos)
+- TypeORM `EntitySchema` con `createDate: true` → precisión de milisegundos en SQLite
+- `synchronize: true` crea la tabla automáticamente al iniciar
+
+##### Sesión de usuario en proceso principal (`currentSession`)
+- Variable módulo-nivel en `main.js` que almacena `{ userId, userName }` del usuario activo
+- Se establece en `auth:login` y se borra en `auth:logout`
+- Elimina la necesidad de pasar contexto de usuario en cada llamada IPC
+
+##### Función `logAudit()` (helper interno en `main.js`)
+- Escribe registros de auditoría silenciosamente (errores no interrumpen la operación principal)
+- Serializa `old_value` / `new_value` como JSON para inspección posterior
+
+##### Eventos auditados automáticamente
+- **LOGIN / LOGOUT**: usuario, username, rol; llamado desde `auth:login` y nuevo `auth:logout` IPC
+- **Productos**: CREATE (nombre, SKU, precio, costo, stock), UPDATE (snapshot antes/después de precio, costo, stock, estado), DELETE (nombre, SKU, stock)
+- **Precio bonificación**: UPDATE producto con nota `_note: 'precio_bonificacion'`
+- **Ventas**: CREATE (total, cliente, ítems, método de pago), UPDATE estado/método de pago (antes → después)
+- **Devoluciones**: CREATE (venta origen, monto reembolsado, razón, parcial/total)
+- **Entradas de inventario**: CREATE (producto, cantidad, bonificación, proveedor, costo)
+- **Usuarios**: CREATE (nombre, username, rol), UPDATE (cambios de nombre/rol/contraseña), DELETE (snapshot antes)
+
+##### IPC `auditLog:getAll` (nuevo handler en `main.js`)
+- Parámetros: `page`, `pageSize` (default 50), `userId`, `action`, `entity`, `dateFrom`, `dateTo`
+- Usa `createQueryBuilder` de TypeORM con `andWhere` condicional para filtros
+- Retorna `{ items, total, page, pageSize }` para paginación en UI
+
+##### Nuevo `auth:logout` IPC handler
+- Registra evento LOGOUT en audit log antes de limpiar `currentSession`
+- Preload expone `window.electron.auth.logout()`
+- `app.js` llama `auth.logout()` al presionar "Salir"
+
+##### `AuditLogView.js` — Vista de registro de actividad (Admin)
+- Filtros: usuario (select), acción (CREATE/UPDATE/DELETE/LOGIN/LOGOUT), entidad, fecha desde/hasta
+- Al cambiar cualquier filtro, reinicia automáticamente a página 1
+- Tabla con columnas: Fecha y hora (con segundos), Usuario, Acción (badge con color), Entidad, ID, Detalle
+- Detalle formateado en español según entidad/acción: muestra cambios de precio, stock, estado, etc.
+- Paginación de 50 registros por página con controles Anterior / Siguiente
+- Mensaje "No hay registros" cuando no hay resultados
+
+##### `ConfigView.js` — Integración de la vista de auditoría
+- Nueva sección "📋 Registro de Actividad" al final de Configuración (solo Admin)
+
+---
+
 ## [0.31.1] - 2026-03-11
 
 ### Changed — Documentation & Diagrams

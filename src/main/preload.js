@@ -60,6 +60,10 @@ contextBridge.exposeInMainWorld('electron', {
   },
   auth: {
     login: (credentials) => ipcRenderer.invoke('auth:login', credentials),
+    logout: () => ipcRenderer.invoke('auth:logout'),
+  },
+  auditLog: {
+    getAll: (filters) => ipcRenderer.invoke('auditLog:getAll', filters),
   },
   users: {
     getAll: () => ipcRenderer.invoke('users:getAll'),

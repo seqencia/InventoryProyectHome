@@ -1474,7 +1474,7 @@
           return dispatcher;
         }
         "undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(Error());
-        var React16 = require_react(), Internals = {
+        var React19 = require_react(), Internals = {
           d: {
             f: noop,
             r: function() {
@@ -1492,7 +1492,7 @@
           },
           p: 0,
           findDOMNode: null
-        }, REACT_PORTAL_TYPE = Symbol.for("react.portal"), ReactSharedInternals = React16.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE;
+        }, REACT_PORTAL_TYPE = Symbol.for("react.portal"), ReactSharedInternals = React19.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE;
         "function" === typeof Map && null != Map.prototype && "function" === typeof Map.prototype.forEach && "function" === typeof Set && null != Set.prototype && "function" === typeof Set.prototype.clear && "function" === typeof Set.prototype.forEach || console.error(
           "React depends on Map and Set built-in types. Make sure that you load a polyfill in older browsers. https://reactjs.org/link/react-polyfills"
         );
@@ -2948,7 +2948,7 @@
           "number" === type && getActiveElement(node.ownerDocument) === node || node.defaultValue === "" + value || (node.defaultValue = "" + value);
         }
         function validateOptionProps(element, props) {
-          null == props.value && ("object" === typeof props.children && null !== props.children ? React16.Children.forEach(props.children, function(child) {
+          null == props.value && ("object" === typeof props.children && null !== props.children ? React19.Children.forEach(props.children, function(child) {
             null == child || "string" === typeof child || "number" === typeof child || "bigint" === typeof child || didWarnInvalidChild || (didWarnInvalidChild = true, console.error(
               "Cannot infer the option value of complex children. Pass a `value` prop or use a plain string as children to <option>."
             ));
@@ -16418,13 +16418,13 @@
           ));
         }
         "undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(Error());
-        var Scheduler = require_scheduler(), React16 = require_react(), ReactDOM = require_react_dom(), REACT_LEGACY_ELEMENT_TYPE = Symbol.for("react.element"), REACT_ELEMENT_TYPE = Symbol.for("react.transitional.element"), REACT_PORTAL_TYPE = Symbol.for("react.portal"), REACT_FRAGMENT_TYPE = Symbol.for("react.fragment"), REACT_STRICT_MODE_TYPE = Symbol.for("react.strict_mode"), REACT_PROFILER_TYPE = Symbol.for("react.profiler"), REACT_PROVIDER_TYPE = Symbol.for("react.provider"), REACT_CONSUMER_TYPE = Symbol.for("react.consumer"), REACT_CONTEXT_TYPE = Symbol.for("react.context"), REACT_FORWARD_REF_TYPE = Symbol.for("react.forward_ref"), REACT_SUSPENSE_TYPE = Symbol.for("react.suspense"), REACT_SUSPENSE_LIST_TYPE = Symbol.for("react.suspense_list"), REACT_MEMO_TYPE = Symbol.for("react.memo"), REACT_LAZY_TYPE = Symbol.for("react.lazy");
+        var Scheduler = require_scheduler(), React19 = require_react(), ReactDOM = require_react_dom(), REACT_LEGACY_ELEMENT_TYPE = Symbol.for("react.element"), REACT_ELEMENT_TYPE = Symbol.for("react.transitional.element"), REACT_PORTAL_TYPE = Symbol.for("react.portal"), REACT_FRAGMENT_TYPE = Symbol.for("react.fragment"), REACT_STRICT_MODE_TYPE = Symbol.for("react.strict_mode"), REACT_PROFILER_TYPE = Symbol.for("react.profiler"), REACT_PROVIDER_TYPE = Symbol.for("react.provider"), REACT_CONSUMER_TYPE = Symbol.for("react.consumer"), REACT_CONTEXT_TYPE = Symbol.for("react.context"), REACT_FORWARD_REF_TYPE = Symbol.for("react.forward_ref"), REACT_SUSPENSE_TYPE = Symbol.for("react.suspense"), REACT_SUSPENSE_LIST_TYPE = Symbol.for("react.suspense_list"), REACT_MEMO_TYPE = Symbol.for("react.memo"), REACT_LAZY_TYPE = Symbol.for("react.lazy");
         Symbol.for("react.scope");
         Symbol.for("react.debug_trace_mode");
         var REACT_OFFSCREEN_TYPE = Symbol.for("react.offscreen");
         Symbol.for("react.legacy_hidden");
         Symbol.for("react.tracing_marker");
-        var REACT_MEMO_CACHE_SENTINEL = Symbol.for("react.memo_cache_sentinel"), MAYBE_ITERATOR_SYMBOL = Symbol.iterator, REACT_CLIENT_REFERENCE = Symbol.for("react.client.reference"), ReactSharedInternals = React16.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, assign = Object.assign, disabledDepth = 0, prevLog, prevInfo, prevWarn, prevError, prevGroup, prevGroupCollapsed, prevGroupEnd;
+        var REACT_MEMO_CACHE_SENTINEL = Symbol.for("react.memo_cache_sentinel"), MAYBE_ITERATOR_SYMBOL = Symbol.iterator, REACT_CLIENT_REFERENCE = Symbol.for("react.client.reference"), ReactSharedInternals = React19.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, assign = Object.assign, disabledDepth = 0, prevLog, prevInfo, prevWarn, prevError, prevGroup, prevGroupCollapsed, prevGroupEnd;
         disabledLog.__reactDisabledLog = true;
         var prefix, suffix, reentry = false;
         var componentFrameCache = new ("function" === typeof WeakMap ? WeakMap : Map)();
@@ -19144,7 +19144,7 @@
           }
         };
         (function() {
-          var isomorphicReactPackageVersion = React16.version;
+          var isomorphicReactPackageVersion = React19.version;
           if ("19.0.0" !== isomorphicReactPackageVersion)
             throw Error(
               'Incompatible React versions: The "react" and "react-dom" packages must have the exact same version. Instead got:\n  - react:      ' + (isomorphicReactPackageVersion + "\n  - react-dom:  19.0.0\nLearn more: https://react.dev/warnings/version-mismatch")
@@ -19286,11 +19286,11 @@
   });
 
   // src/renderer/index.js
-  var import_react15 = __toESM(require_react());
+  var import_react18 = __toESM(require_react());
   var import_client = __toESM(require_client());
 
   // src/renderer/app.js
-  var import_react14 = __toESM(require_react());
+  var import_react17 = __toESM(require_react());
 
   // src/renderer/components/DashboardView.js
   var import_react = __toESM(require_react());
@@ -19419,7 +19419,7 @@
       animation: "pulse 1.5s ease infinite"
     }
   };
-  function DashboardView({ onNavigate }) {
+  function DashboardView({ onNavigate, role }) {
     const [data, setData] = (0, import_react.useState)(null);
     const [loading, setLoading] = (0, import_react.useState)(true);
     const [error, setError] = (0, import_react.useState)(null);
@@ -19430,7 +19430,7 @@
       return /* @__PURE__ */ import_react.default.createElement(import_react.default.Fragment, null, /* @__PURE__ */ import_react.default.createElement("div", { style: layout.title }, "Dashboard"), /* @__PURE__ */ import_react.default.createElement("div", { style: layout.grid3 }, /* @__PURE__ */ import_react.default.createElement("div", { style: layout.skeleton }), /* @__PURE__ */ import_react.default.createElement("div", { style: layout.skeleton }), /* @__PURE__ */ import_react.default.createElement("div", { style: layout.skeleton })), /* @__PURE__ */ import_react.default.createElement("div", { style: layout.grid2Bottom }, /* @__PURE__ */ import_react.default.createElement("div", { style: { ...layout.skeleton, height: "200px" } }), /* @__PURE__ */ import_react.default.createElement("div", { style: { ...layout.skeleton, height: "200px" } })), /* @__PURE__ */ import_react.default.createElement("div", { style: { ...layout.skeleton, height: "220px" } }));
     }
     if (error) return /* @__PURE__ */ import_react.default.createElement("div", { style: layout.errorBox }, error);
-    return /* @__PURE__ */ import_react.default.createElement(import_react.default.Fragment, null, /* @__PURE__ */ import_react.default.createElement("div", { style: layout.title }, "Dashboard"), /* @__PURE__ */ import_react.default.createElement("div", { style: layout.grid3 }, /* @__PURE__ */ import_react.default.createElement(
+    return /* @__PURE__ */ import_react.default.createElement(import_react.default.Fragment, null, /* @__PURE__ */ import_react.default.createElement("div", { style: layout.title }, "Dashboard"), /* @__PURE__ */ import_react.default.createElement("div", { style: role === "Vendedor" ? layout.grid2Bottom : layout.grid3 }, /* @__PURE__ */ import_react.default.createElement(
       StatCard,
       {
         label: "Ventas Hoy",
@@ -19446,7 +19446,7 @@
         sub: data.todayReturnCount ? `Bruto $${data.todayTotal.toFixed(2)} \u2014 Dev. $${(data.todayReturnTotal || 0).toFixed(2)}` : data.todayCount === 0 ? "Sin movimiento hoy" : `Promedio $${(data.todayTotal / data.todayCount).toFixed(2)} por venta`,
         accentColor: "#107c10"
       }
-    ), /* @__PURE__ */ import_react.default.createElement(
+    ), role !== "Vendedor" && /* @__PURE__ */ import_react.default.createElement(
       StatCard,
       {
         label: "Utilidad Hoy",
@@ -20173,7 +20173,7 @@
       fontWeight: "500"
     }
   };
-  function StockEntryModal({ products, suppliers, onSave, onCancel }) {
+  function StockEntryModal({ products, suppliers, onSave, onCancel, role }) {
     const [form, setForm] = (0, import_react5.useState)({ product_id: "", quantity: "", bonus_quantity: "", unit_cost: "", supplier_id: "", notes: "" });
     const [saving, setSaving] = (0, import_react5.useState)(false);
     const set = (field) => (e) => setForm((prev) => ({ ...prev, [field]: e.target.value }));
@@ -20199,7 +20199,7 @@
       });
       setSaving(false);
     };
-    return /* @__PURE__ */ import_react5.default.createElement("div", { style: s3.overlay, onClick: (e) => e.target === e.currentTarget && onCancel() }, /* @__PURE__ */ import_react5.default.createElement("div", { style: s3.modal }, /* @__PURE__ */ import_react5.default.createElement("div", { style: s3.modalHeader }, /* @__PURE__ */ import_react5.default.createElement("h2", { style: s3.modalTitle }, "Nueva Entrada de Stock")), /* @__PURE__ */ import_react5.default.createElement("form", { onSubmit: handleSubmit }, /* @__PURE__ */ import_react5.default.createElement("div", { style: s3.modalBody }, /* @__PURE__ */ import_react5.default.createElement("div", { style: s3.field }, /* @__PURE__ */ import_react5.default.createElement("label", { style: s3.label }, "Producto *"), /* @__PURE__ */ import_react5.default.createElement("select", { className: "fl-select", style: s3.select, value: form.product_id, onChange: set("product_id"), required: true, autoFocus: true }, /* @__PURE__ */ import_react5.default.createElement("option", { value: "" }, "Seleccionar producto..."), products.map((p) => /* @__PURE__ */ import_react5.default.createElement("option", { key: p.id, value: p.id }, p.name, p.sku ? ` (${p.sku})` : "", " \u2014 Stock actual: ", p.stock)))), /* @__PURE__ */ import_react5.default.createElement("div", { style: s3.grid2 }, /* @__PURE__ */ import_react5.default.createElement("div", { style: s3.field }, /* @__PURE__ */ import_react5.default.createElement("label", { style: s3.label }, "Cantidad comprada *"), /* @__PURE__ */ import_react5.default.createElement("input", { className: "fl-input", style: s3.input, type: "number", min: "1", step: "1", value: form.quantity, onChange: set("quantity"), placeholder: "0", required: true })), /* @__PURE__ */ import_react5.default.createElement("div", { style: s3.field }, /* @__PURE__ */ import_react5.default.createElement("label", { style: s3.label }, "Cantidad bonificada"), /* @__PURE__ */ import_react5.default.createElement("input", { className: "fl-input", style: s3.input, type: "number", min: "0", step: "1", value: form.bonus_quantity, onChange: set("bonus_quantity"), placeholder: "0 (opcional)" }), /* @__PURE__ */ import_react5.default.createElement("div", { style: s3.hint }, "Unidades de regalo/bonus del proveedor"))), (qty > 0 || bonus > 0) && /* @__PURE__ */ import_react5.default.createElement("div", { style: { background: "#e8f5e9", border: "1px solid #c8e6c9", borderRadius: "8px", padding: "8px 12px", fontSize: "13px", color: "#2e7d32", marginBottom: "14px", fontWeight: "500" } }, "Total a ingresar: ", /* @__PURE__ */ import_react5.default.createElement("strong", null, totalQty, " unidades"), bonus > 0 && /* @__PURE__ */ import_react5.default.createElement("span", { style: { fontWeight: "400", color: "#5c5c5c", marginLeft: "8px" } }, "(", qty, " compradas + ", bonus, " bonificada", bonus !== 1 ? "s" : "", ")")), /* @__PURE__ */ import_react5.default.createElement("div", { style: s3.grid2 }, /* @__PURE__ */ import_react5.default.createElement("div", { style: s3.field }, /* @__PURE__ */ import_react5.default.createElement("label", { style: s3.label }, "Costo unitario ($)"), /* @__PURE__ */ import_react5.default.createElement("input", { className: "fl-input", style: s3.input, type: "number", min: "0", step: "0.01", value: form.unit_cost, onChange: set("unit_cost"), placeholder: "0.00" }), bonus > 0 && /* @__PURE__ */ import_react5.default.createElement("div", { style: s3.hint }, "Solo sobre cantidad comprada (", qty, " uds.)"))), /* @__PURE__ */ import_react5.default.createElement("div", { style: s3.field }, /* @__PURE__ */ import_react5.default.createElement("label", { style: s3.label }, "Proveedor"), /* @__PURE__ */ import_react5.default.createElement("select", { className: "fl-select", style: s3.select, value: form.supplier_id, onChange: set("supplier_id") }, /* @__PURE__ */ import_react5.default.createElement("option", { value: "" }, "Sin proveedor / no aplica"), suppliers.map((sup) => /* @__PURE__ */ import_react5.default.createElement("option", { key: sup.id, value: sup.id }, sup.name))), suppliers.length === 0 && /* @__PURE__ */ import_react5.default.createElement("div", { style: s3.hint }, 'Registra proveedores en la pesta\xF1a "Proveedores"')), /* @__PURE__ */ import_react5.default.createElement("div", { style: s3.field }, /* @__PURE__ */ import_react5.default.createElement("label", { style: s3.label }, "Notas"), /* @__PURE__ */ import_react5.default.createElement("textarea", { className: "fl-input", style: s3.textarea, value: form.notes, onChange: set("notes"), placeholder: "N\xFAmero de factura, lote, observaciones..." }))), formErr && /* @__PURE__ */ import_react5.default.createElement("div", { style: { margin: "0 24px 12px", background: "#ffebee", color: "#a4262c", borderRadius: "6px", padding: "8px 12px", fontSize: "13px" } }, formErr), /* @__PURE__ */ import_react5.default.createElement("div", { style: s3.modalFooter }, /* @__PURE__ */ import_react5.default.createElement("button", { type: "button", className: "fl-btn-ghost", style: s3.btnCancel, onClick: onCancel }, "Cancelar"), /* @__PURE__ */ import_react5.default.createElement("button", { type: "submit", className: "fl-btn-primary", style: s3.btnSave, disabled: saving }, saving ? "Registrando..." : "Registrar entrada")))));
+    return /* @__PURE__ */ import_react5.default.createElement("div", { style: s3.overlay, onClick: (e) => e.target === e.currentTarget && onCancel() }, /* @__PURE__ */ import_react5.default.createElement("div", { style: s3.modal }, /* @__PURE__ */ import_react5.default.createElement("div", { style: s3.modalHeader }, /* @__PURE__ */ import_react5.default.createElement("h2", { style: s3.modalTitle }, "Nueva Entrada de Stock")), /* @__PURE__ */ import_react5.default.createElement("form", { onSubmit: handleSubmit }, /* @__PURE__ */ import_react5.default.createElement("div", { style: s3.modalBody }, /* @__PURE__ */ import_react5.default.createElement("div", { style: s3.field }, /* @__PURE__ */ import_react5.default.createElement("label", { style: s3.label }, "Producto *"), /* @__PURE__ */ import_react5.default.createElement("select", { className: "fl-select", style: s3.select, value: form.product_id, onChange: set("product_id"), required: true, autoFocus: true }, /* @__PURE__ */ import_react5.default.createElement("option", { value: "" }, "Seleccionar producto..."), products.map((p) => /* @__PURE__ */ import_react5.default.createElement("option", { key: p.id, value: p.id }, p.name, p.sku ? ` (${p.sku})` : "", " \u2014 Stock actual: ", p.stock)))), /* @__PURE__ */ import_react5.default.createElement("div", { style: s3.grid2 }, /* @__PURE__ */ import_react5.default.createElement("div", { style: s3.field }, /* @__PURE__ */ import_react5.default.createElement("label", { style: s3.label }, "Cantidad comprada *"), /* @__PURE__ */ import_react5.default.createElement("input", { className: "fl-input", style: s3.input, type: "number", min: "1", step: "1", value: form.quantity, onChange: set("quantity"), placeholder: "0", required: true })), /* @__PURE__ */ import_react5.default.createElement("div", { style: s3.field }, /* @__PURE__ */ import_react5.default.createElement("label", { style: s3.label }, "Cantidad bonificada"), /* @__PURE__ */ import_react5.default.createElement("input", { className: "fl-input", style: s3.input, type: "number", min: "0", step: "1", value: form.bonus_quantity, onChange: set("bonus_quantity"), placeholder: "0 (opcional)" }), /* @__PURE__ */ import_react5.default.createElement("div", { style: s3.hint }, "Unidades de regalo/bonus del proveedor"))), (qty > 0 || bonus > 0) && /* @__PURE__ */ import_react5.default.createElement("div", { style: { background: "#e8f5e9", border: "1px solid #c8e6c9", borderRadius: "8px", padding: "8px 12px", fontSize: "13px", color: "#2e7d32", marginBottom: "14px", fontWeight: "500" } }, "Total a ingresar: ", /* @__PURE__ */ import_react5.default.createElement("strong", null, totalQty, " unidades"), bonus > 0 && /* @__PURE__ */ import_react5.default.createElement("span", { style: { fontWeight: "400", color: "#5c5c5c", marginLeft: "8px" } }, "(", qty, " compradas + ", bonus, " bonificada", bonus !== 1 ? "s" : "", ")")), role !== "Vendedor" && /* @__PURE__ */ import_react5.default.createElement("div", { style: s3.grid2 }, /* @__PURE__ */ import_react5.default.createElement("div", { style: s3.field }, /* @__PURE__ */ import_react5.default.createElement("label", { style: s3.label }, "Costo unitario ($)"), /* @__PURE__ */ import_react5.default.createElement("input", { className: "fl-input", style: s3.input, type: "number", min: "0", step: "0.01", value: form.unit_cost, onChange: set("unit_cost"), placeholder: "0.00" }), bonus > 0 && /* @__PURE__ */ import_react5.default.createElement("div", { style: s3.hint }, "Solo sobre cantidad comprada (", qty, " uds.)"))), /* @__PURE__ */ import_react5.default.createElement("div", { style: s3.field }, /* @__PURE__ */ import_react5.default.createElement("label", { style: s3.label }, "Proveedor"), /* @__PURE__ */ import_react5.default.createElement("select", { className: "fl-select", style: s3.select, value: form.supplier_id, onChange: set("supplier_id") }, /* @__PURE__ */ import_react5.default.createElement("option", { value: "" }, "Sin proveedor / no aplica"), suppliers.map((sup) => /* @__PURE__ */ import_react5.default.createElement("option", { key: sup.id, value: sup.id }, sup.name))), suppliers.length === 0 && /* @__PURE__ */ import_react5.default.createElement("div", { style: s3.hint }, 'Registra proveedores en la pesta\xF1a "Proveedores"')), /* @__PURE__ */ import_react5.default.createElement("div", { style: s3.field }, /* @__PURE__ */ import_react5.default.createElement("label", { style: s3.label }, "Notas"), /* @__PURE__ */ import_react5.default.createElement("textarea", { className: "fl-input", style: s3.textarea, value: form.notes, onChange: set("notes"), placeholder: "N\xFAmero de factura, lote, observaciones..." }))), formErr && /* @__PURE__ */ import_react5.default.createElement("div", { style: { margin: "0 24px 12px", background: "#ffebee", color: "#a4262c", borderRadius: "6px", padding: "8px 12px", fontSize: "13px" } }, formErr), /* @__PURE__ */ import_react5.default.createElement("div", { style: s3.modalFooter }, /* @__PURE__ */ import_react5.default.createElement("button", { type: "button", className: "fl-btn-ghost", style: s3.btnCancel, onClick: onCancel }, "Cancelar"), /* @__PURE__ */ import_react5.default.createElement("button", { type: "submit", className: "fl-btn-primary", style: s3.btnSave, disabled: saving }, saving ? "Registrando..." : "Registrar entrada")))));
   }
   function BonificacionPriceModal({ entry, product, onConfirm, onCancel }) {
     const currentPrice = Number(product?.precio_venta_sin_iva || product?.sale_price || 0);
@@ -20237,7 +20237,7 @@
       "Confirmar"
     ))));
   }
-  function StockEntriesView() {
+  function StockEntriesView({ role }) {
     const [entries, setEntries] = (0, import_react5.useState)([]);
     const [products, setProducts] = (0, import_react5.useState)([]);
     const [suppliers, setSuppliers] = (0, import_react5.useState)([]);
@@ -20295,7 +20295,7 @@
         load();
       }
     };
-    return /* @__PURE__ */ import_react5.default.createElement(import_react5.default.Fragment, null, /* @__PURE__ */ import_react5.default.createElement("div", { style: s3.toolbar }, /* @__PURE__ */ import_react5.default.createElement("h2", { style: s3.sectionTitle }, "Entradas de Inventario"), /* @__PURE__ */ import_react5.default.createElement("button", { className: "fl-btn-primary", style: s3.btnPrimary, onClick: () => setModal(true) }, "+ Nueva Entrada")), error && /* @__PURE__ */ import_react5.default.createElement("div", { style: s3.errorBox }, error), loading ? /* @__PURE__ */ import_react5.default.createElement("p", { style: { color: "#9e9e9e", fontSize: "14px" } }, "Cargando...") : /* @__PURE__ */ import_react5.default.createElement("div", { style: s3.wrapper }, entries.length === 0 ? /* @__PURE__ */ import_react5.default.createElement("p", { style: s3.empty }, "No hay entradas registradas. Registra la primera.") : /* @__PURE__ */ import_react5.default.createElement("table", { style: s3.table }, /* @__PURE__ */ import_react5.default.createElement("thead", null, /* @__PURE__ */ import_react5.default.createElement("tr", null, /* @__PURE__ */ import_react5.default.createElement("th", { style: s3.th }, "#"), /* @__PURE__ */ import_react5.default.createElement("th", { style: s3.th }, "Fecha"), /* @__PURE__ */ import_react5.default.createElement("th", { style: s3.th }, "Producto"), /* @__PURE__ */ import_react5.default.createElement("th", { style: s3.th }, "Ingresado"), /* @__PURE__ */ import_react5.default.createElement("th", { style: s3.th }, "Costo unit."), /* @__PURE__ */ import_react5.default.createElement("th", { style: s3.th }, "Proveedor"), /* @__PURE__ */ import_react5.default.createElement("th", { style: s3.th }, "Notas"))), /* @__PURE__ */ import_react5.default.createElement("tbody", null, entries.map((entry) => /* @__PURE__ */ import_react5.default.createElement("tr", { key: entry.id, className: "fl-tr" }, /* @__PURE__ */ import_react5.default.createElement("td", { style: { ...s3.td, color: "#9e9e9e" } }, entry.id), /* @__PURE__ */ import_react5.default.createElement("td", { style: s3.td }, formatDate2(entry.created_at)), /* @__PURE__ */ import_react5.default.createElement("td", { style: { ...s3.td, fontWeight: "600" } }, entry.product_name), /* @__PURE__ */ import_react5.default.createElement("td", { style: s3.td }, entry.bonus_quantity > 0 ? /* @__PURE__ */ import_react5.default.createElement("span", { style: { fontSize: "12px", color: "#1a1a1a" } }, /* @__PURE__ */ import_react5.default.createElement("span", { style: s3.qtyBadge }, "+", entry.quantity + entry.bonus_quantity), /* @__PURE__ */ import_react5.default.createElement("span", { style: { display: "block", fontSize: "11px", color: "#9e9e9e", marginTop: "3px" } }, entry.quantity, " comprada", entry.quantity !== 1 ? "s" : "", " + ", entry.bonus_quantity, " bonificada", entry.bonus_quantity !== 1 ? "s" : ""), entry.precio_venta_bonificacion != null ? /* @__PURE__ */ import_react5.default.createElement("span", { style: { display: "block", fontSize: "11px", color: "#1565c0", marginTop: "2px", fontWeight: "600" } }, "P.V. bonif.: $", Number(entry.precio_venta_bonificacion).toFixed(2)) : entry.precio_bonificacion_pendiente ? /* @__PURE__ */ import_react5.default.createElement("span", { style: { display: "block", fontSize: "11px", color: "#e65100", marginTop: "2px", fontWeight: "600" } }, "\u23F3 Precio pendiente") : null) : /* @__PURE__ */ import_react5.default.createElement("span", { style: s3.qtyBadge }, "+", entry.quantity)), /* @__PURE__ */ import_react5.default.createElement("td", { style: { ...s3.td, color: entry.unit_cost ? "#1a1a1a" : "#9e9e9e" } }, entry.unit_cost ? `$${Number(entry.unit_cost).toFixed(2)}` : "\u2014"), /* @__PURE__ */ import_react5.default.createElement("td", { style: { ...s3.td, color: entry.supplier_name ? "#1a1a1a" : "#9e9e9e" } }, entry.supplier_name || "\u2014"), /* @__PURE__ */ import_react5.default.createElement("td", { style: { ...s3.td, color: entry.notes ? "#1a1a1a" : "#9e9e9e", maxWidth: "200px" } }, entry.notes || "\u2014")))))), modal && /* @__PURE__ */ import_react5.default.createElement(StockEntryModal, { products, suppliers, onSave: handleSave, onCancel: () => setModal(false) }), pendingBonificacion && /* @__PURE__ */ import_react5.default.createElement(
+    return /* @__PURE__ */ import_react5.default.createElement(import_react5.default.Fragment, null, /* @__PURE__ */ import_react5.default.createElement("div", { style: s3.toolbar }, /* @__PURE__ */ import_react5.default.createElement("h2", { style: s3.sectionTitle }, "Entradas de Inventario"), /* @__PURE__ */ import_react5.default.createElement("button", { className: "fl-btn-primary", style: s3.btnPrimary, onClick: () => setModal(true) }, "+ Nueva Entrada")), error && /* @__PURE__ */ import_react5.default.createElement("div", { style: s3.errorBox }, error), loading ? /* @__PURE__ */ import_react5.default.createElement("p", { style: { color: "#9e9e9e", fontSize: "14px" } }, "Cargando...") : /* @__PURE__ */ import_react5.default.createElement("div", { style: s3.wrapper }, entries.length === 0 ? /* @__PURE__ */ import_react5.default.createElement("p", { style: s3.empty }, "No hay entradas registradas. Registra la primera.") : /* @__PURE__ */ import_react5.default.createElement("table", { style: s3.table }, /* @__PURE__ */ import_react5.default.createElement("thead", null, /* @__PURE__ */ import_react5.default.createElement("tr", null, /* @__PURE__ */ import_react5.default.createElement("th", { style: s3.th }, "#"), /* @__PURE__ */ import_react5.default.createElement("th", { style: s3.th }, "Fecha"), /* @__PURE__ */ import_react5.default.createElement("th", { style: s3.th }, "Producto"), /* @__PURE__ */ import_react5.default.createElement("th", { style: s3.th }, "Ingresado"), role !== "Vendedor" && /* @__PURE__ */ import_react5.default.createElement("th", { style: s3.th }, "Costo unit."), /* @__PURE__ */ import_react5.default.createElement("th", { style: s3.th }, "Proveedor"), /* @__PURE__ */ import_react5.default.createElement("th", { style: s3.th }, "Notas"))), /* @__PURE__ */ import_react5.default.createElement("tbody", null, entries.map((entry) => /* @__PURE__ */ import_react5.default.createElement("tr", { key: entry.id, className: "fl-tr" }, /* @__PURE__ */ import_react5.default.createElement("td", { style: { ...s3.td, color: "#9e9e9e" } }, entry.id), /* @__PURE__ */ import_react5.default.createElement("td", { style: s3.td }, formatDate2(entry.created_at)), /* @__PURE__ */ import_react5.default.createElement("td", { style: { ...s3.td, fontWeight: "600" } }, entry.product_name), /* @__PURE__ */ import_react5.default.createElement("td", { style: s3.td }, entry.bonus_quantity > 0 ? /* @__PURE__ */ import_react5.default.createElement("span", { style: { fontSize: "12px", color: "#1a1a1a" } }, /* @__PURE__ */ import_react5.default.createElement("span", { style: s3.qtyBadge }, "+", entry.quantity + entry.bonus_quantity), /* @__PURE__ */ import_react5.default.createElement("span", { style: { display: "block", fontSize: "11px", color: "#9e9e9e", marginTop: "3px" } }, entry.quantity, " comprada", entry.quantity !== 1 ? "s" : "", " + ", entry.bonus_quantity, " bonificada", entry.bonus_quantity !== 1 ? "s" : ""), entry.precio_venta_bonificacion != null ? /* @__PURE__ */ import_react5.default.createElement("span", { style: { display: "block", fontSize: "11px", color: "#1565c0", marginTop: "2px", fontWeight: "600" } }, "P.V. bonif.: $", Number(entry.precio_venta_bonificacion).toFixed(2)) : entry.precio_bonificacion_pendiente ? /* @__PURE__ */ import_react5.default.createElement("span", { style: { display: "block", fontSize: "11px", color: "#e65100", marginTop: "2px", fontWeight: "600" } }, "\u23F3 Precio pendiente") : null) : /* @__PURE__ */ import_react5.default.createElement("span", { style: s3.qtyBadge }, "+", entry.quantity)), role !== "Vendedor" && /* @__PURE__ */ import_react5.default.createElement("td", { style: { ...s3.td, color: entry.unit_cost ? "#1a1a1a" : "#9e9e9e" } }, entry.unit_cost ? `$${Number(entry.unit_cost).toFixed(2)}` : "\u2014"), /* @__PURE__ */ import_react5.default.createElement("td", { style: { ...s3.td, color: entry.supplier_name ? "#1a1a1a" : "#9e9e9e" } }, entry.supplier_name || "\u2014"), /* @__PURE__ */ import_react5.default.createElement("td", { style: { ...s3.td, color: entry.notes ? "#1a1a1a" : "#9e9e9e", maxWidth: "200px" } }, entry.notes || "\u2014")))))), modal && /* @__PURE__ */ import_react5.default.createElement(StockEntryModal, { products, suppliers, onSave: handleSave, onCancel: () => setModal(false), role }), pendingBonificacion && /* @__PURE__ */ import_react5.default.createElement(
       BonificacionPriceModal,
       {
         entry: pendingBonificacion.entry,
@@ -21039,7 +21039,7 @@
         (p) => !q || p.name.toLowerCase().includes(q) || (p.category || "").toLowerCase().includes(q)
       );
     }, [allProducts, query]);
-    const cartQtyFor = (productId) => cart.filter((c) => c.product_id === productId).reduce((s8, c) => s8 + c.quantity, 0);
+    const cartQtyFor = (productId) => cart.filter((c) => c.product_id === productId).reduce((s9, c) => s9 + c.quantity, 0);
     const availableStock = (product) => product.stock - cartQtyFor(product.id);
     const showBarcodeMsg = (type, text) => {
       if (barcodeMsgTimerRef.current) clearTimeout(barcodeMsgTimerRef.current);
@@ -21115,7 +21115,7 @@
         return;
       }
       const product = allProducts.find((p) => p.id === productId);
-      const otherQty = cart.filter((c) => c.product_id === productId && c.regalia_type !== regaliaType).reduce((s8, c) => s8 + c.quantity, 0);
+      const otherQty = cart.filter((c) => c.product_id === productId && c.regalia_type !== regaliaType).reduce((s9, c) => s9 + c.quantity, 0);
       if (qty + otherQty > product.stock) return;
       setCart(
         (prev) => prev.map(
@@ -21125,10 +21125,10 @@
     };
     const r2 = (v) => parseFloat(v.toFixed(2));
     const regularCart = cart.filter((i) => !i.is_regalia);
-    const regaliaPropiaCount = cart.filter((i) => i.regalia_type === "propia").reduce((s8, i) => s8 + i.quantity, 0);
-    const bonificacionCount = cart.filter((i) => i.regalia_type === "bonificacion").reduce((s8, i) => s8 + i.quantity, 0);
-    const subtotalBruto = r2(regularCart.reduce((s8, i) => s8 + i.unit_price * i.quantity, 0));
-    const lineDiscountsTotal = r2(regularCart.reduce((s8, i) => s8 + getLineDiscount(i) * i.quantity, 0));
+    const regaliaPropiaCount = cart.filter((i) => i.regalia_type === "propia").reduce((s9, i) => s9 + i.quantity, 0);
+    const bonificacionCount = cart.filter((i) => i.regalia_type === "bonificacion").reduce((s9, i) => s9 + i.quantity, 0);
+    const subtotalBruto = r2(regularCart.reduce((s9, i) => s9 + i.unit_price * i.quantity, 0));
+    const lineDiscountsTotal = r2(regularCart.reduce((s9, i) => s9 + getLineDiscount(i) * i.quantity, 0));
     const subtotalPostLine = r2(subtotalBruto - lineDiscountsTotal);
     const globalDiscRaw = parseFloat(globalDiscountValue) || 0;
     const globalDiscAmount = r2(globalDiscountMode === "percent" ? subtotalPostLine * globalDiscRaw / 100 : Math.min(globalDiscRaw, subtotalPostLine));
@@ -21515,7 +21515,7 @@
         setSaving(false);
       }
     };
-    const inputStyle = {
+    const inputStyle2 = {
       width: "100%",
       padding: "8px 12px",
       border: "1px solid #d1d1d1",
@@ -21523,7 +21523,7 @@
       fontSize: "13px",
       boxSizing: "border-box"
     };
-    const selectStyle = { ...inputStyle, background: "white" };
+    const selectStyle = { ...inputStyle2, background: "white" };
     return /* @__PURE__ */ import_react9.default.createElement(
       "div",
       {
@@ -21601,7 +21601,7 @@
         "textarea",
         {
           className: "fl-input",
-          style: { ...inputStyle, resize: "vertical", minHeight: "56px", fontFamily: "inherit" },
+          style: { ...inputStyle2, resize: "vertical", minHeight: "56px", fontFamily: "inherit" },
           value: notes,
           onChange: (e) => setNotes(e.target.value),
           placeholder: "Detalles adicionales..."
@@ -21809,11 +21809,11 @@
         line_discount_value: Number(d.discount_amount || 0)
       }));
       const subtotalBruto = regularDetails.reduce(
-        (s8, d) => s8 + (Number(d.unit_price) + Number(d.discount_amount || 0)) * d.quantity,
+        (s9, d) => s9 + (Number(d.unit_price) + Number(d.discount_amount || 0)) * d.quantity,
         0
       );
       const lineDiscountsTotal = regularDetails.reduce(
-        (s8, d) => s8 + Number(d.discount_amount || 0) * d.quantity,
+        (s9, d) => s9 + Number(d.discount_amount || 0) * d.quantity,
         0
       );
       const globalDiscountAmount = Number(sale.global_discount || 0);
@@ -22430,7 +22430,457 @@
   }
 
   // src/renderer/components/ConfigView.js
+  var import_react14 = __toESM(require_react());
+
+  // src/renderer/components/UsersView.js
   var import_react12 = __toESM(require_react());
+  var ROLES = ["Admin", "Vendedor"];
+  var ROLE_BADGE = {
+    Admin: { background: "#e3f2fd", color: "#1565c0" },
+    Vendedor: { background: "#e8f5e9", color: "#2e7d32" }
+  };
+  var s8 = {
+    wrapper: {
+      background: "white",
+      borderRadius: "12px",
+      boxShadow: "0 2px 8px rgba(0,0,0,0.07)",
+      overflow: "hidden"
+    },
+    table: { width: "100%", borderCollapse: "collapse", fontSize: "13px" },
+    th: {
+      background: "#f7f7f7",
+      padding: "10px 16px",
+      textAlign: "left",
+      fontWeight: "700",
+      fontSize: "11px",
+      color: "#9e9e9e",
+      borderBottom: "1px solid #e5e5e5",
+      textTransform: "uppercase",
+      letterSpacing: "0.5px"
+    },
+    td: { padding: "12px 16px", borderBottom: "1px solid #f5f5f5", verticalAlign: "middle", fontSize: "13px" },
+    empty: { textAlign: "center", padding: "48px 32px", color: "#9e9e9e", fontSize: "14px" },
+    overlay: {
+      position: "fixed",
+      inset: 0,
+      background: "rgba(0,0,0,0.4)",
+      backdropFilter: "blur(8px)",
+      WebkitBackdropFilter: "blur(8px)",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      zIndex: 1e3
+    },
+    modal: {
+      background: "white",
+      borderRadius: "12px",
+      width: "420px",
+      maxWidth: "95vw",
+      boxShadow: "0 24px 64px rgba(0,0,0,0.18)",
+      overflow: "hidden"
+    },
+    modalHeader: { padding: "20px 24px 16px", borderBottom: "1px solid #f0f0f0" },
+    modalTitle: { fontSize: "17px", fontWeight: "700", color: "#1a1a1a", margin: 0 },
+    modalBody: { padding: "18px 24px" },
+    modalFooter: {
+      padding: "14px 24px",
+      borderTop: "1px solid #f0f0f0",
+      display: "flex",
+      justifyContent: "flex-end",
+      gap: "8px"
+    },
+    field: { marginBottom: "14px" },
+    label: { display: "block", fontSize: "12px", fontWeight: "600", color: "#5c5c5c", marginBottom: "5px" },
+    hint: { fontSize: "11px", color: "#9e9e9e", marginTop: "3px" },
+    input: {
+      width: "100%",
+      padding: "8px 12px",
+      border: "1px solid #d1d1d1",
+      borderRadius: "6px",
+      fontSize: "14px",
+      boxSizing: "border-box"
+    },
+    select: {
+      width: "100%",
+      padding: "8px 12px",
+      border: "1px solid #d1d1d1",
+      borderRadius: "6px",
+      fontSize: "14px",
+      background: "white",
+      boxSizing: "border-box"
+    },
+    btnEdit: {
+      background: "white",
+      border: "1px solid #d1d1d1",
+      padding: "5px 12px",
+      borderRadius: "6px",
+      cursor: "pointer",
+      fontSize: "12px",
+      marginRight: "6px",
+      color: "#1a1a1a",
+      fontWeight: "500"
+    },
+    btnDelete: {
+      background: "white",
+      border: "1px solid #fad9d9",
+      padding: "5px 12px",
+      borderRadius: "6px",
+      cursor: "pointer",
+      fontSize: "12px",
+      color: "#a4262c",
+      fontWeight: "500"
+    },
+    btnCancel: {
+      background: "white",
+      border: "1px solid #d1d1d1",
+      padding: "8px 16px",
+      borderRadius: "8px",
+      cursor: "pointer",
+      fontSize: "14px",
+      color: "#5c5c5c"
+    },
+    btnSave: {
+      background: "#0078d4",
+      color: "white",
+      border: "none",
+      padding: "8px 20px",
+      borderRadius: "8px",
+      cursor: "pointer",
+      fontSize: "14px",
+      fontWeight: "500"
+    }
+  };
+  function UserModal({ user, onSave, onCancel }) {
+    const isEdit = !!user;
+    const [form, setForm] = (0, import_react12.useState)({
+      name: user?.name || "",
+      username: user?.username || "",
+      password: "",
+      role: user?.role || "Vendedor"
+    });
+    const [saving, setSaving] = (0, import_react12.useState)(false);
+    const [error, setError] = (0, import_react12.useState)("");
+    const set = (field) => (e) => setForm((prev) => ({ ...prev, [field]: e.target.value }));
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+      if (!form.name.trim() || !form.username.trim()) return;
+      if (!isEdit && !form.password) {
+        setError("La contrase\xF1a es obligatoria.");
+        return;
+      }
+      setError("");
+      setSaving(true);
+      try {
+        await onSave(form);
+      } catch (err) {
+        setError(err?.message || "Error al guardar.");
+        setSaving(false);
+      }
+    };
+    return /* @__PURE__ */ import_react12.default.createElement("div", { style: s8.overlay, onClick: (e) => e.target === e.currentTarget && onCancel() }, /* @__PURE__ */ import_react12.default.createElement("div", { style: s8.modal }, /* @__PURE__ */ import_react12.default.createElement("div", { style: s8.modalHeader }, /* @__PURE__ */ import_react12.default.createElement("h2", { style: s8.modalTitle }, isEdit ? "Editar Usuario" : "Nuevo Usuario")), /* @__PURE__ */ import_react12.default.createElement("form", { onSubmit: handleSubmit }, /* @__PURE__ */ import_react12.default.createElement("div", { style: s8.modalBody }, /* @__PURE__ */ import_react12.default.createElement("div", { style: s8.field }, /* @__PURE__ */ import_react12.default.createElement("label", { style: s8.label }, "Nombre completo *"), /* @__PURE__ */ import_react12.default.createElement(
+      "input",
+      {
+        className: "fl-input",
+        style: s8.input,
+        type: "text",
+        value: form.name,
+        onChange: set("name"),
+        placeholder: "Nombre del usuario",
+        required: true,
+        autoFocus: true,
+        disabled: saving
+      }
+    )), /* @__PURE__ */ import_react12.default.createElement("div", { style: s8.field }, /* @__PURE__ */ import_react12.default.createElement("label", { style: s8.label }, "Nombre de usuario *"), /* @__PURE__ */ import_react12.default.createElement(
+      "input",
+      {
+        className: "fl-input",
+        style: s8.input,
+        type: "text",
+        value: form.username,
+        onChange: set("username"),
+        placeholder: "login",
+        required: true,
+        disabled: saving
+      }
+    )), /* @__PURE__ */ import_react12.default.createElement("div", { style: s8.field }, /* @__PURE__ */ import_react12.default.createElement("label", { style: s8.label }, isEdit ? "Nueva contrase\xF1a" : "Contrase\xF1a *"), /* @__PURE__ */ import_react12.default.createElement(
+      "input",
+      {
+        className: "fl-input",
+        style: s8.input,
+        type: "password",
+        value: form.password,
+        onChange: set("password"),
+        placeholder: isEdit ? "Dejar vac\xEDo para no cambiar" : "Contrase\xF1a",
+        required: !isEdit,
+        disabled: saving
+      }
+    ), isEdit && /* @__PURE__ */ import_react12.default.createElement("div", { style: s8.hint }, "Dejar vac\xEDo para mantener la contrase\xF1a actual")), /* @__PURE__ */ import_react12.default.createElement("div", { style: s8.field }, /* @__PURE__ */ import_react12.default.createElement("label", { style: s8.label }, "Rol *"), /* @__PURE__ */ import_react12.default.createElement("select", { className: "fl-select", style: s8.select, value: form.role, onChange: set("role"), disabled: saving }, ROLES.map((r) => /* @__PURE__ */ import_react12.default.createElement("option", { key: r, value: r }, r)))), error && /* @__PURE__ */ import_react12.default.createElement("div", { style: {
+      background: "#ffebee",
+      color: "#a4262c",
+      border: "1px solid #ef9a9a",
+      borderRadius: "6px",
+      padding: "8px 12px",
+      fontSize: "13px"
+    } }, error)), /* @__PURE__ */ import_react12.default.createElement("div", { style: s8.modalFooter }, /* @__PURE__ */ import_react12.default.createElement("button", { type: "button", className: "fl-btn-ghost", style: s8.btnCancel, onClick: onCancel, disabled: saving }, "Cancelar"), /* @__PURE__ */ import_react12.default.createElement("button", { type: "submit", className: "fl-btn-primary", style: s8.btnSave, disabled: saving }, saving ? "Guardando..." : "Guardar")))));
+  }
+  function UsersView() {
+    const [users, setUsers] = (0, import_react12.useState)([]);
+    const [loading, setLoading] = (0, import_react12.useState)(true);
+    const [error, setError] = (0, import_react12.useState)("");
+    const [modal, setModal] = (0, import_react12.useState)(null);
+    const load = (0, import_react12.useCallback)(async () => {
+      try {
+        setLoading(true);
+        setUsers(await window.electron.users.getAll());
+        setError("");
+      } catch {
+        setError("Error al cargar los usuarios.");
+      } finally {
+        setLoading(false);
+      }
+    }, []);
+    (0, import_react12.useEffect)(() => {
+      load();
+    }, [load]);
+    const handleSave = async (form) => {
+      if (modal === "create") {
+        await window.electron.users.create(form);
+      } else {
+        await window.electron.users.update(modal.user.id, form);
+      }
+      setModal(null);
+      load();
+    };
+    const handleDelete = async (user) => {
+      if (!window.confirm(`\xBFEliminar el usuario "${user.name}"?`)) return;
+      try {
+        await window.electron.users.delete(user.id);
+        load();
+      } catch (err) {
+        setError(err?.message || "Error al eliminar el usuario.");
+      }
+    };
+    return /* @__PURE__ */ import_react12.default.createElement("div", { style: { marginTop: "20px" } }, /* @__PURE__ */ import_react12.default.createElement("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "14px" } }, /* @__PURE__ */ import_react12.default.createElement("div", { style: { fontSize: "15px", fontWeight: "700", color: "#1a1a1a" } }, "Usuarios del Sistema"), /* @__PURE__ */ import_react12.default.createElement(
+      "button",
+      {
+        className: "fl-btn-primary",
+        style: {
+          background: "#0078d4",
+          color: "white",
+          border: "none",
+          padding: "7px 16px",
+          borderRadius: "8px",
+          cursor: "pointer",
+          fontSize: "13px",
+          fontWeight: "500"
+        },
+        onClick: () => setModal("create")
+      },
+      "+ Nuevo Usuario"
+    )), error && /* @__PURE__ */ import_react12.default.createElement("div", { style: { background: "#ffebee", color: "#a4262c", padding: "10px 14px", borderRadius: "8px", marginBottom: "14px", fontSize: "13px" } }, error), /* @__PURE__ */ import_react12.default.createElement("div", { style: s8.wrapper }, loading ? /* @__PURE__ */ import_react12.default.createElement("p", { style: s8.empty }, "Cargando...") : users.length === 0 ? /* @__PURE__ */ import_react12.default.createElement("p", { style: s8.empty }, "No hay usuarios registrados.") : /* @__PURE__ */ import_react12.default.createElement("table", { style: s8.table }, /* @__PURE__ */ import_react12.default.createElement("thead", null, /* @__PURE__ */ import_react12.default.createElement("tr", null, /* @__PURE__ */ import_react12.default.createElement("th", { style: s8.th }, "Nombre"), /* @__PURE__ */ import_react12.default.createElement("th", { style: s8.th }, "Usuario"), /* @__PURE__ */ import_react12.default.createElement("th", { style: s8.th }, "Rol"), /* @__PURE__ */ import_react12.default.createElement("th", { style: s8.th }, "Acciones"))), /* @__PURE__ */ import_react12.default.createElement("tbody", null, users.map((u) => /* @__PURE__ */ import_react12.default.createElement("tr", { key: u.id, className: "fl-tr" }, /* @__PURE__ */ import_react12.default.createElement("td", { style: { ...s8.td, fontWeight: "600" } }, u.name), /* @__PURE__ */ import_react12.default.createElement("td", { style: { ...s8.td, fontFamily: "monospace", fontSize: "12px", color: "#5c5c5c" } }, u.username), /* @__PURE__ */ import_react12.default.createElement("td", { style: s8.td }, /* @__PURE__ */ import_react12.default.createElement("span", { style: {
+      display: "inline-block",
+      padding: "3px 10px",
+      borderRadius: "12px",
+      fontSize: "12px",
+      fontWeight: "600",
+      ...ROLE_BADGE[u.role]
+    } }, u.role)), /* @__PURE__ */ import_react12.default.createElement("td", { style: s8.td }, /* @__PURE__ */ import_react12.default.createElement("button", { className: "fl-btn-secondary", style: s8.btnEdit, onClick: () => setModal({ mode: "edit", user: u }) }, "Editar"), /* @__PURE__ */ import_react12.default.createElement("button", { className: "fl-btn-danger", style: s8.btnDelete, onClick: () => handleDelete(u) }, "Eliminar"))))))), modal && /* @__PURE__ */ import_react12.default.createElement(
+      UserModal,
+      {
+        user: modal === "create" ? null : modal.user,
+        onSave: handleSave,
+        onCancel: () => setModal(null)
+      }
+    ));
+  }
+
+  // src/renderer/components/AuditLogView.js
+  var import_react13 = __toESM(require_react());
+  var ACTION_COLORS = {
+    CREATE: { background: "#e8f5e9", color: "#2e7d32" },
+    UPDATE: { background: "#e3f2fd", color: "#1565c0" },
+    DELETE: { background: "#ffebee", color: "#a4262c" },
+    LOGIN: { background: "#f3e5f5", color: "#6a1b9a" },
+    LOGOUT: { background: "#f5f5f5", color: "#5c5c5c" }
+  };
+  var ENTITY_LABELS = {
+    product: "Producto",
+    sale: "Venta",
+    return: "Devoluci\xF3n",
+    stock_entry: "Entrada",
+    user: "Usuario",
+    category: "Categor\xEDa",
+    supplier: "Proveedor",
+    customer: "Cliente"
+  };
+  var ACTIONS = ["CREATE", "UPDATE", "DELETE", "LOGIN", "LOGOUT"];
+  var ENTITIES = Object.keys(ENTITY_LABELS);
+  var PAGE_SIZE = 50;
+  function formatTS(ts) {
+    if (!ts) return "\u2014";
+    return new Date(ts).toLocaleString("es", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit"
+    });
+  }
+  function formatDetail(log) {
+    try {
+      const nv = log.new_value ? JSON.parse(log.new_value) : null;
+      const ov = log.old_value ? JSON.parse(log.old_value) : null;
+      if (log.action === "LOGIN") return `Inicio de sesi\xF3n${nv?.username ? ` \u2014 ${nv.username}` : ""}`;
+      if (log.action === "LOGOUT") return `Cierre de sesi\xF3n${nv?.userName ? ` \u2014 ${nv.userName}` : ""}`;
+      if (log.entity === "product") {
+        if (log.action === "CREATE") return `Creado: ${nv?.name || `ID ${log.entity_id}`}${nv?.stock != null ? ` (stock: ${nv.stock})` : ""}`;
+        if (log.action === "DELETE") return `Eliminado: ${ov?.name || `ID ${log.entity_id}`}`;
+        if (log.action === "UPDATE") {
+          const parts = [];
+          if (ov?.precio_venta_sin_iva !== nv?.precio_venta_sin_iva && (ov?.precio_venta_sin_iva != null || nv?.precio_venta_sin_iva != null))
+            parts.push(`precio ${ov?.precio_venta_sin_iva ?? "\u2014"} \u2192 ${nv?.precio_venta_sin_iva ?? "\u2014"}`);
+          if (ov?.precio_costo !== nv?.precio_costo && (ov?.precio_costo != null || nv?.precio_costo != null))
+            parts.push(`costo ${ov?.precio_costo ?? "\u2014"} \u2192 ${nv?.precio_costo ?? "\u2014"}`);
+          if (ov?.stock !== nv?.stock && (ov?.stock != null || nv?.stock != null))
+            parts.push(`stock ${ov?.stock ?? "\u2014"} \u2192 ${nv?.stock ?? "\u2014"}`);
+          if (ov?.status !== nv?.status && nv?.status)
+            parts.push(`estado ${ov?.status ?? "\u2014"} \u2192 ${nv?.status}`);
+          const name = nv?.name || ov?.name || `ID ${log.entity_id}`;
+          return parts.length ? `${name} (${parts.join(", ")})` : `Actualizado: ${name}`;
+        }
+      }
+      if (log.entity === "sale") {
+        if (log.action === "CREATE") {
+          const cust = nv?.customer_name ? ` \u2014 ${nv.customer_name}` : "";
+          return `Total: $${Number(nv?.total || 0).toFixed(2)}${cust} \xB7 ${nv?.items_count ?? "?"} \xEDtem(s)`;
+        }
+        if (log.action === "UPDATE") {
+          const parts = [];
+          if (ov?.status !== nv?.status) parts.push(`estado: ${ov?.status ?? "\u2014"} \u2192 ${nv?.status ?? "\u2014"}`);
+          if (ov?.payment_method !== nv?.payment_method) parts.push(`pago: ${ov?.payment_method ?? "\u2014"} \u2192 ${nv?.payment_method ?? "\u2014"}`);
+          return parts.length ? parts.join(", ") : `Venta #${log.entity_id} actualizada`;
+        }
+      }
+      if (log.entity === "return") {
+        return `Venta #${nv?.sale_id ?? log.entity_id} \u2014 $${Number(nv?.total_refunded || 0).toFixed(2)}${nv?.is_partial ? " (parcial)" : ""}`;
+      }
+      if (log.entity === "stock_entry") {
+        const qty = nv?.bonus_quantity > 0 ? `${nv.quantity}+${nv.bonus_quantity}b` : `+${nv?.quantity ?? "?"}`;
+        return `${nv?.product_name || `ID ${log.entity_id}`} ${qty}${nv?.supplier_name ? ` \xB7 ${nv.supplier_name}` : ""}`;
+      }
+      if (log.entity === "user") {
+        if (log.action === "CREATE") return `Creado: ${nv?.name || ""} (${nv?.username || ""}) \u2014 ${nv?.role || ""}`;
+        if (log.action === "DELETE") return `Eliminado: ${ov?.name || ""} (${ov?.username || ""})`;
+        if (log.action === "UPDATE") {
+          const parts = [];
+          if (ov?.name !== nv?.name) parts.push(`nombre: ${nv?.name}`);
+          if (ov?.role !== nv?.role) parts.push(`rol: ${ov?.role} \u2192 ${nv?.role}`);
+          if (nv?.password_changed) parts.push("contrase\xF1a cambiada");
+          return parts.length ? `${nv?.name || `ID ${log.entity_id}`} (${parts.join(", ")})` : `Actualizado: ${nv?.name || `ID ${log.entity_id}`}`;
+        }
+      }
+      return nv ? JSON.stringify(nv).slice(0, 80) : "\u2014";
+    } catch {
+      return "\u2014";
+    }
+  }
+  var inputStyle = {
+    padding: "7px 10px",
+    border: "1px solid #d1d1d1",
+    borderRadius: "7px",
+    fontSize: "13px",
+    background: "white",
+    color: "#1a1a1a"
+  };
+  var labelStyle = { fontSize: "11px", fontWeight: "600", color: "#9e9e9e", textTransform: "uppercase", letterSpacing: "0.5px", display: "block", marginBottom: "4px" };
+  var thStyle = { padding: "9px 12px", textAlign: "left", fontSize: "11px", fontWeight: "700", color: "#9e9e9e", textTransform: "uppercase", letterSpacing: "0.5px", whiteSpace: "nowrap" };
+  var tdStyle = { padding: "9px 12px", fontSize: "13px", color: "#1a1a1a", borderTop: "1px solid #f0f0f0", verticalAlign: "middle" };
+  function AuditLogView() {
+    const [logs, setLogs] = (0, import_react13.useState)([]);
+    const [total, setTotal] = (0, import_react13.useState)(0);
+    const [page, setPage] = (0, import_react13.useState)(1);
+    const [loading, setLoading] = (0, import_react13.useState)(false);
+    const [users, setUsers] = (0, import_react13.useState)([]);
+    const [filterUserId, setFilterUserId] = (0, import_react13.useState)("");
+    const [filterAction, setFilterAction] = (0, import_react13.useState)("");
+    const [filterEntity, setFilterEntity] = (0, import_react13.useState)("");
+    const [filterDateFrom, setFilterDateFrom] = (0, import_react13.useState)("");
+    const [filterDateTo, setFilterDateTo] = (0, import_react13.useState)("");
+    const totalPages = Math.ceil(total / PAGE_SIZE);
+    const loadLogs = (0, import_react13.useCallback)(async (p) => {
+      setLoading(true);
+      try {
+        const result = await window.electron.auditLog.getAll({
+          page: p,
+          pageSize: PAGE_SIZE,
+          userId: filterUserId || void 0,
+          action: filterAction || void 0,
+          entity: filterEntity || void 0,
+          dateFrom: filterDateFrom || void 0,
+          dateTo: filterDateTo || void 0
+        });
+        setLogs(result.items);
+        setTotal(result.total);
+      } finally {
+        setLoading(false);
+      }
+    }, [filterUserId, filterAction, filterEntity, filterDateFrom, filterDateTo]);
+    (0, import_react13.useEffect)(() => {
+      setPage(1);
+    }, [filterUserId, filterAction, filterEntity, filterDateFrom, filterDateTo]);
+    (0, import_react13.useEffect)(() => {
+      loadLogs(page);
+    }, [page, loadLogs]);
+    (0, import_react13.useEffect)(() => {
+      window.electron.users.getAll().then(setUsers).catch(() => {
+      });
+    }, []);
+    const handlePageChange = (p) => {
+      if (p < 1 || p > totalPages) return;
+      setPage(p);
+    };
+    const clearFilters = () => {
+      setFilterUserId("");
+      setFilterAction("");
+      setFilterEntity("");
+      setFilterDateFrom("");
+      setFilterDateTo("");
+    };
+    const hasFilters = filterUserId || filterAction || filterEntity || filterDateFrom || filterDateTo;
+    return /* @__PURE__ */ import_react13.default.createElement("div", null, /* @__PURE__ */ import_react13.default.createElement("div", { style: { display: "flex", gap: "12px", flexWrap: "wrap", alignItems: "flex-end", marginBottom: "16px" } }, /* @__PURE__ */ import_react13.default.createElement("div", null, /* @__PURE__ */ import_react13.default.createElement("label", { style: labelStyle }, "Usuario"), /* @__PURE__ */ import_react13.default.createElement("select", { className: "fl-select", style: inputStyle, value: filterUserId, onChange: (e) => setFilterUserId(e.target.value) }, /* @__PURE__ */ import_react13.default.createElement("option", { value: "" }, "Todos"), users.map((u) => /* @__PURE__ */ import_react13.default.createElement("option", { key: u.id, value: u.id }, u.name, " (", u.username, ")")))), /* @__PURE__ */ import_react13.default.createElement("div", null, /* @__PURE__ */ import_react13.default.createElement("label", { style: labelStyle }, "Acci\xF3n"), /* @__PURE__ */ import_react13.default.createElement("select", { className: "fl-select", style: inputStyle, value: filterAction, onChange: (e) => setFilterAction(e.target.value) }, /* @__PURE__ */ import_react13.default.createElement("option", { value: "" }, "Todas"), ACTIONS.map((a) => /* @__PURE__ */ import_react13.default.createElement("option", { key: a, value: a }, a)))), /* @__PURE__ */ import_react13.default.createElement("div", null, /* @__PURE__ */ import_react13.default.createElement("label", { style: labelStyle }, "Entidad"), /* @__PURE__ */ import_react13.default.createElement("select", { className: "fl-select", style: inputStyle, value: filterEntity, onChange: (e) => setFilterEntity(e.target.value) }, /* @__PURE__ */ import_react13.default.createElement("option", { value: "" }, "Todas"), ENTITIES.map((e) => /* @__PURE__ */ import_react13.default.createElement("option", { key: e, value: e }, ENTITY_LABELS[e])))), /* @__PURE__ */ import_react13.default.createElement("div", null, /* @__PURE__ */ import_react13.default.createElement("label", { style: labelStyle }, "Desde"), /* @__PURE__ */ import_react13.default.createElement("input", { className: "fl-input", type: "date", style: inputStyle, value: filterDateFrom, onChange: (e) => setFilterDateFrom(e.target.value) })), /* @__PURE__ */ import_react13.default.createElement("div", null, /* @__PURE__ */ import_react13.default.createElement("label", { style: labelStyle }, "Hasta"), /* @__PURE__ */ import_react13.default.createElement("input", { className: "fl-input", type: "date", style: inputStyle, value: filterDateTo, onChange: (e) => setFilterDateTo(e.target.value) })), hasFilters && /* @__PURE__ */ import_react13.default.createElement(
+      "button",
+      {
+        className: "fl-btn-ghost",
+        style: { background: "white", border: "1px solid #d1d1d1", color: "#5c5c5c", padding: "7px 14px", borderRadius: "7px", cursor: "pointer", fontSize: "13px", alignSelf: "flex-end" },
+        onClick: clearFilters
+      },
+      "\u2715 Limpiar filtros"
+    )), /* @__PURE__ */ import_react13.default.createElement("div", { style: { fontSize: "12px", color: "#9e9e9e", marginBottom: "10px" } }, loading ? "Cargando..." : `${total} registro${total !== 1 ? "s" : ""}${total > 0 ? ` \xB7 P\xE1gina ${page} de ${totalPages}` : ""}`), /* @__PURE__ */ import_react13.default.createElement("div", { style: { overflowX: "auto" } }, /* @__PURE__ */ import_react13.default.createElement("table", { style: { width: "100%", borderCollapse: "collapse", fontSize: "13px" } }, /* @__PURE__ */ import_react13.default.createElement("thead", null, /* @__PURE__ */ import_react13.default.createElement("tr", { style: { background: "#fafafa" } }, /* @__PURE__ */ import_react13.default.createElement("th", { style: thStyle }, "Fecha y hora"), /* @__PURE__ */ import_react13.default.createElement("th", { style: thStyle }, "Usuario"), /* @__PURE__ */ import_react13.default.createElement("th", { style: thStyle }, "Acci\xF3n"), /* @__PURE__ */ import_react13.default.createElement("th", { style: thStyle }, "Entidad"), /* @__PURE__ */ import_react13.default.createElement("th", { style: { ...thStyle, textAlign: "center" } }, "ID"), /* @__PURE__ */ import_react13.default.createElement("th", { style: { ...thStyle, minWidth: "280px" } }, "Detalle"))), /* @__PURE__ */ import_react13.default.createElement("tbody", null, !loading && logs.length === 0 && /* @__PURE__ */ import_react13.default.createElement("tr", null, /* @__PURE__ */ import_react13.default.createElement("td", { colSpan: 6, style: { ...tdStyle, textAlign: "center", color: "#9e9e9e", padding: "32px" } }, "No hay registros para los filtros seleccionados")), logs.map((log) => {
+      const ac = ACTION_COLORS[log.action] || { background: "#f5f5f5", color: "#5c5c5c" };
+      return /* @__PURE__ */ import_react13.default.createElement("tr", { key: log.id, className: "fl-tr" }, /* @__PURE__ */ import_react13.default.createElement("td", { style: { ...tdStyle, whiteSpace: "nowrap", color: "#5c5c5c", fontSize: "12px" } }, formatTS(log.timestamp)), /* @__PURE__ */ import_react13.default.createElement("td", { style: tdStyle }, log.user_name || /* @__PURE__ */ import_react13.default.createElement("span", { style: { color: "#bdbdbd" } }, "\u2014")), /* @__PURE__ */ import_react13.default.createElement("td", { style: tdStyle }, /* @__PURE__ */ import_react13.default.createElement("span", { style: { ...ac, padding: "2px 9px", borderRadius: "10px", fontSize: "11px", fontWeight: "700", whiteSpace: "nowrap" } }, log.action)), /* @__PURE__ */ import_react13.default.createElement("td", { style: tdStyle }, ENTITY_LABELS[log.entity] || log.entity || /* @__PURE__ */ import_react13.default.createElement("span", { style: { color: "#bdbdbd" } }, "\u2014")), /* @__PURE__ */ import_react13.default.createElement("td", { style: { ...tdStyle, textAlign: "center", color: "#9e9e9e", fontSize: "12px" } }, log.entity_id ?? "\u2014"), /* @__PURE__ */ import_react13.default.createElement("td", { style: { ...tdStyle, color: "#5c5c5c", maxWidth: "380px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" } }, formatDetail(log)));
+    })))), totalPages > 1 && /* @__PURE__ */ import_react13.default.createElement("div", { style: { display: "flex", alignItems: "center", gap: "6px", marginTop: "16px", justifyContent: "center" } }, /* @__PURE__ */ import_react13.default.createElement(
+      "button",
+      {
+        className: "fl-btn-ghost",
+        style: { border: "1px solid #d1d1d1", background: "white", padding: "5px 12px", borderRadius: "7px", cursor: page === 1 ? "not-allowed" : "pointer", opacity: page === 1 ? 0.4 : 1, fontSize: "13px" },
+        onClick: () => handlePageChange(page - 1),
+        disabled: page === 1
+      },
+      "\u2039 Anterior"
+    ), /* @__PURE__ */ import_react13.default.createElement("span", { style: { fontSize: "13px", color: "#5c5c5c", padding: "0 8px" } }, page, " / ", totalPages), /* @__PURE__ */ import_react13.default.createElement(
+      "button",
+      {
+        className: "fl-btn-ghost",
+        style: { border: "1px solid #d1d1d1", background: "white", padding: "5px 12px", borderRadius: "7px", cursor: page === totalPages ? "not-allowed" : "pointer", opacity: page === totalPages ? 0.4 : 1, fontSize: "13px" },
+        onClick: () => handlePageChange(page + 1),
+        disabled: page === totalPages
+      },
+      "Siguiente \u203A"
+    )));
+  }
+
+  // src/renderer/components/ConfigView.js
   function formatBytes(bytes) {
     if (bytes == null) return "\u2014";
     if (bytes < 1024) return `${bytes} B`;
@@ -22448,12 +22898,12 @@
     });
   }
   function ConfirmRestoreModal({ filePath, fileSize, onConfirm, onCancel }) {
-    const [restoring, setRestoring] = (0, import_react12.useState)(false);
+    const [restoring, setRestoring] = (0, import_react14.useState)(false);
     const handleConfirm = async () => {
       setRestoring(true);
       await onConfirm(filePath);
     };
-    return /* @__PURE__ */ import_react12.default.createElement("div", { style: {
+    return /* @__PURE__ */ import_react14.default.createElement("div", { style: {
       position: "fixed",
       inset: 0,
       background: "rgba(0,0,0,0.45)",
@@ -22463,14 +22913,14 @@
       alignItems: "center",
       justifyContent: "center",
       zIndex: 1e3
-    } }, /* @__PURE__ */ import_react12.default.createElement("div", { style: {
+    } }, /* @__PURE__ */ import_react14.default.createElement("div", { style: {
       background: "white",
       borderRadius: "12px",
       width: "440px",
       maxWidth: "95vw",
       boxShadow: "0 24px 64px rgba(0,0,0,0.18)",
       overflow: "hidden"
-    } }, /* @__PURE__ */ import_react12.default.createElement("div", { style: { padding: "20px 24px 16px", borderBottom: "1px solid #f0f0f0" } }, /* @__PURE__ */ import_react12.default.createElement("h2", { style: { fontSize: "17px", fontWeight: "700", color: "#a4262c", margin: 0 } }, "\u26A0 Restaurar base de datos")), /* @__PURE__ */ import_react12.default.createElement("div", { style: { padding: "20px 24px" } }, /* @__PURE__ */ import_react12.default.createElement("div", { style: {
+    } }, /* @__PURE__ */ import_react14.default.createElement("div", { style: { padding: "20px 24px 16px", borderBottom: "1px solid #f0f0f0" } }, /* @__PURE__ */ import_react14.default.createElement("h2", { style: { fontSize: "17px", fontWeight: "700", color: "#a4262c", margin: 0 } }, "\u26A0 Restaurar base de datos")), /* @__PURE__ */ import_react14.default.createElement("div", { style: { padding: "20px 24px" } }, /* @__PURE__ */ import_react14.default.createElement("div", { style: {
       background: "#fff8e1",
       border: "1px solid #ffe082",
       borderRadius: "8px",
@@ -22479,7 +22929,7 @@
       color: "#8a5700",
       marginBottom: "16px",
       lineHeight: "1.5"
-    } }, "Esta acci\xF3n reemplazar\xE1 ", /* @__PURE__ */ import_react12.default.createElement("strong", null, "todos los datos actuales"), " con los del archivo de respaldo. Esta operaci\xF3n no se puede deshacer."), /* @__PURE__ */ import_react12.default.createElement("div", { style: { fontSize: "13px", color: "#5c5c5c", marginBottom: "6px" } }, /* @__PURE__ */ import_react12.default.createElement("strong", null, "Archivo:"), " ", filePath.split(/[\\/]/).pop()), /* @__PURE__ */ import_react12.default.createElement("div", { style: { fontSize: "13px", color: "#5c5c5c" } }, /* @__PURE__ */ import_react12.default.createElement("strong", null, "Tama\xF1o:"), " ", formatBytes(fileSize))), /* @__PURE__ */ import_react12.default.createElement("div", { style: { padding: "16px 24px", borderTop: "1px solid #f0f0f0", display: "flex", justifyContent: "flex-end", gap: "8px" } }, /* @__PURE__ */ import_react12.default.createElement(
+    } }, "Esta acci\xF3n reemplazar\xE1 ", /* @__PURE__ */ import_react14.default.createElement("strong", null, "todos los datos actuales"), " con los del archivo de respaldo. Esta operaci\xF3n no se puede deshacer."), /* @__PURE__ */ import_react14.default.createElement("div", { style: { fontSize: "13px", color: "#5c5c5c", marginBottom: "6px" } }, /* @__PURE__ */ import_react14.default.createElement("strong", null, "Archivo:"), " ", filePath.split(/[\\/]/).pop()), /* @__PURE__ */ import_react14.default.createElement("div", { style: { fontSize: "13px", color: "#5c5c5c" } }, /* @__PURE__ */ import_react14.default.createElement("strong", null, "Tama\xF1o:"), " ", formatBytes(fileSize))), /* @__PURE__ */ import_react14.default.createElement("div", { style: { padding: "16px 24px", borderTop: "1px solid #f0f0f0", display: "flex", justifyContent: "flex-end", gap: "8px" } }, /* @__PURE__ */ import_react14.default.createElement(
       "button",
       {
         className: "fl-btn-ghost",
@@ -22488,7 +22938,7 @@
         disabled: restoring
       },
       "Cancelar"
-    ), /* @__PURE__ */ import_react12.default.createElement(
+    ), /* @__PURE__ */ import_react14.default.createElement(
       "button",
       {
         className: "fl-btn-danger",
@@ -22500,7 +22950,7 @@
     ))));
   }
   function Card2({ children }) {
-    return /* @__PURE__ */ import_react12.default.createElement("div", { className: "fl-card", style: {
+    return /* @__PURE__ */ import_react14.default.createElement("div", { className: "fl-card", style: {
       background: "white",
       borderRadius: "12px",
       boxShadow: "0 2px 8px rgba(0,0,0,0.07)",
@@ -22509,7 +22959,7 @@
     } }, children);
   }
   function CardHeader2({ title, accent }) {
-    return /* @__PURE__ */ import_react12.default.createElement("div", { style: {
+    return /* @__PURE__ */ import_react14.default.createElement("div", { style: {
       padding: "14px 20px",
       borderBottom: "1px solid #f0f0f0",
       fontWeight: "600",
@@ -22518,7 +22968,7 @@
     } }, title);
   }
   function Toggle({ checked, onChange }) {
-    return /* @__PURE__ */ import_react12.default.createElement(
+    return /* @__PURE__ */ import_react14.default.createElement(
       "div",
       {
         onClick: () => onChange(!checked),
@@ -22533,7 +22983,7 @@
           flexShrink: 0
         }
       },
-      /* @__PURE__ */ import_react12.default.createElement("div", { style: {
+      /* @__PURE__ */ import_react14.default.createElement("div", { style: {
         position: "absolute",
         top: "3px",
         left: checked ? "23px" : "3px",
@@ -22553,7 +23003,7 @@
       info: { background: "#e3f2fd", color: "#1565c0", border: "#90caf9" }
     };
     const c = colors[type] || colors.info;
-    return /* @__PURE__ */ import_react12.default.createElement("div", { style: {
+    return /* @__PURE__ */ import_react14.default.createElement("div", { style: {
       background: c.background,
       color: c.color,
       border: `1px solid ${c.border}`,
@@ -22563,16 +23013,16 @@
       marginTop: "12px"
     } }, children);
   }
-  function ConfigView() {
-    const [info, setInfo] = (0, import_react12.useState)(null);
-    const [loading, setLoading] = (0, import_react12.useState)(true);
-    const [autoBackup, setAutoBackup] = (0, import_react12.useState)(false);
-    const [savingToggle, setSavingToggle] = (0, import_react12.useState)(false);
-    const [exportStatus, setExportStatus] = (0, import_react12.useState)(null);
-    const [importStatus, setImportStatus] = (0, import_react12.useState)(null);
-    const [manualStatus, setManualStatus] = (0, import_react12.useState)(null);
-    const [restoreCandidate, setRestoreCandidate] = (0, import_react12.useState)(null);
-    const [restoreStatus, setRestoreStatus] = (0, import_react12.useState)(null);
+  function ConfigView({ role }) {
+    const [info, setInfo] = (0, import_react14.useState)(null);
+    const [loading, setLoading] = (0, import_react14.useState)(true);
+    const [autoBackup, setAutoBackup] = (0, import_react14.useState)(false);
+    const [savingToggle, setSavingToggle] = (0, import_react14.useState)(false);
+    const [exportStatus, setExportStatus] = (0, import_react14.useState)(null);
+    const [importStatus, setImportStatus] = (0, import_react14.useState)(null);
+    const [manualStatus, setManualStatus] = (0, import_react14.useState)(null);
+    const [restoreCandidate, setRestoreCandidate] = (0, import_react14.useState)(null);
+    const [restoreStatus, setRestoreStatus] = (0, import_react14.useState)(null);
     const loadInfo = () => {
       window.electron.backup.getInfo().then((data) => {
         setInfo(data);
@@ -22580,7 +23030,7 @@
         setLoading(false);
       });
     };
-    (0, import_react12.useEffect)(() => {
+    (0, import_react14.useEffect)(() => {
       loadInfo();
     }, []);
     const handleToggleAutoBackup = async (val) => {
@@ -22659,8 +23109,8 @@
       cursor: "pointer",
       fontSize: "14px"
     };
-    return /* @__PURE__ */ import_react12.default.createElement(import_react12.default.Fragment, null, /* @__PURE__ */ import_react12.default.createElement("div", { style: { fontSize: "18px", fontWeight: "700", color: "#1a1a1a", letterSpacing: "-0.3px", marginBottom: "20px" } }, "Configuraci\xF3n"), /* @__PURE__ */ import_react12.default.createElement(Card2, null, /* @__PURE__ */ import_react12.default.createElement(CardHeader2, { title: "\u{1F5C4} Estado de respaldo" }), /* @__PURE__ */ import_react12.default.createElement("div", { style: { padding: "18px 20px" } }, loading ? /* @__PURE__ */ import_react12.default.createElement("p", { style: { color: "#9e9e9e", fontSize: "14px", margin: 0 } }, "Cargando...") : /* @__PURE__ */ import_react12.default.createElement("div", { style: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" } }, /* @__PURE__ */ import_react12.default.createElement("div", { style: { background: "#fafafa", borderRadius: "10px", padding: "14px 16px" } }, /* @__PURE__ */ import_react12.default.createElement("div", { style: { fontSize: "11px", fontWeight: "700", color: "#9e9e9e", textTransform: "uppercase", letterSpacing: "0.7px", marginBottom: "6px" } }, "\xDAltimo respaldo autom\xE1tico"), /* @__PURE__ */ import_react12.default.createElement("div", { style: { fontSize: "15px", fontWeight: "600", color: "#1a1a1a" } }, info?.lastBackup ? formatDate5(info.lastBackup.date) : "Sin respaldos a\xFAn"), info?.lastBackup && /* @__PURE__ */ import_react12.default.createElement("div", { style: { fontSize: "12px", color: "#9e9e9e", marginTop: "4px" } }, info.lastBackup.name, " \xB7 ", formatBytes(info.lastBackup.size))), /* @__PURE__ */ import_react12.default.createElement("div", { style: { background: "#fafafa", borderRadius: "10px", padding: "14px 16px" } }, /* @__PURE__ */ import_react12.default.createElement("div", { style: { fontSize: "11px", fontWeight: "700", color: "#9e9e9e", textTransform: "uppercase", letterSpacing: "0.7px", marginBottom: "6px" } }, "Respaldo autom\xE1tico diario"), /* @__PURE__ */ import_react12.default.createElement("div", { style: { display: "flex", alignItems: "center", gap: "12px" } }, /* @__PURE__ */ import_react12.default.createElement(Toggle, { checked: autoBackup, onChange: savingToggle ? () => {
-    } : handleToggleAutoBackup }), /* @__PURE__ */ import_react12.default.createElement("span", { style: { fontSize: "14px", fontWeight: "500", color: autoBackup ? "#0078d4" : "#9e9e9e" } }, autoBackup ? "Activado" : "Desactivado")), autoBackup && /* @__PURE__ */ import_react12.default.createElement("div", { style: { fontSize: "12px", color: "#9e9e9e", marginTop: "6px" } }, "Se guarda al iniciar la app si no hay copia del d\xEDa"))))), /* @__PURE__ */ import_react12.default.createElement(Card2, null, /* @__PURE__ */ import_react12.default.createElement(CardHeader2, { title: "\u{1F4E4} Exportar copia de seguridad" }), /* @__PURE__ */ import_react12.default.createElement("div", { style: { padding: "18px 20px" } }, /* @__PURE__ */ import_react12.default.createElement("p", { style: { fontSize: "13px", color: "#5c5c5c", margin: "0 0 14px" } }, "Guarda la base de datos actual como archivo ", /* @__PURE__ */ import_react12.default.createElement("code", { style: { background: "#f5f5f5", padding: "1px 5px", borderRadius: "4px" } }, ".sqlite"), " en la ubicaci\xF3n que elijas. El nombre del archivo incluye la fecha de hoy autom\xE1ticamente."), /* @__PURE__ */ import_react12.default.createElement("div", { style: { display: "flex", gap: "10px", flexWrap: "wrap" } }, /* @__PURE__ */ import_react12.default.createElement("button", { className: "fl-btn-primary", style: btnPrimary, onClick: handleExport }, "\u{1F4E4} Exportar copia de seguridad"), /* @__PURE__ */ import_react12.default.createElement("button", { className: "fl-btn-secondary", style: btnSecondary, onClick: handleManualBackup }, "\u{1F4BE} Guardar en carpeta de respaldos")), exportStatus && /* @__PURE__ */ import_react12.default.createElement(Alert, { type: exportStatus.type }, exportStatus.msg), manualStatus && /* @__PURE__ */ import_react12.default.createElement(Alert, { type: manualStatus.type }, manualStatus.msg))), /* @__PURE__ */ import_react12.default.createElement(Card2, null, /* @__PURE__ */ import_react12.default.createElement(CardHeader2, { title: "\u{1F4E5} Restaurar desde copia de seguridad", accent: "#a4262c" }), /* @__PURE__ */ import_react12.default.createElement("div", { style: { padding: "18px 20px" } }, /* @__PURE__ */ import_react12.default.createElement("div", { style: {
+    return /* @__PURE__ */ import_react14.default.createElement(import_react14.default.Fragment, null, /* @__PURE__ */ import_react14.default.createElement("div", { style: { fontSize: "18px", fontWeight: "700", color: "#1a1a1a", letterSpacing: "-0.3px", marginBottom: "20px" } }, "Configuraci\xF3n"), /* @__PURE__ */ import_react14.default.createElement(Card2, null, /* @__PURE__ */ import_react14.default.createElement(CardHeader2, { title: "\u{1F5C4} Estado de respaldo" }), /* @__PURE__ */ import_react14.default.createElement("div", { style: { padding: "18px 20px" } }, loading ? /* @__PURE__ */ import_react14.default.createElement("p", { style: { color: "#9e9e9e", fontSize: "14px", margin: 0 } }, "Cargando...") : /* @__PURE__ */ import_react14.default.createElement("div", { style: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" } }, /* @__PURE__ */ import_react14.default.createElement("div", { style: { background: "#fafafa", borderRadius: "10px", padding: "14px 16px" } }, /* @__PURE__ */ import_react14.default.createElement("div", { style: { fontSize: "11px", fontWeight: "700", color: "#9e9e9e", textTransform: "uppercase", letterSpacing: "0.7px", marginBottom: "6px" } }, "\xDAltimo respaldo autom\xE1tico"), /* @__PURE__ */ import_react14.default.createElement("div", { style: { fontSize: "15px", fontWeight: "600", color: "#1a1a1a" } }, info?.lastBackup ? formatDate5(info.lastBackup.date) : "Sin respaldos a\xFAn"), info?.lastBackup && /* @__PURE__ */ import_react14.default.createElement("div", { style: { fontSize: "12px", color: "#9e9e9e", marginTop: "4px" } }, info.lastBackup.name, " \xB7 ", formatBytes(info.lastBackup.size))), /* @__PURE__ */ import_react14.default.createElement("div", { style: { background: "#fafafa", borderRadius: "10px", padding: "14px 16px" } }, /* @__PURE__ */ import_react14.default.createElement("div", { style: { fontSize: "11px", fontWeight: "700", color: "#9e9e9e", textTransform: "uppercase", letterSpacing: "0.7px", marginBottom: "6px" } }, "Respaldo autom\xE1tico diario"), /* @__PURE__ */ import_react14.default.createElement("div", { style: { display: "flex", alignItems: "center", gap: "12px" } }, /* @__PURE__ */ import_react14.default.createElement(Toggle, { checked: autoBackup, onChange: savingToggle ? () => {
+    } : handleToggleAutoBackup }), /* @__PURE__ */ import_react14.default.createElement("span", { style: { fontSize: "14px", fontWeight: "500", color: autoBackup ? "#0078d4" : "#9e9e9e" } }, autoBackup ? "Activado" : "Desactivado")), autoBackup && /* @__PURE__ */ import_react14.default.createElement("div", { style: { fontSize: "12px", color: "#9e9e9e", marginTop: "6px" } }, "Se guarda al iniciar la app si no hay copia del d\xEDa"))))), /* @__PURE__ */ import_react14.default.createElement(Card2, null, /* @__PURE__ */ import_react14.default.createElement(CardHeader2, { title: "\u{1F4E4} Exportar copia de seguridad" }), /* @__PURE__ */ import_react14.default.createElement("div", { style: { padding: "18px 20px" } }, /* @__PURE__ */ import_react14.default.createElement("p", { style: { fontSize: "13px", color: "#5c5c5c", margin: "0 0 14px" } }, "Guarda la base de datos actual como archivo ", /* @__PURE__ */ import_react14.default.createElement("code", { style: { background: "#f5f5f5", padding: "1px 5px", borderRadius: "4px" } }, ".sqlite"), " en la ubicaci\xF3n que elijas. El nombre del archivo incluye la fecha de hoy autom\xE1ticamente."), /* @__PURE__ */ import_react14.default.createElement("div", { style: { display: "flex", gap: "10px", flexWrap: "wrap" } }, /* @__PURE__ */ import_react14.default.createElement("button", { className: "fl-btn-primary", style: btnPrimary, onClick: handleExport }, "\u{1F4E4} Exportar copia de seguridad"), /* @__PURE__ */ import_react14.default.createElement("button", { className: "fl-btn-secondary", style: btnSecondary, onClick: handleManualBackup }, "\u{1F4BE} Guardar en carpeta de respaldos")), exportStatus && /* @__PURE__ */ import_react14.default.createElement(Alert, { type: exportStatus.type }, exportStatus.msg), manualStatus && /* @__PURE__ */ import_react14.default.createElement(Alert, { type: manualStatus.type }, manualStatus.msg))), /* @__PURE__ */ import_react14.default.createElement(Card2, null, /* @__PURE__ */ import_react14.default.createElement(CardHeader2, { title: "\u{1F4E5} Restaurar desde copia de seguridad", accent: "#a4262c" }), /* @__PURE__ */ import_react14.default.createElement("div", { style: { padding: "18px 20px" } }, /* @__PURE__ */ import_react14.default.createElement("div", { style: {
       background: "#fff8e1",
       border: "1px solid #ffe082",
       borderRadius: "8px",
@@ -22669,7 +23119,7 @@
       color: "#8a5700",
       marginBottom: "14px",
       lineHeight: "1.5"
-    } }, "\u26A0 Restaurar un respaldo ", /* @__PURE__ */ import_react12.default.createElement("strong", null, "reemplazar\xE1 todos los datos actuales"), ". Se te pedir\xE1 confirmaci\xF3n antes de continuar."), /* @__PURE__ */ import_react12.default.createElement("button", { className: "fl-btn-danger", style: btnDanger, onClick: handleImport }, "\u{1F4E5} Seleccionar archivo de respaldo..."), restoreStatus && /* @__PURE__ */ import_react12.default.createElement(Alert, { type: restoreStatus.type }, restoreStatus.msg))), restoreCandidate && /* @__PURE__ */ import_react12.default.createElement(
+    } }, "\u26A0 Restaurar un respaldo ", /* @__PURE__ */ import_react14.default.createElement("strong", null, "reemplazar\xE1 todos los datos actuales"), ". Se te pedir\xE1 confirmaci\xF3n antes de continuar."), /* @__PURE__ */ import_react14.default.createElement("button", { className: "fl-btn-danger", style: btnDanger, onClick: handleImport }, "\u{1F4E5} Seleccionar archivo de respaldo..."), restoreStatus && /* @__PURE__ */ import_react14.default.createElement(Alert, { type: restoreStatus.type }, restoreStatus.msg))), role === "Admin" && /* @__PURE__ */ import_react14.default.createElement(Card2, null, /* @__PURE__ */ import_react14.default.createElement(CardHeader2, { title: "\u{1F465} Gesti\xF3n de Usuarios", accent: "#0078d4" }), /* @__PURE__ */ import_react14.default.createElement("div", { style: { padding: "18px 20px" } }, /* @__PURE__ */ import_react14.default.createElement("p", { style: { fontSize: "13px", color: "#5c5c5c", margin: "0 0 4px" } }, "Administra los usuarios del sistema. Solo los administradores pueden crear, editar o eliminar usuarios."), /* @__PURE__ */ import_react14.default.createElement(UsersView, null))), role === "Admin" && /* @__PURE__ */ import_react14.default.createElement(Card2, null, /* @__PURE__ */ import_react14.default.createElement(CardHeader2, { title: "\u{1F4CB} Registro de Actividad", accent: "#0078d4" }), /* @__PURE__ */ import_react14.default.createElement("div", { style: { padding: "18px 20px" } }, /* @__PURE__ */ import_react14.default.createElement("p", { style: { fontSize: "13px", color: "#5c5c5c", margin: "0 0 16px" } }, "Historial completo de acciones: inicios de sesi\xF3n, creaci\xF3n/edici\xF3n/eliminaci\xF3n de productos, ventas, devoluciones y usuarios."), /* @__PURE__ */ import_react14.default.createElement(AuditLogView, null))), restoreCandidate && /* @__PURE__ */ import_react14.default.createElement(
       ConfirmRestoreModal,
       {
         filePath: restoreCandidate.filePath,
@@ -22681,7 +23131,7 @@
   }
 
   // src/renderer/components/ReportsView.js
-  var import_react13 = __toESM(require_react());
+  var import_react15 = __toESM(require_react());
   function todayStr() {
     return (/* @__PURE__ */ new Date()).toISOString().slice(0, 10);
   }
@@ -22756,7 +23206,7 @@
     return lines.join("\n");
   }
   function Card3({ children, style }) {
-    return /* @__PURE__ */ import_react13.default.createElement("div", { className: "fl-card", style: {
+    return /* @__PURE__ */ import_react15.default.createElement("div", { className: "fl-card", style: {
       background: "white",
       borderRadius: "12px",
       boxShadow: "0 2px 8px rgba(0,0,0,0.07)",
@@ -22765,7 +23215,7 @@
     } }, children);
   }
   function CardHeader3({ title }) {
-    return /* @__PURE__ */ import_react13.default.createElement("div", { style: {
+    return /* @__PURE__ */ import_react15.default.createElement("div", { style: {
       padding: "13px 20px",
       borderBottom: "1px solid #f0f0f0",
       fontWeight: "600",
@@ -22801,37 +23251,37 @@
       { label: "Ingreso neto", value: summary.netIncome, color: "#107c10", fmt: fmtMoney },
       { label: "Utilidad estimada", value: summary.totalProfit, color: "#7519b5", fmt: fmtMoney }
     ];
-    return /* @__PURE__ */ import_react13.default.createElement(Card3, { style: { marginBottom: "16px" } }, /* @__PURE__ */ import_react13.default.createElement(CardHeader3, { title: "Resumen del per\xEDodo" }), /* @__PURE__ */ import_react13.default.createElement("div", { style: { display: "grid", gridTemplateColumns: "repeat(6, 1fr)", gap: 0 } }, items.map((it, i) => /* @__PURE__ */ import_react13.default.createElement("div", { key: i, style: {
+    return /* @__PURE__ */ import_react15.default.createElement(Card3, { style: { marginBottom: "16px" } }, /* @__PURE__ */ import_react15.default.createElement(CardHeader3, { title: "Resumen del per\xEDodo" }), /* @__PURE__ */ import_react15.default.createElement("div", { style: { display: "grid", gridTemplateColumns: "repeat(6, 1fr)", gap: 0 } }, items.map((it, i) => /* @__PURE__ */ import_react15.default.createElement("div", { key: i, style: {
       padding: "18px 16px",
       borderRight: i < items.length - 1 ? "1px solid #f5f5f5" : "none",
       borderTop: `3px solid ${it.color}`
-    } }, /* @__PURE__ */ import_react13.default.createElement("div", { style: { fontSize: "11px", fontWeight: "700", color: "#9e9e9e", textTransform: "uppercase", letterSpacing: "0.6px", marginBottom: "8px" } }, it.label), /* @__PURE__ */ import_react13.default.createElement("div", { style: { fontSize: "22px", fontWeight: "700", color: "#1a1a1a", lineHeight: 1 } }, it.fmt(it.value))))));
+    } }, /* @__PURE__ */ import_react15.default.createElement("div", { style: { fontSize: "11px", fontWeight: "700", color: "#9e9e9e", textTransform: "uppercase", letterSpacing: "0.6px", marginBottom: "8px" } }, it.label), /* @__PURE__ */ import_react15.default.createElement("div", { style: { fontSize: "22px", fontWeight: "700", color: "#1a1a1a", lineHeight: 1 } }, it.fmt(it.value))))));
   }
   function PaymentCard({ data, grossIncome }) {
     const COLORS = { "Efectivo": "#107c10", "Tarjeta": "#0078d4", "Transferencia": "#7519b5" };
-    return /* @__PURE__ */ import_react13.default.createElement(Card3, null, /* @__PURE__ */ import_react13.default.createElement(CardHeader3, { title: "Por m\xE9todo de pago" }), data.length === 0 ? /* @__PURE__ */ import_react13.default.createElement("div", { style: { padding: "24px", color: "#9e9e9e", fontSize: "13px", textAlign: "center" } }, "Sin datos") : /* @__PURE__ */ import_react13.default.createElement("div", { style: { padding: "16px 20px" } }, data.map((m) => {
+    return /* @__PURE__ */ import_react15.default.createElement(Card3, null, /* @__PURE__ */ import_react15.default.createElement(CardHeader3, { title: "Por m\xE9todo de pago" }), data.length === 0 ? /* @__PURE__ */ import_react15.default.createElement("div", { style: { padding: "24px", color: "#9e9e9e", fontSize: "13px", textAlign: "center" } }, "Sin datos") : /* @__PURE__ */ import_react15.default.createElement("div", { style: { padding: "16px 20px" } }, data.map((m) => {
       const pct = grossIncome > 0 ? m.amount / grossIncome * 100 : 0;
       const color = COLORS[m.method] || "#5c5c5c";
-      return /* @__PURE__ */ import_react13.default.createElement("div", { key: m.method, style: { marginBottom: "14px" } }, /* @__PURE__ */ import_react13.default.createElement("div", { style: { display: "flex", justifyContent: "space-between", marginBottom: "5px" } }, /* @__PURE__ */ import_react13.default.createElement("span", { style: { fontSize: "13px", fontWeight: "600", color: "#1a1a1a" } }, m.method), /* @__PURE__ */ import_react13.default.createElement("div", { style: { textAlign: "right" } }, /* @__PURE__ */ import_react13.default.createElement("span", { style: { fontSize: "13px", fontWeight: "700", color } }, fmtMoney(m.amount)), /* @__PURE__ */ import_react13.default.createElement("span", { style: { fontSize: "12px", color: "#9e9e9e", marginLeft: "8px" } }, pct.toFixed(1), "%"), /* @__PURE__ */ import_react13.default.createElement("span", { style: { fontSize: "12px", color: "#9e9e9e", marginLeft: "8px" } }, m.count, " venta", m.count !== 1 ? "s" : ""))), /* @__PURE__ */ import_react13.default.createElement("div", { style: { height: "6px", background: "#f0f0f0", borderRadius: "6px", overflow: "hidden" } }, /* @__PURE__ */ import_react13.default.createElement("div", { style: { height: "100%", width: `${pct}%`, background: color, borderRadius: "6px", transition: "width 0.4s ease" } })));
+      return /* @__PURE__ */ import_react15.default.createElement("div", { key: m.method, style: { marginBottom: "14px" } }, /* @__PURE__ */ import_react15.default.createElement("div", { style: { display: "flex", justifyContent: "space-between", marginBottom: "5px" } }, /* @__PURE__ */ import_react15.default.createElement("span", { style: { fontSize: "13px", fontWeight: "600", color: "#1a1a1a" } }, m.method), /* @__PURE__ */ import_react15.default.createElement("div", { style: { textAlign: "right" } }, /* @__PURE__ */ import_react15.default.createElement("span", { style: { fontSize: "13px", fontWeight: "700", color } }, fmtMoney(m.amount)), /* @__PURE__ */ import_react15.default.createElement("span", { style: { fontSize: "12px", color: "#9e9e9e", marginLeft: "8px" } }, pct.toFixed(1), "%"), /* @__PURE__ */ import_react15.default.createElement("span", { style: { fontSize: "12px", color: "#9e9e9e", marginLeft: "8px" } }, m.count, " venta", m.count !== 1 ? "s" : ""))), /* @__PURE__ */ import_react15.default.createElement("div", { style: { height: "6px", background: "#f0f0f0", borderRadius: "6px", overflow: "hidden" } }, /* @__PURE__ */ import_react15.default.createElement("div", { style: { height: "100%", width: `${pct}%`, background: color, borderRadius: "6px", transition: "width 0.4s ease" } })));
     })));
   }
   function CategoryCard({ data }) {
     const maxIncome = data[0]?.income || 1;
-    return /* @__PURE__ */ import_react13.default.createElement(Card3, null, /* @__PURE__ */ import_react13.default.createElement(CardHeader3, { title: "Por categor\xEDa" }), data.length === 0 ? /* @__PURE__ */ import_react13.default.createElement("div", { style: { padding: "24px", color: "#9e9e9e", fontSize: "13px", textAlign: "center" } }, "Sin datos") : /* @__PURE__ */ import_react13.default.createElement("table", { style: { width: "100%", borderCollapse: "collapse", fontSize: "13px" } }, /* @__PURE__ */ import_react13.default.createElement("thead", null, /* @__PURE__ */ import_react13.default.createElement("tr", null, /* @__PURE__ */ import_react13.default.createElement("th", { style: th }, "Categor\xEDa"), /* @__PURE__ */ import_react13.default.createElement("th", { style: { ...th, textAlign: "right" } }, "Unidades"), /* @__PURE__ */ import_react13.default.createElement("th", { style: { ...th, textAlign: "right" } }, "Ingresos"), /* @__PURE__ */ import_react13.default.createElement("th", { style: { ...th, width: "120px" } }))), /* @__PURE__ */ import_react13.default.createElement("tbody", null, data.map((c) => /* @__PURE__ */ import_react13.default.createElement("tr", { key: c.category, className: "fl-tr" }, /* @__PURE__ */ import_react13.default.createElement("td", { style: td }, c.category), /* @__PURE__ */ import_react13.default.createElement("td", { style: { ...td, textAlign: "right", color: "#5c5c5c" } }, c.units), /* @__PURE__ */ import_react13.default.createElement("td", { style: { ...td, textAlign: "right", fontWeight: "700", color: "#0078d4" } }, fmtMoney(c.income)), /* @__PURE__ */ import_react13.default.createElement("td", { style: { ...td, paddingRight: "20px" } }, /* @__PURE__ */ import_react13.default.createElement("div", { style: { height: "4px", background: "#f0f0f0", borderRadius: "4px", overflow: "hidden" } }, /* @__PURE__ */ import_react13.default.createElement("div", { style: { height: "100%", width: `${c.income / maxIncome * 100}%`, background: "#0078d4", borderRadius: "4px" } }))))))));
+    return /* @__PURE__ */ import_react15.default.createElement(Card3, null, /* @__PURE__ */ import_react15.default.createElement(CardHeader3, { title: "Por categor\xEDa" }), data.length === 0 ? /* @__PURE__ */ import_react15.default.createElement("div", { style: { padding: "24px", color: "#9e9e9e", fontSize: "13px", textAlign: "center" } }, "Sin datos") : /* @__PURE__ */ import_react15.default.createElement("table", { style: { width: "100%", borderCollapse: "collapse", fontSize: "13px" } }, /* @__PURE__ */ import_react15.default.createElement("thead", null, /* @__PURE__ */ import_react15.default.createElement("tr", null, /* @__PURE__ */ import_react15.default.createElement("th", { style: th }, "Categor\xEDa"), /* @__PURE__ */ import_react15.default.createElement("th", { style: { ...th, textAlign: "right" } }, "Unidades"), /* @__PURE__ */ import_react15.default.createElement("th", { style: { ...th, textAlign: "right" } }, "Ingresos"), /* @__PURE__ */ import_react15.default.createElement("th", { style: { ...th, width: "120px" } }))), /* @__PURE__ */ import_react15.default.createElement("tbody", null, data.map((c) => /* @__PURE__ */ import_react15.default.createElement("tr", { key: c.category, className: "fl-tr" }, /* @__PURE__ */ import_react15.default.createElement("td", { style: td }, c.category), /* @__PURE__ */ import_react15.default.createElement("td", { style: { ...td, textAlign: "right", color: "#5c5c5c" } }, c.units), /* @__PURE__ */ import_react15.default.createElement("td", { style: { ...td, textAlign: "right", fontWeight: "700", color: "#0078d4" } }, fmtMoney(c.income)), /* @__PURE__ */ import_react15.default.createElement("td", { style: { ...td, paddingRight: "20px" } }, /* @__PURE__ */ import_react15.default.createElement("div", { style: { height: "4px", background: "#f0f0f0", borderRadius: "4px", overflow: "hidden" } }, /* @__PURE__ */ import_react15.default.createElement("div", { style: { height: "100%", width: `${c.income / maxIncome * 100}%`, background: "#0078d4", borderRadius: "4px" } }))))))));
   }
   function TopProductsTable({ data }) {
-    return /* @__PURE__ */ import_react13.default.createElement(Card3, { style: { marginBottom: "16px" } }, /* @__PURE__ */ import_react13.default.createElement(CardHeader3, { title: "Top 10 productos m\xE1s vendidos" }), data.length === 0 ? /* @__PURE__ */ import_react13.default.createElement("div", { style: { padding: "24px", color: "#9e9e9e", fontSize: "13px", textAlign: "center" } }, "Sin datos en el per\xEDodo") : /* @__PURE__ */ import_react13.default.createElement("table", { style: { width: "100%", borderCollapse: "collapse", fontSize: "13px" } }, /* @__PURE__ */ import_react13.default.createElement("thead", null, /* @__PURE__ */ import_react13.default.createElement("tr", null, /* @__PURE__ */ import_react13.default.createElement("th", { style: th }, "#"), /* @__PURE__ */ import_react13.default.createElement("th", { style: th }, "Producto"), /* @__PURE__ */ import_react13.default.createElement("th", { style: { ...th, textAlign: "right" } }, "Unidades"), /* @__PURE__ */ import_react13.default.createElement("th", { style: { ...th, textAlign: "right" } }, "Ingresos"), /* @__PURE__ */ import_react13.default.createElement("th", { style: { ...th, textAlign: "right" } }, "Utilidad"))), /* @__PURE__ */ import_react13.default.createElement("tbody", null, data.map((p, i) => /* @__PURE__ */ import_react13.default.createElement("tr", { key: p.product_id, className: "fl-tr" }, /* @__PURE__ */ import_react13.default.createElement("td", { style: { ...td, color: "#9e9e9e", width: "40px" } }, i + 1), /* @__PURE__ */ import_react13.default.createElement("td", { style: { ...td, fontWeight: "500" } }, p.product_name), /* @__PURE__ */ import_react13.default.createElement("td", { style: { ...td, textAlign: "right" } }, /* @__PURE__ */ import_react13.default.createElement("span", { style: { background: "#e3f2fd", color: "#1565c0", padding: "2px 10px", borderRadius: "12px", fontSize: "12px", fontWeight: "700" } }, p.units)), /* @__PURE__ */ import_react13.default.createElement("td", { style: { ...td, textAlign: "right", fontWeight: "700", color: "#0078d4" } }, fmtMoney(p.income)), /* @__PURE__ */ import_react13.default.createElement("td", { style: { ...td, textAlign: "right", color: p.profit > 0 ? "#2e7d32" : "#9e9e9e" } }, p.profit > 0 ? fmtMoney(p.profit) : "\u2014"))))));
+    return /* @__PURE__ */ import_react15.default.createElement(Card3, { style: { marginBottom: "16px" } }, /* @__PURE__ */ import_react15.default.createElement(CardHeader3, { title: "Top 10 productos m\xE1s vendidos" }), data.length === 0 ? /* @__PURE__ */ import_react15.default.createElement("div", { style: { padding: "24px", color: "#9e9e9e", fontSize: "13px", textAlign: "center" } }, "Sin datos en el per\xEDodo") : /* @__PURE__ */ import_react15.default.createElement("table", { style: { width: "100%", borderCollapse: "collapse", fontSize: "13px" } }, /* @__PURE__ */ import_react15.default.createElement("thead", null, /* @__PURE__ */ import_react15.default.createElement("tr", null, /* @__PURE__ */ import_react15.default.createElement("th", { style: th }, "#"), /* @__PURE__ */ import_react15.default.createElement("th", { style: th }, "Producto"), /* @__PURE__ */ import_react15.default.createElement("th", { style: { ...th, textAlign: "right" } }, "Unidades"), /* @__PURE__ */ import_react15.default.createElement("th", { style: { ...th, textAlign: "right" } }, "Ingresos"), /* @__PURE__ */ import_react15.default.createElement("th", { style: { ...th, textAlign: "right" } }, "Utilidad"))), /* @__PURE__ */ import_react15.default.createElement("tbody", null, data.map((p, i) => /* @__PURE__ */ import_react15.default.createElement("tr", { key: p.product_id, className: "fl-tr" }, /* @__PURE__ */ import_react15.default.createElement("td", { style: { ...td, color: "#9e9e9e", width: "40px" } }, i + 1), /* @__PURE__ */ import_react15.default.createElement("td", { style: { ...td, fontWeight: "500" } }, p.product_name), /* @__PURE__ */ import_react15.default.createElement("td", { style: { ...td, textAlign: "right" } }, /* @__PURE__ */ import_react15.default.createElement("span", { style: { background: "#e3f2fd", color: "#1565c0", padding: "2px 10px", borderRadius: "12px", fontSize: "12px", fontWeight: "700" } }, p.units)), /* @__PURE__ */ import_react15.default.createElement("td", { style: { ...td, textAlign: "right", fontWeight: "700", color: "#0078d4" } }, fmtMoney(p.income)), /* @__PURE__ */ import_react15.default.createElement("td", { style: { ...td, textAlign: "right", color: p.profit > 0 ? "#2e7d32" : "#9e9e9e" } }, p.profit > 0 ? fmtMoney(p.profit) : "\u2014"))))));
   }
   function DailyChart({ data }) {
     if (data.length === 0) {
-      return /* @__PURE__ */ import_react13.default.createElement(Card3, { style: { marginBottom: "16px" } }, /* @__PURE__ */ import_react13.default.createElement(CardHeader3, { title: "Ventas diarias" }), /* @__PURE__ */ import_react13.default.createElement("div", { style: { padding: "32px", color: "#9e9e9e", fontSize: "13px", textAlign: "center" } }, "Sin datos en el per\xEDodo"));
+      return /* @__PURE__ */ import_react15.default.createElement(Card3, { style: { marginBottom: "16px" } }, /* @__PURE__ */ import_react15.default.createElement(CardHeader3, { title: "Ventas diarias" }), /* @__PURE__ */ import_react15.default.createElement("div", { style: { padding: "32px", color: "#9e9e9e", fontSize: "13px", textAlign: "center" } }, "Sin datos en el per\xEDodo"));
     }
     const maxTotal = Math.max(...data.map((d) => d.total), 1);
     const BAR_MAX_HEIGHT = 100;
     const barWidth = Math.max(16, Math.min(48, Math.floor(600 / data.length) - 6));
-    return /* @__PURE__ */ import_react13.default.createElement(Card3, { style: { marginBottom: "16px" } }, /* @__PURE__ */ import_react13.default.createElement(CardHeader3, { title: "Ventas diarias" }), /* @__PURE__ */ import_react13.default.createElement("div", { style: { padding: "20px 20px 8px", overflowX: "auto" } }, /* @__PURE__ */ import_react13.default.createElement("div", { style: { display: "flex", alignItems: "flex-end", gap: "4px", minWidth: data.length * (barWidth + 4), paddingBottom: "4px" } }, data.map((d) => {
+    return /* @__PURE__ */ import_react15.default.createElement(Card3, { style: { marginBottom: "16px" } }, /* @__PURE__ */ import_react15.default.createElement(CardHeader3, { title: "Ventas diarias" }), /* @__PURE__ */ import_react15.default.createElement("div", { style: { padding: "20px 20px 8px", overflowX: "auto" } }, /* @__PURE__ */ import_react15.default.createElement("div", { style: { display: "flex", alignItems: "flex-end", gap: "4px", minWidth: data.length * (barWidth + 4), paddingBottom: "4px" } }, data.map((d) => {
       const h = Math.max(4, d.total / maxTotal * BAR_MAX_HEIGHT);
-      return /* @__PURE__ */ import_react13.default.createElement("div", { key: d.date, style: { display: "flex", flexDirection: "column", alignItems: "center", gap: "4px", flex: "0 0 auto", width: barWidth } }, /* @__PURE__ */ import_react13.default.createElement("div", { style: { fontSize: "10px", color: "#5c5c5c", fontWeight: "600", whiteSpace: "nowrap" } }, fmtMoney(d.total)), /* @__PURE__ */ import_react13.default.createElement(
+      return /* @__PURE__ */ import_react15.default.createElement("div", { key: d.date, style: { display: "flex", flexDirection: "column", alignItems: "center", gap: "4px", flex: "0 0 auto", width: barWidth } }, /* @__PURE__ */ import_react15.default.createElement("div", { style: { fontSize: "10px", color: "#5c5c5c", fontWeight: "600", whiteSpace: "nowrap" } }, fmtMoney(d.total)), /* @__PURE__ */ import_react15.default.createElement(
         "div",
         {
           title: `${fmtDate(d.date)}: ${d.count} venta${d.count !== 1 ? "s" : ""} \xB7 ${fmtMoney(d.total)}`,
@@ -22844,7 +23294,7 @@
             transition: "opacity 0.1s"
           }
         }
-      ), /* @__PURE__ */ import_react13.default.createElement("div", { style: { fontSize: "10px", color: "#9e9e9e", textAlign: "center", whiteSpace: "nowrap", transform: data.length > 15 ? "rotate(-45deg)" : "none", transformOrigin: "top center" } }, fmtDate(d.date)));
+      ), /* @__PURE__ */ import_react15.default.createElement("div", { style: { fontSize: "10px", color: "#9e9e9e", textAlign: "center", whiteSpace: "nowrap", transform: data.length > 15 ? "rotate(-45deg)" : "none", transformOrigin: "top center" } }, fmtDate(d.date)));
     }))));
   }
   var QUICK_FILTERS = [
@@ -22854,15 +23304,15 @@
     { id: "year", label: "Este a\xF1o" }
   ];
   function ReportsView() {
-    const [activeQuick, setActiveQuick] = (0, import_react13.useState)("month");
+    const [activeQuick, setActiveQuick] = (0, import_react15.useState)("month");
     const initial = getRange("month");
-    const [from, setFrom] = (0, import_react13.useState)(initial.from);
-    const [to, setTo] = (0, import_react13.useState)(initial.to);
-    const [data, setData] = (0, import_react13.useState)(null);
-    const [loading, setLoading] = (0, import_react13.useState)(false);
-    const [error, setError] = (0, import_react13.useState)(null);
-    const [exportStatus, setExportStatus] = (0, import_react13.useState)(null);
-    const [xlsxStatus, setXlsxStatus] = (0, import_react13.useState)(null);
+    const [from, setFrom] = (0, import_react15.useState)(initial.from);
+    const [to, setTo] = (0, import_react15.useState)(initial.to);
+    const [data, setData] = (0, import_react15.useState)(null);
+    const [loading, setLoading] = (0, import_react15.useState)(false);
+    const [error, setError] = (0, import_react15.useState)(null);
+    const [exportStatus, setExportStatus] = (0, import_react15.useState)(null);
+    const [xlsxStatus, setXlsxStatus] = (0, import_react15.useState)(null);
     const applyQuick = (id) => {
       setActiveQuick(id);
       const range = getRange(id);
@@ -22928,14 +23378,14 @@
       fontWeight: active ? "600" : "400",
       transition: "all 0.15s"
     });
-    const inputStyle = {
+    const inputStyle2 = {
       padding: "7px 12px",
       border: "1px solid #d1d1d1",
       borderRadius: "6px",
       fontSize: "13px",
       boxSizing: "border-box"
     };
-    return /* @__PURE__ */ import_react13.default.createElement(import_react13.default.Fragment, null, /* @__PURE__ */ import_react13.default.createElement("div", { style: { display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "20px" } }, /* @__PURE__ */ import_react13.default.createElement("div", { style: { fontSize: "18px", fontWeight: "700", color: "#1a1a1a", letterSpacing: "-0.3px" } }, "Reportes"), data && /* @__PURE__ */ import_react13.default.createElement("div", { style: { display: "flex", gap: "8px" } }, /* @__PURE__ */ import_react13.default.createElement(
+    return /* @__PURE__ */ import_react15.default.createElement(import_react15.default.Fragment, null, /* @__PURE__ */ import_react15.default.createElement("div", { style: { display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "20px" } }, /* @__PURE__ */ import_react15.default.createElement("div", { style: { fontSize: "18px", fontWeight: "700", color: "#1a1a1a", letterSpacing: "-0.3px" } }, "Reportes"), data && /* @__PURE__ */ import_react15.default.createElement("div", { style: { display: "flex", gap: "8px" } }, /* @__PURE__ */ import_react15.default.createElement(
       "button",
       {
         className: "fl-btn-primary",
@@ -22943,7 +23393,7 @@
         onClick: handleExportXLSX
       },
       "\u{1F4CA} Exportar Excel"
-    ), /* @__PURE__ */ import_react13.default.createElement(
+    ), /* @__PURE__ */ import_react15.default.createElement(
       "button",
       {
         className: "fl-btn-secondary",
@@ -22951,7 +23401,7 @@
         onClick: handleExport
       },
       "\u{1F4C4} Exportar CSV"
-    ))), /* @__PURE__ */ import_react13.default.createElement("div", { style: {
+    ))), /* @__PURE__ */ import_react15.default.createElement("div", { style: {
       background: "white",
       borderRadius: "12px",
       boxShadow: "0 2px 8px rgba(0,0,0,0.07)",
@@ -22961,7 +23411,7 @@
       alignItems: "center",
       gap: "12px",
       flexWrap: "wrap"
-    } }, /* @__PURE__ */ import_react13.default.createElement("div", { style: { display: "flex", gap: "6px" } }, QUICK_FILTERS.map((q) => /* @__PURE__ */ import_react13.default.createElement("button", { key: q.id, className: "fl-tab", style: btnQuick(activeQuick === q.id), onClick: () => applyQuick(q.id) }, q.label))), /* @__PURE__ */ import_react13.default.createElement("div", { style: { width: "1px", height: "28px", background: "#e5e5e5" } }), /* @__PURE__ */ import_react13.default.createElement("div", { style: { display: "flex", alignItems: "center", gap: "8px" } }, /* @__PURE__ */ import_react13.default.createElement("label", { style: { fontSize: "12px", color: "#9e9e9e", fontWeight: "600" } }, "Desde"), /* @__PURE__ */ import_react13.default.createElement("input", { className: "fl-input", type: "date", style: inputStyle, value: from, onChange: (e) => handleFromChange(e.target.value), max: to }), /* @__PURE__ */ import_react13.default.createElement("label", { style: { fontSize: "12px", color: "#9e9e9e", fontWeight: "600" } }, "Hasta"), /* @__PURE__ */ import_react13.default.createElement("input", { className: "fl-input", type: "date", style: inputStyle, value: to, onChange: (e) => handleToChange(e.target.value), min: from })), /* @__PURE__ */ import_react13.default.createElement(
+    } }, /* @__PURE__ */ import_react15.default.createElement("div", { style: { display: "flex", gap: "6px" } }, QUICK_FILTERS.map((q) => /* @__PURE__ */ import_react15.default.createElement("button", { key: q.id, className: "fl-tab", style: btnQuick(activeQuick === q.id), onClick: () => applyQuick(q.id) }, q.label))), /* @__PURE__ */ import_react15.default.createElement("div", { style: { width: "1px", height: "28px", background: "#e5e5e5" } }), /* @__PURE__ */ import_react15.default.createElement("div", { style: { display: "flex", alignItems: "center", gap: "8px" } }, /* @__PURE__ */ import_react15.default.createElement("label", { style: { fontSize: "12px", color: "#9e9e9e", fontWeight: "600" } }, "Desde"), /* @__PURE__ */ import_react15.default.createElement("input", { className: "fl-input", type: "date", style: inputStyle2, value: from, onChange: (e) => handleFromChange(e.target.value), max: to }), /* @__PURE__ */ import_react15.default.createElement("label", { style: { fontSize: "12px", color: "#9e9e9e", fontWeight: "600" } }, "Hasta"), /* @__PURE__ */ import_react15.default.createElement("input", { className: "fl-input", type: "date", style: inputStyle2, value: to, onChange: (e) => handleToChange(e.target.value), min: from })), /* @__PURE__ */ import_react15.default.createElement(
       "button",
       {
         className: "fl-btn-primary",
@@ -22970,35 +23420,164 @@
         disabled: loading
       },
       loading ? "Generando..." : "\u{1F4CA} Generar reporte"
-    )), xlsxStatus && /* @__PURE__ */ import_react13.default.createElement("div", { style: {
+    )), xlsxStatus && /* @__PURE__ */ import_react15.default.createElement("div", { style: {
       background: xlsxStatus.type === "success" ? "#e8f5e9" : "#ffebee",
       color: xlsxStatus.type === "success" ? "#2e7d32" : "#a4262c",
       borderRadius: "8px",
       padding: "10px 16px",
       fontSize: "13px",
       marginBottom: "16px"
-    } }, xlsxStatus.msg), exportStatus && /* @__PURE__ */ import_react13.default.createElement("div", { style: {
+    } }, xlsxStatus.msg), exportStatus && /* @__PURE__ */ import_react15.default.createElement("div", { style: {
       background: exportStatus.type === "success" ? "#e8f5e9" : "#ffebee",
       color: exportStatus.type === "success" ? "#2e7d32" : "#a4262c",
       borderRadius: "8px",
       padding: "10px 16px",
       fontSize: "13px",
       marginBottom: "16px"
-    } }, exportStatus.msg), error && /* @__PURE__ */ import_react13.default.createElement("div", { style: { background: "#ffebee", color: "#a4262c", borderRadius: "8px", padding: "10px 16px", fontSize: "13px", marginBottom: "16px" } }, error), loading && /* @__PURE__ */ import_react13.default.createElement("div", { style: { textAlign: "center", padding: "60px", color: "#9e9e9e", fontSize: "14px" } }, "Generando reporte..."), !loading && !data && !error && /* @__PURE__ */ import_react13.default.createElement("div", { style: { textAlign: "center", padding: "60px", color: "#9e9e9e", fontSize: "14px" } }, 'Selecciona un per\xEDodo y pulsa "Generar reporte"'), data && !loading && /* @__PURE__ */ import_react13.default.createElement(import_react13.default.Fragment, null, /* @__PURE__ */ import_react13.default.createElement(SummaryCard, { summary: data.summary }), /* @__PURE__ */ import_react13.default.createElement("div", { style: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px", marginBottom: "16px" } }, /* @__PURE__ */ import_react13.default.createElement(PaymentCard, { data: data.byPaymentMethod, grossIncome: data.summary.grossIncome }), /* @__PURE__ */ import_react13.default.createElement(CategoryCard, { data: data.byCategory })), /* @__PURE__ */ import_react13.default.createElement(TopProductsTable, { data: data.topProducts }), /* @__PURE__ */ import_react13.default.createElement(DailyChart, { data: data.dailySales })));
+    } }, exportStatus.msg), error && /* @__PURE__ */ import_react15.default.createElement("div", { style: { background: "#ffebee", color: "#a4262c", borderRadius: "8px", padding: "10px 16px", fontSize: "13px", marginBottom: "16px" } }, error), loading && /* @__PURE__ */ import_react15.default.createElement("div", { style: { textAlign: "center", padding: "60px", color: "#9e9e9e", fontSize: "14px" } }, "Generando reporte..."), !loading && !data && !error && /* @__PURE__ */ import_react15.default.createElement("div", { style: { textAlign: "center", padding: "60px", color: "#9e9e9e", fontSize: "14px" } }, 'Selecciona un per\xEDodo y pulsa "Generar reporte"'), data && !loading && /* @__PURE__ */ import_react15.default.createElement(import_react15.default.Fragment, null, /* @__PURE__ */ import_react15.default.createElement(SummaryCard, { summary: data.summary }), /* @__PURE__ */ import_react15.default.createElement("div", { style: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px", marginBottom: "16px" } }, /* @__PURE__ */ import_react15.default.createElement(PaymentCard, { data: data.byPaymentMethod, grossIncome: data.summary.grossIncome }), /* @__PURE__ */ import_react15.default.createElement(CategoryCard, { data: data.byCategory })), /* @__PURE__ */ import_react15.default.createElement(TopProductsTable, { data: data.topProducts }), /* @__PURE__ */ import_react15.default.createElement(DailyChart, { data: data.dailySales })));
+  }
+
+  // src/renderer/components/LoginScreen.js
+  var import_react16 = __toESM(require_react());
+  function LoginScreen({ onLogin }) {
+    const [username, setUsername] = (0, import_react16.useState)("");
+    const [password, setPassword] = (0, import_react16.useState)("");
+    const [loading, setLoading] = (0, import_react16.useState)(false);
+    const [error, setError] = (0, import_react16.useState)("");
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+      if (!username.trim() || !password) return;
+      setError("");
+      setLoading(true);
+      try {
+        const user = await window.electron.auth.login({ username: username.trim(), password });
+        onLogin(user);
+      } catch (err) {
+        setError(err?.message || "Error al iniciar sesi\xF3n.");
+      } finally {
+        setLoading(false);
+      }
+    };
+    return /* @__PURE__ */ import_react16.default.createElement("div", { style: {
+      minHeight: "100vh",
+      background: "#f3f3f3",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center"
+    } }, /* @__PURE__ */ import_react16.default.createElement("div", { style: {
+      background: "rgba(255, 255, 255, 0.92)",
+      backdropFilter: "blur(24px)",
+      WebkitBackdropFilter: "blur(24px)",
+      borderRadius: "16px",
+      boxShadow: "0 24px 64px rgba(0, 0, 0, 0.13)",
+      width: "360px",
+      padding: "40px 36px 32px"
+    } }, /* @__PURE__ */ import_react16.default.createElement("div", { style: { textAlign: "center", marginBottom: "28px" } }, /* @__PURE__ */ import_react16.default.createElement("div", { style: {
+      width: "52px",
+      height: "52px",
+      borderRadius: "14px",
+      background: "#0078d4",
+      display: "inline-flex",
+      alignItems: "center",
+      justifyContent: "center",
+      fontSize: "24px",
+      marginBottom: "14px"
+    } }, "\u{1F4BB}"), /* @__PURE__ */ import_react16.default.createElement("div", { style: { fontSize: "20px", fontWeight: "800", color: "#0078d4", letterSpacing: "-0.4px" } }, "StarTecnology"), /* @__PURE__ */ import_react16.default.createElement("div", { style: { fontSize: "13px", color: "#9e9e9e", marginTop: "4px" } }, "Sistema de Gesti\xF3n")), /* @__PURE__ */ import_react16.default.createElement("form", { onSubmit: handleSubmit }, /* @__PURE__ */ import_react16.default.createElement("div", { style: { marginBottom: "14px" } }, /* @__PURE__ */ import_react16.default.createElement("label", { style: {
+      display: "block",
+      fontSize: "12px",
+      fontWeight: "600",
+      color: "#5c5c5c",
+      marginBottom: "5px"
+    } }, "Usuario"), /* @__PURE__ */ import_react16.default.createElement(
+      "input",
+      {
+        className: "fl-input",
+        type: "text",
+        value: username,
+        onChange: (e) => setUsername(e.target.value),
+        autoFocus: true,
+        autoComplete: "username",
+        style: {
+          width: "100%",
+          padding: "9px 12px",
+          border: "1px solid #d1d1d1",
+          borderRadius: "8px",
+          fontSize: "14px",
+          boxSizing: "border-box",
+          background: "white"
+        },
+        placeholder: "Ingresa tu usuario",
+        disabled: loading
+      }
+    )), /* @__PURE__ */ import_react16.default.createElement("div", { style: { marginBottom: "22px" } }, /* @__PURE__ */ import_react16.default.createElement("label", { style: {
+      display: "block",
+      fontSize: "12px",
+      fontWeight: "600",
+      color: "#5c5c5c",
+      marginBottom: "5px"
+    } }, "Contrase\xF1a"), /* @__PURE__ */ import_react16.default.createElement(
+      "input",
+      {
+        className: "fl-input",
+        type: "password",
+        value: password,
+        onChange: (e) => setPassword(e.target.value),
+        autoComplete: "current-password",
+        style: {
+          width: "100%",
+          padding: "9px 12px",
+          border: "1px solid #d1d1d1",
+          borderRadius: "8px",
+          fontSize: "14px",
+          boxSizing: "border-box",
+          background: "white"
+        },
+        placeholder: "Ingresa tu contrase\xF1a",
+        disabled: loading
+      }
+    )), error && /* @__PURE__ */ import_react16.default.createElement("div", { style: {
+      background: "#ffebee",
+      color: "#a4262c",
+      border: "1px solid #ef9a9a",
+      borderRadius: "8px",
+      padding: "9px 12px",
+      fontSize: "13px",
+      marginBottom: "16px"
+    } }, error), /* @__PURE__ */ import_react16.default.createElement(
+      "button",
+      {
+        type: "submit",
+        className: "fl-btn-primary",
+        disabled: loading || !username.trim() || !password,
+        style: {
+          width: "100%",
+          background: "#0078d4",
+          color: "white",
+          border: "none",
+          padding: "10px",
+          borderRadius: "8px",
+          fontSize: "14px",
+          fontWeight: "600",
+          cursor: loading ? "not-allowed" : "pointer",
+          opacity: !username.trim() || !password ? 0.6 : 1
+        }
+      },
+      loading ? "Iniciando sesi\xF3n..." : "Iniciar Sesi\xF3n"
+    ))));
   }
 
   // src/renderer/app.js
-  var TABS = [
-    { id: "dashboard", label: "Dashboard", icon: "\u{1F4CA}" },
-    { id: "catalog", label: "Cat\xE1logo", icon: "\u{1F4E6}" },
-    { id: "stock-entries", label: "Entradas", icon: "\u{1F4E5}" },
-    { id: "suppliers", label: "Proveedores", icon: "\u{1F3E2}" },
-    { id: "new-sale", label: "Nueva Venta", icon: "\u{1F6D2}" },
-    { id: "history", label: "Historial", icon: "\u{1F4CB}" },
-    { id: "categories", label: "Categor\xEDas", icon: "\u{1F3F7}\uFE0F" },
-    { id: "customers", label: "Clientes", icon: "\u{1F464}" },
-    { id: "reports", label: "Reportes", icon: "\u{1F4C8}" },
-    { id: "config", label: "Configuraci\xF3n", icon: "\u2699\uFE0F" }
+  var ALL_TABS = [
+    { id: "dashboard", label: "Dashboard", icon: "\u{1F4CA}", roles: ["Admin", "Vendedor"] },
+    { id: "catalog", label: "Cat\xE1logo", icon: "\u{1F4E6}", roles: ["Admin"] },
+    { id: "stock-entries", label: "Entradas", icon: "\u{1F4E5}", roles: ["Admin", "Vendedor"] },
+    { id: "suppliers", label: "Proveedores", icon: "\u{1F3E2}", roles: ["Admin"] },
+    { id: "new-sale", label: "Nueva Venta", icon: "\u{1F6D2}", roles: ["Admin", "Vendedor"] },
+    { id: "history", label: "Historial", icon: "\u{1F4CB}", roles: ["Admin", "Vendedor"] },
+    { id: "categories", label: "Categor\xEDas", icon: "\u{1F3F7}\uFE0F", roles: ["Admin"] },
+    { id: "customers", label: "Clientes", icon: "\u{1F464}", roles: ["Admin"] },
+    { id: "reports", label: "Reportes", icon: "\u{1F4C8}", roles: ["Admin"] },
+    { id: "config", label: "Configuraci\xF3n", icon: "\u2699\uFE0F", roles: ["Admin"] }
   ];
   var GLOBAL_CSS = `
   * { box-sizing: border-box; }
@@ -23117,26 +23696,70 @@
       whiteSpace: "nowrap",
       flexShrink: 0
     },
-    main: { padding: "24px" }
+    main: { padding: "24px" },
+    userInfo: {
+      display: "flex",
+      alignItems: "center",
+      gap: "8px",
+      flexShrink: 0,
+      borderLeft: "1px solid rgba(0,0,0,0.1)",
+      paddingLeft: "14px",
+      marginLeft: "4px"
+    },
+    userName: { fontSize: "13px", fontWeight: "600", color: "#1a1a1a", whiteSpace: "nowrap" },
+    roleBadge: (role) => ({
+      fontSize: "11px",
+      fontWeight: "700",
+      padding: "2px 8px",
+      borderRadius: "10px",
+      background: role === "Admin" ? "#e3f2fd" : "#e8f5e9",
+      color: role === "Admin" ? "#1565c0" : "#2e7d32"
+    }),
+    btnLogout: {
+      background: "white",
+      border: "1px solid #d1d1d1",
+      color: "#5c5c5c",
+      padding: "4px 12px",
+      borderRadius: "8px",
+      cursor: "pointer",
+      fontSize: "12px"
+    }
   };
   function App() {
-    const [activeTab, setActiveTab] = (0, import_react14.useState)("dashboard");
-    return /* @__PURE__ */ import_react14.default.createElement(import_react14.default.Fragment, null, /* @__PURE__ */ import_react14.default.createElement("style", null, GLOBAL_CSS), /* @__PURE__ */ import_react14.default.createElement("div", { style: styles4.app }, /* @__PURE__ */ import_react14.default.createElement("header", { style: styles4.header }, /* @__PURE__ */ import_react14.default.createElement("span", { style: styles4.title }, "StarTecnology"), /* @__PURE__ */ import_react14.default.createElement("nav", { style: styles4.nav }, TABS.map((tab) => /* @__PURE__ */ import_react14.default.createElement(
+    const [currentUser, setCurrentUser] = (0, import_react17.useState)(null);
+    const [activeTab, setActiveTab] = (0, import_react17.useState)("dashboard");
+    const handleLogin = (user) => {
+      setCurrentUser(user);
+      setActiveTab("dashboard");
+    };
+    const handleLogout = () => {
+      window.electron.auth.logout().catch(() => {
+      });
+      setCurrentUser(null);
+      setActiveTab("dashboard");
+    };
+    if (!currentUser) {
+      return /* @__PURE__ */ import_react17.default.createElement(import_react17.default.Fragment, null, /* @__PURE__ */ import_react17.default.createElement("style", null, GLOBAL_CSS), /* @__PURE__ */ import_react17.default.createElement(LoginScreen, { onLogin: handleLogin }));
+    }
+    const tabs = ALL_TABS.filter((t) => t.roles.includes(currentUser.role));
+    const activeTabVisible = tabs.some((t) => t.id === activeTab);
+    const safeActiveTab = activeTabVisible ? activeTab : "dashboard";
+    return /* @__PURE__ */ import_react17.default.createElement(import_react17.default.Fragment, null, /* @__PURE__ */ import_react17.default.createElement("style", null, GLOBAL_CSS), /* @__PURE__ */ import_react17.default.createElement("div", { style: styles4.app }, /* @__PURE__ */ import_react17.default.createElement("header", { style: styles4.header }, /* @__PURE__ */ import_react17.default.createElement("span", { style: styles4.title }, "StarTecnology"), /* @__PURE__ */ import_react17.default.createElement("nav", { style: styles4.nav }, tabs.map((tab) => /* @__PURE__ */ import_react17.default.createElement(
       "button",
       {
         key: tab.id,
         className: "fl-tab",
-        style: activeTab === tab.id ? styles4.tabActive : styles4.tab,
+        style: safeActiveTab === tab.id ? styles4.tabActive : styles4.tab,
         onClick: () => setActiveTab(tab.id)
       },
-      /* @__PURE__ */ import_react14.default.createElement("span", null, tab.icon),
-      /* @__PURE__ */ import_react14.default.createElement("span", null, tab.label)
-    )))), /* @__PURE__ */ import_react14.default.createElement("main", { style: styles4.main }, activeTab === "dashboard" && /* @__PURE__ */ import_react14.default.createElement(DashboardView, { onNavigate: setActiveTab }), activeTab === "catalog" && /* @__PURE__ */ import_react14.default.createElement(InventoryView, null), activeTab === "stock-entries" && /* @__PURE__ */ import_react14.default.createElement(StockEntriesView, null), activeTab === "suppliers" && /* @__PURE__ */ import_react14.default.createElement(SuppliersView, null), activeTab === "new-sale" && /* @__PURE__ */ import_react14.default.createElement(NewSale, { onSaleComplete: () => setActiveTab("history") }), activeTab === "history" && /* @__PURE__ */ import_react14.default.createElement(SaleHistory, null), activeTab === "categories" && /* @__PURE__ */ import_react14.default.createElement(CategoriesView, null), activeTab === "customers" && /* @__PURE__ */ import_react14.default.createElement(CustomersView, null), activeTab === "reports" && /* @__PURE__ */ import_react14.default.createElement(ReportsView, null), activeTab === "config" && /* @__PURE__ */ import_react14.default.createElement(ConfigView, null))));
+      /* @__PURE__ */ import_react17.default.createElement("span", null, tab.icon),
+      /* @__PURE__ */ import_react17.default.createElement("span", null, tab.label)
+    ))), /* @__PURE__ */ import_react17.default.createElement("div", { style: styles4.userInfo }, /* @__PURE__ */ import_react17.default.createElement("span", { style: styles4.userName }, currentUser.name), /* @__PURE__ */ import_react17.default.createElement("span", { style: styles4.roleBadge(currentUser.role) }, currentUser.role), /* @__PURE__ */ import_react17.default.createElement("button", { className: "fl-btn-ghost", style: styles4.btnLogout, onClick: handleLogout }, "Salir"))), /* @__PURE__ */ import_react17.default.createElement("main", { style: styles4.main }, safeActiveTab === "dashboard" && /* @__PURE__ */ import_react17.default.createElement(DashboardView, { onNavigate: setActiveTab, role: currentUser.role }), safeActiveTab === "catalog" && /* @__PURE__ */ import_react17.default.createElement(InventoryView, null), safeActiveTab === "stock-entries" && /* @__PURE__ */ import_react17.default.createElement(StockEntriesView, { role: currentUser.role }), safeActiveTab === "suppliers" && /* @__PURE__ */ import_react17.default.createElement(SuppliersView, null), safeActiveTab === "new-sale" && /* @__PURE__ */ import_react17.default.createElement(NewSale, { onSaleComplete: () => setActiveTab("history") }), safeActiveTab === "history" && /* @__PURE__ */ import_react17.default.createElement(SaleHistory, null), safeActiveTab === "categories" && /* @__PURE__ */ import_react17.default.createElement(CategoriesView, null), safeActiveTab === "customers" && /* @__PURE__ */ import_react17.default.createElement(CustomersView, null), safeActiveTab === "reports" && /* @__PURE__ */ import_react17.default.createElement(ReportsView, null), safeActiveTab === "config" && /* @__PURE__ */ import_react17.default.createElement(ConfigView, { role: currentUser.role }))));
   }
 
   // src/renderer/index.js
   var root = (0, import_client.createRoot)(document.getElementById("root"));
-  root.render(/* @__PURE__ */ import_react15.default.createElement(App, null));
+  root.render(/* @__PURE__ */ import_react18.default.createElement(App, null));
 })();
 /*! Bundled license information:
 

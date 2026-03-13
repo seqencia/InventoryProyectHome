@@ -223,15 +223,32 @@ const UserSchema = new EntitySchema({
   },
 });
 
+const AuditLogSchema = new EntitySchema({
+  name: 'AuditLog',
+  tableName: 'audit_logs',
+  columns: {
+    id: { type: Number, primary: true, generated: true },
+    user_id: { type: Number, nullable: true },
+    user_name: { type: String, nullable: true },
+    action: { type: String }, // CREATE | UPDATE | DELETE | LOGIN | LOGOUT
+    entity: { type: String, nullable: true }, // product | sale | return | stock_entry | user | category | supplier | customer
+    entity_id: { type: Number, nullable: true },
+    old_value: { type: String, nullable: true }, // JSON string
+    new_value: { type: String, nullable: true }, // JSON string
+    timestamp: { type: 'datetime', createDate: true },
+  },
+});
+
 // ── Database ───────────────────────────────────────────────────────────────
 
 let AppDataSource;
+let currentSession = null; // { userId, userName } — set on login, cleared on logout
 
 async function initDatabase() {
   AppDataSource = new DataSource({
     type: 'sqlite',
     database: path.join(app.getPath('userData'), 'database.sqlite'),
-    entities: [ProductSchema, CategorySchema, CustomerSchema, SaleSchema, SaleDetailSchema, SupplierSchema, StockEntrySchema, ReturnSchema, ReturnDetailSchema, BonificacionPriceLogSchema, UserSchema],
+    entities: [ProductSchema, CategorySchema, CustomerSchema, SaleSchema, SaleDetailSchema, SupplierSchema, StockEntrySchema, ReturnSchema, ReturnDetailSchema, BonificacionPriceLogSchema, UserSchema, AuditLogSchema],
     synchronize: true,
     logging: false,
   });
@@ -248,6 +265,25 @@ async function seedDefaultAdmin() {
       password_hash: hashPassword('admin'),
       role: 'Admin',
     }));
+  }
+}
+
+// ── Audit log helper ───────────────────────────────────────────────────────
+
+async function logAudit({ action, entity, entityId, oldValue, newValue }) {
+  try {
+    const r = AppDataSource.getRepository('AuditLog');
+    await r.save(r.create({
+      user_id:   currentSession?.userId  ?? null,
+      user_name: currentSession?.userName ?? null,
+      action,
+      entity:    entity    ?? null,
+      entity_id: entityId  ?? null,
+      old_value: oldValue  != null ? JSON.stringify(oldValue)  : null,
+      new_value: newValue  != null ? JSON.stringify(newValue)  : null,
+    }));
+  } catch (err) {
+    console.error('Audit log error:', err);
   }
 }
 
@@ -297,7 +333,9 @@ function setupIpcHandlers() {
       data.sale_price = data.precio_venta_sin_iva;
       if (data.precio_costo != null) data.cost_price = data.precio_costo;
     }
-    return await repo('Product').save(repo('Product').create(data));
+    const saved = await repo('Product').save(repo('Product').create(data));
+    await logAudit({ action: 'CREATE', entity: 'product', entityId: saved.id, newValue: { name: saved.name, sku: saved.sku, precio_venta_sin_iva: saved.precio_venta_sin_iva, precio_costo: saved.precio_costo, stock: saved.stock } });
+    return saved;
   });
 
   ipcMain.handle('products:update', async (_, { id, ...data }) => {
@@ -306,6 +344,7 @@ function setupIpcHandlers() {
       const dup = await repo('Product').findOneBy({ barcode: data.barcode });
       if (dup && dup.id !== id) throw new Error(`El código de barras "${data.barcode}" ya está asignado al producto "${dup.name}".`);
     }
+    const oldProduct = await repo('Product').findOneBy({ id });
     // Compute derived pricing fields
     if (data.precio_venta_sin_iva != null) {
       Object.assign(data, computePricing(data));
@@ -313,11 +352,19 @@ function setupIpcHandlers() {
       if (data.precio_costo != null) data.cost_price = data.precio_costo;
     }
     await repo('Product').update(id, data);
-    return await repo('Product').findOneBy({ id });
+    const updated = await repo('Product').findOneBy({ id });
+    await logAudit({
+      action: 'UPDATE', entity: 'product', entityId: id,
+      oldValue: oldProduct ? { name: oldProduct.name, precio_venta_sin_iva: oldProduct.precio_venta_sin_iva, precio_costo: oldProduct.precio_costo, stock: oldProduct.stock, status: oldProduct.status } : null,
+      newValue: updated   ? { name: updated.name,   precio_venta_sin_iva: updated.precio_venta_sin_iva,   precio_costo: updated.precio_costo,   stock: updated.stock,   status: updated.status   } : null,
+    });
+    return updated;
   });
 
   ipcMain.handle('products:delete', async (_, id) => {
+    const old = await repo('Product').findOneBy({ id });
     await repo('Product').delete(id);
+    await logAudit({ action: 'DELETE', entity: 'product', entityId: id, oldValue: old ? { name: old.name, sku: old.sku, stock: old.stock } : null });
     return { success: true };
   });
 
@@ -360,6 +407,11 @@ function setupIpcHandlers() {
         new_price: r6(newPrice),
       })
     );
+    await logAudit({
+      action: 'UPDATE', entity: 'product', entityId: productId,
+      oldValue: { name: productName, precio_venta_sin_iva: previousPrice },
+      newValue: { name: productName, precio_venta_sin_iva: r6(newPrice), _note: 'precio_bonificacion' },
+    });
     return { success: true };
   });
 
@@ -478,7 +530,7 @@ function setupIpcHandlers() {
   });
 
   ipcMain.handle('stockEntries:create', async (_, data) => {
-    return await AppDataSource.transaction(async (manager) => {
+    const entry = await AppDataSource.transaction(async (manager) => {
       const product = await manager.getRepository('Product').findOneBy({ id: data.product_id });
       if (!product) throw new Error('Producto no encontrado');
 
@@ -508,6 +560,11 @@ function setupIpcHandlers() {
       await manager.getRepository('Product').increment({ id: data.product_id }, 'stock', totalQty);
       return entry;
     });
+    await logAudit({
+      action: 'CREATE', entity: 'stock_entry', entityId: entry.id,
+      newValue: { product_id: entry.product_id, product_name: entry.product_name, quantity: entry.quantity, bonus_quantity: entry.bonus_quantity, supplier_name: entry.supplier_name, unit_cost: entry.unit_cost },
+    });
+    return entry;
   });
 
   ipcMain.handle('stockEntries:updateBonificacion', async (_, { entryId, productId, precio_venta_bonificacion, precio_bonificacion_pendiente, updateProductPrice }) => {
@@ -536,7 +593,7 @@ function setupIpcHandlers() {
 
   // Sales
   ipcMain.handle('sales:create', async (_, { items, customerId, customerName, paymentMethod, status, globalDiscountAmount }) => {
-    return await AppDataSource.transaction(async (manager) => {
+    const savedSale = await AppDataSource.transaction(async (manager) => {
       const regularItems = items.filter((i) => !i.is_regalia);
       const regaliaItems = items.filter((i) => i.is_regalia);
 
@@ -625,14 +682,26 @@ function setupIpcHandlers() {
 
       return savedSale;
     });
+    await logAudit({
+      action: 'CREATE', entity: 'sale', entityId: savedSale.id,
+      newValue: { total: savedSale.total, subtotal: savedSale.subtotal, payment_method: savedSale.payment_method, status: savedSale.status, customer_name: savedSale.customer_name, items_count: items.length },
+    });
+    return savedSale;
   });
 
   ipcMain.handle('sales:updateStatus', async (_, { id, status, payment_method }) => {
+    const old = await repo('Sale').findOneBy({ id });
     const update = {};
     if (status) update.status = status;
     if (payment_method) update.payment_method = payment_method;
     await repo('Sale').update(id, update);
-    return repo('Sale').findOneBy({ id });
+    const updated = await repo('Sale').findOneBy({ id });
+    await logAudit({
+      action: 'UPDATE', entity: 'sale', entityId: id,
+      oldValue: old    ? { status: old.status,     payment_method: old.payment_method     } : null,
+      newValue: updated ? { status: updated.status, payment_method: updated.payment_method } : null,
+    });
+    return updated;
   });
 
   ipcMain.handle('sales:getAll', async () => {
@@ -646,7 +715,7 @@ function setupIpcHandlers() {
 
   // Returns
   ipcMain.handle('returns:create', async (_, { saleId, items, reason, notes }) => {
-    return await AppDataSource.transaction(async (manager) => {
+    const result = await AppDataSource.transaction(async (manager) => {
       // Get original sale details
       const originalDetails = await manager.getRepository('SaleDetail').find({ where: { sale_id: saleId } });
 
@@ -713,6 +782,11 @@ function setupIpcHandlers() {
 
       return { ...savedReturn, is_partial: isPartial };
     });
+    await logAudit({
+      action: 'CREATE', entity: 'return', entityId: result.id,
+      newValue: { sale_id: saleId, total_refunded: result.total_refunded, reason, is_partial: result.is_partial, items_count: items.length },
+    });
+    return result;
   });
 
   ipcMain.handle('returns:getAll', async () => {
@@ -973,7 +1047,17 @@ function setupIpcHandlers() {
     if (!user || user.password_hash !== hashPassword(password)) {
       throw new Error('Usuario o contraseña incorrectos.');
     }
+    currentSession = { userId: user.id, userName: user.name };
+    await logAudit({ action: 'LOGIN', entity: 'user', entityId: user.id, newValue: { username: user.username, role: user.role } });
     return { id: user.id, name: user.name, username: user.username, role: user.role };
+  });
+
+  ipcMain.handle('auth:logout', async () => {
+    if (currentSession) {
+      await logAudit({ action: 'LOGOUT', entity: 'user', entityId: currentSession.userId, newValue: { userName: currentSession.userName } });
+    }
+    currentSession = null;
+    return { success: true };
   });
 
   // Users
@@ -992,6 +1076,7 @@ function setupIpcHandlers() {
       role: data.role,
     });
     const saved = await repo('User').save(user);
+    await logAudit({ action: 'CREATE', entity: 'user', entityId: saved.id, newValue: { name: saved.name, username: saved.username, role: saved.role } });
     const { password_hash, ...result } = saved;
     return result;
   });
@@ -1001,6 +1086,7 @@ function setupIpcHandlers() {
       const dup = await repo('User').findOneBy({ username: data.username });
       if (dup && dup.id !== id) throw new Error('El nombre de usuario ya existe.');
     }
+    const oldUser = await repo('User').findOneBy({ id });
     const updateData = {};
     if (data.name) updateData.name = data.name;
     if (data.username) updateData.username = data.username;
@@ -1008,6 +1094,11 @@ function setupIpcHandlers() {
     if (data.password) updateData.password_hash = hashPassword(data.password);
     await repo('User').update(id, updateData);
     const updated = await repo('User').findOneBy({ id });
+    await logAudit({
+      action: 'UPDATE', entity: 'user', entityId: id,
+      oldValue: oldUser ? { name: oldUser.name, username: oldUser.username, role: oldUser.role } : null,
+      newValue: updated ? { name: updated.name, username: updated.username, role: updated.role, password_changed: !!data.password } : null,
+    });
     const { password_hash, ...result } = updated;
     return result;
   });
@@ -1019,7 +1110,30 @@ function setupIpcHandlers() {
       if (adminCount <= 1) throw new Error('No se puede eliminar el último administrador.');
     }
     await repo('User').delete(id);
+    await logAudit({ action: 'DELETE', entity: 'user', entityId: id, oldValue: user ? { name: user.name, username: user.username, role: user.role } : null });
     return { success: true };
+  });
+
+  // Audit Log
+  ipcMain.handle('auditLog:getAll', async (_, filters = {}) => {
+    const { page = 1, pageSize = 50, userId, action, entity, dateFrom, dateTo } = filters;
+    const qb = repo('AuditLog')
+      .createQueryBuilder('a')
+      .orderBy('a.timestamp', 'DESC');
+    if (userId)   qb.andWhere('a.user_id = :userId', { userId: Number(userId) });
+    if (action)   qb.andWhere('a.action = :action',   { action });
+    if (entity)   qb.andWhere('a.entity = :entity',   { entity });
+    if (dateFrom) {
+      const from = new Date(dateFrom); from.setHours(0, 0, 0, 0);
+      qb.andWhere('a.timestamp >= :dateFrom', { dateFrom: from.toISOString() });
+    }
+    if (dateTo) {
+      const to = new Date(dateTo); to.setHours(23, 59, 59, 999);
+      qb.andWhere('a.timestamp <= :dateTo', { dateTo: to.toISOString() });
+    }
+    const total = await qb.getCount();
+    const items = await qb.skip((page - 1) * pageSize).take(pageSize).getMany();
+    return { items, total, page, pageSize };
   });
 }
 
