@@ -110,6 +110,58 @@ Verificar que las siguientes entidades tengan `created_at` con precisión comple
 - [ ] Gráfica de tendencia de utilidad diaria/semanal
 - [ ] Export PDF de reportes (usando `window.print()` sobre la vista de reportes)
 
+### Panel de Inteligencia de Inventario ("Tambor")
+
+Dashboard analítico dedicado que cruza datos de ventas históricas con el stock actual para clasificar y priorizar el inventario.
+
+#### Métricas por producto
+
+| Métrica | Descripción |
+|---|---|
+| Promedio de ventas 3 meses | Unidades vendidas / 90 días |
+| Promedio de ventas 6 meses | Unidades vendidas / 180 días |
+| Tendencia | Comparación 3 m vs 6 m (↑ acelerando / ↓ desacelerando / → estable) |
+| Días de cobertura | `stock_actual / promedio_diario_3m` |
+| Peso % de stock | `stock_valor_producto / stock_valor_total × 100` |
+
+#### Clasificación de productos (5 categorías)
+
+| Clasificación | Criterio | Color |
+|---|---|---|
+| **Sobreventa** | Días de cobertura < umbral mínimo (ej. < 15 días) | 🔴 Rojo |
+| **Target** | Días de cobertura dentro del rango óptimo | 🟢 Verde |
+| **Subventa** | Días de cobertura > umbral máximo (ej. > 90 días) | 🟡 Amarillo |
+| **Sin venta** | Stock > 0 pero sin ventas en los últimos 90 días | 🟠 Naranja |
+| **Sin inventario** | Stock = 0 (independiente de la demanda) | ⚫ Gris |
+
+#### Análisis Pareto 80/20
+
+- Ranking de productos por ingresos acumulados en el período seleccionado
+- Curva Pareto: línea que muestra qué % de productos genera el 80 % de los ingresos
+- Identificación visual del corte 80/20 en la tabla
+
+#### Ranking por quintil de velocidad de ventas
+
+Divide los productos (con ventas > 0) en 5 quintiles según su promedio de ventas diario:
+
+| Quintil | Descripción |
+|---|---|
+| Q1 (top 20 %) | Rotación muy alta |
+| Q2 | Rotación alta |
+| Q3 | Rotación media |
+| Q4 | Rotación baja |
+| Q5 (bottom 20 %) | Rotación muy baja |
+
+#### UI del panel
+
+- Pestaña dedicada "Tambor" o sección dentro de Reportes (solo Admin)
+- Selector de período de análisis (3 m / 6 m / personalizado)
+- Umbrales de cobertura configurables (mínimo y máximo en días)
+- Tabla principal con columnas: Producto, SKU, Stock, Ventas 3m, Ventas 6m, Tendencia, Días cobertura, Peso %, Quintil, Clasificación (badge con color)
+- Filtros: por clasificación, por categoría, por quintil
+- Resumen KPI en tarjetas: total SKUs por clasificación, valor de inventario en riesgo (Sobreventa + Sin inventario), valor inmovilizado (Subventa + Sin venta)
+- Export CSV del análisis completo
+
 ---
 
 ## 🔜 v0.35.0 — Clientes y fidelización
