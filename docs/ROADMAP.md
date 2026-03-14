@@ -250,6 +250,28 @@ Clasifica productos en cuatro cuadrantes según participación en ingresos (eje 
 
 ---
 
+## 🔜 v0.38.0 — Cotizaciones
+
+- [ ] Crear cotizaciones con productos, cantidades y precios (flujo similar a Nueva Venta)
+- [ ] Convertir cotización a venta con un solo clic (traspasa ítems al carrito o crea la venta directamente)
+- [ ] Fecha de vencimiento configurable por cotización
+- [ ] Impresión / export PDF de la cotización con datos de la tienda (nombre, logo, número de cotización)
+- [ ] Estados del ciclo de vida: `Borrador`, `Enviada`, `Aceptada`, `Rechazada`, `Vencida`
+- [ ] Historial de cotizaciones con filtros por estado, cliente y rango de fechas
+
+---
+
+## 🔜 v0.39.0 — Pago mixto
+
+- [ ] División del pago en Nueva Venta entre múltiples métodos (ej. $50 Efectivo + $30 Tarjeta = $80 total)
+- [ ] Cada método de pago registra su monto por separado en la venta
+- [ ] Validación: suma de pagos parciales debe igualar el total de la venta
+- [ ] Recibo muestra el desglose de métodos y montos pagados
+- [ ] Historial de Ventas muestra el detalle de pago mixto en la vista expandida
+- [ ] Reportes contabilizan correctamente los totales por método (efectivo, tarjeta, transferencia) incluyendo ventas mixtas
+
+---
+
 ## 🎯 v1.0.0 — Release estable
 
 **Criterios de entrada a v1.0.0**:
@@ -260,7 +282,7 @@ Clasifica productos en cuatro cuadrantes según participación en ingresos (eje 
 - [ ] Performance aceptable con ≥ 5 000 productos y ≥ 10 000 ventas
 - [ ] Instalador empaquetado con `electron-builder` (`.exe` firmado)
 
-**Incluye todo lo de v0.32 – v0.37 más**:
+**Incluye todo lo de v0.32 – v0.39 más**:
 - [ ] Onboarding para nuevos usuarios (wizard de primera configuración)
 - [ ] Pantalla de ayuda / shortcuts in-app
 - [ ] Auto-updater (`electron-updater`) para nuevas versiones
