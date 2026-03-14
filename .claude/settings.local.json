@@ -2,7 +2,11 @@
   "permissions": {
     "allow": [
       "Bash(npm install:*)",
-      "Bash(npm run:*)"
+      "Bash(npm run:*)",
+      "Bash(ls -la \"C:\\\\Users\\\\ASUS\\\\Desktop\\\\proyecto\\\\inventario-venta-desktop\\\\src\\\\renderer\\\\components\\\\\" 2>&1 | grep -E '\\\\.js$|\\\\.jsx$')",
+      "Bash(cd \"C:\\\\Users\\\\ASUS\\\\Desktop\\\\proyecto\\\\inventario-venta-desktop\" && node --check src/database/seed.js && echo \"Syntax OK\")",
+      "Bash(node --check src/database/seed.js && echo \"OK\")",
+      "Bash(git add:*)"
     ]
   }
 }
