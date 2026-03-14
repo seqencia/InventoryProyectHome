@@ -4,14 +4,15 @@ Semantic versioning: `0.x.x` = pre-release (active development), `1.0.0` = stabl
 
 ---
 
-## ✅ v0.31.0 — Estado actual (2026-03-11)
+## ✅ v0.33.0 — Estado actual (2026-03-13)
 
 ### Completado en esta versión
 
-- **Login y Roles** — pantalla de login al arrancar; roles Admin y Vendedor; sesión en memoria
-- **Gestión de usuarios** — CRUD completo en Configuración (solo Admin); seed `admin/admin` en primer arranque
-- **Restricciones Vendedor** — tabs ocultos (Catálogo, Categorías, Proveedores, Clientes, Reportes, Configuración); sin utilidad/costos en Dashboard; sin costo unitario en Entradas
-- **Diagramas Mermaid** — ERD, flujos de venta/devolución/stock/login, arquitectura, roles en `docs/diagrams/`
+- **Ajuste manual de inventario** — tabla `inventory_adjustments`, modal con modos agregar/reducir/establecer, motivo, preview de stock, auditoría automática
+- **Timeline de movimientos por producto** — agrega entradas, ventas, devoluciones y ajustes en cronología inversa; modal "📊 Historial" en Catálogo
+- **Foto del producto** — campo `photo_path` en Product, dialog de selección, copia local en `userData/photos/`, base64 en renderer, modal de gestión
+- **Alertas de stock bajo** — Electron `Notification` al iniciar app y tras ajustes manuales
+- **Editar venta Pendiente** — handler `sales:edit` con restauración de stock, modal con búsqueda, edición de cantidades y recálculo de totales
 
 ### Completado en versiones anteriores
 
@@ -29,7 +30,7 @@ Semantic versioning: `0.x.x` = pre-release (active development), `1.0.0` = stabl
 
 ---
 
-## 🔜 v0.32.0 — Audit Log & Activity Tracking
+## ✅ v0.32.0 — Audit Log & Activity Tracking (completado 2026-03-12)
 
 ### Objetivo
 
@@ -90,13 +91,13 @@ Verificar que las siguientes entidades tengan `created_at` con precisión comple
 
 ---
 
-## 🔜 v0.33.0 — Inventario avanzado
+## ✅ v0.33.0 — Inventario avanzado (completado 2026-03-13)
 
-- [ ] Ajuste de inventario manual (corrección de conteo físico) con motivo y log de auditoría
-- [ ] Vista de movimientos de stock por producto (entradas + salidas + devoluciones en una línea de tiempo)
-- [ ] Inventario con foto del producto (imagen local, opcional)
-- [ ] Alertas de stock bajo por notificación de sistema (Electron `Notification`)
-- [ ] Editar venta en estado `Pendiente` antes de confirmar (agregar/quitar ítems)
+- [x] Ajuste de inventario manual (corrección de conteo físico) con motivo y log de auditoría
+- [x] Vista de movimientos de stock por producto (entradas + salidas + devoluciones en una línea de tiempo)
+- [x] Inventario con foto del producto (imagen local, opcional)
+- [x] Alertas de stock bajo por notificación de sistema (Electron `Notification`)
+- [x] Editar venta en estado `Pendiente` antes de confirmar (agregar/quitar ítems)
 
 ---
 
