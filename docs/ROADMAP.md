@@ -317,3 +317,38 @@ Browser (React SPA)  ←→  API REST (Node.js / Express o Fastify)
 - Los snapshots en `sale_details` garantizan que los reportes históricos sean correctos post-migración
 - La API DTE (v1.1.0) se integra más fácilmente en una arquitectura server-side
 - El sistema de usuarios/roles de v0.31.0 es base directa del sistema multi-tenant
+
+---
+
+## 🗂️ Backlog — Sin versión asignada
+
+Ideas y funcionalidades identificadas sin fecha ni versión comprometida. Se priorizarán según evolución del negocio.
+
+---
+
+### Cobertura de SKU y Dispersión Geográfica
+
+Análisis de qué productos (SKUs) está comprando cada cliente y cómo se distribuye la cobertura del catálogo por zona geográfica.
+
+#### Cobertura de SKU por cliente
+
+- SKUs activos por cliente vs. total del catálogo: cuántos productos distintos ha comprado en el período
+- % de cobertura — SKUs comprados / total SKUs activos
+- % target — cobertura esperada según segmento o acuerdo comercial
+- % gap — diferencia entre target y cobertura real; oportunidad de venta cruzada
+- Semáforo por cliente: 🟢 verde (≥ target), 🟡 amarillo (entre umbral mínimo y target), 🔴 rojo (< umbral mínimo)
+
+#### Mapa geográfico de clientes
+
+- Mapa interactivo con posición de cada cliente (requiere campo de coordenadas o zona en `customers`)
+- Heatmap de ventas superpuesto: intensidad por zona según ingresos o unidades vendidas en el período
+- Filtros: por período, por categoría de producto, por clasificación de semáforo
+
+#### Análisis de cobertura por región geográfica
+
+- Agrupación de clientes por zona/región definida
+- Cobertura de SKU promedio por región
+- Identificación de regiones con baja penetración de catálogo vs. alto potencial (cruza con volumen de ventas)
+- Comparativa entre regiones: qué SKUs se venden en unas zonas pero no en otras
+
+> **Nota de alcance:** Esta funcionalidad requiere la fase SaaS (v2.0.0) para disponer de datos geográficos reales de múltiples clientes y zonas. En la versión desktop monousuario, podría implementarse de forma simplificada con un campo `zona` en `customers` y análisis tabular sin mapa. El alcance definitivo se definirá según la evolución del negocio.
