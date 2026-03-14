@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, dialog } = require('electron');
+const { app, BrowserWindow, ipcMain, dialog, Notification } = require('electron');
 const path = require('path');
 const fs = require('fs');
 const crypto = require('crypto');
@@ -13,6 +13,7 @@ const hashPassword = (p) => crypto.createHash('sha256').update(p).digest('hex');
 const dbPath = () => path.join(app.getPath('userData'), 'database.sqlite');
 const backupsDir = () => path.join(app.getPath('userData'), 'backups');
 const configPath = () => path.join(app.getPath('userData'), 'config.json');
+const photosDir = () => path.join(app.getPath('userData'), 'photos');
 
 function loadConfig() {
   try { return JSON.parse(fs.readFileSync(configPath(), 'utf8')); }
@@ -56,6 +57,23 @@ async function seedDefaultAdmin() {
       password_hash: hashPassword('admin'),
       role: 'Admin',
     }));
+  }
+}
+
+// ── Low stock notification ─────────────────────────────────────────────────
+
+async function checkAndNotifyLowStock() {
+  try {
+    if (!Notification.isSupported()) return;
+    const products = await AppDataSource.getRepository('Product').find();
+    const low = products.filter((p) => p.stock <= (p.min_stock ?? 5));
+    if (low.length === 0) return;
+    new Notification({
+      title: 'Stock bajo detectado — StarTecnology',
+      body: `${low.length} producto${low.length !== 1 ? 's' : ''} con stock bajo o agotado.`,
+    }).show();
+  } catch (err) {
+    console.error('Notification error:', err);
   }
 }
 
@@ -905,6 +923,273 @@ function setupIpcHandlers() {
     return { success: true };
   });
 
+  // ── Inventory Adjustments ─────────────────────────────────────────────────
+
+  ipcMain.handle('adjustments:create', async (_, { product_id, adjustment_amount, reason, notes }) => {
+    const product = await repo('Product').findOneBy({ id: product_id });
+    if (!product) throw new Error('Producto no encontrado');
+    const qty_before = product.stock;
+    const qty_after = qty_before + adjustment_amount;
+    if (qty_after < 0) throw new Error('El ajuste resultaría en stock negativo.');
+
+    const adj = await AppDataSource.transaction(async (manager) => {
+      const saved = await manager.save(
+        'InventoryAdjustment',
+        manager.create('InventoryAdjustment', {
+          product_id,
+          product_name: product.name,
+          adjustment_amount,
+          quantity_before: qty_before,
+          quantity_after: qty_after,
+          reason,
+          notes: notes || null,
+        })
+      );
+      await manager.getRepository('Product').update(product_id, { stock: qty_after });
+      return saved;
+    });
+
+    await logAudit({
+      action: 'UPDATE', entity: 'product', entityId: product_id,
+      oldValue: { name: product.name, stock: qty_before },
+      newValue: { name: product.name, stock: qty_after, _note: 'ajuste_inventario', reason },
+    });
+    checkAndNotifyLowStock();
+    return adj;
+  });
+
+  ipcMain.handle('adjustments:getByProduct', async (_, productId) => {
+    return await repo('InventoryAdjustment').find({
+      where: { product_id: productId },
+      order: { created_at: 'DESC' },
+    });
+  });
+
+  // ── Stock Movement Timeline ───────────────────────────────────────────────
+
+  ipcMain.handle('stockMovement:getByProduct', async (_, productId) => {
+    const [entries, saleDetails, returnDetails, adjustments] = await Promise.all([
+      repo('StockEntry').find({ where: { product_id: productId } }),
+      repo('SaleDetail').find({ where: { product_id: productId } }),
+      repo('ReturnDetail').find({ where: { product_id: productId } }),
+      repo('InventoryAdjustment').find({ where: { product_id: productId } }),
+    ]);
+
+    const saleIds = [...new Set(saleDetails.map((d) => d.sale_id))];
+    const returnIds = [...new Set(returnDetails.map((d) => d.return_id))];
+
+    const [sales, returns] = await Promise.all([
+      saleIds.length ? repo('Sale').find({ where: { id: In(saleIds) } }) : Promise.resolve([]),
+      returnIds.length ? repo('Return').find({ where: { id: In(returnIds) } }) : Promise.resolve([]),
+    ]);
+
+    const saleMap = Object.fromEntries(sales.map((s) => [s.id, s]));
+    const returnMap = Object.fromEntries(returns.map((r) => [r.id, r]));
+
+    const movements = [];
+
+    for (const e of entries) {
+      const total = e.quantity + (e.bonus_quantity || 0);
+      movements.push({
+        type: 'entrada',
+        date: e.created_at,
+        amount: total,
+        description: `Entrada: ${e.quantity} uds${e.bonus_quantity ? ` + ${e.bonus_quantity} bon.` : ''}`,
+        supplier: e.supplier_name || null,
+        reference_id: e.id,
+      });
+    }
+
+    for (const d of saleDetails) {
+      const sale = saleMap[d.sale_id];
+      if (!sale || sale.status === 'Cancelada') continue;
+      movements.push({
+        type: 'venta',
+        date: sale.created_at,
+        amount: -d.quantity,
+        description: `Venta #${d.sale_id}: ${d.quantity} uds.${d.is_regalia ? ' (regalía)' : ''}`,
+        reference_id: d.sale_id,
+      });
+    }
+
+    for (const d of returnDetails) {
+      const ret = returnMap[d.return_id];
+      if (!ret) continue;
+      movements.push({
+        type: 'devolucion',
+        date: ret.created_at,
+        amount: d.quantity,
+        description: `Devolución de venta #${ret.sale_id}: +${d.quantity} uds.`,
+        reference_id: d.return_id,
+      });
+    }
+
+    for (const adj of adjustments) {
+      movements.push({
+        type: 'ajuste',
+        date: adj.created_at,
+        amount: adj.adjustment_amount,
+        description: `Ajuste (${adj.reason}): ${adj.adjustment_amount > 0 ? '+' : ''}${adj.adjustment_amount} uds.`,
+        reference_id: adj.id,
+      });
+    }
+
+    movements.sort((a, b) => new Date(b.date) - new Date(a.date));
+    return movements;
+  });
+
+  // ── Product Photos ────────────────────────────────────────────────────────
+
+  ipcMain.handle('products:savePhoto', async (_, productId) => {
+    const result = await dialog.showOpenDialog(mainWindow, {
+      title: 'Seleccionar foto del producto',
+      filters: [{ name: 'Imágenes', extensions: ['jpg', 'jpeg', 'png', 'webp'] }],
+      properties: ['openFile'],
+    });
+    if (result.canceled || !result.filePaths.length) return { canceled: true };
+
+    const dir = photosDir();
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+
+    const ext = path.extname(result.filePaths[0]).toLowerCase();
+    // Remove any old photo for this product regardless of extension
+    for (const old of ['jpg', 'jpeg', 'png', 'webp']) {
+      const oldFile = path.join(dir, `product-${productId}.${old}`);
+      if (fs.existsSync(oldFile)) fs.unlinkSync(oldFile);
+    }
+
+    const dest = path.join(dir, `product-${productId}${ext}`);
+    fs.copyFileSync(result.filePaths[0], dest);
+
+    const relPath = `photos/product-${productId}${ext}`;
+    await repo('Product').update(productId, { photo_path: relPath });
+
+    const data = fs.readFileSync(dest);
+    const mime = (ext === '.jpg' || ext === '.jpeg') ? 'jpeg' : ext.slice(1);
+    const photoUrl = `data:image/${mime};base64,${data.toString('base64')}`;
+    return { success: true, photoUrl, path: relPath };
+  });
+
+  ipcMain.handle('products:getPhoto', async (_, productId) => {
+    const product = await repo('Product').findOneBy({ id: productId });
+    if (!product?.photo_path) return null;
+    const fullPath = path.join(app.getPath('userData'), product.photo_path);
+    if (!fs.existsSync(fullPath)) return null;
+    const data = fs.readFileSync(fullPath);
+    const ext = path.extname(fullPath).slice(1);
+    const mime = (ext === 'jpg' || ext === 'jpeg') ? 'jpeg' : ext;
+    return `data:image/${mime};base64,${data.toString('base64')}`;
+  });
+
+  ipcMain.handle('products:deletePhoto', async (_, productId) => {
+    const product = await repo('Product').findOneBy({ id: productId });
+    if (product?.photo_path) {
+      const fullPath = path.join(app.getPath('userData'), product.photo_path);
+      if (fs.existsSync(fullPath)) fs.unlinkSync(fullPath);
+      await repo('Product').update(productId, { photo_path: null });
+    }
+    return { success: true };
+  });
+
+  // ── Edit Pending Sale ─────────────────────────────────────────────────────
+
+  ipcMain.handle('sales:edit', async (_, { id, items, customerId, customerName, paymentMethod, globalDiscountAmount }) => {
+    const sale = await repo('Sale').findOneBy({ id });
+    if (!sale) throw new Error('Venta no encontrada');
+    if (sale.status !== 'Pendiente') throw new Error('Solo se pueden editar ventas en estado Pendiente.');
+
+    const updatedSale = await AppDataSource.transaction(async (manager) => {
+      // Restore stock for all current items
+      const currentDetails = await manager.getRepository('SaleDetail').find({ where: { sale_id: id } });
+      for (const d of currentDetails) {
+        await manager.getRepository('Product').increment({ id: d.product_id }, 'stock', d.quantity);
+      }
+      // Delete current SaleDetails
+      if (currentDetails.length > 0) {
+        await manager.getRepository('SaleDetail').delete({ sale_id: id });
+      }
+
+      // Recalculate totals
+      const regularItems = items.filter((i) => !i.is_regalia);
+      const regaliaItems = items.filter((i) => i.is_regalia);
+      const lineSubtotal = r6(regularItems.reduce((sum, item) => sum + (Number(item.subtotal) || 0), 0));
+      const globalDisc = r6(parseFloat(globalDiscountAmount) || 0);
+      const subtotal = r6(Math.max(0, lineSubtotal - globalDisc));
+      const tax = r6(subtotal * 0.13);
+      const total = r6(subtotal + tax);
+      const regaliaCount = regaliaItems.reduce((sum, item) => sum + item.quantity, 0);
+
+      const productIds = items.map((i) => i.product_id);
+      const products = productIds.length
+        ? await manager.getRepository('Product').find({ where: { id: In(productIds) } })
+        : [];
+      const productMap = Object.fromEntries(products.map((p) => [p.id, p]));
+
+      let profit = 0;
+      for (const item of regularItems) {
+        const product = productMap[item.product_id];
+        const costPrice = product?.precio_costo ?? product?.cost_price;
+        if (product && costPrice != null) {
+          profit = r6(profit + (item.unit_price - Number(costPrice)) * item.quantity);
+        }
+      }
+      for (const item of regaliaItems.filter((i) => i.regalia_type === 'propia')) {
+        const product = productMap[item.product_id];
+        const costPrice = product?.precio_costo ?? product?.cost_price;
+        if (product && costPrice != null) {
+          profit = r6(profit - Number(costPrice) * item.quantity);
+        }
+      }
+
+      // Create new SaleDetails and decrement stock
+      for (const item of items) {
+        const product = productMap[item.product_id];
+        const costSnap = product?.precio_costo ?? product?.cost_price ?? null;
+        const unitP = item.is_regalia ? 0 : item.unit_price;
+        const lineSub = item.is_regalia ? 0 : item.subtotal;
+        const ivaAmt = item.is_regalia ? 0 : r6(lineSub * 0.13);
+        const lineTotal = item.is_regalia ? 0 : r6(lineSub + ivaAmt);
+        await manager.save(
+          'SaleDetail',
+          manager.create('SaleDetail', {
+            sale_id: id,
+            product_id: item.product_id,
+            product_name: item.product_name,
+            quantity: item.quantity,
+            unit_price: unitP,
+            subtotal: lineSub,
+            is_regalia: item.is_regalia || false,
+            regalia_type: item.regalia_type ?? null,
+            cost_price: item.is_regalia ? null : (costSnap != null ? r6(costSnap) : null),
+            discount_amount: item.is_regalia ? 0 : r6(item.discount_amount ?? 0),
+            discount_percentage: item.is_regalia ? 0 : r6(item.discount_percentage ?? 0),
+            iva_amount: ivaAmt,
+            line_total: lineTotal,
+          })
+        );
+        await manager.getRepository('Product').decrement({ id: item.product_id }, 'stock', item.quantity);
+      }
+
+      await manager.getRepository('Sale').update(id, {
+        payment_method: paymentMethod || sale.payment_method,
+        subtotal, tax, total, profit,
+        global_discount: globalDisc,
+        regalia_count: regaliaCount,
+        customer_id: customerId || null,
+        customer_name: customerName || null,
+      });
+
+      return await manager.getRepository('Sale').findOneBy({ id });
+    });
+
+    await logAudit({
+      action: 'UPDATE', entity: 'sale', entityId: id,
+      oldValue: { total: sale.total, status: sale.status },
+      newValue: { total: updatedSale.total, items_count: items.length, _note: 'edicion_pendiente' },
+    });
+    return updatedSale;
+  });
+
   // Audit Log
   ipcMain.handle('auditLog:getAll', async (_, filters = {}) => {
     const { page = 1, pageSize = 50, userId, action, entity, dateFrom, dateTo } = filters;
@@ -950,6 +1235,7 @@ app.whenReady().then(async () => {
   await runAutoBackup();
   setupIpcHandlers();
   createWindow();
+  checkAndNotifyLowStock();
 });
 
 app.on('window-all-closed', () => {

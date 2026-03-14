@@ -10,6 +10,47 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [0.33.0] - 2026-03-13
+
+### Added
+
+#### Inventario Avanzado
+
+##### Ajuste manual de inventario (`inventory_adjustments`)
+- Nueva tabla `inventory_adjustments`: `id`, `product_id`, `product_name`, `adjustment_amount` (firmado), `quantity_before`, `quantity_after`, `reason`, `notes`, `created_at`
+- `EntitySchema` añadido en `dataSource.js` con `synchronize: true`
+- Handler `adjustments:create` — transaction que actualiza stock del producto y crea el registro de ajuste; valida stock no negativo
+- Handler `adjustments:getByProduct` — retorna historial de ajustes por producto
+- Modal "Ajuste de Inventario" en Catálogo: tres modos (+ Agregar / − Reducir / = Establecer), selección de motivo (6 opciones), notas opcionales, preview del stock resultante en tiempo real
+- Botón "⚖ Ajustar" por fila en la tabla de productos
+- Evento auditado automáticamente via `logAudit()` con snapshot antes/después
+
+##### Timeline de movimientos por producto
+- Handler `stockMovement:getByProduct` — agrega `StockEntry`, `SaleDetail` (negativo), `ReturnDetail` (positivo), `InventoryAdjustment` en cronología inversa; omite ventas canceladas
+- Modal "Movimientos de Stock" con timeline cronológico: tipo (Entrada / Venta / Devolución / Ajuste), descripción, proveedor (si aplica), fecha/hora, cantidad con signo en color verde/rojo
+- Botón "📊 Historial" por fila en la tabla de productos
+
+##### Foto del producto (local, opcional)
+- Campo `photo_path` añadido a `ProductSchema` (nullable, sin migración destructiva)
+- Handler `products:savePhoto` — dialog de selección de imagen (jpg/jpeg/png/webp), copia a `userData/photos/product-{id}.ext`, actualiza `photo_path`, devuelve base64 data URL
+- Handler `products:getPhoto` — lee el archivo y devuelve base64; retorna null si no existe
+- Handler `products:deletePhoto` — elimina archivo y limpia `photo_path`
+- Columna "Foto" en tabla de productos: ícono 📷 azul si tiene foto, gris si no
+- Modal "Foto del producto": muestra imagen, botones "Agregar foto / Cambiar foto / Eliminar"
+
+##### Alertas de stock bajo (Electron Notification)
+- `checkAndNotifyLowStock()` — notificación nativa del sistema si hay productos con `stock <= min_stock`
+- Se ejecuta al iniciar la app y después de cada ajuste manual de inventario
+- Muestra título "Stock bajo detectado — StarTecnology" con conteo de productos afectados
+
+##### Editar venta en estado Pendiente
+- Handler `sales:edit` — transaction que restaura stock de ítems anteriores, elimina `SaleDetail` anteriores, crea nuevos ítems, decrementa stock, recalcula `subtotal/tax/total/profit/regalia_count`, actualiza venta; solo permite editar ventas Pendiente
+- Modal "Editar Venta #N" en Historial de Ventas: búsqueda de productos para agregar, edición de cantidad por ítem, eliminar ítems, selector de método de pago, descuento global, totales en tiempo real
+- Botón "✎ Editar" visible solo en ventas con estado Pendiente
+- Evento auditado con snapshot antes/después
+
+---
+
 ## [0.32.0] - 2026-03-12
 
 ### Added

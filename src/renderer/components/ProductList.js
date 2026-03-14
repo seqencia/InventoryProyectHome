@@ -97,7 +97,7 @@ const s = {
   },
 };
 
-export default function ProductList({ products, onEdit, onDelete }) {
+export default function ProductList({ products, onEdit, onDelete, onAdjust, onMovements, onPhoto }) {
   if (products.length === 0) {
     return (
       <div style={s.wrapper}>
@@ -116,6 +116,7 @@ export default function ProductList({ products, onEdit, onDelete }) {
             <th style={s.th}>Estado</th>
             <th style={s.th}>Precio venta</th>
             <th style={s.th}>Stock</th>
+            <th style={s.th}>Foto</th>
             <th style={s.th}>Acciones</th>
           </tr>
         </thead>
@@ -162,7 +163,36 @@ export default function ProductList({ products, onEdit, onDelete }) {
                 <div style={s.minStockHint}>mín {p.min_stock ?? 5}</div>
               </td>
               <td style={s.td}>
+                <button
+                  className="fl-btn-secondary"
+                  style={{
+                    background: p.photo_path ? '#e3f2fd' : 'white',
+                    border: p.photo_path ? '1px solid #90caf9' : '1px solid #d1d1d1',
+                    padding: '4px 10px', borderRadius: '6px', cursor: 'pointer',
+                    fontSize: '14px', color: p.photo_path ? '#1565c0' : '#9e9e9e',
+                  }}
+                  onClick={() => onPhoto(p)}
+                  title={p.photo_path ? 'Ver / cambiar foto' : 'Agregar foto'}
+                >
+                  📷
+                </button>
+              </td>
+              <td style={s.td}>
                 <button className="fl-btn-secondary" style={s.btnEdit} onClick={() => onEdit(p)}>Editar</button>
+                <button
+                  className="fl-btn-secondary"
+                  style={{ ...s.btnEdit, color: '#0078d4', borderColor: '#90caf9', background: '#f0f7ff' }}
+                  onClick={() => onAdjust(p)}
+                >
+                  ⚖ Ajustar
+                </button>
+                <button
+                  className="fl-btn-secondary"
+                  style={{ ...s.btnEdit, color: '#6a1b9a', borderColor: '#ce93d8', background: '#fdf5ff' }}
+                  onClick={() => onMovements(p)}
+                >
+                  📊 Historial
+                </button>
                 <button className="fl-btn-danger" style={s.btnDelete} onClick={() => onDelete(p.id)}>Eliminar</button>
               </td>
             </tr>

@@ -41,6 +41,214 @@ function formatDate(dateStr) {
   });
 }
 
+// ── Edit Sale Modal ───────────────────────────────────────────────────────────
+
+function EditSaleModal({ sale, onClose, onSave }) {
+  const [items, setItems] = useState(() =>
+    sale.details.map((d) => ({
+      product_id: d.product_id,
+      product_name: d.product_name,
+      quantity: d.quantity,
+      unit_price: Number(d.unit_price),
+      subtotal: Number(d.subtotal),
+      is_regalia: d.is_regalia || false,
+      regalia_type: d.regalia_type ?? null,
+      discount_amount: Number(d.discount_amount || 0),
+      discount_percentage: Number(d.discount_percentage || 0),
+    }))
+  );
+  const [products, setProducts] = useState([]);
+  const [searchText, setSearchText] = useState('');
+  const [paymentMethod, setPaymentMethod] = useState(sale.payment_method || 'Efectivo');
+  const [globalDiscount, setGlobalDiscount] = useState(Number(sale.global_discount || 0));
+  const [saving, setSaving] = useState(false);
+  const [err, setErr] = useState('');
+
+  useEffect(() => {
+    window.electron.products.getAll().then(setProducts).catch(() => {});
+  }, []);
+
+  const updateQty = (idx, val) => {
+    setItems((prev) => prev.map((item, i) => {
+      if (i !== idx) return item;
+      const qty = Math.max(1, parseInt(val, 10) || 1);
+      return { ...item, quantity: qty, subtotal: item.is_regalia ? 0 : item.unit_price * qty };
+    }));
+  };
+
+  const removeItem = (idx) => setItems((prev) => prev.filter((_, i) => i !== idx));
+
+  const addProduct = (p) => {
+    const existing = items.findIndex((i) => i.product_id === p.id && !i.is_regalia);
+    if (existing >= 0) {
+      updateQty(existing, items[existing].quantity + 1);
+    } else {
+      const unitPrice = Number(p.precio_venta_sin_iva || p.sale_price || 0);
+      setItems((prev) => [...prev, {
+        product_id: p.id, product_name: p.name,
+        quantity: 1, unit_price: unitPrice, subtotal: unitPrice,
+        is_regalia: false, regalia_type: null, discount_amount: 0, discount_percentage: 0,
+      }]);
+    }
+    setSearchText('');
+  };
+
+  const lineSubtotal = items.filter((i) => !i.is_regalia).reduce((s, i) => s + i.subtotal, 0);
+  const subtotal = Math.max(0, lineSubtotal - globalDiscount);
+  const tax = subtotal * 0.13;
+  const total = subtotal + tax;
+
+  const filteredProducts = searchText.trim()
+    ? products.filter((p) =>
+        p.name.toLowerCase().includes(searchText.trim().toLowerCase()) ||
+        (p.sku || '').toLowerCase().includes(searchText.trim().toLowerCase()) ||
+        (p.barcode || '').includes(searchText.trim())
+      ).slice(0, 8)
+    : [];
+
+  const handleSave = async () => {
+    if (items.length === 0) { setErr('La venta debe tener al menos un ítem.'); return; }
+    setSaving(true);
+    setErr('');
+    try {
+      await onSave({
+        id: sale.id, items,
+        customerId: sale.customer_id, customerName: sale.customer_name,
+        paymentMethod, globalDiscountAmount: globalDiscount,
+      });
+      onClose();
+    } catch (e) {
+      setErr(e?.message || 'Error al guardar los cambios.');
+      setSaving(false);
+    }
+  };
+
+  const inp = { padding: '8px 12px', border: '1px solid #d1d1d1', borderRadius: '6px', fontSize: '13px', boxSizing: 'border-box' };
+  const lbl = { display: 'block', fontSize: '12px', fontWeight: '600', color: '#5c5c5c', marginBottom: '4px' };
+
+  return (
+    <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.45)', backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}
+      onClick={(e) => e.target === e.currentTarget && onClose()}>
+      <div style={{ background: 'white', borderRadius: '12px', width: '640px', maxWidth: '95vw', maxHeight: '90vh', display: 'flex', flexDirection: 'column', boxShadow: '0 24px 64px rgba(0,0,0,0.18)' }}>
+        <div style={{ padding: '20px 24px 16px', borderBottom: '1px solid #f0f0f0', flexShrink: 0 }}>
+          <h2 style={{ fontSize: '17px', fontWeight: '700', margin: 0 }}>Editar Venta #{sale.id}</h2>
+          <div style={{ fontSize: '12px', color: '#9e9e9e', marginTop: '4px' }}>Solo se pueden editar ventas en estado Pendiente</div>
+        </div>
+
+        <div style={{ flex: 1, overflowY: 'auto', padding: '16px 24px' }}>
+          {/* Product search */}
+          <div style={{ marginBottom: '16px', position: 'relative' }}>
+            <div style={{ fontSize: '11px', fontWeight: '700', color: '#9e9e9e', textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: '8px' }}>
+              Agregar producto
+            </div>
+            <input
+              type="text" className="fl-input"
+              placeholder="Buscar por nombre, SKU o código de barras..."
+              value={searchText} onChange={(e) => setSearchText(e.target.value)}
+              style={{ ...inp, width: '100%' }}
+            />
+            {filteredProducts.length > 0 && (
+              <div style={{ position: 'absolute', left: 0, right: 0, top: '100%', background: 'white', border: '1px solid #e5e5e5', borderRadius: '8px', boxShadow: '0 8px 24px rgba(0,0,0,0.12)', zIndex: 10, maxHeight: '220px', overflowY: 'auto' }}>
+                {filteredProducts.map((p) => (
+                  <div key={p.id} className="fl-tr"
+                    style={{ padding: '8px 14px', cursor: 'pointer', borderBottom: '1px solid #f5f5f5', fontSize: '13px' }}
+                    onClick={() => addProduct(p)}>
+                    <div style={{ fontWeight: '500' }}>{p.name}</div>
+                    <div style={{ fontSize: '11px', color: '#9e9e9e' }}>
+                      {p.sku && `SKU: ${p.sku} · `}${Number(p.precio_venta_sin_iva || p.sale_price || 0).toFixed(2)} s/IVA · Stock: {p.stock}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Cart items */}
+          <div style={{ fontSize: '11px', fontWeight: '700', color: '#9e9e9e', textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: '8px' }}>
+            Ítems ({items.length})
+          </div>
+          {items.length === 0 ? (
+            <div style={{ padding: '24px', textAlign: 'center', color: '#9e9e9e', border: '2px dashed #e5e5e5', borderRadius: '8px', marginBottom: '16px' }}>
+              Sin ítems. Agrega productos arriba.
+            </div>
+          ) : (
+            <div style={{ border: '1px solid #e5e5e5', borderRadius: '8px', overflow: 'hidden', marginBottom: '16px' }}>
+              {items.map((item, idx) => (
+                <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '10px 14px', borderBottom: idx < items.length - 1 ? '1px solid #f5f5f5' : 'none', background: item.is_regalia ? '#fdf5ff' : 'white' }}>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontSize: '13px', fontWeight: '500' }}>
+                      {item.product_name}
+                      {item.is_regalia && <span style={{ marginLeft: '6px', fontSize: '10px', fontWeight: '700', color: '#6a1b9a', background: '#f3e5f5', padding: '1px 6px', borderRadius: '8px' }}>REGALÍA</span>}
+                    </div>
+                    <div style={{ fontSize: '11px', color: '#9e9e9e' }}>
+                      ${item.unit_price.toFixed(2)} × {item.quantity} = ${item.subtotal.toFixed(2)}
+                    </div>
+                  </div>
+                  {!item.is_regalia && (
+                    <input type="number" min={1} value={item.quantity}
+                      onChange={(e) => updateQty(idx, e.target.value)} className="fl-input"
+                      style={{ width: '64px', padding: '4px 8px', border: '1px solid #d1d1d1', borderRadius: '6px', fontSize: '13px', textAlign: 'center' }}
+                    />
+                  )}
+                  <button type="button" onClick={() => removeItem(idx)}
+                    style={{ background: 'white', border: '1px solid #fad9d9', color: '#a4262c', padding: '4px 10px', borderRadius: '6px', cursor: 'pointer', fontSize: '12px' }}>
+                    ✕
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Payment & discount */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '12px' }}>
+            <div>
+              <label style={lbl}>Método de pago</label>
+              <select value={paymentMethod} onChange={(e) => setPaymentMethod(e.target.value)} className="fl-select"
+                style={{ ...inp, width: '100%', background: 'white' }}>
+                <option value="Efectivo">Efectivo</option>
+                <option value="Tarjeta">Tarjeta</option>
+                <option value="Transferencia">Transferencia</option>
+              </select>
+            </div>
+            <div>
+              <label style={lbl}>Descuento global ($)</label>
+              <input type="number" min={0} step="0.01" value={globalDiscount} className="fl-input"
+                onChange={(e) => setGlobalDiscount(parseFloat(e.target.value) || 0)}
+                style={{ ...inp, width: '100%' }} />
+            </div>
+          </div>
+
+          {/* Totals */}
+          <div style={{ background: '#f7f7f7', borderRadius: '8px', padding: '12px 16px', fontSize: '13px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px', color: '#5c5c5c' }}>
+              <span>Subtotal s/IVA</span><span>${subtotal.toFixed(2)}</span>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px', color: '#5c5c5c' }}>
+              <span>IVA 13%</span><span>${tax.toFixed(2)}</span>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: '700', fontSize: '15px', color: '#0078d4', marginTop: '8px', paddingTop: '8px', borderTop: '1px solid #e5e5e5' }}>
+              <span>Total</span><span>${total.toFixed(2)}</span>
+            </div>
+          </div>
+
+          {err && <div style={{ background: '#ffebee', color: '#a4262c', borderRadius: '8px', padding: '8px 12px', fontSize: '13px', marginTop: '12px' }}>{err}</div>}
+        </div>
+
+        <div style={{ padding: '16px 24px', borderTop: '1px solid #f0f0f0', display: 'flex', justifyContent: 'flex-end', gap: '8px', flexShrink: 0 }}>
+          <button type="button" className="fl-btn-ghost" onClick={onClose} disabled={saving}
+            style={{ background: 'white', border: '1px solid #d1d1d1', padding: '8px 16px', borderRadius: '8px', cursor: 'pointer', fontSize: '14px', color: '#5c5c5c' }}>
+            Cancelar
+          </button>
+          <button type="button" className="fl-btn-primary" onClick={handleSave} disabled={saving}
+            style={{ background: '#0078d4', color: 'white', border: 'none', padding: '8px 20px', borderRadius: '8px', cursor: 'pointer', fontSize: '14px', fontWeight: '500' }}>
+            {saving ? 'Guardando...' : 'Guardar cambios'}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ── Return Modal ─────────────────────────────────────────────────────────────
 
 function ReturnModal({ sale, alreadyReturned, onClose, onConfirm }) {
@@ -316,6 +524,7 @@ export default function SaleHistory() {
   const [expanded, setExpanded] = useState(null);
   const [returnsExpanded, setReturnsExpanded] = useState(null);
   const [returnModal, setReturnModal] = useState(null); // sale object
+  const [editModal, setEditModal] = useState(null); // sale object
   const [showReturnsSection, setShowReturnsSection] = useState(false);
   const [ticketSale, setTicketSale] = useState(null);
   const [autoPrintSale, setAutoPrintSale] = useState(null);
@@ -367,6 +576,15 @@ export default function SaleHistory() {
       }
     }
     return map;
+  };
+
+  const handleEditSave = async (data) => {
+    try {
+      await window.electron.sales.edit(data);
+      loadData();
+    } catch (e) {
+      setError(`Error al editar la venta: ${e?.message || 'Intenta de nuevo.'}`);
+    }
   };
 
   const handleUpdateStatus = async (saleId, status) => {
@@ -701,6 +919,13 @@ export default function SaleHistory() {
                           <>
                             <button
                               className="fl-btn-secondary"
+                              style={{ ...styles.toggleBtn, marginLeft: '6px', color: '#0078d4', borderColor: '#90caf9', background: '#f0f7ff' }}
+                              onClick={() => setEditModal(sale)}
+                            >
+                              ✎ Editar
+                            </button>
+                            <button
+                              className="fl-btn-secondary"
                               style={{ ...styles.toggleBtn, marginLeft: '6px', color: '#107c10', borderColor: '#a5d6a7', background: '#f1f8f1' }}
                               onClick={() => handleUpdateStatus(sale.id, 'Completada')}
                             >
@@ -782,6 +1007,15 @@ export default function SaleHistory() {
             </table>
           )}
         </div>
+      )}
+
+      {/* ── Edit sale modal ── */}
+      {editModal && (
+        <EditSaleModal
+          sale={editModal}
+          onClose={() => setEditModal(null)}
+          onSave={handleEditSave}
+        />
       )}
 
       {/* ── Return modal ── */}

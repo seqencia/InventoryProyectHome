@@ -41,6 +41,7 @@ const ProductSchema = new EntitySchema({
     stock: { type: Number },
     min_stock: { type: Number, nullable: true, default: 5 },
     location: { type: String, nullable: true },
+    photo_path: { type: String, nullable: true },
     created_at: { type: 'datetime', createDate: true },
     updated_at: { type: 'datetime', updateDate: true },
   },
@@ -213,6 +214,22 @@ const AuditLogSchema = new EntitySchema({
   },
 });
 
+const InventoryAdjustmentSchema = new EntitySchema({
+  name: 'InventoryAdjustment',
+  tableName: 'inventory_adjustments',
+  columns: {
+    id: { type: Number, primary: true, generated: true },
+    product_id: { type: Number, index: true },
+    product_name: { type: String },
+    adjustment_amount: { type: Number }, // signed: positive = increase, negative = decrease
+    quantity_before: { type: Number },
+    quantity_after: { type: Number },
+    reason: { type: String },
+    notes: { type: String, nullable: true },
+    created_at: { type: 'datetime', createDate: true },
+  },
+});
+
 // ── Ordered entity list (same order used by main.js and seed.js) ──────────────
 
 const ENTITIES = [
@@ -221,6 +238,7 @@ const ENTITIES = [
   SupplierSchema, StockEntrySchema,
   ReturnSchema, ReturnDetailSchema,
   BonificacionPriceLogSchema, UserSchema, AuditLogSchema,
+  InventoryAdjustmentSchema,
 ];
 
 // ── Factory ───────────────────────────────────────────────────────────────────

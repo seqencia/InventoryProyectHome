@@ -11,6 +11,9 @@ contextBridge.exposeInMainWorld('electron', {
     delete: (id) => ipcRenderer.invoke('products:delete', id),
     getBonificacionInfo: (productId) => ipcRenderer.invoke('products:getBonificacionInfo', productId),
     updateBonificacionPrice: (data) => ipcRenderer.invoke('products:updateBonificacionPrice', data),
+    savePhoto: (productId) => ipcRenderer.invoke('products:savePhoto', productId),
+    getPhoto: (productId) => ipcRenderer.invoke('products:getPhoto', productId),
+    deletePhoto: (productId) => ipcRenderer.invoke('products:deletePhoto', productId),
   },
   categories: {
     getAll: () => ipcRenderer.invoke('categories:getAll'),
@@ -40,6 +43,7 @@ contextBridge.exposeInMainWorld('electron', {
       ipcRenderer.invoke('sales:create', { items, customerId, customerName, paymentMethod, status, globalDiscountAmount }),
     getAll: () => ipcRenderer.invoke('sales:getAll'),
     updateStatus: (id, data) => ipcRenderer.invoke('sales:updateStatus', { id, ...data }),
+    edit: (data) => ipcRenderer.invoke('sales:edit', data),
   },
   returns: {
     create: (data) => ipcRenderer.invoke('returns:create', data),
@@ -61,6 +65,13 @@ contextBridge.exposeInMainWorld('electron', {
   auth: {
     login: (credentials) => ipcRenderer.invoke('auth:login', credentials),
     logout: () => ipcRenderer.invoke('auth:logout'),
+  },
+  adjustments: {
+    create: (data) => ipcRenderer.invoke('adjustments:create', data),
+    getByProduct: (productId) => ipcRenderer.invoke('adjustments:getByProduct', productId),
+  },
+  stockMovement: {
+    getByProduct: (productId) => ipcRenderer.invoke('stockMovement:getByProduct', productId),
   },
   auditLog: {
     getAll: (filters) => ipcRenderer.invoke('auditLog:getAll', filters),
