@@ -164,7 +164,75 @@ Divide los productos (con ventas > 0) en 5 quintiles según su promedio de venta
 
 ---
 
-## 🔜 v0.35.0 — Clientes y fidelización
+## 🔜 v0.35.0 — Inteligencia Comercial Avanzada
+
+Métricas analíticas profundas por producto, orientadas a la toma de decisiones de compra, pricing y gestión de obsolescencia. Complementa el panel Tambor de v0.34.0 con indicadores de rotación, rentabilidad, riesgo y comportamiento de demanda.
+
+### Métricas de rotación
+
+| Métrica | Descripción |
+|---|---|
+| Tasa de rotación de inventario | Veces que se vendió el stock completo en el período (`unidades_vendidas / stock_promedio`) |
+| DSI — Days Sales of Inventory | Días estimados hasta agotar el stock actual (`stock_actual / ventas_diarias_promedio`) |
+| Velocidad de ventas | Unidades/día promedio en el período seleccionado |
+
+### Métricas de rentabilidad
+
+| Métrica | Descripción |
+|---|---|
+| Margen bruto % | `(precio_venta - costo) / precio_venta × 100` por producto |
+| Contribución al margen total % | Participación de cada SKU en la utilidad bruta total del período |
+| ROI de inventario | `utilidad_generada / (costo × stock_promedio)` — retorno sobre la inversión en inventario |
+
+### Métricas de riesgo
+
+| Métrica | Descripción |
+|---|---|
+| Riesgo de quiebre de stock | Días hasta stockout con alerta si DSI < umbral configurable (ej. 15 días) |
+| Stock óptimo sugerido | `ventas_diarias_promedio × (días_reposición + días_cobertura_objetivo)` |
+| Riesgo de obsolescencia | Producto sin ventas en 60+ días con stock > 0; clasificado como crítico si > 120 días |
+
+### Métricas de comportamiento
+
+| Métrica | Descripción |
+|---|---|
+| Estacionalidad | Mes con mayor y menor venta histórica por producto; índice de estacionalidad mensual |
+| Frecuencia de reabastecimiento | Conteo de entradas de stock en el período; intervalo promedio entre entradas |
+| Coeficiente de variación | `desviación_estándar_ventas / media_ventas` — índice de estabilidad de la demanda (bajo = predecible, alto = errática) |
+
+### Visualización
+
+#### Matriz BCG simplificada
+
+Clasifica productos en cuatro cuadrantes según participación en ingresos (eje X) y crecimiento de ventas (eje Y comparando períodos):
+
+| Cuadrante | Criterio | Acción sugerida |
+|---|---|---|
+| ⭐ Estrella | Alta participación + alto crecimiento | Mantener stock, priorizar |
+| 🐄 Vaca lechera | Alta participación + bajo crecimiento | Optimizar margen, no descuidar |
+| ❓ Interrogante | Baja participación + alto crecimiento | Evaluar inversión, monitorear |
+| 🐕 Perro | Baja participación + bajo crecimiento | Reducir stock, considerar descontinuar |
+
+#### Mapa de calor de ventas
+
+- Grilla mes × producto (o mes × categoría) con intensidad de color según unidades o ingresos
+- Período configurable (últimos 6 m / 12 m)
+- Permite identificar patrones estacionales de un vistazo
+
+### UI del módulo
+
+- Pestaña "Inteligencia" dentro de Reportes (solo Admin)
+- Selector de período de análisis y umbral de días de reposición (configurable)
+- Tabla principal con todas las métricas por SKU, ordenable por cualquier columna
+- Filtros: por clasificación de riesgo, por cuadrante BCG, por categoría
+- Tarjetas KPI: SKUs en riesgo de quiebre, valor inmovilizado en obsolescencia, margen promedio del catálogo
+- Gráfico de dispersión para la matriz BCG (participación vs. crecimiento)
+- Mapa de calor de ventas interactivo
+- Export CSV con todas las métricas calculadas
+
+---
+
+## 🔜 v0.36.0 — Clientes y fidelización
 
 - [ ] Historial de compras por cliente (ventas + montos + productos)
 - [ ] Notas internas por cliente
@@ -173,7 +241,7 @@ Divide los productos (con ventas > 0) en 5 quintiles según su promedio de venta
 
 ---
 
-## 🔜 v0.36.0 — Configuración avanzada
+## 🔜 v0.37.0 — Configuración avanzada
 
 - [ ] Nombre y logo de la tienda configurables (mostrado en recibo)
 - [ ] Número de comprobante personalizable (prefijo + secuencia)
@@ -192,7 +260,7 @@ Divide los productos (con ventas > 0) en 5 quintiles según su promedio de venta
 - [ ] Performance aceptable con ≥ 5 000 productos y ≥ 10 000 ventas
 - [ ] Instalador empaquetado con `electron-builder` (`.exe` firmado)
 
-**Incluye todo lo de v0.32 – v0.35 más**:
+**Incluye todo lo de v0.32 – v0.37 más**:
 - [ ] Onboarding para nuevos usuarios (wizard de primera configuración)
 - [ ] Pantalla de ayuda / shortcuts in-app
 - [ ] Auto-updater (`electron-updater`) para nuevas versiones
